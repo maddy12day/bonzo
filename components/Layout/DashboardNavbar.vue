@@ -28,19 +28,11 @@
     >
       <span
         >Welcome <b>{{ $auth.user.email }}</b
-        >!&nbsp;&nbsp;</span
+        >!&nbsp;&nbsp;&nbsp;&nbsp;</span
       >
-      <a href="/logout">Logout</a>
+      <div class="logout" @click="logOut()">Logout</div>
     </ul>
   </base-nav>
-
-  <!-- <div v-if="$auth.loggedIn">
-    Welcome {{ $auth.user.email }}
-    <v-btn text>Logout</v-btn>
-  </div>
-  <div v-else>
-    <v-btn text to="/login">Login</v-btn>
-  </div> -->
 </template>
 <script>
 import { CollapseTransition } from "vue2-transitions";
@@ -74,6 +66,11 @@ export default {
     };
   },
   methods: {
+    logOut() {
+      console.log("logout clicked...");
+      localStorage.removeItem("token");
+      this.$router.push("/");
+    },
     capitalizeFirstLetter(string) {
       if (!string || typeof string !== "string") {
         return "";
@@ -90,13 +87,13 @@ export default {
       this.showMenu = !this.showMenu;
     },
   },
-  mounted() {
-    console.log("$auth.user", this.$auth.user);
-  },
 };
 </script>
 <style scoped>
 .top-navbar {
   top: 0px;
+}
+.logout {
+  cursor: pointer;
 }
 </style>
