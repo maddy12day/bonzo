@@ -21,6 +21,13 @@
           <el-table-column
             min-width="150"
             sortable
+            label="Type"
+            property="scenario_types.scenario_type"
+          ></el-table-column>
+
+          <el-table-column
+            min-width="150"
+            sortable
             label="Filter Level"
             property="filter_level"
           ></el-table-column>
@@ -79,6 +86,13 @@
             sortable
             label="Skus"
             property="filter_skus"
+          ></el-table-column>
+
+          <el-table-column
+            min-width="150"
+            sortable
+            label="Amount"
+            property="amount"
           ></el-table-column>
 
           <el-table-column
