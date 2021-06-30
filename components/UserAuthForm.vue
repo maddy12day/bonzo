@@ -2,10 +2,12 @@
   <card class="w-75">
     <div class="row">
       <div class="col-md-6">
-        <h5 slot="header" class="title">Login to your account!</h5>
+        <h5 slot="header" class="title mt-5 text-center">
+          Login to your account!
+        </h5>
         <form @submit.prevent="userLogin">
           <div class="row">
-            <div class="col-md-12">
+            <div class="col-md-12 mt-5">
               <base-input
                 type="email"
                 label="Email address"
@@ -40,7 +42,16 @@
         </form>
       </div>
       <div class="col-md-6">
-        <img src="/icon.png" />
+        <div class="text-center">
+          <img src="/icon.png" class="w-75" />
+        </div>
+        <div>
+          <h4 class="text-center">
+            Bonzo.ai is a hosted Data Science as a Service (DSaaS) platform for
+            predictive as well as prescriptive analytics, enabling enterprises
+            with strategic actionable insights.
+          </h4>
+        </div>
       </div>
     </div>
   </card>
