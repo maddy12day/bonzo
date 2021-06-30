@@ -1,0 +1,568 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model daily_inv_by_location_by_sku {
+  id             BigInt    @id @default(autoincrement())
+  channel        String?   @db.VarChar(10)
+  country        String?   @db.VarChar(5)
+  inv_date       DateTime? @db.Date
+  sku            String?   @db.VarChar(50)
+  start_balance  BigInt?
+  total_inputs   BigInt?
+  total_outputs  BigInt?
+  end_balance    BigInt?
+  ods_created_at DateTime? @default(now()) @db.Timestamp(0)
+  ods_updated_at DateTime? @default(now()) @db.Timestamp(0)
+
+  @@index([channel], name: "daily_inv_by_location_by_sku_channel_IDX")
+  @@index([country], name: "daily_inv_by_location_by_sku_country_IDX")
+  @@index([inv_date], name: "daily_inv_by_location_by_sku_inv_date_IDX")
+  @@index([sku], name: "daily_inv_by_location_by_sku_sku_IDX")
+}
+
+model demand_forecast_base_weekly_metrics {
+  id                         BigInt    @id @default(autoincrement())
+  weekend                    DateTime  @db.Date
+  channel                    String?   @db.VarChar(10)
+  sub_channel                String?   @db.VarChar(50)
+  brand                      String?   @db.VarChar(30)
+  country                    String?   @db.VarChar(5)
+  category                   String?   @db.VarChar(20)
+  collection                 String?   @db.VarChar(50)
+  sub_collection             String?   @db.VarChar(50)
+  sku                        String    @db.VarChar(50)
+  retail_sales               Float?    @db.Float
+  retail_sales_build         Float?    @db.Float
+  units_sales                Int?
+  units_sales_build          Float?    @db.Float
+  aur                        Float?    @db.Float
+  discounts                  Float?    @db.Float
+  gm                         Float?    @db.Float
+  gm_percent                 Float?    @db.Float
+  wos                        Float?    @db.Float
+  sell_through               Float?    @db.Float
+  inventory_ins_units        Int?
+  inventory_ins_cost         Float?    @db.Float
+  inventory_dc_units         Int?
+  inventory_dc_cost          Float?    @db.Float
+  receipt_units              Int?
+  receipt_cost               Float?    @db.Float
+  aps                        Float?    @db.Float
+  forecasted_at              DateTime? @default(now()) @db.Timestamp(0)
+  demand_forecast_run_log_id Int?
+
+  @@index([brand], name: "demand_forecast_base_weekly_metrics_brand_IDX")
+  @@index([category], name: "demand_forecast_base_weekly_metrics_category_IDX")
+  @@index([channel], name: "demand_forecast_base_weekly_metrics_channel_IDX")
+  @@index([collection], name: "demand_forecast_base_weekly_metrics_collection_IDX")
+  @@index([country], name: "demand_forecast_base_weekly_metrics_country_IDX")
+  @@index([sub_channel], name: "demand_forecast_base_weekly_metrics_sub_channel_IDX")
+  @@index([sub_collection], name: "demand_forecast_base_weekly_metrics_sub_collection_IDX")
+  @@index([demand_forecast_run_log_id], name: "dfbwm_demand_forecast_run_log_id_IDX")
+  @@index([sku], name: "dfbwm_sku_IDX")
+  @@index([weekend], name: "dfbwm_weekend_IDX")
+}
+
+model demand_forecast_run_log {
+  id                     Int       @id @default(autoincrement())
+  forecast_type          String?   @db.VarChar(30)
+  forecast_started_at    DateTime? @default(now()) @db.Timestamp(0)
+  forecast_completed_at  DateTime? @db.Timestamp(0)
+  is_base_forecast       Boolean?  @default(false)
+  executed_by            String?   @db.VarChar(30)
+  demand_planner_user_id Int?
+  execution_time_seconds Int?
+  scenario_id            Int?
+  manual_adjustment_id   Int?
+  ma_source_scenario_id  Int?
+  status                 String?   @db.VarChar(10)
+  error_message          String?   @db.VarChar(100)
+
+  @@index([is_base_forecast], name: "dfrl_is_base_forecast_IDX")
+}
+
+model dim_morphe_retail_weekends {
+  id         Int       @id @default(autoincrement())
+  year       String    @db.VarChar(4)
+  weekstart  DateTime? @db.Date
+  weekend    DateTime  @db.Date
+  created_at DateTime? @default(now()) @db.Timestamp(0)
+
+  @@index([weekend], name: "dim_morphe_retail_weekends_weekend_IDX")
+  @@index([weekstart], name: "dim_morphe_retail_weekends_weekstart_IDX")
+  @@index([year], name: "dim_morphe_retail_weekends_year_IDX")
+}
+
+model dim_products {
+  id                          Int       @id @default(autoincrement())
+  SKU                         Int
+  alternate_sku               String?   @db.VarChar(50)
+  title                       String?   @db.VarChar(500)
+  brand                       String?   @db.VarChar(50)
+  life_cycle                  String?   @db.VarChar(50)
+  launch_date                 DateTime? @db.Date
+  cost_price_per_unit         Float?    @db.Float
+  MSRP_us                     Float?    @db.Float
+  MSRP_uk                     Float?    @db.Float
+  MSRP_eu                     Float?    @db.Float
+  MSRP_ca                     Float?    @db.Float
+  MSRP_au                     Float?    @db.Float
+  ns_category                 String?   @db.VarChar(50)
+  ns_class                    String?   @db.VarChar(50)
+  ns_subclass                 String?   @db.VarChar(50)
+  ns_collection               String?   @db.VarChar(50)
+  created_at                  DateTime  @db.DateTime(0)
+  net_suite_internal_id       Int?
+  updated_at                  DateTime? @db.DateTime(0)
+  ns_product_subcollection    String?   @db.VarChar(50)
+  ns_product_group            String?   @db.VarChar(50)
+  ns_npd_subclass             String?   @db.VarChar(50)
+  is_batch_lot                Int
+  product_third_party         String?   @db.VarChar(50)
+  product_morphe_new_brand_3p String?   @db.VarChar(50)
+  ods_created_at              DateTime? @default(now()) @db.DateTime(0)
+  ods_updated_at              DateTime? @default(now()) @db.DateTime(0)
+
+  @@index([SKU], name: "dim_products_SKU_IDX")
+  @@index([brand], name: "dim_products_brand_IDX")
+  @@index([launch_date], name: "dim_products_launch_date_IDX")
+  @@index([life_cycle], name: "dim_products_life_cycle_IDX")
+  @@index([ns_category], name: "dim_products_ns_category_IDX")
+  @@index([ns_class], name: "dim_products_ns_class_IDX")
+  @@index([ns_collection], name: "dim_products_ns_collection_IDX")
+  @@index([ns_subclass], name: "dim_products_ns_subclass_IDX")
+}
+
+model fact_daily_traffic_by_location {
+  id             BigInt    @id @default(autoincrement())
+  channel        String?   @db.VarChar(10)
+  country        String?   @db.VarChar(5)
+  traffic_date   DateTime? @db.Date
+  total_traffic  BigInt?
+  total_orders   BigInt?
+  conversion     Decimal?  @db.Decimal(20, 2)
+  ods_created_at DateTime? @default(now()) @db.Timestamp(0)
+  ods_updated_at DateTime? @default(now()) @db.Timestamp(0)
+
+  @@index([channel], name: "fact_daily_traffic_by_location_channel_IDX")
+  @@index([country], name: "fact_daily_traffic_by_location_country_IDX")
+  @@index([traffic_date], name: "fact_daily_traffic_by_location_traffic_date_IDX")
+}
+
+model fact_received_inventory_by_sku_by_country_by_weekend {
+  id             BigInt    @id @default(autoincrement())
+  channel        String?   @db.VarChar(10)
+  weekend        DateTime? @db.Date
+  sku            String?   @db.VarChar(50)
+  country_code   String?   @db.VarChar(5)
+  received_units Int?
+  ods_created_at DateTime? @default(now()) @db.Timestamp(0)
+
+  @@index([channel], name: "fact_received_inventory_by_sku_by_country_by_weekend_channel_IDX")
+  @@index([country_code], name: "fribsbcbw_country_code_IDX")
+  @@index([sku], name: "fribsbcbw_sku_IDX")
+  @@index([weekend], name: "fribsbcbw_weekend_IDX")
+}
+
+model fact_sales_ending_inventory_sku_by_week {
+  id               BigInt    @id @default(autoincrement())
+  weekend          DateTime? @db.Date
+  channel          String?   @db.VarChar(10)
+  country          String?   @db.VarChar(5)
+  store            String?   @db.VarChar(255)
+  sku              String?   @db.VarChar(50)
+  unit_sales       Int?
+  revenue          Decimal?  @db.Decimal(20, 10)
+  gross_revenue    Decimal?  @db.Decimal(20, 10)
+  ending_inventory BigInt?
+  ods_created_at   DateTime? @default(now()) @db.Timestamp(0)
+
+  @@index([channel], name: "fseisbw_channel_IDX")
+  @@index([country], name: "fseisbw_country_IDX")
+  @@index([ending_inventory], name: "fseisbw_ending_inventory_IDX")
+  @@index([gross_revenue], name: "fseisbw_gross_revenue_IDX")
+  @@index([revenue], name: "fseisbw_revenue_IDX")
+  @@index([sku], name: "fseisbw_sku_IDX")
+  @@index([unit_sales], name: "fseisbw_unit_sales_IDX")
+  @@index([weekend], name: "fseisbw_weekend_IDX")
+}
+
+model forecasted_monthly_metrics {
+  id                         BigInt    @id @default(autoincrement())
+  demand_forecast_run_log_id Int
+  metrics_name               String    @db.VarChar(50)
+  channel                    String    @db.VarChar(10)
+  forecast_year              String    @db.VarChar(4)
+  yearly_aggregate           Float?    @db.Float
+  q1_aggregate               Float?    @db.Float
+  q2_aggregate               Float?    @db.Float
+  q3_aggregate               Float?    @db.Float
+  q4_aggregate               Float?    @db.Float
+  jan                        Float?    @db.Float
+  feb                        Float?    @db.Float
+  mar                        Float?    @db.Float
+  apr                        Float?    @db.Float
+  may                        Float?    @db.Float
+  jun                        Float?    @db.Float
+  jul                        Float?    @db.Float
+  aug                        Float?    @db.Float
+  sep                        Float?    @db.Float
+  oct                        Float?    @db.Float
+  nov                        Float?    @db.Float
+  dec                        Float?    @db.Float
+  created_at                 DateTime? @default(now()) @db.DateTime(0)
+
+  @@index([demand_forecast_run_log_id], name: "fmm_demand_forecast_run_log_id_IDX")
+}
+
+model forecasted_weekly_metrics {
+  id                         BigInt    @id @default(autoincrement())
+  demand_forecast_run_log_id Int
+  metrics_name               String    @db.VarChar(50)
+  channel                    String    @db.VarChar(10)
+  forecast_year              String    @db.VarChar(4)
+  yearly_aggregate           Float?    @db.Float
+  q1_aggregate               Float?    @db.Float
+  q2_aggregate               Float?    @db.Float
+  q3_aggregate               Float?    @db.Float
+  q4_aggregate               Float?    @db.Float
+  w01                        Float?    @db.Float
+  w02                        Float?    @db.Float
+  w03                        Float?    @db.Float
+  w04                        Float?    @db.Float
+  w05                        Float?    @db.Float
+  w06                        Float?    @db.Float
+  w07                        Float?    @db.Float
+  w08                        Float?    @db.Float
+  w09                        Float?    @db.Float
+  w10                        Float?    @db.Float
+  w11                        Float?    @db.Float
+  w12                        Float?    @db.Float
+  w13                        Float?    @db.Float
+  w14                        Float?    @db.Float
+  w15                        Float?    @db.Float
+  w16                        Float?    @db.Float
+  w17                        Float?    @db.Float
+  w18                        Float?    @db.Float
+  w19                        Float?    @db.Float
+  w20                        Float?    @db.Float
+  w21                        Float?    @db.Float
+  w22                        Float?    @db.Float
+  w23                        Float?    @db.Float
+  w24                        Float?    @db.Float
+  w25                        Float?    @db.Float
+  w26                        Float?    @db.Float
+  w27                        Float?    @db.Float
+  w28                        Float?    @db.Float
+  w29                        Float?    @db.Float
+  w30                        Float?    @db.Float
+  w31                        Float?    @db.Float
+  w32                        Float?    @db.Float
+  w33                        Float?    @db.Float
+  w34                        Float?    @db.Float
+  w35                        Float?    @db.Float
+  w36                        Float?    @db.Float
+  w37                        Float?    @db.Float
+  w38                        Float?    @db.Float
+  w39                        Float?    @db.Float
+  w40                        Float?    @db.Float
+  w41                        Float?    @db.Float
+  w42                        Float?    @db.Float
+  w43                        Float?    @db.Float
+  w44                        Float?    @db.Float
+  w45                        Float?    @db.Float
+  w46                        Float?    @db.Float
+  w47                        Float?    @db.Float
+  w48                        Float?    @db.Float
+  w49                        Float?    @db.Float
+  w50                        Float?    @db.Float
+  w51                        Float?    @db.Float
+  w52                        Float?    @db.Float
+  created_at                 DateTime? @default(now()) @db.DateTime(0)
+
+  @@index([demand_forecast_run_log_id], name: "fwm_demand_forecast_run_log_id_IDX")
+}
+
+model manual_adjustments {
+  id                         Int       @id @default(autoincrement())
+  adjusted_by_user_id        Int?
+  demand_forecast_run_log_id Int?
+  adjusted_metrics_name      String?   @db.VarChar(50)
+  adjusted_metrics_cell_date DateTime? @db.Date
+  before_adjustment_value    Float?    @db.Float
+  new_adjusted_value         Float?    @db.Float
+  filter_level               String?   @db.VarChar(20)
+  filter_product_sources     String?   @db.VarChar(100)
+  filter_brand_types         String?   @db.VarChar(100)
+  filter_life_cycles         String?   @db.VarChar(255)
+  filter_newness             String?   @db.VarChar(30)
+  filter_brands              String?   @db.VarChar(255)
+  filter_channels            String?   @db.VarChar(10)
+  filter_sub_channels        String?   @db.VarChar(1000)
+  filter_collections         String?   @db.VarChar(1000)
+  filter_skus                String?   @db.VarChar(1000)
+  filter_programs            String?   @db.VarChar(255)
+  filter_categories          String?   @db.VarChar(255)
+  filter_classes             String?   @db.VarChar(500)
+  filter_sub_classes         String?   @db.VarChar(1000)
+  is_active                  Boolean?
+  status                     String?   @db.VarChar(20)
+  created_at                 DateTime? @default(now()) @db.DateTime(0)
+
+  @@index([adjusted_by_user_id], name: "ma_adjusted_by_user_id_IDX")
+  @@index([adjusted_metrics_name], name: "ma_adjusted_metrics_name_IDX")
+}
+
+model metrics_master {
+  id                      BigInt    @id @default(autoincrement())
+  name                    String    @db.VarChar(50)
+  title                   String    @db.VarChar(100)
+  allow_manual_adjustment Boolean?
+  display_order           Int?
+  last_updated_by         String?   @db.VarChar(50)
+  created_at              DateTime? @default(now()) @db.DateTime(0)
+  updated_at              DateTime? @default(now()) @db.DateTime(0)
+
+  @@index([allow_manual_adjustment], name: "mm_allow_manual_adjustment_IDX")
+  @@index([name], name: "mm_name_IDX")
+}
+
+model planned_monthly_units_revenue_by_channel_by_sku {
+  id            BigInt    @id @default(autoincrement())
+  monthend_date DateTime  @db.Date
+  channel       String    @db.VarChar(10)
+  sub_channel   String    @db.VarChar(30)
+  sku           String    @db.VarChar(50)
+  units         Float     @db.Float
+  revenue       Float     @db.Float
+  source_sheet  String?   @db.VarChar(20)
+  created_at    DateTime? @default(now()) @db.DateTime(0)
+
+  @@index([sku], name: "pmurbcbs_by_sku_sku_IDX")
+  @@index([channel], name: "pmurbcbs_channel_IDX")
+  @@index([monthend_date], name: "pmurbcbs_monthend_date_IDX")
+  @@index([sub_channel], name: "pmurbcbs_sub_channel_IDX")
+}
+
+model planned_weekly_units_revenue_by_channel_by_sku {
+  id           BigInt    @id @default(autoincrement())
+  weekend_date DateTime  @db.Date
+  channel      String    @db.VarChar(10)
+  sub_channel  String    @db.VarChar(30)
+  sku          String    @db.VarChar(50)
+  units        Float     @db.Float
+  revenue      Float     @db.Float
+  source_sheet String?   @db.VarChar(20)
+  created_at   DateTime? @default(now()) @db.DateTime(0)
+
+  @@index([sku], name: "pwurbcbs_by_sku_sku_IDX")
+  @@index([channel], name: "pwurbcbs_channel_IDX")
+  @@index([sub_channel], name: "pwurbcbs_sub_channel_IDX")
+  @@index([weekend_date], name: "pwurbcbs_weekend_date_IDX")
+}
+
+model process_logs {
+  id                 BigInt    @id @default(autoincrement())
+  job_name           String    @db.VarChar(255)
+  job_status         String    @db.VarChar(50)
+  job_start          DateTime? @db.DateTime(0)
+  job_end            DateTime? @db.DateTime(0)
+  source_system      String    @db.VarChar(50)
+  destination_system String    @db.VarChar(50)
+  insert_count       Int       @default(0)
+  update_count       Int       @default(0)
+
+  @@index([job_end], name: "process_logs_job_end_IDX")
+  @@index([job_name], name: "process_logs_job_name_IDX")
+  @@index([job_start], name: "process_logs_job_start_IDX")
+  @@index([job_status], name: "process_logs_job_status_IDX")
+}
+
+model rec_inv_by_sku_by_loc_by_day_interim {
+  id           BigInt    @id @default(autoincrement())
+  channel      String?   @db.VarChar(20)
+  receipt_date DateTime? @db.Date
+  country_code String?   @db.VarChar(5)
+  sku          String?   @db.VarChar(10)
+  inventory    Int?
+  created_at   DateTime? @default(now()) @db.Timestamp(0)
+  updated_at   DateTime? @default(now()) @db.Timestamp(0)
+
+  @@index([channel], name: "rec_inv_by_sku_by_loc_by_day_interim_channel_IDX")
+  @@index([country_code], name: "rec_inv_by_sku_by_loc_by_day_interim_country_code_IDX")
+  @@index([receipt_date], name: "rec_inv_by_sku_by_loc_by_day_interim_receipt_date_IDX")
+  @@index([sku], name: "rec_inv_by_sku_by_loc_by_day_interim_sku_IDX")
+}
+
+model receiving_inv_by_sku_by_location_by_day {
+  id           BigInt    @id @default(autoincrement())
+  channel      String?   @db.VarChar(20)
+  receipt_date DateTime? @db.Date
+  country_code String?   @db.VarChar(5)
+  store        String?   @db.VarChar(100)
+  sku          String?   @db.VarChar(30)
+  inventory    Int?
+  created_at   DateTime? @default(now()) @db.Timestamp(0)
+  updated_at   DateTime? @default(now()) @db.Timestamp(0)
+
+  @@index([channel], name: "receiving_inv_by_sku_by_location_by_day_channel_IDX")
+  @@index([country_code], name: "receiving_inv_by_sku_by_location_by_day_country_code_IDX")
+  @@index([receipt_date], name: "receiving_inv_by_sku_by_location_by_day_receipt_date_IDX")
+  @@index([sku], name: "receiving_inv_by_sku_by_location_by_day_sku_IDX")
+  @@index([store], name: "receiving_inv_by_sku_by_location_by_day_store_IDX")
+}
+
+model sales_ending_inventory_sku_by_date {
+  id                  BigInt    @id @default(autoincrement())
+  sales_date          DateTime? @db.Date
+  channel             String?   @db.VarChar(10)
+  sub_channel         String?   @db.VarChar(50)
+  brand               String?   @db.VarChar(30)
+  country             String?   @db.VarChar(5)
+  category            String?   @db.VarChar(20)
+  collection          String?   @db.VarChar(50)
+  sub_collection      String?   @db.VarChar(50)
+  sku                 String?   @db.VarChar(50)
+  unit_sales          Int?
+  revenue             Decimal?  @db.Decimal(20, 10)
+  gross_revenue       Decimal?  @db.Decimal(20, 10)
+  ending_inventory    BigInt?
+  cost_price_per_unit Decimal?  @db.Decimal(20, 10)
+  ods_created_at      DateTime? @default(now()) @db.Timestamp(0)
+
+  @@index([brand], name: "sales_ending_inventory_sku_by_date_brand_IDX")
+  @@index([category], name: "sales_ending_inventory_sku_by_date_category_IDX")
+  @@index([channel], name: "sales_ending_inventory_sku_by_date_channel_IDX")
+  @@index([collection], name: "sales_ending_inventory_sku_by_date_collection_IDX")
+  @@index([cost_price_per_unit], name: "sales_ending_inventory_sku_by_date_cost_price_per_unit_IDX")
+  @@index([country], name: "sales_ending_inventory_sku_by_date_country_IDX")
+  @@index([ending_inventory], name: "sales_ending_inventory_sku_by_date_ending_inventory_IDX")
+  @@index([gross_revenue], name: "sales_ending_inventory_sku_by_date_gross_revenue_IDX")
+  @@index([revenue], name: "sales_ending_inventory_sku_by_date_revenue_IDX")
+  @@index([sales_date], name: "sales_ending_inventory_sku_by_date_sales_date_IDX")
+  @@index([sku], name: "sales_ending_inventory_sku_by_date_sku_IDX")
+  @@index([sub_channel], name: "sales_ending_inventory_sku_by_date_sub_channel_IDX")
+  @@index([sub_collection], name: "sales_ending_inventory_sku_by_date_sub_collection_IDX")
+  @@index([unit_sales], name: "sales_ending_inventory_sku_by_date_unit_sales_IDX")
+}
+
+model scenario_influenced_leveled_aggregates {
+  id                         BigInt    @id @default(autoincrement())
+  scenario_id                Int
+  demand_forecast_run_log_id Int
+  level                      String    @db.VarChar(20)
+  level_value                String    @db.VarChar(100)
+  channel                    String    @db.VarChar(10)
+  planned_units              Int?
+  forecasted_units           Int?
+  adjusted_units             Int?
+  planned_revenue            Float?    @db.Float
+  planned_revenue_percent    Float?    @db.Float
+  planned_gm_percent         Float?    @db.Float
+  forecasted_revenue         Float?    @db.Float
+  forecasted_revenue_percent Float?    @db.Float
+  forecasted_gm_percent      Float?    @db.Float
+  adjusted_revenue           Float?    @db.Float
+  adjusted_revenue_percent   Float?    @db.Float
+  adjusted_gm_percent        Float?    @db.Float
+  created_at                 DateTime? @default(now()) @db.DateTime(0)
+
+  @@index([scenario_id], name: "sila_scenario_id_IDX")
+}
+
+model scenario_influenced_leveled_metrics {
+  id                         BigInt    @id @default(autoincrement())
+  scenario_id                Int
+  demand_forecast_run_log_id Int
+  weekend                    DateTime  @db.Date
+  level                      String    @db.VarChar(20)
+  level_value                String    @db.VarChar(100)
+  channel                    String    @db.VarChar(10)
+  planned_units              Int?
+  forecasted_units           Int?
+  adjusted_units             Int?
+  planned_revenue            Float?    @db.Float
+  forecasted_revenue         Float?    @db.Float
+  adjusted_revenue           Float?    @db.Float
+  created_at                 DateTime? @default(now()) @db.DateTime(0)
+
+  @@index([scenario_id], name: "silm_scenario_id_IDX")
+}
+
+model scenario_influenced_metrics {
+  id                         BigInt    @id @default(autoincrement())
+  scenario_id                Int
+  demand_forecast_run_log_id Int
+  weekend                    DateTime  @db.Date
+  channel                    String    @db.VarChar(10)
+  planned_units              Int?
+  forecasted_units           Int?
+  adjusted_units             Int?
+  planned_revenue            Float?    @db.Float
+  forecasted_revenue         Float?    @db.Float
+  adjusted_revenue           Float?    @db.Float
+  created_at                 DateTime? @default(now()) @db.DateTime(0)
+
+  @@index([scenario_id], name: "sim_scenario_id_IDX")
+}
+
+model scenario_types {
+  id                 Int       @id @default(autoincrement())
+  scenario_type      String?   @db.VarChar(30)
+  scenario_type_desc String?   @db.VarChar(100)
+  created_at         DateTime? @default(now()) @db.DateTime(0)
+
+  @@index([scenario_type], name: "scenario_types_scenario_type_IDX")
+}
+
+model scenarios {
+  id                     Int       @id @default(autoincrement())
+  demand_planner_user_id Int
+  scenario_name          String    @db.VarChar(50)
+  scenario_type_id       Int
+  amount                 Float?    @db.Float
+  is_dollar              Boolean?
+  start_date             DateTime  @db.DateTime(0)
+  end_date               DateTime? @db.DateTime(0)
+  filter_level           String?   @db.VarChar(20)
+  filter_product_sources String?   @db.VarChar(100)
+  filter_brand_types     String?   @db.VarChar(100)
+  filter_life_cycles     String?   @db.VarChar(255)
+  filter_newness         String?   @db.VarChar(30)
+  filter_brands          String?   @db.VarChar(255)
+  filter_channels        String?   @db.VarChar(10)
+  filter_sub_channels    String?   @db.VarChar(1000)
+  filter_collections     String?   @db.VarChar(1000)
+  filter_skus            String?   @db.VarChar(1000)
+  filter_programs        String?   @db.VarChar(255)
+  filter_categories      String?   @db.VarChar(255)
+  filter_classes         String?   @db.VarChar(500)
+  filter_sub_classes     String?   @db.VarChar(1000)
+  is_active              Boolean?
+  status                 String?   @db.VarChar(20)
+  is_shared              Boolean?
+  is_part_of_base        Boolean?
+  merged_with_base_at    DateTime? @db.DateTime(0)
+  merged_with_base_id    Int?
+  created_at             DateTime? @default(now()) @db.DateTime(0)
+
+  @@index([demand_planner_user_id], name: "scenarios_demand_planner_user_id_IDX")
+}
+
+model users {
+  id           Int       @id @default(autoincrement())
+  email_id     String?   @db.VarChar(255)
+  password     String?   @db.VarChar(255)
+  first_name   String?   @db.VarChar(50)
+  last_name    String?   @db.VarChar(50)
+  account_id   Int
+  user_role_id Int
+  created_at   DateTime? @default(now()) @db.Timestamp(0)
+  updated_at   DateTime? @default(now()) @db.Timestamp(0)
+}
