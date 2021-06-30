@@ -1,18 +1,25 @@
 // index.js
 import express from "express";
 import user from "./routes/user";
-
+<<<<<<< Updated upstream
+import scenario from './routes/scenario';
+import metrics from './routes/metrics';
+=======
 import scenario from "./routes/scenario";
-import metrics from "./routes/metrics";
 import chart from "./routes/chart";
 
+>>>>>>> Stashed changes
 const app = express();
 
 app.use(express.json());
 app.use(user);
 app.use(scenario);
+<<<<<<< Updated upstream
 app.use(metrics);
+
+=======
 app.use(chart);
+>>>>>>> Stashed changes
 
 /**
  * logic for our api will go here
