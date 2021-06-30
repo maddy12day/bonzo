@@ -38,25 +38,23 @@ export const registerUser = async (req, res) => {
 export const authenticateUser = async (req, res) => {
   try {
     const { email, password } = req.body;
-    console.log("req.body", req.body);
-    console.log("email", email);
     const user = await prisma.users.findMany({
       where: { email_id: `${email}` },
     });
-    console.log("user", user);
     if (user) {
-      console.log("user[0].password", user[0].password);
-      const isAuthenticate = bcrypt.compareSync(password, user[0].password);
-      console.log("isAuthenticate", isAuthenticate);
+      const current_user = user[0];
+      const first_name = current_user.first_name;
+      const last_name = current_user.last_name;
+      const isAuthenticate = bcrypt.compareSync(password, current_user.password);
       if (isAuthenticate) {
-        const token = jwt.sign({ email, password }, "bonzoAITokenSecret", { expiresIn: "24h" });
+        const token = jwt.sign({ email, first_name, last_name }, "bonzoAITokenSecret", { expiresIn: "24h" });
         console.log("token", token);
         res.status(200).send({
           message: "Authentication successful",
           token: token,
-          sessionId: user[0].id,
+          sessionId: current_user.id,
           userRole: "Admin",
-          username: `${user[0].first_name} ${user[0].last_name}`,
+          username: `${first_name} ${last_name}`,
         });
       } else {
         res.status(401).send({
@@ -70,5 +68,21 @@ export const authenticateUser = async (req, res) => {
       body: error,
       status: false,
     });
+  }
+};
+
+export const userInfo = async (req, res) => {
+  var token = req.headers.authorization;
+  if (token) {
+    // verifies secret and checks if the token is expired
+    jwt.verify(token.replace(/^Bearer\s/, ""), "bonzoAITokenSecret", function(err, decoded) {
+      if (err) {
+        return res.status(401).json({ message: "unauthorized" });
+      } else {
+        return res.json({ user: decoded });
+      }
+    });
+  } else {
+    return res.status(401).json({ message: "unauthorized" });
   }
 };

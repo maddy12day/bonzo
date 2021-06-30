@@ -16,11 +16,20 @@
           <span class="navbar-toggler-bar bar3"></span>
         </button>
       </div>
-      <a class="navbar-brand ml-xl-3 ml-5" href="/">{{ routeName }}</a>
+      <a v-if="$auth.loggedIn" class="navbar-brand ml-xl-3 ml-5" href="/">{{
+        routeName
+      }}</a>
     </div>
 
-    <ul class="navbar-nav" :class="$rtl.isRTL ? 'mr-auto' : 'ml-auto'">
-      <span>Welcome <b>Anil Mitra</b>!&nbsp;&nbsp;</span>
+    <ul
+      v-if="$auth.loggedIn"
+      class="navbar-nav"
+      :class="$rtl.isRTL ? 'mr-auto' : 'ml-auto'"
+    >
+      <span
+        >Welcome <b>{{ $auth.user.email }}</b
+        >!&nbsp;&nbsp;</span
+      >
       <a href="/logout">Logout</a>
     </ul>
   </base-nav>
@@ -80,6 +89,9 @@ export default {
     toggleMenu() {
       this.showMenu = !this.showMenu;
     },
+  },
+  mounted() {
+    console.log("$auth.user", this.$auth.user);
   },
 };
 </script>

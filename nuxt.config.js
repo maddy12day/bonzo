@@ -35,6 +35,7 @@ export default {
   },
   router: {
     linkExactActiveClass: "active",
+    middleware: ["auth"],
   },
   /*
    ** Customize the progress-bar color
@@ -100,9 +101,9 @@ export default {
     strategies: {
       local: {
         endpoints: {
-          login: { url: "/sessions", method: "post", propertyName: "token" },
-          logout: { url: "/sessions", method: "delete" },
-          user: { url: "/sessions/user", method: "get", propertyName: "data.attributes" },
+          login: { url: "/authenticate-user", method: "post", propertyName: "token" },
+          logout: true, //{ url: "/logout", method: "delete" },
+          user: { url: "/user-info", method: "get", propertyName: "data.attributes" },
         },
         // tokenRequired: true,
         tokenType: "",

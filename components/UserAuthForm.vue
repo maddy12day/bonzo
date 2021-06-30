@@ -1,7 +1,7 @@
 <template>
   <card>
     <h5 slot="header" class="title">Login to your account!</h5>
-    <form>
+    <form @submit.prevent="userLogin">
       <div class="row">
         <div class="col-md-4">
           <base-input
@@ -47,8 +47,8 @@ export default {
       valid: false,
       showPassword: false,
       userInfo: {
-        email: "anilm@aretove.com",
-        password: "Asdf123$",
+        email: "kristen.doherty@formabrands.com",
+        password: "k3J#R3#$w7rf*UD5",
       },
       ...validations,
     };
