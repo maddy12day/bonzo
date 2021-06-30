@@ -1,41 +1,48 @@
 <template>
-  <card>
-    <h5 slot="header" class="title">Login to your account!</h5>
-    <form @submit.prevent="userLogin">
-      <div class="row">
-        <div class="col-md-4">
-          <base-input
-            type="email"
-            label="Email address"
-            placeholder="your email adddress"
-            v-model="userInfo.email"
-            :rules="[required('email'), emailFormat()]"
+  <card class="w-75">
+    <div class="row">
+      <div class="col-md-6">
+        <h5 slot="header" class="title">Login to your account!</h5>
+        <form @submit.prevent="userLogin">
+          <div class="row">
+            <div class="col-md-12">
+              <base-input
+                type="email"
+                label="Email address"
+                placeholder="your email adddress"
+                v-model="userInfo.email"
+                :rules="[required('email'), emailFormat()]"
+              >
+              </base-input>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12">
+              <base-input
+                :type="showPassword ? 'text' : 'password'"
+                counter="true"
+                label="Password"
+                placeholder="your password"
+                v-model="userInfo.password"
+                :rules="[required('password'), minLength('password', 8)]"
+              >
+              </base-input>
+            </div>
+          </div>
+          <base-button
+            native-type="submit"
+            type="primary"
+            class="btn-fill"
+            @click="submitForm(userInfo)"
           >
-          </base-input>
-        </div>
+            {{ buttonText }}
+          </base-button>
+        </form>
       </div>
-      <div class="row">
-        <div class="col-md-4">
-          <base-input
-            :type="showPassword ? 'text' : 'password'"
-            counter="true"
-            label="Password"
-            placeholder="your password"
-            v-model="userInfo.password"
-            :rules="[required('password'), minLength('password', 8)]"
-          >
-          </base-input>
-        </div>
+      <div class="col-md-6">
+        <img src="/icon.png" />
       </div>
-      <base-button
-        native-type="submit"
-        type="primary"
-        class="btn-fill"
-        @click="submitForm(userInfo)"
-      >
-        {{ buttonText }}
-      </base-button>
-    </form>
+    </div>
   </card>
 </template>
 
