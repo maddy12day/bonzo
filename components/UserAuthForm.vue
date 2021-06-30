@@ -1,41 +1,59 @@
 <template>
-  <card>
-    <h5 slot="header" class="title">Login to your account!</h5>
-    <form @submit.prevent="userLogin">
-      <div class="row">
-        <div class="col-md-4">
-          <base-input
-            type="email"
-            label="Email address"
-            placeholder="your email adddress"
-            v-model="userInfo.email"
-            :rules="[required('email'), emailFormat()]"
+  <card class="w-75">
+    <div class="row">
+      <div class="col-md-6">
+        <h5 slot="header" class="title mt-5 text-center">
+          Login to your account!
+        </h5>
+        <form @submit.prevent="userLogin">
+          <div class="row">
+            <div class="col-md-12 mt-5">
+              <base-input
+                type="email"
+                label="Email address"
+                placeholder="your email adddress"
+                v-model="userInfo.email"
+                :rules="[required('email'), emailFormat()]"
+              >
+              </base-input>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12">
+              <base-input
+                :type="showPassword ? 'text' : 'password'"
+                counter="true"
+                label="Password"
+                placeholder="your password"
+                v-model="userInfo.password"
+                :rules="[required('password'), minLength('password', 8)]"
+              >
+              </base-input>
+            </div>
+          </div>
+          <base-button
+            native-type="submit"
+            type="primary"
+            class="btn-fill"
+            @click="submitForm(userInfo)"
           >
-          </base-input>
+            {{ buttonText }}
+          </base-button>
+        </form>
+      </div>
+      <div class="col-md-6">
+        <div class="text-center">
+          <img src="/icon.png" class="w-75" />
+        </div>
+        <div>
+          <h4 class="text-center">
+            Bonzo.ai is a hosted Data Science as a Service (DSaaS) platform for
+            predictive as well as prescriptive analytics, enabling enterprises
+            with strategic actionable insights.
+          </h4>
         </div>
       </div>
-      <div class="row">
-        <div class="col-md-4">
-          <base-input
-            :type="showPassword ? 'text' : 'password'"
-            counter="true"
-            label="Password"
-            placeholder="your password"
-            v-model="userInfo.password"
-            :rules="[required('password'), minLength('password', 8)]"
-          >
-          </base-input>
-        </div>
-      </div>
-      <base-button
-        native-type="submit"
-        type="primary"
-        class="btn-fill"
-        @click="submitForm(userInfo)"
-      >
-        {{ buttonText }}
-      </base-button>
-    </form>
+    </div>
   </card>
 </template>
 

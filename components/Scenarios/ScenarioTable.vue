@@ -2,7 +2,9 @@
   <div class="row">
     <div class="col-lg-12">
       <card card-body-classes="table-full-width">
-        <h4 slot="header" class="card-title text-bold font-weight-bold">{{ tableHeading }}</h4>
+        <h4 slot="header" class="card-title text-bold font-weight-bold">
+          {{ tableHeading }}
+        </h4>
         <el-table :data="scenarioTableData">
           <el-table-column
             min-width="150"
@@ -149,9 +151,7 @@ export default {
   },
   computed: {},
   methods: {},
-  mounted() {
-    console.log(this.scenarioTableData);
-  },
+  mounted() {},
 };
 </script>
 <style></style>

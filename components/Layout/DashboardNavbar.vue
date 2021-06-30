@@ -27,10 +27,12 @@
       :class="$rtl.isRTL ? 'mr-auto' : 'ml-auto'"
     >
       <span
-        >Welcome <b>{{ $auth.user.email }}</b
-        >!&nbsp;&nbsp;&nbsp;&nbsp;</span
+        >Welcome <b>{{ $auth.user.first_name }} {{ $auth.user.last_name }}</b
+        >!&nbsp;&nbsp;</span
       >
-      <div class="logout" @click="logOut()">Logout</div>
+      <a href="/logout" title="Logout"
+        ><i class="tim-icons icon-button-power"></i
+      ></a>
     </ul>
   </base-nav>
 </template>
