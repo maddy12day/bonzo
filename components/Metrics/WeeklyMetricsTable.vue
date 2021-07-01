@@ -11,6 +11,13 @@
             property="metrics_master.title"
           ></el-table-column>
 
+           <el-table-column
+            min-width="150"
+            sortable
+            label="Yearly"
+            property="yearly_aggregate"
+          ></el-table-column>
+
          <el-table-column
             min-width="150"
             sortable
