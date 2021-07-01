@@ -1,13 +1,6 @@
 <template>
   <div>
-    <h1>Forecast page</h1>
     <!-- Filters component (Vishal) -->
-    <!-- Applied filters pills (Vishal) -->
-    <!-- Base Year/Quarter Stats / Filtered Year/Quarter Stats (Vishal) -->
-    <!-- Base Metrics / Filtered Metrics (Jubin) -->
-    <!-- Filter: Revenue table (Jubin) -->
-    <!-- Filter: Units table (Jubin) -->
-    <!-- Filter: AUR table (Jubin) -->
     <div class="col-md-12 text-right">
       <div class="btn-group btn-group-toggle p-0 mb-2" data-toggle="buttons">
         <label
@@ -39,6 +32,12 @@
         v-if="activeFilterType == 'Program'"
       />
     </div>
+    <!-- Applied filters pills (Vishal) -->
+    <!-- Base Year/Quarter Stats / Filtered Year/Quarter Stats (Vishal) -->
+    <!-- Base Metrics / Filtered Metrics (Jubin) -->
+    <!-- Filter: Revenue table (Jubin) -->
+    <!-- Filter: Units table (Jubin) -->
+    <!-- Filter: AUR table (Jubin) -->
   </div>
 </template>
 
