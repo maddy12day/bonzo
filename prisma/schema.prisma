@@ -521,7 +521,7 @@ model scenario_types {
   scenario_type      String?   @db.VarChar(30)
   scenario_type_desc String?   @db.VarChar(100)
   created_at         DateTime? @default(now()) @db.DateTime(0)
-
+  scenarios          scenarios[]
   @@index([scenario_type], name: "scenario_types_scenario_type_IDX")
 }
 
@@ -529,7 +529,6 @@ model scenarios {
   id                     Int       @id @default(autoincrement())
   demand_planner_user_id Int
   scenario_name          String    @db.VarChar(50)
-  scenario_type_id       Int
   amount                 Float?    @db.Float
   is_dollar              Boolean?
   start_date             DateTime  @db.DateTime(0)
@@ -555,7 +554,8 @@ model scenarios {
   merged_with_base_at    DateTime? @db.DateTime(0)
   merged_with_base_id    Int?
   created_at             DateTime? @default(now()) @db.DateTime(0)
-
+  scenario_types         scenario_types  @relation(fields: [scenario_type_id], references: [id])
+  scenario_type_id       Int
   @@index([demand_planner_user_id], name: "scenarios_demand_planner_user_id_IDX")
 }
 

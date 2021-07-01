@@ -1,8 +1,10 @@
 <template>
   <div>
     <ScenarioTable
+      v-if="sharedScenariosList.scenarios"
       tableHeading="Shared Scenarios"
       :scenarioTableData="sharedScenariosList.scenarios"
+      :type="'sharedScenarios'"
     />
 
     <card card-body-classes="table-full-width">
@@ -357,6 +359,7 @@ export default {
       yearlyPlannedData: [],
       activeTab: "Weekly",
       currentYQTab: "Yearly",
+      userInfo: [],
     };
   },
   components: {
@@ -453,6 +456,10 @@ export default {
         baseYearlyQuarterlysListString.baseYQForecast
       );
     },
+    async getAllUserData () {
+      this.userInfo = await this.$axios.$get("/get-all-users")
+      window.localStorage.setItem("allUsersInfo", JSON.stringify(this.userInfo));
+    },
   },
   async mounted() {
     this.showMetricsByDuration("Weekly");
@@ -461,7 +468,9 @@ export default {
     this.yearlySale();
     this.quarterlyPlanned();
     this.yearlyPlanned();
+    this.getAllUserData();
   },
+ 
 
   computed: {
     yearlyQuarterlyTabs() {

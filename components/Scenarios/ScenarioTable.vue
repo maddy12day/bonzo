@@ -5,7 +5,7 @@
         <h4 slot="header" class="card-title text-bold font-weight-bold">
           {{ tableHeading }}
         </h4>
-        <el-table :data="scenarioTableData">
+        <el-table v-if="loadTable" :data="scenarioTableDataForTable">
           <el-table-column
             min-width="150"
             sortable
@@ -18,6 +18,22 @@
             sortable
             label="Created At"
             property="created_at"
+          ></el-table-column>
+
+          <el-table-column
+            min-width="150"
+            sortable
+            label="Shared By"
+            property="sharedBy"
+            v-if="type == 'sharedScenarios'"
+          >
+          </el-table-column>
+
+          <el-table-column
+            min-width="150"
+            sortable
+            label="Type"
+            property="scenario_types.scenario_type"
           ></el-table-column>
 
           <el-table-column
@@ -86,6 +102,13 @@
           <el-table-column
             min-width="150"
             sortable
+            label="Amount"
+            property="amount"
+          ></el-table-column>
+
+          <el-table-column
+            min-width="150"
+            sortable
             label="Programs"
             property="filter_programs"
           ></el-table-column>
@@ -131,13 +154,33 @@ export default {
     [Table.name]: Table,
     [TableColumn.name]: TableColumn,
   },
-  props: ["tableHeading", "scenarioTableData"],
+  props: ["tableHeading", "scenarioTableData", "type"],
   data() {
-    return {};
+    return {
+      scenarioTableDataForTable: [],
+      loadTable: false
+    };
   },
   computed: {},
-  methods: {},
-  mounted() {},
+  methods: {
+    getUserName: function(id) {
+      let allUserInfo = JSON.parse(window.localStorage.getItem('allUsersInfo'))
+      let userName = allUserInfo.users.filter(user => user.id = id)[0].first_name;
+      return userName
+    },
+    addUserToScenarioTableData: function(scenarioTableData, type) {
+      if (type = "sharedScenarios") {
+        this.scenarioTableDataForTable = scenarioTableData.map(v => ({...v, sharedBy: this.getUserName(v.demand_planner_user_id)}));
+        this.loadTable = true
+      } else {
+        this.scenarioTableDataForTable = scenarioTableData;
+        this.loadTable = true;
+      }
+    }
+  },
+  created() {
+    this.addUserToScenarioTableData(this.scenarioTableData,this.type)
+  },
 };
 </script>
 <style></style>
