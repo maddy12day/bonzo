@@ -7,11 +7,15 @@
       <h4 class="card-title font-weight-bold">{{ title | capitalize }}</h4>
       <h5 class="card-category">
         Units -
-        <span class="text-white display-4">{{ units | toLocaleStr }}</span>
+        <span class="text-white display-4 font-weight-normal">{{
+          units | toLocaleStr
+        }}</span>
       </h5>
       <h5 class="card-category">
         Revenue -
-        <span class="text-white display-4">{{ revenue | toLocaleStr }}</span>
+        <span class="text-white display-4 font-weight-normal">{{
+          revenue | toLocaleStr
+        }}</span>
       </h5>
     </div>
   </div>
