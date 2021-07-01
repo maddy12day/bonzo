@@ -19,68 +19,141 @@
             sortable
             label="Yearly"
             property="yearly_aggregate"
+            align="right"
           >
             <template slot-scope="scope">{{
               scope.row.yearly_aggregate | toLocaleStr
             }}</template>
           </el-table-column>
 
-          <el-table-column min-width="150" sortable label="Jan" property="jan">
+          <el-table-column
+            min-width="150"
+            sortable
+            label="Jan"
+            property="jan"
+            align="right"
+          >
             <template slot-scope="scope">{{
               scope.row.jan | toLocaleStr
             }}</template>
           </el-table-column>
-          <el-table-column min-width="150" sortable label="Feb" property="feb">
+          <el-table-column
+            min-width="150"
+            sortable
+            label="Feb"
+            property="feb"
+            align="right"
+          >
             <template slot-scope="scope">{{
               scope.row.feb | toLocaleStr
             }}</template>
           </el-table-column>
-          <el-table-column min-width="150" sortable label="Mar" property="mar">
+          <el-table-column
+            min-width="150"
+            sortable
+            label="Mar"
+            property="mar"
+            align="right"
+          >
             <template slot-scope="scope">{{
               scope.row.mar | toLocaleStr
             }}</template>
           </el-table-column>
-          <el-table-column min-width="150" sortable label="Apr" property="apr">
+          <el-table-column
+            min-width="150"
+            sortable
+            label="Apr"
+            property="apr"
+            align="right"
+          >
             <template slot-scope="scope">{{
               scope.row.apr | toLocaleStr
             }}</template>
           </el-table-column>
-          <el-table-column min-width="150" sortable label="May" property="may">
+          <el-table-column
+            min-width="150"
+            sortable
+            label="May"
+            property="may"
+            align="right"
+          >
             <template slot-scope="scope">{{
               scope.row.may | toLocaleStr
             }}</template>
           </el-table-column>
-          <el-table-column min-width="150" sortable label="Jun" property="jun">
+          <el-table-column
+            min-width="150"
+            sortable
+            label="Jun"
+            property="jun"
+            align="right"
+          >
             <template slot-scope="scope">{{
               scope.row.jun | toLocaleStr
             }}</template>
           </el-table-column>
-          <el-table-column min-width="150" sortable label="Jul" property="jul">
+          <el-table-column
+            min-width="150"
+            sortable
+            label="Jul"
+            property="jul"
+            align="right"
+          >
             <template slot-scope="scope">{{
               scope.row.jul | toLocaleStr
             }}</template>
           </el-table-column>
-          <el-table-column min-width="150" sortable label="Aug" property="aug">
+          <el-table-column
+            min-width="150"
+            sortable
+            label="Aug"
+            property="aug"
+            align="right"
+          >
             <template slot-scope="scope">{{
               scope.row.aug | toLocaleStr
             }}</template>
           </el-table-column>
-          <el-table-column min-width="150" sortable label="Sep" property="sep">
+          <el-table-column
+            min-width="150"
+            sortable
+            label="Sep"
+            property="sep"
+            align="right"
+          >
             <template slot-scope="scope">{{
               scope.row.sep | toLocaleStr
             }}</template>
           </el-table-column>
-          <el-table-column min-width="150" sortable label="Oct" property="oct">
+          <el-table-column
+            min-width="150"
+            sortable
+            label="Oct"
+            property="oct"
+            align="right"
+          >
             <template slot-scope="scope">{{
               scope.row.oct | toLocaleStr
             }}</template>
           </el-table-column>
-          <el-table-column min-width="150" sortable label="Nov" property="nov">
+          <el-table-column
+            min-width="150"
+            sortable
+            label="Nov"
+            property="nov"
+            align="right"
+          >
             <template slot-scope="scope">{{
               scope.row.nov | toLocaleStr
             }}</template>
           </el-table-column>
-          <el-table-column min-width="150" sortable label="Dec" property="dec">
+          <el-table-column
+            min-width="150"
+            sortable
+            label="Dec"
+            property="dec"
+            align="right"
+          >
             <template slot-scope="scope">{{
               scope.row.dec | toLocaleStr
             }}</template>
