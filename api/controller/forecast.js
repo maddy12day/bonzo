@@ -10,9 +10,7 @@ const weeklyCommonTableDataMapping = (data) => {
   let counter = uniqueSkus.length <= 10 ? uniqueSkus.length : 10;
   const finalData = [];
   for (let i = 0; i < counter; i++) {
-    let arr = data.filter(
-      (item) => item.sku == uniqueSkus[i] && item.title == uniqueSkusTitle[i]
-    );
+    let arr = data.filter((item) => item.sku == uniqueSkus[i] && item.title == uniqueSkusTitle[i]);
     finalData.push({
       sku: uniqueSkus[i],
       title: uniqueSkusTitle[i],
@@ -32,6 +30,7 @@ export const getFilteredForecastData = async (req, res) => {
         morphe_staging.dim_products idp
       where
         idfbwm.sku = idp.SKU
+        and demand_forecast_run_log_id = 1
       order by
         idfbwm.units_sales desc
       limit 10)
@@ -60,7 +59,7 @@ export const getFilteredForecastData = async (req, res) => {
         dfbwm.sku,
         dfbwm.weekend;`);
 
-    let parsedWeeklyData = weeklyCommonTableDataMapping(filteredForecastData)    
+    let parsedWeeklyData = weeklyCommonTableDataMapping(filteredForecastData);
     res.status(200).json({
       parsedWeeklyData,
     });

@@ -7,14 +7,38 @@
     </div>
     <div class="card-body">
       <h5 class="card-category">
-        Units -
-        <span class="text-white display-4 font-weight-normal">{{
-          units | toLocaleStr
-        }}</span>
+        Units:
+        <span
+          v-if="title === 'Planned'"
+          class="text-info display-4 font-weight-normal"
+          >{{ units | toLocaleStr }}</span
+        >
+        <span
+          v-if="title === 'This Year'"
+          class="text-danger display-4 font-weight-normal"
+          >{{ units | toLocaleStr }}</span
+        >
+        <span
+          v-if="title === 'Forecast'"
+          class="text-warning display-4 font-weight-normal"
+          >{{ units | toLocaleStr }}</span
+        >
       </h5>
       <h5 class="card-category">
-        Revenue -
-        <span class="text-white display-4 font-weight-normal"
+        Revenue:
+        <span
+          v-if="title === 'Planned'"
+          class="text-info display-4 font-weight-normal"
+          >$ {{ revenue | toLocaleStr }}</span
+        >
+        <span
+          v-if="title === 'This Year'"
+          class="text-danger display-4 font-weight-normal"
+          >$ {{ revenue | toLocaleStr }}</span
+        >
+        <span
+          v-if="title === 'Forecast'"
+          class="text-warning display-4 font-weight-normal"
           >$ {{ revenue | toLocaleStr }}</span
         >
       </h5>

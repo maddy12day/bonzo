@@ -36,80 +36,71 @@
       </div>
     </card>
     <!-- Applied filters pills (Vishal) -->
+
     <!-- Base Year/Quarter Stats / Filtered Year/Quarter Stats (Vishal) -->
+
     <!-- Base Metrics / Filtered Metrics (Jubin) -->
     <!-- Filter: Revenue table (Jubin) -->
     <!-- Filter: Units table (Jubin) -->
     <!-- Filter: AUR table (Jubin) -->
 
-    <template v-if="!isFilteredForecast">
-      <card card-body-classes="table-full-width">
-        <div class="col-md-12 text-right p-0">
-          <div class="btn-group btn-group-toggle" data-toggle="buttons">
-            <label
-              v-for="(option, index) in Durations"
-              :key="option.name"
-              class="btn btn-sm btn-primary btn-simple"
-              :id="index"
-              :class="{ active: activeTab == option.name }"
-            >
-              <input
-                type="radio"
-                name="options"
-                autocomplete="off"
-                checked=""
-                @click="showMetricsByDuration(option.name)"
-              />
-              <span class="d-none d-sm-block">{{ option.name }}</span>
-              <span class="d-block d-sm-none">
-                <i :class="option.icon"></i>
-              </span>
-            </label>
-          </div>
+    <card card-body-classes="table-full-width">
+      <div class="col-md-12 text-right p-0">
+        <div class="btn-group btn-group-toggle" data-toggle="buttons">
+          <label
+            v-for="(option, index) in Durations"
+            :key="option.name"
+            class="btn btn-sm btn-primary btn-simple"
+            :id="index"
+            :class="{ active: activeTab == option.name }"
+          >
+            <input
+              type="radio"
+              name="options"
+              autocomplete="off"
+              checked=""
+              @click="showMetricsByDuration(option.name)"
+            />
+            <span class="d-none d-sm-block">{{ option.name }}</span>
+            <span class="d-block d-sm-none">
+              <i :class="option.icon"></i>
+            </span>
+          </label>
         </div>
-        <WeeklyMetricsTable
-          v-if="activeTab == 'Weekly'"
-          :metricsTableData="baseMetricsList"
-          tableHeading="Weekly Metrics"
-        />
-        <MonthlyMetricsTable
-          v-if="activeTab == 'Monthly'"
-          :metricsTableData="baseMetricsList"
-          tableHeading="Monthly Metrics"
-        />
-      </card>
-    </template>
-
-    <template v-if="isFilteredForecast">
-      <br /><br />
-
-      <card>
-        <h4>Top 10 SKUs Forecast</h4>
-      </card>
-
-      <div class="col-md-12">
-        <WeeklyForecast
-          :tableHeading="'Retail Sales'"
-          :forecast_attribute="'retail_sales'"
-          :weeklyforecast="weeklyforecast"
-        />
       </div>
+      <WeeklyMetricsTable
+        v-if="activeTab == 'Weekly'"
+        :metricsTableData="baseMetricsList"
+        tableHeading="Weekly Forecast Metrics"
+      />
+      <MonthlyMetricsTable
+        v-if="activeTab == 'Monthly'"
+        :metricsTableData="baseMetricsList"
+        tableHeading="Monthly Forecast Metrics"
+      />
+    </card>
 
-      <div class="col-md-12">
-        <WeeklyForecast
-          :tableHeading="'Units Sales'"
-          :forecast_attribute="'units_sales'"
-          :weeklyforecast="weeklyforecast"
-        />
-      </div>
-      <div class="col-md-12">
-        <WeeklyForecast
-          :tableHeading="'AUR Sales'"
-          :forecast_attribute="'aur'"
-          :weeklyforecast="weeklyforecast"
-        />
-      </div>
-    </template>
+    <h4 v-if="isFilteredForecast" class="font-weight-bold">
+      Top 10 SKUs Forecast
+    </h4>
+    <WeeklyForecast
+      v-if="isFilteredForecast"
+      :tableHeading="'Revenue'"
+      :forecast_attribute="'retail_sales'"
+      :weeklyforecast="weeklyforecast"
+    />
+    <WeeklyForecast
+      v-if="isFilteredForecast"
+      :tableHeading="'Units Sales'"
+      :forecast_attribute="'units_sales'"
+      :weeklyforecast="weeklyforecast"
+    />
+    <WeeklyForecast
+      v-if="isFilteredForecast"
+      :tableHeading="'AUR'"
+      :forecast_attribute="'aur'"
+      :weeklyforecast="weeklyforecast"
+    />
   </div>
 </template>
 
