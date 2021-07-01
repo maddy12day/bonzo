@@ -66,7 +66,7 @@ export default {
   },
   data() {
     return {
-      sidebarBackground: "blue", //vue|blue|orange|green|red|primary
+      sidebarBackground: "vue", //vue|blue|orange|green|red|primary
     };
   },
   computed: {
