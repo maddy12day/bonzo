@@ -7,6 +7,7 @@ import metrics from "./routes/metrics";
 import chart from "./routes/chart";
 import cache from "./routes/cache";
 import bonzoMl from "./routes/bonzo-ml";
+import forecast from "./routes/forecast";
 
 const app = express();
 
@@ -17,6 +18,7 @@ app.use(metrics);
 app.use(chart);
 app.use(cache);
 app.use(bonzoMl);
+app.use(forecast);
 
 /**
  * logic for our api will go here
