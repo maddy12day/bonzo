@@ -39,12 +39,16 @@
             title="Planned"
             :units="
               `Units - ${
-                yearlyPlannedData[0] ? parseInt(yearlyPlannedData[0]._sum.units) : 0
+                yearlyPlannedData[0]
+                  ? parseInt(yearlyPlannedData[0]._sum.units)
+                  : 0
               }`
             "
             :revenue="
               `Revenue - ${
-                yearlyPlannedData[0] ? parseInt(yearlyPlannedData[0]._sum.revenue) : 0
+                yearlyPlannedData[0]
+                  ? parseInt(yearlyPlannedData[0]._sum.revenue)
+                  : 0
               }`
             "
             class="bg-danger"
@@ -372,10 +376,12 @@ export default {
   methods: {
     async calloutByDuration(duration) {
       this.currentYQTab = duration;
-      const booleanDuration = ["Q1", "Q2", "Q3", "Q4"].find( vendor => vendor === duration );
-      if(booleanDuration) {
-            this.quarterlySale();
-            this.quarterlyPlanned();
+      const booleanDuration = ["Q1", "Q2", "Q3", "Q4"].find(
+        (vendor) => vendor === duration
+      );
+      if (booleanDuration) {
+        this.quarterlySale();
+        this.quarterlyPlanned();
       }
     },
     async showMetricsByDuration(activeTab) {
@@ -461,9 +467,12 @@ export default {
         baseYearlyQuarterlysListString.baseYQForecast
       );
     },
-    async getAllUserData () {
-      this.userInfo = await this.$axios.$get("/get-all-users")
-      window.localStorage.setItem("allUsersInfo", JSON.stringify(this.userInfo));
+    async getAllUserData() {
+      this.userInfo = await this.$axios.$get("/get-all-users");
+      window.localStorage.setItem(
+        "allUsersInfo",
+        JSON.stringify(this.userInfo)
+      );
     },
   },
   async mounted() {
@@ -473,7 +482,6 @@ export default {
     this.yearlyPlanned();
     this.getAllUserData();
   },
- 
 
   computed: {
     yearlyQuarterlyTabs() {
