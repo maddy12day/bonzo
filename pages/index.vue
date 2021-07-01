@@ -2,7 +2,7 @@
   <div>
     <card card-body-classes="table-full-width">
       <div class="row" v-if="forecastYQData.length > 0">
-        <div class="col-md-12 text-right mb-3">
+        <div class="col-md-12 text-right mb-2">
           <div class="btn-group btn-group-toggle" data-toggle="buttons">
             <label
               v-for="(option, index) in yearlyQuarterlyTabs"
