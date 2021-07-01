@@ -251,13 +251,13 @@
             title="Planned"
             :units="
               `Units - ${
-                quarterlyPlannedData[3] ? quarterlyPlannedData[2].qtr_units : 0
+                quarterlyPlannedData[3] ? quarterlyPlannedData[3].qtr_units : 0
               }`
             "
             :revenue="
               `Revenue - ${
                 quarterlyPlannedData[3]
-                  ? quarterlyPlannedData[2].qtr_revenue
+                  ? quarterlyPlannedData[3].qtr_revenue
                   : 0
               }`
             "
