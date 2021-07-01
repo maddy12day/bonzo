@@ -3,6 +3,8 @@
     <ScenarioTable
       tableHeading="Your Scenarios"
       :scenarioTableData="sharedScenariosList.scenarios"
+      :type="'yourScenarios'"
+      v-if="sharedScenariosList.scenarios"
     />
   </div>
 </template>
@@ -20,10 +22,11 @@ export default {
     ScenarioTable,
   },
   async mounted() {
-    this.sharedScenariosList = await this.$axios.$get("/get-user-scenarios", {
+    let allUserInfo = JSON.parse(window.localStorage.getItem('allUsersInfo'))
+    let currentUserId = allUserInfo.users.filter(user => user.email_id = this.$auth.user.email)[0].id;
+    this.sharedScenariosList = await this.$axios.$get(`/get-user-scenarios/${currentUserId}`, {
       progress: true,
     });
-    console.log("JJ",this.$auth.user)
   },
 };
 </script>

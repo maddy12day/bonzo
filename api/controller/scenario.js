@@ -6,7 +6,7 @@ export const getUserScenarios = async (req, res) => {
   try {
     const scenarios = await prisma.scenarios.findMany({
       where: {
-        demand_planner_user_id: 1,
+        demand_planner_user_id: parseInt(req.params.id),
       },
       include: {
         scenario_types: {
@@ -32,7 +32,14 @@ export const allSharedScenarios = async (req, res) => {
     const scenarios = await prisma.scenarios.findMany({
       where: {
         is_shared: true,
-      }
+      },
+      include: {
+        scenario_types: {
+          select: {
+            scenario_type: true
+          }
+        },
+      },
     });
     res.status(200).json({
       scenarios,

@@ -47,7 +47,7 @@ export const authenticateUser = async (req, res) => {
       const last_name = current_user.last_name;
       const isAuthenticate = bcrypt.compareSync(password, current_user.password);
       if (isAuthenticate) {
-        const token = jwt.sign({ email, first_name, last_name }, "bonzoAITokenSecret", { expiresIn: "24h" });
+        const token = jwt.sign({ email, last_name }, "bonzoAITokenSecret", { expiresIn: "24h" });
         console.log("token", token);
         res.status(200).send({
           message: "Authentication successful",
@@ -84,5 +84,25 @@ export const userInfo = async (req, res) => {
     });
   } else {
     return res.status(401).json({ message: "unauthorized" });
+  }
+};
+
+export const getAllUsers = async (req, res) => {
+  try {
+    const users =  await prisma.users.findMany({
+      select: {
+        first_name: true,
+        email_id: true,
+        id: true
+      }
+    })
+    res.status(200).json({
+      users
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "something went wrong in shared scenario list api",
+      error: `${error}`,
+    });
   }
 };
