@@ -303,6 +303,13 @@ export default {
   methods: {
     async calloutByDuration(duration) {
       this.currentYQTab = duration;
+      const booleanDuration = ["Q1", "Q2", "Q3", "Q4"].find(
+        (vendor) => vendor === duration
+      );
+      if (booleanDuration) {
+        this.quarterlySale();
+        this.quarterlyPlanned();
+      }
     },
     async showMetricsByDuration(activeTab) {
       this.activeTab = activeTab;
@@ -398,9 +405,7 @@ export default {
   async mounted() {
     this.showMetricsByDuration("Weekly");
     this.forecastYearlyQuarterly();
-    this.quarterlySale();
     this.yearlySale();
-    this.quarterlyPlanned();
     this.yearlyPlanned();
     this.getAllUserData();
   },
