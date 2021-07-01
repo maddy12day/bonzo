@@ -10,7 +10,7 @@
             min-width="150"
             sortable
             label="Metrics Name"
-            property="metrics_name"
+            property="metrics_master.title"
           ></el-table-column>
 
           <el-table-column
