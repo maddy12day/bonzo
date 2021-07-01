@@ -28,7 +28,7 @@
       </div>
       <div class="row" v-if="currentYQTab == 'Yearly'">
         <div class="col-md-4">
-          <YearlyQarterlyCard
+          <YearlyQuarterlyCard
             title="Planned"
             :units="`${
               yearlyPlannedData[0]
@@ -44,7 +44,7 @@
           />
         </div>
         <div class="col-md-4">
-          <YearlyQarterlyCard
+          <YearlyQuarterlyCard
             title="This Year"
             :units="`${yearlySaleData[0] ? yearlySaleData[0].qtr_units : 0}`"
             :revenue="`${
@@ -54,7 +54,7 @@
           />
         </div>
         <div class="col-md-4">
-          <YearlyQarterlyCard
+          <YearlyQuarterlyCard
             title="Forecast"
             :units="`${
               forecastYQData[1] ? forecastYQData[1].yearly_aggregate : 0
@@ -68,7 +68,7 @@
       </div>
       <div class="row" v-if="currentYQTab == 'Q1'">
         <div class="col-md-4">
-          <YearlyQarterlyCard
+          <YearlyQuarterlyCard
             title="Planned"
             :units="`${
               quarterlyPlannedData[0] ? quarterlyPlannedData[0].qtr_units : 0
@@ -80,7 +80,7 @@
           />
         </div>
         <div class="col-md-4">
-          <YearlyQarterlyCard
+          <YearlyQuarterlyCard
             title="This Year"
             :units="`${
               quarterlyPlannedData[0] ? quarterlyPlannedData[0].qtr_units : 0
@@ -92,7 +92,7 @@
           />
         </div>
         <div class="col-md-4">
-          <YearlyQarterlyCard
+          <YearlyQuarterlyCard
             title="Forecast"
             :units="`${forecastYQData[1] ? forecastYQData[1].q1_aggregate : 0}`"
             :revenue="`${
@@ -104,7 +104,7 @@
       </div>
       <div class="row" v-if="currentYQTab == 'Q2'">
         <div class="col-md-4">
-          <YearlyQarterlyCard
+          <YearlyQuarterlyCard
             title="Planned"
             :units="`${
               quarterlyPlannedData[1] ? quarterlyPlannedData[1].qtr_units : 0
@@ -116,7 +116,7 @@
           />
         </div>
         <div class="col-md-4">
-          <YearlyQarterlyCard
+          <YearlyQuarterlyCard
             title="This Year"
             :units="`${
               quarterlyPlannedData[1] ? quarterlyPlannedData[1].qtr_units : 0
@@ -128,7 +128,7 @@
           />
         </div>
         <div class="col-md-4">
-          <YearlyQarterlyCard
+          <YearlyQuarterlyCard
             title="Forecast"
             :units="`${forecastYQData[1] ? forecastYQData[1].q2_aggregate : 0}`"
             :revenue="`${
@@ -140,7 +140,7 @@
       </div>
       <div class="row" v-if="currentYQTab == 'Q3'">
         <div class="col-md-4">
-          <YearlyQarterlyCard
+          <YearlyQuarterlyCard
             title="Planned"
             :units="`${
               quarterlyPlannedData[2] ? quarterlyPlannedData[2].qtr_units : 0
@@ -152,7 +152,7 @@
           />
         </div>
         <div class="col-md-4">
-          <YearlyQarterlyCard
+          <YearlyQuarterlyCard
             title="This Year"
             :units="`${
               quarterlyPlannedData[2] ? quarterlyPlannedData[2].qtr_units : 0
@@ -164,7 +164,7 @@
           />
         </div>
         <div class="col-md-4">
-          <YearlyQarterlyCard
+          <YearlyQuarterlyCard
             title="Forecast"
             :units="`${forecastYQData[1] ? forecastYQData[1].q3_aggregate : 0}`"
             :revenue="`${forecastYQData ? forecastYQData[0].q3_aggregate : 0}`"
@@ -174,7 +174,7 @@
       </div>
       <div class="row" v-if="currentYQTab == 'Q4'">
         <div class="col-md-4">
-          <YearlyQarterlyCard
+          <YearlyQuarterlyCard
             title="Planned"
             :units="`${
               quarterlyPlannedData[3] ? quarterlyPlannedData[3].qtr_units : 0
@@ -186,7 +186,7 @@
           />
         </div>
         <div class="col-md-4">
-          <YearlyQarterlyCard
+          <YearlyQuarterlyCard
             title="This Year"
             :units="`${
               quarterlyPlannedData[3] ? quarterlyPlannedData[3].qtr_units : 0
@@ -198,7 +198,7 @@
           />
         </div>
         <div class="col-md-4">
-          <YearlyQarterlyCard
+          <YearlyQuarterlyCard
             title="Forecast"
             :units="`${forecastYQData[1] ? forecastYQData[1].q4_aggregate : 0}`"
             :revenue="`${
@@ -259,7 +259,7 @@
 import ScenarioTable from "../components/Scenarios/ScenarioTable.vue";
 import WeeklyMetricsTable from "../components/Metrics/WeeklyMetricsTable.vue";
 import MonthlyMetricsTable from "../components/Metrics/MonthlyMetricsTable.vue";
-import YearlyQarterlyCard from "../components/YearlyQuarterlyCards/YearlyQuarterlyCards.vue";
+import YearlyQuarterlyCard from "../components/YearlyQuarterlyCards/YearlyQuarterlyCards.vue";
 import Card from "~/components/Cards/Card.vue";
 
 export default {
@@ -281,7 +281,7 @@ export default {
     ScenarioTable,
     WeeklyMetricsTable,
     MonthlyMetricsTable,
-    YearlyQarterlyCard,
+    YearlyQuarterlyCard,
     Card,
   },
   methods: {
