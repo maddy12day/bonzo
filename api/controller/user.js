@@ -86,3 +86,23 @@ export const userInfo = async (req, res) => {
     return res.status(401).json({ message: "unauthorized" });
   }
 };
+
+export const getAllUsers = async (req, res) => {
+  try {
+    const users =  await prisma.users.findMany({
+      select: {
+        first_name: true,
+        email_id: true,
+        id: true
+      }
+    })
+    res.status(200).json({
+      users
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "something went wrong in shared scenario list api",
+      error: `${error}`,
+    });
+  }
+};

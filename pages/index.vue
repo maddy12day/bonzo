@@ -1,8 +1,10 @@
 <template>
   <div>
     <ScenarioTable
+      v-if="sharedScenariosList.scenarios"
       tableHeading="Shared Scenarios"
       :scenarioTableData="sharedScenariosList.scenarios"
+      :type="'sharedScenarios'"
     />
     <card card-body-classes="table-full-width">
       <div class="col-md-12 text-right p-0">
@@ -53,6 +55,7 @@ export default {
       sharedScenariosList: [],
       baseMetricsList: [],
       activeTab: "Weekly",
+      userInfo: [],
     };
   },
   components: {
@@ -91,10 +94,14 @@ export default {
         );
       }
     },
+    async getAllUserData () {
+      this.userInfo = await this.$axios.$get("/get-all-users")
+      window.localStorage.setItem("allUsersInfo", JSON.stringify(this.userInfo));
+    },
   },
-
   mounted() {
     this.showMetricsByDuration("Weekly");
+    this.getAllUserData();
   },
   computed: {
     bigLineChartCategories() {
