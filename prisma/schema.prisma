@@ -217,7 +217,7 @@ model forecasted_monthly_metrics {
   nov                        Float?    @db.Float
   dec                        Float?    @db.Float
   created_at                 DateTime? @default(now()) @db.DateTime(0)
-
+  metrics_master             metrics_master @relation(fields: [metrics_name], references: [name])
   @@index([demand_forecast_run_log_id], name: "fmm_demand_forecast_run_log_id_IDX")
 }
 
@@ -321,15 +321,16 @@ model manual_adjustments {
 }
 
 model metrics_master {
-  id                        BigInt    @id @default(autoincrement())
-  name                      String    @db.VarChar(50)
-  title                     String    @db.VarChar(100)
-  allow_manual_adjustment   Boolean?
-  display_order             Int?
-  last_updated_by           String?   @db.VarChar(50)
-  created_at                DateTime? @default(now()) @db.DateTime(0)
-  updated_at                DateTime? @default(now()) @db.DateTime(0)
-  forecasted_weekly_metrics forecasted_weekly_metrics[]
+  id                          BigInt    @id @default(autoincrement())
+  name                        String    @db.VarChar(50)
+  title                       String    @db.VarChar(100)
+  allow_manual_adjustment     Boolean?
+  display_order               Int?
+  last_updated_by             String?   @db.VarChar(50)
+  created_at                  DateTime? @default(now()) @db.DateTime(0)
+  updated_at                  DateTime? @default(now()) @db.DateTime(0)
+  forecasted_weekly_metrics   forecasted_weekly_metrics[]
+  forecasted_monthly_metrics  forecasted_monthly_metrics[]
   
   @@index([allow_manual_adjustment], name: "mm_allow_manual_adjustment_IDX")
   @@index([name], name: "mm_name_IDX")

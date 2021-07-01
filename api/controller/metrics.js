@@ -39,6 +39,13 @@ export const getBaseMonthlyMetrics = async (req, res) => {
         where: {
           demand_forecast_run_log_id: 1,
         },
+        include: {
+          metrics_master: {
+            select: {
+              title: true,
+            },
+          },
+        },
       }
     );
     const baseMonthlyMetrics = JSON.stringify(
@@ -135,13 +142,19 @@ export const getBaseQuarterlyPlanned = async (req, res) => {
 
 export const getBaseThisQuarterlySale = async (req, res) => {
   try {
-    const baseQuarterlyPlanned = await prisma.$queryRaw(`SELECT QUARTER(weekend_date) AS qtr, ROUND(SUM(revenue),0) AS qtr_revenue, ROUND(SUM(units),0) AS qtr_units
-                                                        FROM morphe_staging.planned_weekly_units_revenue_by_channel_by_sku
-                                                        WHERE weekend_date BETWEEN '2021-01-01' AND '2021-12-31'
-                                                        GROUP BY QUARTER(weekend_date);`);
+    const baseQuarterlySale = await prisma.$queryRaw(`SELECT 
+                                                        QUARTER(weekend) AS qtr, 
+                                                        ROUND(SUM(revenue),0) AS qtr_revenue, 
+                                                        ROUND(SUM(unit_sales),0) AS qtr_units
+                                                      FROM morphe_staging.fact_sales_ending_inventory_sku_by_week fseisbw 
+                                                      WHERE 
+                                                        weekend BETWEEN '2021-01-01' AND '2021-12-31'
+                                                        AND fseisbw.sku IN (select sku from morphe_staging.planned_weekly_units_revenue_by_channel_by_sku)
+                                                      GROUP BY 
+                                                        QUARTER(weekend);`);
 
     res.status(200).json({
-      baseQuarterlyPlanned,
+      baseQuarterlySale,
     });
   } catch (error) {
     res.status(500).json({
@@ -152,13 +165,19 @@ export const getBaseThisQuarterlySale = async (req, res) => {
 };
 export const getBaseThisYearlySale = async (req, res) => {
   try {
-    const baseQuarterlyPlanned = await prisma.$queryRaw(`SELECT QUARTER(weekend_date) AS qtr, ROUND(SUM(revenue),0) AS qtr_revenue, ROUND(SUM(units),0) AS qtr_units
-                                                        FROM morphe_staging.planned_weekly_units_revenue_by_channel_by_sku
-                                                        WHERE weekend_date BETWEEN '2021-01-01' AND '2021-12-31'
-                                                        GROUP BY QUARTER(weekend_date);`);
+    const baseYearlySale = await prisma.$queryRaw(`SELECT 
+                                                    Year(weekend) AS qtr, 
+                                                    ROUND(SUM(revenue),0) AS qtr_revenue, 
+                                                    ROUND(SUM(unit_sales),0) AS qtr_units
+                                                  FROM morphe_staging.fact_sales_ending_inventory_sku_by_week fseisbw 
+                                                  WHERE 
+                                                    weekend BETWEEN '2021-01-01' AND '2021-12-31'
+                                                    AND fseisbw.sku IN (select sku from morphe_staging.planned_weekly_units_revenue_by_channel_by_sku)
+                                                  GROUP BY 
+                                                    Year(weekend);`);
 
     res.status(200).json({
-      baseQuarterlyPlanned,
+      baseYearlySale,
     });
   } catch (error) {
     res.status(500).json({

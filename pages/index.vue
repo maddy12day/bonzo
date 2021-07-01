@@ -14,14 +14,14 @@
               :key="option.name"
               class="btn btn-sm btn-primary btn-simple "
               :id="index"
-              :class="{ active: activeTab == option.name }"
+              :class="{ active: currentYQTab == option.name }"
             >
               <input
                 type="radio"
                 name="options"
                 autocomplete="off"
                 checked=""
-                @click="showMetricsByDuration(option.name)"
+                @click="calloutByDuration(option.name)"
               />
               <span class="d-none d-sm-block">{{ option.name }}</span>
               <span class="d-block d-sm-none">
@@ -30,27 +30,271 @@
             </label>
           </div>
         </div>
+      </div>
+      <div class="row" v-if="currentYQTab == 'Yearly'">
         <div class="col-md-4">
           <YearlyQarterlyCard
             title="Planned"
-            :units="`Units - ${yearlyQuarterlyData[1].yearly_aggregate}`"
-            :revenue="`Revenue - ${yearlyQuarterlyData[0].yearly_aggregate}`"
+            :units="
+              `Units - ${
+                yearlyPlannedData[0] ? yearlyPlannedData[0]._sum.units : 0
+              }`
+            "
+            :revenue="
+              `Revenue - ${
+                yearlyPlannedData[0] ? yearlyPlannedData[0]._sum.revenue : 0
+              }`
+            "
             class="bg-danger"
           />
         </div>
         <div class="col-md-4">
           <YearlyQarterlyCard
             title="This Year"
-            :units="`Units - ${yearlyQuarterlyData[1].yearly_aggregate}`"
-            :revenue="`Revenue - ${yearlyQuarterlyData[0].yearly_aggregate}`"
+            :units="
+              `Units - ${yearlySaleData[0] ? yearlySaleData[0].qtr_units : 0}`
+            "
+            :revenue="
+              `Revenue - ${
+                yearlySaleData[0] ? yearlySaleData[0].qtr_revenue : 0
+              }`
+            "
             class="bg-warning"
           />
         </div>
         <div class="col-md-4">
           <YearlyQarterlyCard
             title="Forecast"
-            :units="`Units - ${yearlyQuarterlyData[1].yearly_aggregate}`"
-            :revenue="`Revenue - ${yearlyQuarterlyData[0].yearly_aggregate}`"
+            :units="
+              `Units - ${
+                yearlyQuarterlyData[1]
+                  ? yearlyQuarterlyData[1].yearly_aggregate
+                  : 0
+              }`
+            "
+            :revenue="
+              `Revenue - ${
+                yearlyQuarterlyData[0]
+                  ? yearlyQuarterlyData[0].yearly_aggregate
+                  : 0
+              }`
+            "
+            class="bg-info"
+          />
+        </div>
+      </div>
+      <div class="row" v-if="currentYQTab == 'Q1'">
+        <div class="col-md-4">
+          <YearlyQarterlyCard
+            title="Planned"
+            :units="
+              `Units - ${
+                quarterlyPlannedData[0] ? quarterlyPlannedData[0].qtr_units : 0
+              }`
+            "
+            :revenue="
+              `Revenue - ${
+                quarterlyPlannedData[0]
+                  ? quarterlyPlannedData[0].qtr_revenue
+                  : 0
+              }`
+            "
+            class="bg-danger"
+          />
+        </div>
+        <div class="col-md-4">
+          <YearlyQarterlyCard
+            title="This Year"
+            :units="
+              `Units - ${
+                quarterlyPlannedData[0] ? quarterlyPlannedData[0].qtr_units : 0
+              }`
+            "
+            :revenue="
+              `Revenue - ${
+                quarterlyPlannedData[0]
+                  ? quarterlyPlannedData[0].qtr_revenue
+                  : 0
+              }`
+            "
+            class="bg-warning"
+          />
+        </div>
+        <div class="col-md-4">
+          <YearlyQarterlyCard
+            title="Forecast"
+            :units="
+              `Units - ${
+                yearlyQuarterlyData[1] ? yearlyQuarterlyData[1].q1_aggregate : 0
+              }`
+            "
+            :revenue="
+              `Revenue - ${
+                yearlyQuarterlyData[0] ? yearlyQuarterlyData[0].q1_aggregate : 0
+              }`
+            "
+            class="bg-info"
+          />
+        </div>
+      </div>
+      <div class="row" v-if="currentYQTab == 'Q2'">
+        <div class="col-md-4">
+          <YearlyQarterlyCard
+            title="Planned"
+            :units="
+              `Units - ${
+                quarterlyPlannedData[1] ? quarterlyPlannedData[1].qtr_units : 0
+              }`
+            "
+            :revenue="
+              `Revenue - ${
+                quarterlyPlannedData[1]
+                  ? quarterlyPlannedData[1].qtr_revenue
+                  : 0
+              }`
+            "
+            class="bg-danger"
+          />
+        </div>
+        <div class="col-md-4">
+          <YearlyQarterlyCard
+            title="This Year"
+            :units="
+              `Units - ${
+                quarterlyPlannedData[1] ? quarterlyPlannedData[1].qtr_units : 0
+              }`
+            "
+            :revenue="
+              `Revenue - ${
+                quarterlyPlannedData[1]
+                  ? quarterlyPlannedData[1].qtr_revenue
+                  : 0
+              }`
+            "
+            class="bg-warning"
+          />
+        </div>
+        <div class="col-md-4">
+          <YearlyQarterlyCard
+            title="Forecast"
+            :units="
+              `Units - ${
+                yearlyQuarterlyData[1] ? yearlyQuarterlyData[1].q2_aggregate : 0
+              }`
+            "
+            :revenue="
+              `Revenue - ${
+                yearlyQuarterlyData[0] ? yearlyQuarterlyData[0].q2_aggregate : 0
+              }`
+            "
+            class="bg-info"
+          />
+        </div>
+      </div>
+      <div class="row" v-if="currentYQTab == 'Q3'">
+        <div class="col-md-4">
+          <YearlyQarterlyCard
+            title="Planned"
+            :units="
+              `Units - ${
+                quarterlyPlannedData[2] ? quarterlyPlannedData[2].qtr_units : 0
+              }`
+            "
+            :revenue="
+              `Revenue - ${
+                quarterlyPlannedData[2]
+                  ? quarterlyPlannedData[2].qtr_revenue
+                  : 0
+              }`
+            "
+            class="bg-danger"
+          />
+        </div>
+        <div class="col-md-4">
+          <YearlyQarterlyCard
+            title="This Year"
+            :units="
+              `Units - ${
+                quarterlyPlannedData[2] ? quarterlyPlannedData[2].qtr_units : 0
+              }`
+            "
+            :revenue="
+              `Revenue - ${
+                quarterlyPlannedData[2]
+                  ? quarterlyPlannedData[2].qtr_revenue
+                  : 0
+              }`
+            "
+            class="bg-warning"
+          />
+        </div>
+        <div class="col-md-4">
+          <YearlyQarterlyCard
+            title="Forecast"
+            :units="
+              `Units - ${
+                yearlyQuarterlyData[1] ? yearlyQuarterlyData[1].q3_aggregate : 0
+              }`
+            "
+            :revenue="
+              `Revenue - ${
+                yearlyQuarterlyData ? yearlyQuarterlyData[0].q3_aggregate : 0
+              }`
+            "
+            class="bg-info"
+          />
+        </div>
+      </div>
+      <div class="row" v-if="currentYQTab == 'Q4'">
+        <div class="col-md-4">
+          <YearlyQarterlyCard
+            title="Planned"
+            :units="
+              `Units - ${
+                quarterlyPlannedData[3] ? quarterlyPlannedData[2].qtr_units : 0
+              }`
+            "
+            :revenue="
+              `Revenue - ${
+                quarterlyPlannedData[3]
+                  ? quarterlyPlannedData[2].qtr_revenue
+                  : 0
+              }`
+            "
+            class="bg-danger"
+          />
+        </div>
+        <div class="col-md-4">
+          <YearlyQarterlyCard
+            title="This Year"
+            :units="
+              `Units - ${
+                quarterlyPlannedData[3] ? quarterlyPlannedData[3].qtr_units : 0
+              }`
+            "
+            :revenue="
+              `Revenue - ${
+                quarterlyPlannedData[3]
+                  ? quarterlyPlannedData[3].qtr_revenue
+                  : 0
+              }`
+            "
+            class="bg-warning"
+          />
+        </div>
+        <div class="col-md-4">
+          <YearlyQarterlyCard
+            title="Forecast"
+            :units="
+              `Units - ${
+                yearlyQuarterlyData[1] ? yearlyQuarterlyData[1].q4_aggregate : 0
+              }`
+            "
+            :revenue="
+              `Revenue - ${
+                yearlyQuarterlyData[0] ? yearlyQuarterlyData[0].q4_aggregate : 0
+              }`
+            "
             class="bg-info"
           />
         </div>
@@ -60,7 +304,7 @@
       <div class="col-md-12 text-right p-0">
         <div class="btn-group btn-group-toggle" data-toggle="buttons">
           <label
-            v-for="(option, index) in bigLineChartCategories"
+            v-for="(option, index) in Durations"
             :key="option.name"
             class="btn btn-sm btn-primary btn-simple "
             :id="index"
@@ -107,7 +351,12 @@ export default {
       sharedScenariosList: [],
       baseMetricsList: [],
       yearlyQuarterlyData: {},
+      quarterlyPlannedData: [],
+      quarterlySaleData: [],
+      yearlySaleData: [],
+      yearlyPlannedData: [],
       activeTab: "Weekly",
+      currentYQTab: "Yearly",
     };
   },
   components: {
@@ -118,6 +367,9 @@ export default {
     Card,
   },
   methods: {
+    async calloutByDuration(duration) {
+      this.currentYQTab = duration;
+    },
     async showMetricsByDuration(activeTab) {
       this.activeTab = activeTab;
       if (this.activeTab == "Weekly") {
@@ -135,7 +387,6 @@ export default {
         this.baseMetricsList = JSON.parse(
           baseWeeklyMetricsListString.baseWeeklyMetrics
         );
-        console.log(this.baseMetricsList);
       } else {
         // base metrics table for monthly
         const baseMonthlyMetricsListString = await this.$axios.$get(
@@ -149,20 +400,67 @@ export default {
         );
       }
     },
-  },
 
+    async yearlySale() {
+      const baseYearlyQuarterlysListString = await this.$axios.$get(
+        "/based-yearly-sale-this-year",
+        {
+          progress: true,
+        }
+      );
+      this.yearlySaleData = baseYearlyQuarterlysListString.baseYearlySale;
+    },
+
+    async quarterlySale() {
+      const baseYearlyQuarterlysListString = await this.$axios.$get(
+        "/based-quarterly-sale-this-year",
+        {
+          progress: true,
+        }
+      );
+      this.quarterlySaleData = baseYearlyQuarterlysListString.baseQuarterlySale;
+    },
+
+    async yearlyPlanned() {
+      const baseYearlyQuarterlysListString = await this.$axios.$get(
+        "/base-yearly-planned",
+        {
+          progress: true,
+        }
+      );
+      this.yearlyPlannedData = baseYearlyQuarterlysListString.baseYearlyPlanned;
+    },
+
+    async quarterlyPlanned() {
+      const baseYearlyQuarterlysListString = await this.$axios.$get(
+        "/based-quarterly-planned",
+        {
+          progress: true,
+        }
+      );
+      this.quarterlyPlannedData =
+        baseYearlyQuarterlysListString.baseQuarterlyPlanned;
+    },
+
+    async forecastYearlyQuarterly() {
+      const baseYearlyQuarterlysListString = await this.$axios.$get(
+        "/base-yearly-quarterly-forecast",
+        {
+          progress: true,
+        }
+      );
+      this.yearlyQuarterlyData = JSON.parse(
+        baseYearlyQuarterlysListString.baseYQForecast
+      );
+    },
+  },
   async mounted() {
     this.showMetricsByDuration("Weekly");
-    const baseYearlyQuarterlysListString = await this.$axios.$get(
-      "/base-yearly-quarterly-forecast",
-      {
-        progress: true,
-      }
-    );
-    this.yearlyQuarterlyData = JSON.parse(
-      baseYearlyQuarterlysListString.baseYQForecast
-    );
-    console.log(this.yearlyQuarterlyData);
+    this.forecastYearlyQuarterly();
+    this.quarterlySale();
+    this.yearlySale();
+    this.quarterlyPlanned();
+    this.yearlyPlanned();
   },
 
   computed: {
@@ -173,21 +471,21 @@ export default {
           name: "Q1",
           icon: "tim-icons icon-gift-2",
         },
-         {
+        {
           name: "Q2",
           icon: "tim-icons icon-gift-2",
         },
-         {
+        {
           name: "Q3",
           icon: "tim-icons icon-gift-2",
         },
-         {
+        {
           name: "Q4",
           icon: "tim-icons icon-gift-2",
         },
       ];
     },
-    bigLineChartCategories() {
+    Durations() {
       return [
         { name: "Monthly", icon: "tim-icons icon-single-02" },
         {
