@@ -1,7 +1,7 @@
 <template>
   <div>
     <card card-body-classes="table-full-width">
-      <div class="row" v-if="yearlyQuarterlyData.length > 0">
+      <div class="row" v-if="forecastYQData.length > 0">
         <div class="col-md-12 text-right mb-3">
           <div class="btn-group btn-group-toggle" data-toggle="buttons">
             <label
@@ -281,7 +281,7 @@ export default {
     return {
       sharedScenariosList: [],
       baseMetricsList: [],
-      yearlyQuarterlyData: {},
+      forecastYQData: {},
       quarterlyPlannedData: [],
       quarterlySaleData: [],
       yearlySaleData: [],
@@ -341,56 +341,44 @@ export default {
     },
 
     async yearlySale() {
-      const baseYearlyQuarterlysListString = await this.$axios.$get(
-        "/based-yearly-sale-this-year",
-        {
-          progress: true,
-        }
-      );
-      this.yearlySaleData = baseYearlyQuarterlysListString.baseYearlySale;
+      const yearly = await this.$axios.$get("/based-yearly-sale-this-year", {
+        progress: true,
+      });
+      this.yearlySaleData = yearly.baseYearlySale;
     },
 
     async quarterlySale() {
-      const baseYearlyQuarterlysListString = await this.$axios.$get(
+      const quaterly = await this.$axios.$get(
         "/based-quarterly-sale-this-year",
         {
           progress: true,
         }
       );
-      this.quarterlySaleData = baseYearlyQuarterlysListString.baseQuarterlySale;
+      this.quarterlySaleData = quaterly.baseQuarterlySale;
     },
 
     async yearlyPlanned() {
-      const baseYearlyQuarterlysListString = await this.$axios.$get(
-        "/base-yearly-planned",
-        {
-          progress: true,
-        }
-      );
-      this.yearlyPlannedData = baseYearlyQuarterlysListString.baseYearlyPlanned;
+      const yearly = await this.$axios.$get("/base-yearly-planned", {
+        progress: true,
+      });
+      this.yearlyPlannedData = yearly.baseYearlyPlanned;
     },
 
     async quarterlyPlanned() {
-      const baseYearlyQuarterlysListString = await this.$axios.$get(
-        "/based-quarterly-planned",
-        {
-          progress: true,
-        }
-      );
-      this.quarterlyPlannedData =
-        baseYearlyQuarterlysListString.baseQuarterlyPlanned;
+      const quarterly = await this.$axios.$get("/based-quarterly-planned", {
+        progress: true,
+      });
+      this.quarterlyPlannedData = quarterly.baseQuarterlyPlanned;
     },
 
     async forecastYearlyQuarterly() {
-      const baseYearlyQuarterlysListString = await this.$axios.$get(
+      const forecast = await this.$axios.$get(
         "/base-yearly-quarterly-forecast",
         {
           progress: true,
         }
       );
-      this.yearlyQuarterlyData = JSON.parse(
-        baseYearlyQuarterlysListString.baseYQForecast
-      );
+      this.forecastYQData = JSON.parse(forecast.baseYQForecast);
     },
     async getAllUserData() {
       this.userInfo = await this.$axios.$get("/get-all-users");

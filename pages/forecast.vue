@@ -8,12 +8,22 @@
     <!-- Filter: Revenue table (Jubin) -->
     <!-- Filter: Units table (Jubin) -->
     <!-- Filter: AUR table (Jubin) -->
+    <RegularFilters :showAplyFilterBtn="true"/>
   </div>
 </template>
 
 <script>
-export default {};
+import RegularFilters from "../components/Filters/RegularFilter.vue";
+export default {
+  name: "Forecast",
+  components: {
+    RegularFilters,
+  },
+
+  data() {
+    return {};
+  },
+};
 </script>
 
-<style>
-</style>
+<style></style>
