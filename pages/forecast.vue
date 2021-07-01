@@ -8,7 +8,7 @@
     <!-- Filter: Revenue table (Jubin) -->
     <!-- Filter: Units table (Jubin) -->
     <!-- Filter: AUR table (Jubin) -->
-    <RegularFilters />
+    <RegularFilters :showAplyFilterBtn="true"/>
   </div>
 </template>
 

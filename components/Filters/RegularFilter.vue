@@ -90,7 +90,7 @@
       />
     </div>
 
-    <div class="col-md-6 mt-2">
+    <div :class="showAplyFilterBtn ? 'col-md-6 mt-2': 'col-md-8 mt-2'">
       <CustomMultiSelect
         :Options="skuOptions"
         placeholder="SKUs"
@@ -100,7 +100,7 @@
         ref="skus"
       />
     </div>
-    <div class="col-md-2 mt-1">
+    <div class="col-md-2 mt-1" v-if="showAplyFilterBtn">
       <button
         class="btn btn-sm btn-primary btn-block "
         style="line-height: 28px;"
