@@ -30,12 +30,12 @@
         <div class="col-md-4">
           <YearlyQarterlyCard
             title="Planned"
-            :units="`Units - ${
+            :units="`${
               yearlyPlannedData[0]
                 ? parseInt(yearlyPlannedData[0]._sum.units)
                 : 0
             }`"
-            :revenue="`Revenue - ${
+            :revenue="`${
               yearlyPlannedData[0]
                 ? parseInt(yearlyPlannedData[0]._sum.revenue)
                 : 0
@@ -46,10 +46,8 @@
         <div class="col-md-4">
           <YearlyQarterlyCard
             title="This Year"
-            :units="`Units - ${
-              yearlySaleData[0] ? yearlySaleData[0].qtr_units : 0
-            }`"
-            :revenue="`Revenue - ${
+            :units="`${yearlySaleData[0] ? yearlySaleData[0].qtr_units : 0}`"
+            :revenue="`${
               yearlySaleData[0] ? yearlySaleData[0].qtr_revenue : 0
             }`"
             class="bg-warning"
@@ -58,12 +56,12 @@
         <div class="col-md-4">
           <YearlyQarterlyCard
             title="Forecast"
-            :units="`Units - ${
+            :units="`${
               yearlyQuarterlyData[1]
                 ? yearlyQuarterlyData[1].yearly_aggregate
                 : 0
             }`"
-            :revenue="`Revenue - ${
+            :revenue="`${
               yearlyQuarterlyData[0]
                 ? yearlyQuarterlyData[0].yearly_aggregate
                 : 0
@@ -76,10 +74,10 @@
         <div class="col-md-4">
           <YearlyQarterlyCard
             title="Planned"
-            :units="`Units - ${
+            :units="`${
               quarterlyPlannedData[0] ? quarterlyPlannedData[0].qtr_units : 0
             }`"
-            :revenue="`Revenue - ${
+            :revenue="`${
               quarterlyPlannedData[0] ? quarterlyPlannedData[0].qtr_revenue : 0
             }`"
             class="bg-danger"
@@ -88,10 +86,10 @@
         <div class="col-md-4">
           <YearlyQarterlyCard
             title="This Year"
-            :units="`Units - ${
+            :units="`${
               quarterlyPlannedData[0] ? quarterlyPlannedData[0].qtr_units : 0
             }`"
-            :revenue="`Revenue - ${
+            :revenue="`${
               quarterlyPlannedData[0] ? quarterlyPlannedData[0].qtr_revenue : 0
             }`"
             class="bg-warning"
@@ -100,10 +98,10 @@
         <div class="col-md-4">
           <YearlyQarterlyCard
             title="Forecast"
-            :units="`Units - ${
+            :units="`${
               yearlyQuarterlyData[1] ? yearlyQuarterlyData[1].q1_aggregate : 0
             }`"
-            :revenue="`Revenue - ${
+            :revenue="`${
               yearlyQuarterlyData[0] ? yearlyQuarterlyData[0].q1_aggregate : 0
             }`"
             class="bg-info"
@@ -114,10 +112,10 @@
         <div class="col-md-4">
           <YearlyQarterlyCard
             title="Planned"
-            :units="`Units - ${
+            :units="`${
               quarterlyPlannedData[1] ? quarterlyPlannedData[1].qtr_units : 0
             }`"
-            :revenue="`Revenue - ${
+            :revenue="`${
               quarterlyPlannedData[1] ? quarterlyPlannedData[1].qtr_revenue : 0
             }`"
             class="bg-danger"
@@ -126,10 +124,10 @@
         <div class="col-md-4">
           <YearlyQarterlyCard
             title="This Year"
-            :units="`Units - ${
+            :units="`${
               quarterlyPlannedData[1] ? quarterlyPlannedData[1].qtr_units : 0
             }`"
-            :revenue="`Revenue - ${
+            :revenue="`${
               quarterlyPlannedData[1] ? quarterlyPlannedData[1].qtr_revenue : 0
             }`"
             class="bg-warning"
@@ -138,10 +136,10 @@
         <div class="col-md-4">
           <YearlyQarterlyCard
             title="Forecast"
-            :units="`Units - ${
+            :units="`${
               yearlyQuarterlyData[1] ? yearlyQuarterlyData[1].q2_aggregate : 0
             }`"
-            :revenue="`Revenue - ${
+            :revenue="`${
               yearlyQuarterlyData[0] ? yearlyQuarterlyData[0].q2_aggregate : 0
             }`"
             class="bg-info"
@@ -152,10 +150,10 @@
         <div class="col-md-4">
           <YearlyQarterlyCard
             title="Planned"
-            :units="`Units - ${
+            :units="`${
               quarterlyPlannedData[2] ? quarterlyPlannedData[2].qtr_units : 0
             }`"
-            :revenue="`Revenue - ${
+            :revenue="`${
               quarterlyPlannedData[2] ? quarterlyPlannedData[2].qtr_revenue : 0
             }`"
             class="bg-danger"
@@ -164,10 +162,10 @@
         <div class="col-md-4">
           <YearlyQarterlyCard
             title="This Year"
-            :units="`Units - ${
+            :units="`${
               quarterlyPlannedData[2] ? quarterlyPlannedData[2].qtr_units : 0
             }`"
-            :revenue="`Revenue - ${
+            :revenue="`${
               quarterlyPlannedData[2] ? quarterlyPlannedData[2].qtr_revenue : 0
             }`"
             class="bg-warning"
@@ -176,10 +174,10 @@
         <div class="col-md-4">
           <YearlyQarterlyCard
             title="Forecast"
-            :units="`Units - ${
+            :units="`${
               yearlyQuarterlyData[1] ? yearlyQuarterlyData[1].q3_aggregate : 0
             }`"
-            :revenue="`Revenue - ${
+            :revenue="`${
               yearlyQuarterlyData ? yearlyQuarterlyData[0].q3_aggregate : 0
             }`"
             class="bg-info"
@@ -190,10 +188,10 @@
         <div class="col-md-4">
           <YearlyQarterlyCard
             title="Planned"
-            :units="`Units - ${
+            :units="`${
               quarterlyPlannedData[3] ? quarterlyPlannedData[3].qtr_units : 0
             }`"
-            :revenue="`Revenue - ${
+            :revenue="`${
               quarterlyPlannedData[3] ? quarterlyPlannedData[3].qtr_revenue : 0
             }`"
             class="bg-danger"
@@ -202,10 +200,10 @@
         <div class="col-md-4">
           <YearlyQarterlyCard
             title="This Year"
-            :units="`Units - ${
+            :units="`${
               quarterlyPlannedData[3] ? quarterlyPlannedData[3].qtr_units : 0
             }`"
-            :revenue="`Revenue - ${
+            :revenue="`${
               quarterlyPlannedData[3] ? quarterlyPlannedData[3].qtr_revenue : 0
             }`"
             class="bg-warning"
@@ -214,10 +212,10 @@
         <div class="col-md-4">
           <YearlyQarterlyCard
             title="Forecast"
-            :units="`Units - ${
+            :units="`${
               yearlyQuarterlyData[1] ? yearlyQuarterlyData[1].q4_aggregate : 0
             }`"
-            :revenue="`Revenue - ${
+            :revenue="`${
               yearlyQuarterlyData[0] ? yearlyQuarterlyData[0].q4_aggregate : 0
             }`"
             class="bg-info"

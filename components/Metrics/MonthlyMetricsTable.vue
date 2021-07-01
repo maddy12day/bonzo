@@ -7,13 +7,13 @@
         </h4>
         <el-table :data="metricsTableData">
           <el-table-column
-            min-width="150"
+            min-width="170"
             sortable
             label="Metrics Name"
             property="metrics_master.title"
           ></el-table-column>
 
-         <el-table-column
+          <el-table-column
             min-width="150"
             sortable
             label="Yearly"

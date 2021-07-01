@@ -48,7 +48,7 @@ export default {
   /*
    ** Plugins to load before mounting the App
    */
-  plugins: [`~/plugins/dashboard-plugin.js`],
+  plugins: [`~/plugins/dashboard-plugin.js`, `~/plugins/filters.js`],
   /*
    ** Nuxt.js dev-modules
    */
