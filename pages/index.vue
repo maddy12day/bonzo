@@ -37,12 +37,12 @@
             title="Planned"
             :units="
               `Units - ${
-                yearlyPlannedData[0] ? yearlyPlannedData[0]._sum.units : 0
+                yearlyPlannedData[0] ? parseInt(yearlyPlannedData[0]._sum.units) : 0
               }`
             "
             :revenue="
               `Revenue - ${
-                yearlyPlannedData[0] ? yearlyPlannedData[0]._sum.revenue : 0
+                yearlyPlannedData[0] ? parseInt(yearlyPlannedData[0]._sum.revenue) : 0
               }`
             "
             class="bg-danger"
