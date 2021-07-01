@@ -56,7 +56,7 @@ export default {
   /*
    ** Nuxt.js modules
    */
-  modules: ["@nuxtjs/pwa", "nuxt-i18n", "@nuxtjs/axios", "@nuxtjs/auth-next"],
+  modules: ["@nuxtjs/pwa", "nuxt-i18n", "@nuxtjs/axios", "@nuxtjs/auth-next", "@nuxtjs/moment"],
   axios: {
     baseURL: "http://localhost:3000/api",
   },

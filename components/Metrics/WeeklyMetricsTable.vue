@@ -18,51 +18,43 @@
             sortable
             label="Yearly"
             property="yearly_aggregate"
-            :formatter="formatYearlyAggregate"
-          ></el-table-column>
+          >
+            <template slot-scope="scope">{{
+              scope.row.yearly_aggregate | toLocaleStr
+            }}</template>
+          </el-table-column>
 
-          <el-table-column
-            min-width="150"
-            sortable
-            label="w01"
-            property="w01"
-          ></el-table-column
-          ><el-table-column
-            min-width="150"
-            sortable
-            label="w02"
-            property="w02"
-          ></el-table-column
-          ><el-table-column
-            min-width="150"
-            sortable
-            label="w03"
-            property="w03"
-          ></el-table-column
-          ><el-table-column
-            min-width="150"
-            sortable
-            label="w04"
-            property="w40"
-          ></el-table-column
-          ><el-table-column
-            min-width="150"
-            sortable
-            label="w05"
-            property="w05"
-          ></el-table-column
-          ><el-table-column
-            min-width="150"
-            sortable
-            label="w06"
-            property="w06"
-          ></el-table-column
-          ><el-table-column
-            min-width="150"
-            sortable
-            label="w07"
-            property="w07"
-          ></el-table-column
+          <el-table-column min-width="150" sortable label="w01" property="w01"
+            ><template slot-scope="scope">{{
+              scope.row.w01 | toLocaleStr
+            }}</template></el-table-column
+          >
+          <el-table-column min-width="150" sortable label="w02" property="w02"
+            ><template slot-scope="scope">{{
+              scope.row.w02 | toLocaleStr
+            }}</template></el-table-column
+          >
+          <el-table-column min-width="150" sortable label="w03" property="w03"
+            ><template slot-scope="scope">{{
+              scope.row.w03 | toLocaleStr
+            }}</template></el-table-column
+          >
+          <el-table-column min-width="150" sortable label="w04" property="w40"
+            ><template slot-scope="scope">{{
+              scope.row.w04 | toLocaleStr
+            }}</template></el-table-column
+          ><el-table-column min-width="150" sortable label="w05" property="w05"
+            ><template slot-scope="scope">{{
+              scope.row.w05 | toLocaleStr
+            }}</template></el-table-column
+          ><el-table-column min-width="150" sortable label="w06" property="w06"
+            ><template slot-scope="scope">{{
+              scope.row.w06 | toLocaleStr
+            }}</template></el-table-column
+          ><el-table-column min-width="150" sortable label="w07" property="w07"
+            ><template slot-scope="scope">{{
+              scope.row.w07 | toLocaleStr
+            }}</template></el-table-column
           ><el-table-column
             min-width="150"
             sortable
@@ -352,11 +344,7 @@ export default {
     return {};
   },
   computed: {},
-  methods: {
-    formatYearlyAggregate(metricsObj) {
-      return Number(metricsObj.yearly_aggregate).toLocaleString();
-    },
-  },
+  methods: {},
   mounted() {
     console.log(this.metricsTableData);
   },

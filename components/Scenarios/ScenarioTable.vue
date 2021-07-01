@@ -7,21 +7,25 @@
         </h4>
         <el-table v-if="loadTable" :data="scenarioTableDataForTable">
           <el-table-column
-            min-width="150"
+            min-width="180"
             sortable
             label="Name"
             property="scenario_name"
           ></el-table-column>
 
           <el-table-column
-            min-width="150"
+            min-width="180"
             sortable
             label="Created At"
             property="created_at"
-          ></el-table-column>
+          >
+            <template slot-scope="scope">{{
+              scope.row.created_at | dateYMDHMSFormat
+            }}</template>
+          </el-table-column>
 
           <el-table-column
-            min-width="150"
+            min-width="130"
             sortable
             label="Shared By"
             property="sharedBy"
@@ -158,28 +162,32 @@ export default {
   data() {
     return {
       scenarioTableDataForTable: [],
-      loadTable: false
+      loadTable: false,
     };
   },
   computed: {},
   methods: {
-    getUserName: function(id) {
-      let allUserInfo = JSON.parse(window.localStorage.getItem('allUsersInfo'))
-      let userName = allUserInfo.users.filter(user => user.id = id)[0].first_name;
-      return userName
+    getUserName: function (id) {
+      let allUserInfo = JSON.parse(window.localStorage.getItem("allUsersInfo"));
+      let userName = allUserInfo.users.filter((user) => (user.id = id))[0]
+        .first_name;
+      return userName;
     },
-    addUserToScenarioTableData: function(scenarioTableData, type) {
-      if (type = "sharedScenarios") {
-        this.scenarioTableDataForTable = scenarioTableData.map(v => ({...v, sharedBy: this.getUserName(v.demand_planner_user_id)}));
-        this.loadTable = true
+    addUserToScenarioTableData: function (scenarioTableData, type) {
+      if ((type = "sharedScenarios")) {
+        this.scenarioTableDataForTable = scenarioTableData.map((v) => ({
+          ...v,
+          sharedBy: this.getUserName(v.demand_planner_user_id),
+        }));
+        this.loadTable = true;
       } else {
         this.scenarioTableDataForTable = scenarioTableData;
         this.loadTable = true;
       }
-    }
+    },
   },
   created() {
-    this.addUserToScenarioTableData(this.scenarioTableData,this.type)
+    this.addUserToScenarioTableData(this.scenarioTableData, this.type);
   },
 };
 </script>
