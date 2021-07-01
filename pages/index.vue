@@ -96,7 +96,6 @@ export default {
     },
     async getAllUserData () {
       this.userInfo = await this.$axios.$get("/get-all-users")
-      console.log(this.userInfo);
       window.localStorage.setItem("allUsersInfo", JSON.stringify(this.userInfo));
     },
   },

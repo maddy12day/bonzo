@@ -169,7 +169,6 @@ export default {
       return userName
     },
     addUserToScenarioTableData: function(scenarioTableData, type) {
-console.log("type",type);
       if (type = "sharedScenarios") {
         this.scenarioTableDataForTable = scenarioTableData.map(v => ({...v, sharedBy: this.getUserName(v.demand_planner_user_id)}));
         this.loadTable = true
