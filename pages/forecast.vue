@@ -28,10 +28,33 @@
           :showAplyFilterBtn="true"
           v-if="activeFilterType == 'Regular'"
           @appliedFilters="appliedFilters"
+          @getBroductSource="getProductSource"
+          @getBrandType="getBrandType"
+          @getLifyClycle="getLifeCycle"
+          @newNess="getNewness"
+          @getChannels="getChannelValues"
+          @getBrands="getBrandValus"
+          @getSubChannelValues="getSubChannelValues"
+          @getCollectionValus="getCollectionValues"
+          @getSkusValues="getSkusValues"
+          @getCategories="getCategoryValues"
         />
         <ProgramFilters
           :showAplyFilterBtn="true"
           v-if="activeFilterType == 'Program'"
+          @getBroductSource="getProductSource"
+          @getBrandType="getBrandType"
+          @getLifyClycle="getLifeCycle"
+          @newNess="getNewness"
+          @getBrands="getBrandValus"
+          @getChannels="getChannelValues"
+          @getPrograms="getPrograms"
+          @getSubChannel="getSubChannelValues"
+          @getCategories="getCategoryValues"
+          @getClass="getClassValues"
+          @getSubClass="getSubClassValues"
+          @getCollection="getCollectionValues"
+          @getSkusValues="getSkusValues"
         />
       </div>
     </card>
@@ -136,8 +159,50 @@ export default {
     };
   },
   methods: {
+    // filter value getter methods
+    getProductSource(values) {
+      this.productSourceValues = values;
+    },
+    getBrandType(values) {
+      this.brandTypeValues = values;
+    },
+    getLifeCycle(values) {
+      this.lifeCycleValues = values;
+    },
+    getNewness(values) {
+      this.newNessValues = values;
+    },
+    getBrandValus(values) {
+      this.getBrandValus = values;
+    },
+    getChannelValues(values) {
+      this.channelValues = values;
+    },
+    getPrograms(values) {
+      this.programValues = values;
+    },
+    getSubChannelValues(values) {
+      this.subChannelsValues = values;
+    },
+    getCategoryValues(values) {
+      this.categoriesValues = values;
+    },
+    getClassValues(values) {
+      this.classesValues = values;
+    },
+    getSubClassValues(values) {
+      this.subClassesValues = values;
+    },
+    getCollectionValues(values) {
+      this.collectionValues = values;
+    },
+    getSkusValues(values) {
+      this.skuValues = values;
+    },
+    getScenarioType(values) {
+      this.scenarioTypeValue = values.id;
+    },
     async showMetricsByDuration(activeTab) {
-      console.log("ioioio");
       this.activeTab = activeTab;
       if (this.activeTab == "Weekly") {
         // base metrics table for weekly
@@ -150,7 +215,6 @@ export default {
         this.baseMetricsList = JSON.parse(
           baseWeeklyMetricsListString.baseWeeklyMetrics
         );
-        console.log("this.baseMetricsList", this.baseMetricsList);
       } else {
         // base metrics table for monthly
         const baseMonthlyMetricsListString = await this.$axios.$get(
@@ -162,25 +226,55 @@ export default {
         this.baseMetricsList = JSON.parse(
           baseMonthlyMetricsListString.baseMonthlyMetrics
         );
-        console.log("this.baseMetricsList", this.baseMetricsList);
       }
     },
     showFilterType(type) {
       this.activeFilterType = type;
     },
-    async getFilteredForecastData() {
-      this.weeklyforecast = await this.$axios.$get(
+    async getFilteredForecastData(requestedFilterOption) {
+      this.weeklyforecast = await this.$axios.$post(
         `/get-filtered-forecast-data`,
-        {
-          progress: true,
-        }
+        requestedFilterOption
       );
       // this.forecastData = data;
       // this.loadFilteredData = true;
     },
+    emptyFieldCleaner(reqBody) {
+      for (let key in reqBody) {
+        if (reqBody[key] == "" || reqBody[key] == undefined) {
+          delete reqBody[key];
+        }
+        if (Array.isArray(reqBody[key]) && reqBody[key].length > 1) {
+          reqBody[key] = reqBody[key].map((item) => {
+            if (item.includes("All") === false) {
+              return item;
+            }
+          });
+        } else if (Array.isArray(reqBody[key]) && reqBody[key].length == 1) {
+          reqBody[key] = reqBody[key].map((item) => {
+            if (item.includes("All") === false) {
+              return item;
+            }
+          });
+        }
+      }
+      return reqBody;
+    },
     async appliedFilters() {
-      console.log("popopopop");
-      await this.getFilteredForecastData();
+      const regularFilters = {
+        filter_product_sources: this.productSourceValues,
+        filter_brand_types: this.brandTypeValues,
+        filter_life_cycles: this.lifeCycleValues,
+        filter_newness: this.newNessValues,
+        filter_brands: this.brandValues,
+        filter_channels: this.channelValues,
+        filter_sub_channels: this.subChannelsValues,
+        filter_categories: this.categoriesValues,
+        filter_collections: this.collectionValues,
+        filter_skus: this.skuValues,
+      };
+      let requestedFilterOption = this.emptyFieldCleaner(regularFilters);
+      await this.getFilteredForecastData(requestedFilterOption);
       this.isFilteredForecast = true;
     },
   },
