@@ -189,60 +189,46 @@ export default {
     // filter value getter methods
     getProductSource(values) {
       this.productSourceValues = values;
-      console.log(values);
     },
     getBrandType(values) {
       this.brandTypeValues = values;
-      console.log(values);
     },
     getLifeCycle(values) {
       this.lifeCycleValues = values;
-      console.log(values);
     },
     getNewness(values) {
       this.newNessValues = values;
-      console.log(values);
     },
     getBrandValus(values) {
       this.getBrandValus = values;
-      console.log(values);
     },
     getChannelValues(values) {
       this.channelValues = values;
-      console.log(values);
     },
     getPrograms(values) {
       this.programValues = values;
-      console.log(values);
     },
     getSubChannelValues(values) {
       this.subChannelsValues = values;
-      console.log(values);
     },
     getCategoryValues(values) {
       this.categoriesValues = values;
-      console.log(values);
     },
     getClassValues(values) {
       this.classesValues = values;
-      console.log(values);
     },
     getSubClassValues(values) {
       this.subClassesValues = values;
-      console.log(values);
     },
     getCollectionValues(values) {
       this.collectionValues = values;
-      console.log(values);
     },
     getSkusValues(values) {
       this.skuValues = values;
-      console.log(values);
       console.log(this.scenarioTypeValue);
       console.log(this.startDateValue, this.endDateValue, this.amountValue);
     },
     getScenarioType(values) {
-      console.log(values);
       this.scenarioTypeValue = values.value;
     },
 
