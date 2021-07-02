@@ -73,7 +73,6 @@ export const scenarioTypes = async (req, res) => {
 
 export const createScenario = async (req, res) => {
   try {
-    
     const scenarioRes = await prisma.scenarios.create({
       data: {
         ...req.body,
@@ -82,13 +81,26 @@ export const createScenario = async (req, res) => {
             id: req.body.scenario_types,
           },
         },
-      }
+      },
     });
-  /*   const demandForecastRunlogRes = await prisma.create({
-      data: {
-
+    const executed_by = await prisma.users.findUnique({
+      where: {
+        id: req.body.demand_planner_user_id,
+      },
+    });
+    const demandForecastRunlogRes = await prisma.demand_forecast_run_log.create(
+      {
+        data: {
+          is_base_forecast: false,
+          demand_planner_user_id: req.body.demand_planner_user_id,
+          scenario_id: scenarioRes.id,
+          status: "Pending",
+          forecast_type: "Scenario",
+          executed_by: `${executed_by.first_name} ${executed_by.last_name}`,
+        },
       }
-    }) */
+    );
+    console.log(demandForecastRunlogRes);
     console.log(scenarioRes);
     res.status(200).json({
       scenarioRes,
