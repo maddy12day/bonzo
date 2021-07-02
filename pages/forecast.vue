@@ -38,6 +38,7 @@
     <!-- Applied filters pills (Vishal) -->
 
     <!-- Base Year/Quarter Stats / Filtered Year/Quarter Stats (Vishal) -->
+    <StatsWidget />
 
     <!-- Base Metrics / Filtered Metrics (Jubin) -->
     <!-- Filter: Revenue table (Jubin) -->
@@ -107,6 +108,7 @@
 <script>
 import RegularFilters from "../components/Filters/RegularFilter.vue";
 import ProgramFilters from "../components/Filters/ProgramFilter.vue";
+import StatsWidget from "../components/StatsWidget.vue";
 import WeeklyForecast from "../components/Forecast/ForecastBySkuTable.vue";
 import Card from "~/components/Cards/Card.vue";
 import WeeklyMetricsTable from "../components/Metrics/WeeklyMetricsTable.vue";
@@ -117,6 +119,7 @@ export default {
   components: {
     MonthlyMetricsTable,
     WeeklyMetricsTable,
+    StatsWidget,
     RegularFilters,
     ProgramFilters,
     WeeklyForecast,
