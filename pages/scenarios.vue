@@ -234,7 +234,7 @@ export default {
     async createScenario() {
       const createScenarioModel = {
         scenario_name: this.scenarioNameValue,
-        demand_planner_user_id: 1,
+        demand_planner_user_id: this.$auth.user.user_id,
         scenario_types: this.scenarioTypeValue,
         amount: this.amountValue,
         is_dollar: false,
@@ -294,6 +294,7 @@ export default {
   },
 
   async mounted() {
+    console.log(this.$auth.user)
     this.getScenarioTypes();
     this.userAllScenarios();
   },
