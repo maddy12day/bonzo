@@ -223,6 +223,7 @@ export default {
       console.log(this.startDateValue, this.endDateValue, this.amountValue);
     },
     getScenarioType(values) {
+      console.log(values);
       this.scenarioTypeValue = values.value;
     },
 
@@ -234,11 +235,7 @@ export default {
       const createScenarioModel = {
         scenario_name: this.scenarioNameValue,
         demand_planner_user_id: 1,
-        scenario_types: {
-          connect: {
-            id: this.scenarioTypeValue,
-          },
-        },
+        scenario_types: this.scenarioTypeValue,
         amount: this.amountValue,
         is_dollar: false,
         start_date: this.startDateValue,

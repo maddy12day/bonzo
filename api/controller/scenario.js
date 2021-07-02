@@ -73,8 +73,17 @@ export const scenarioTypes = async (req, res) => {
 
 export const createScenario = async (req, res) => {
   try {
+    const reqBody = {
+      ...req.body,
+      scenario_types: {
+        connect: {
+          id: req.body.scenario_types,
+        },
+      },
+    }
+    console.log(reqBody);
     const data = await prisma.scenarios.create({
-      data: req.body
+      data: reqBody
     });
     console.log(data);
     res.status(200).json({
