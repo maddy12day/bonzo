@@ -47,7 +47,7 @@ export const authenticateUser = async (req, res) => {
       const last_name = current_user.last_name;
       const isAuthenticate = bcrypt.compareSync(password, current_user.password);
       if (isAuthenticate) {
-        const token = jwt.sign({ email, first_name, last_name }, process.env.BONZO_AI_TOKEN_SALT, { expiresIn: "24h" });
+        const token = jwt.sign({ email, first_name, last_name, id }, process.env.BONZO_AI_TOKEN_SALT, { expiresIn: "24h" });
         console.log("token", token);
         res.status(200).send({
           message: "Authentication successful",
