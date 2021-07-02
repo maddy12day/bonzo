@@ -4,20 +4,18 @@ const prisma = new PrismaClient();
 
 export const getBaseWeeklyMetrics = async (req, res) => {
   try {
-    const forecastedWeeklyMetrics = await prisma.forecasted_weekly_metrics.findMany(
-      {
-        where: {
-          demand_forecast_run_log_id: 1,
-        },
-        include: {
-          metrics_master: {
-            select: {
-              title: true,
-            },
+    const forecastedWeeklyMetrics = await prisma.forecasted_weekly_metrics.findMany({
+      where: {
+        demand_forecast_run_log_id: 1,
+      },
+      include: {
+        metrics_master: {
+          select: {
+            title: true,
           },
         },
-      }
-    );
+      },
+    });
     const baseWeeklyMetrics = JSON.stringify(
       forecastedWeeklyMetrics,
       (key, value) => (typeof value === "bigint" ? value.toString() : value) // return everything else unchanged
@@ -34,20 +32,18 @@ export const getBaseWeeklyMetrics = async (req, res) => {
 };
 export const getBaseMonthlyMetrics = async (req, res) => {
   try {
-    const forecastedMonthlyMetrics = await prisma.forecasted_monthly_metrics.findMany(
-      {
-        where: {
-          demand_forecast_run_log_id: 1,
-        },
-        include: {
-          metrics_master: {
-            select: {
-              title: true,
-            },
+    const forecastedMonthlyMetrics = await prisma.forecasted_monthly_metrics.findMany({
+      where: {
+        demand_forecast_run_log_id: 1,
+      },
+      include: {
+        metrics_master: {
+          select: {
+            title: true,
           },
         },
-      }
-    );
+      },
+    });
     const baseMonthlyMetrics = JSON.stringify(
       forecastedMonthlyMetrics,
       (key, value) => (typeof value === "bigint" ? value.toString() : value) // return everything else unchanged
@@ -65,23 +61,21 @@ export const getBaseMonthlyMetrics = async (req, res) => {
 
 export const getBaseYearlyQarterlyForecast = async (req, res) => {
   try {
-    const forecastedYearlyQuarterlyForecast = await prisma.forecasted_weekly_metrics.findMany(
-      {
-        where: {
-          demand_forecast_run_log_id: 1,
-          metrics_name: {
-            in: ["retail_sales", "units_sales"],
-          },
+    const forecastedYearlyQuarterlyForecast = await prisma.forecasted_weekly_metrics.findMany({
+      where: {
+        demand_forecast_run_log_id: 1,
+        metrics_name: {
+          in: ["retail_sales", "units_sales"],
         },
-        select: {
-          yearly_aggregate: true,
-          q1_aggregate: true,
-          q2_aggregate: true,
-          q3_aggregate: true,
-          q4_aggregate: true,
-        },
-      }
-    );
+      },
+      select: {
+        yearly_aggregate: true,
+        q1_aggregate: true,
+        q2_aggregate: true,
+        q3_aggregate: true,
+        q4_aggregate: true,
+      },
+    });
     const baseYQForecast = JSON.stringify(
       forecastedYearlyQuarterlyForecast,
       (key, value) => (typeof value === "bigint" ? value.toString() : value) // return everything else unchanged
@@ -98,18 +92,16 @@ export const getBaseYearlyQarterlyForecast = async (req, res) => {
 };
 export const getBaseYearlyPlanned = async (req, res) => {
   try {
-    const baseYearlyPlanned = await prisma.planned_weekly_units_revenue_by_channel_by_sku.groupBy(
-      {
-        by: ["plan_year"],
-        where: {
-          plan_year: "2021",
-        },
-        _sum: {
-          units: true,
-          revenue: true,
-        },
-      }
-    );
+    const baseYearlyPlanned = await prisma.planned_weekly_units_revenue_by_channel_by_sku.groupBy({
+      by: ["plan_year"],
+      where: {
+        plan_year: "2021",
+      },
+      _sum: {
+        units: true,
+        revenue: true,
+      },
+    });
 
     res.status(200).json({
       baseYearlyPlanned,

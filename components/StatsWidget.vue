@@ -280,23 +280,11 @@ export default {
   computed: {
     yearlyQuarterlyTabs() {
       return [
-        { name: "Yearly", icon: "tim-icons icon-single-02" },
-        {
-          name: "Q1",
-          icon: "tim-icons icon-gift-2",
-        },
-        {
-          name: "Q2",
-          icon: "tim-icons icon-gift-2",
-        },
-        {
-          name: "Q3",
-          icon: "tim-icons icon-gift-2",
-        },
-        {
-          name: "Q4",
-          icon: "tim-icons icon-gift-2",
-        },
+        { name: "Yearly" },
+        { name: "Q1" },
+        { name: "Q2" },
+        { name: "Q3" },
+        { name: "Q4" },
       ];
     },
   },
