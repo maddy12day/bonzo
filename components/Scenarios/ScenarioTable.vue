@@ -14,6 +14,13 @@
           ></el-table-column>
 
           <el-table-column
+            min-width="115"
+            sortable
+            label="Status"
+            property="status"
+          ></el-table-column>
+
+          <el-table-column
             min-width="180"
             sortable
             label="Created At"
@@ -136,13 +143,6 @@
             sortable
             label="Sub Classes"
             property="filter_sub_classes"
-          ></el-table-column>
-
-          <el-table-column
-            min-width="150"
-            sortable
-            label="Status"
-            property="status"
           ></el-table-column>
         </el-table>
       </card>
