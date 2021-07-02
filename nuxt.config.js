@@ -58,7 +58,7 @@ export default {
    */
   modules: ["@nuxtjs/pwa", "nuxt-i18n", "@nuxtjs/axios", "@nuxtjs/auth-next", "@nuxtjs/moment"],
   axios: {
-    baseURL: "http://localhost:3000/api",
+    baseURL: process.env.API_BASE_URL,
   },
   i18n: {
     locales: [
@@ -115,5 +115,8 @@ export default {
       home: "/", // User will be redirect to this path after login if accessed login page directly
     },
     rewriteRedirects: true,
+  },
+  server: {
+    port: process.env.SERVER_PORT,
   },
 };
