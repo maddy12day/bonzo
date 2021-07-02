@@ -15,6 +15,9 @@ export const getUserScenarios = async (req, res) => {
           },
         },
       },
+      orderBy: {
+        created_at: "desc",
+      },
     });
     res.status(200).json({
       scenarios,
@@ -88,18 +91,16 @@ export const createScenario = async (req, res) => {
         id: req.body.demand_planner_user_id,
       },
     });
-    const demandForecastRunlogRes = await prisma.demand_forecast_run_log.create(
-      {
-        data: {
-          is_base_forecast: false,
-          demand_planner_user_id: req.body.demand_planner_user_id,
-          scenario_id: scenarioRes.id,
-          status: "Pending",
-          forecast_type: "Scenario",
-          executed_by: `${executed_by.first_name} ${executed_by.last_name}`,
-        },
-      }
-    );
+    const demandForecastRunlogRes = await prisma.demand_forecast_run_log.create({
+      data: {
+        is_base_forecast: false,
+        demand_planner_user_id: req.body.demand_planner_user_id,
+        scenario_id: scenarioRes.id,
+        status: "Pending",
+        forecast_type: "Scenario",
+        executed_by: `${executed_by.first_name} ${executed_by.last_name}`,
+      },
+    });
     console.log(demandForecastRunlogRes);
     console.log(scenarioRes);
     res.status(200).json({

@@ -10,7 +10,7 @@ export const emptyFieldCleaner = (reqBody) => {
             return item;
           }
         })
-        .join(" ,");
+        .join(", ");
     } else if (Array.isArray(reqBody[key]) && reqBody[key].length == 1) {
       reqBody[key] = reqBody[key].map((item) => {
         if (item.includes("All") === false) {

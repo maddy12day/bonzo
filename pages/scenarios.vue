@@ -56,7 +56,7 @@
           @getCollection="getCollectionValues"
           @getSkusValues="getSkusValues"
         />
-        <div class="row">
+        <div class="row mt-3">
           <div class="col-md-3 text-left">
             <Label class="mb-0 mb-1 mt-2">Scenario Type</Label>
             <Multiselect
@@ -65,8 +65,8 @@
               @customEvent="getScenarioType"
             />
           </div>
-          <div class="col-md-2 text-left  mt-1">
-            <Label class="mb-0 mt-0 ">Start Date</Label>
+          <div class="col-md-2 text-left mt-1">
+            <Label class="mb-0 mt-0">Start Date</Label>
             <base-input
               type="date"
               placeholder="start date"
@@ -76,7 +76,7 @@
             </base-input>
           </div>
           <div class="col-md-2 text-left pl-0 mt-1">
-            <Label class="mb-0 mt-0 ">End Date</Label>
+            <Label class="mb-0 mt-0">End Date</Label>
             <base-input
               type="date"
               placeholder="start date"
@@ -86,7 +86,7 @@
             </base-input>
           </div>
           <div class="col-md-2 text-left pl-0 mt-1">
-            <Label class="mb-0 mt-0 ">Amount</Label>
+            <Label class="mb-0 mt-0">Amount</Label>
             <base-input
               type="number"
               placeholder="amount"
@@ -97,18 +97,18 @@
           </div>
         </div>
         <div class="row">
-          <div class="col-md-6 text-left  mt-1">
-            <Label class="mb-0 mt-0 ">Scenario Name</Label>
+          <div class="col-md-6 text-left mt-1">
+            <Label class="mb-0 mt-0">Scenario Name</Label>
             <base-input
               type="text"
               placeholder="Scenario Name"
-              class="bg-white mt-2"
+              class="bg-white mt-1"
               v-model="scenarioNameValue"
             >
             </base-input>
           </div>
-          <div class="col-md-3 mt-4 text-left ">
-            <button class="btn btn-primary " @click="createScenario">
+          <div class="col-md-3 mt-4 text-left">
+            <button class="btn btn-primary" @click="createScenario">
               Create Scenario
             </button>
           </div>
@@ -117,7 +117,7 @@
     </div>
 
     <ScenarioTable
-      class="mt-2"
+      class="mt-4"
       tableHeading="Your Scenarios"
       :scenarioTableData="sharedScenariosList.scenarios"
       :type="'yourScenarios'"
@@ -127,6 +127,7 @@
 </template>
 
 <script>
+import { BaseAlert } from "@/components";
 import ScenarioTable from "../components/Scenarios/ScenarioTable.vue";
 import RegularFilters from "../components/Filters/RegularFilter.vue";
 import ProgramFilters from "../components/Filters/ProgramFilter.vue";
@@ -159,15 +160,32 @@ export default {
       amountValue: "",
       scenarioNameValue: "",
       showScenarioTable: false,
+      type: ["", "info", "success", "warning", "danger"],
+      notifications: {
+        topCenter: false,
+      },
     };
   },
   components: {
+    BaseAlert,
     ScenarioTable,
     RegularFilters,
     ProgramFilters,
     Multiselect,
   },
   methods: {
+    notifyVue(verticalAlign, horizontalAlign) {
+      let color = 4;
+      this.$notify({
+        message:
+          "Scenario submitted to model. Please check 'Your Scenarios' for updates in sometime.",
+        timeout: 30000,
+        icon: "tim-icons icon-bell-55",
+        horizontalAlign: horizontalAlign,
+        verticalAlign: verticalAlign,
+        type: this.type[color],
+      });
+    },
     // filter value getter methods
     getProductSource(values) {
       this.productSourceValues = values;
@@ -267,6 +285,7 @@ export default {
         finalModel
       );
       await this.userAllScenarios();
+      this.notifyVue("top", "right");
     },
     async getScenarioTypes() {
       const scenarioTypesJson = await this.$axios.$get(
@@ -316,4 +335,9 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+.card .alert {
+  position: relative !important;
+  width: 100%;
+}
+</style>
