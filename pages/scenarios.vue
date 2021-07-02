@@ -121,7 +121,7 @@
       tableHeading="Your Scenarios"
       :scenarioTableData="sharedScenariosList.scenarios"
       :type="'yourScenarios'"
-      v-if="sharedScenariosList.scenarios"
+      v-if="showScenarioTable"
     />
   </div>
 </template>
@@ -158,6 +158,7 @@ export default {
       endDateValue: "",
       amountValue: "",
       scenarioNameValue: "",
+      showScenarioTable: false,
     };
   },
   components: {
@@ -232,14 +233,15 @@ export default {
       this.activeFilterType = type;
     },
     async createScenario() {
+      this.showScenarioTable = false;
       const createScenarioModel = {
         scenario_name: this.scenarioNameValue,
         demand_planner_user_id: this.$auth.user.user_id,
         scenario_types: this.scenarioTypeValue,
-        amount: this.amountValue,
+        amount: Number(this.amountValue),
         is_dollar: false,
-        start_date: this.startDateValue,
-        end_date: this.endDateValue,
+        start_date: new Date(this.startDateValue),
+        end_date: new Date(this.endDateValue),
         filter_level: this.activeFilterType,
         filter_product_sources: this.productSourceValues,
         filter_brand_types: this.brandTypeValues,
@@ -255,15 +257,16 @@ export default {
         filter_classes: this.classesValues,
         filter_sub_classes: this.subClassesValues,
         is_active: true,
-        status: "pending",
+        status: "Pending",
         is_shared: false,
         is_part_of_base: false,
       };
       const finalModel = emptyFieldCleaner(createScenarioModel);
-
-      console.log(finalModel);
-      const createScenarioJson = await this.$axios.$post(`/create-scenario`);
-      console.log(createScenarioJson);
+      const createScenarioJson = await this.$axios.$post(
+        `/create-scenario`,
+        finalModel
+      );
+      await this.userAllScenarios();
     },
     async getScenarioTypes() {
       const scenarioTypesJson = await this.$axios.$get(
@@ -290,11 +293,12 @@ export default {
           progress: true,
         }
       );
+      this.showScenarioTable = true;
     },
   },
 
   async mounted() {
-    console.log(this.$auth.user)
+    console.log(this.$auth.user);
     this.getScenarioTypes();
     this.userAllScenarios();
   },

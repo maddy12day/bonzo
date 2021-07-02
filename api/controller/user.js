@@ -56,7 +56,7 @@ export const authenticateUser = async (req, res) => {
           sessionId: current_user.id,
           userRole: "Admin",
           username: `${first_name} ${last_name}`,
-          user_id: user_id
+          user_id
         });
       } else {
         res.status(401).send({
