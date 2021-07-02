@@ -11,8 +11,8 @@ export const getUserScenarios = async (req, res) => {
       include: {
         scenario_types: {
           select: {
-            scenario_type: true
-          }
+            scenario_type: true,
+          },
         },
       },
     });
@@ -36,8 +36,8 @@ export const allSharedScenarios = async (req, res) => {
       include: {
         scenario_types: {
           select: {
-            scenario_type: true
-          }
+            scenario_type: true,
+          },
         },
       },
     });
@@ -47,6 +47,43 @@ export const allSharedScenarios = async (req, res) => {
   } catch (error) {
     res.status(500).json({
       message: "something went wrong in shared scenario list api",
+      error: `${error}`,
+    });
+  }
+};
+
+export const scenarioTypes = async (req, res) => {
+  try {
+    const scenariosTypes = await prisma.scenario_types.findMany({
+      select: {
+        scenario_type: true,
+        id: true,
+      },
+    });
+    res.status(200).json({
+      scenariosTypes,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "something went wrong in scenario type api",
+      error: `${error}`,
+    });
+  }
+};
+
+export const createScenario = async (req, res) => {
+  try {
+    const data = await prisma.scenarios.create({
+      data: req.body
+    });
+    console.log(data);
+    res.status(200).json({
+      data,
+      message: "created successfully",
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "something went wrong in create scenario list api",
       error: `${error}`,
     });
   }
