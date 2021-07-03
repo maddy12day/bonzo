@@ -115,3 +115,217 @@ export const createScenario = async (req, res) => {
     });
   }
 };
+
+// Function Used to Parse the data into El Table Friendly Format
+const parseCategoryUnitComparision = (results) => {
+  const fields = ["Planned Units", "Adjusted Units", "Forecast Units"];
+  let parsedData = [];
+  for (let field of fields) {
+    let index = 0;
+    const newObject = {};
+      
+    newObject["Comparision"] = field;
+      if (field == "Planned Units") {
+        for (let result of results) {
+          index++;
+          newObject[`W-${index}`] = result.planned_units;
+          parsedData.push(newObject);
+        }
+      } else if (field == "Adjusted Units") {
+        for (let result of results) {
+          index++;
+          newObject[`W-${index}`] = result.adjusted_units;
+          parsedData.push(newObject );
+        }
+      } else {
+      for (let result of results) {
+        index++;
+        newObject[`W-${index}`] = result.forecasted_units;
+        parsedData.push(newObject);
+      }
+    }
+  }
+  parsedData.sort((a, b) => {
+    if (a.Comparision == b.Comparision) {}
+  });
+  parsedData = [...new Set(parsedData)];
+  return parsedData;
+} 
+
+
+// Function Used to Parse the data into El Table Friendly Format
+const parseCategorySaleComparision = (results) => {
+  const fields = ["Planned Revenue", "Adjusted Revenue", "Forecast Revenue"];
+  let parsedData = [];
+  for (let field of fields) {
+    let index = 0;
+    const newObject = {};
+      
+    newObject["Comparision"] = field;
+      if (field == "Planned Revenue") {
+        for (let result of results) {
+          index++;
+          newObject[`W-${index}`] = result.planned_revenue;
+          parsedData.push(newObject);
+        }
+      } else if (field == "Adjusted Revenue") {
+        for (let result of results) {
+          index++;
+          newObject[`W-${index}`] = result.adjusted_revenue;
+          parsedData.push(newObject );
+        }
+      } else {
+      for (let result of results) {
+        index++;
+        newObject[`W-${index}`] = result.forecasted_revenue;
+        parsedData.push(newObject);
+      }
+    }
+  }
+  parsedData.sort((a, b) => {
+    if (a.Comparision == b.Comparision) {}
+  });
+  parsedData = [...new Set(parsedData)];
+  return parsedData;
+} 
+
+
+// Function Used to Parse the data into El Table Friendly Format
+const parseUnitSaleComparision = (results) => {
+  const fields = ["Planned Units", "Adjusted Units", "Forecast Units"];
+  let parsedData = [];
+  for (let field of fields) {
+    let index = 0;
+    const newObject = {};
+      
+    newObject["Comparision"] = field;
+      if (field == "Planned Units") {
+        for (let result of results) {
+          index++;
+          newObject[`W-${index}`] = result.planned_units;
+          parsedData.push(newObject);
+        }
+      } else if (field == "Adjusted Units") {
+        for (let result of results) {
+          index++;
+          newObject[`W-${index}`] = result.adjusted_units;
+          parsedData.push(newObject );
+        }
+      } else {
+      for (let result of results) {
+        index++;
+        newObject[`W-${index}`] = result.forecasted_units;
+        parsedData.push(newObject);
+      }
+    }
+  }
+  parsedData.sort((a, b) => {
+    if (a.Comparision == b.Comparision) {}
+  });
+  parsedData = [...new Set(parsedData)];
+  return parsedData;
+} 
+
+
+// Function Used to Parse the data into El Table Friendly Format
+const parseUnitRevenueComparision = (results) => {
+  const fields = ["Planned Revenue", "Adjusted Revenue", "Forecast Revenue"];
+  let parsedData = [];
+  for (let field of fields) {
+    let index = 0;
+    const newObject = {};
+      
+    newObject["Comparision"] = field;
+      if (field == "Planned Revenue") {
+        for (let result of results) {
+          index++;
+          newObject[`W-${index}`] = result.planned_revenue;
+          parsedData.push(newObject);
+        }
+      } else if (field == "Adjusted Revenue") {
+        for (let result of results) {
+          index++;
+          newObject[`W-${index}`] = result.adjusted_revenue;
+          parsedData.push(newObject );
+        }
+      } else {
+      for (let result of results) {
+        index++;
+        newObject[`W-${index}`] = result.forecasted_revenue;
+        parsedData.push(newObject);
+      }
+    }
+  }
+  parsedData.sort((a, b) => {
+    if (a.Comparision == b.Comparision) {}
+  });
+  parsedData = [...new Set(parsedData)];
+  return parsedData;
+} 
+
+//API: Scenario Sales Summary of Revenue & Units
+export const getScenarioSalesSummary = async (req, res) => {
+  try {
+    const result = await prisma.$queryRaw(`SELECT * from morphe_staging.scenario_influenced_leveled_aggregates WHERE scenario_id = ${req.params.id} AND level = "AGGREGATES";`);
+    res.status(200).json({
+      result,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "something went wrong in create scenario list api",
+      error: `${error}`,
+    });
+  }
+};
+
+//API: Scenario Unit & Sales Comparison
+export const getScenarioUnitSalesComparison = async (req, res) => {
+  try {
+    let result = await prisma.$queryRaw(`SELECT * FROM morphe_staging.scenario_influenced_metrics WHERE scenario_id = ${req.params.id};`);
+    let parsedData = {}
+    parsedData['Units'] = parseUnitSaleComparision(result);
+    parsedData['Revenue'] = parseUnitRevenueComparision(result);
+    res.status(200).json({
+      parsedData,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "something went wrong in create scenario list api",
+      error: `${error}`,
+    });
+  }
+}
+
+//API: Scenario Category Total Sales Comparison
+export const getScenarioCategorySalesComparison = async (req, res) => {
+  try {
+    const result = await prisma.$queryRaw(`SELECT * from morphe_staging.scenario_influenced_leveled_aggregates WHERE scenario_id = ${req.params.id};`);
+    res.status(200).json({
+      result,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "something went wrong in create scenario list api",
+      error: `${error}`,
+    });
+  }
+};
+
+//API: Scenario Category Unit & Sales Comparison
+export const getScenarioCategoryComparison = async (req, res) => {
+  try {
+    const result = await prisma.$queryRaw(`SELECT * from morphe_staging.scenario_influenced_leveled_metrics WHERE scenario_id = ${req.params.id};`);
+    let parsedData = {}
+    parsedData['Units'] = parseCategoryUnitComparision(result);
+    parsedData['Revenue'] = parseCategorySaleComparision(result);
+    
+    res.status(200).json({
+      parsedData,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "something went wrong in create scenario list api",
+      error: `${error}`,
+    });
+  }
+};
