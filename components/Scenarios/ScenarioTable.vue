@@ -11,7 +11,15 @@
             sortable
             label="Name"
             property="scenario_name"
-          ></el-table-column>
+          >
+            <a
+              tabindex="0"
+              @click="handleScenarioClick(scope.row)"
+              slot-scope="scope"
+            >
+              {{ scope.row.scenario_name }}</a
+            >
+          </el-table-column>
 
           <el-table-column
             min-width="115"
@@ -147,22 +155,41 @@
         </el-table>
       </card>
     </div>
+
+    <!-- Scenario Forecast Preview -->
+    <PreviewScenario
+      v-if="dialogVisible"
+      @dialogVisible="closeDialog"
+      :dialogVisible="dialogVisible"
+      :scenarioSalesSummary="scenarioSalesSummary"
+      :scenarioUnitSalesComparison="scenarioUnitSalesComparison"
+      :scenarioCategorySalesComparison="scenarioCategorySalesComparison"
+      :scenarioCategoryComparison="scenarioCategoryComparison"
+    />
   </div>
 </template>
 <script>
-import { Table, TableColumn } from "element-ui";
+import { Table, TableColumn, Dialog } from "element-ui";
+import PreviewScenario from "./PreviewScenario.vue";
 
 export default {
   name: "dashboard",
   components: {
     [Table.name]: Table,
     [TableColumn.name]: TableColumn,
+    [Dialog.name]: Dialog,
+    PreviewScenario,
   },
   props: ["tableHeading", "scenarioTableData", "type"],
   data() {
     return {
       scenarioTableDataForTable: [],
       loadTable: false,
+      dialogVisible: false,
+      scenarioSalesSummary: [],
+      scenarioUnitSalesComparison: [],
+      scenarioCategorySalesComparison: [],
+      scenarioCategoryComparison: [],
     };
   },
   computed: {
@@ -173,6 +200,25 @@ export default {
     },
   },
   methods: {
+    closeDialog() {
+      this.dialogVisible = false;
+    },
+    async handleScenarioClick(data) {
+      console.log("data--", this.dialogVisible);
+      this.scenarioSalesSummary = await this.$axios.$get(
+        `/get-scenario-sales-summary/${data.id}`
+      );
+      this.scenarioUnitSalesComparison = await this.$axios.$get(
+        `/get-scenario-unit-sales-comparison/${data.id}`
+      );
+      this.scenarioCategorySalesComparison = await this.$axios.$get(
+        `/get-scenario-category-sales-comparison/${data.id}`
+      );
+      this.scenarioCategoryComparison = await this.$axios.$get(
+        `/get-scenario-category-comparison/${data.id}`
+      );
+      this.dialogVisible = true;
+    },
     getUserName: function(id) {
       let allUserInfo = JSON.parse(window.localStorage.getItem("allUsersInfo"));
       let userName = allUserInfo.users.filter((user) => (user.id = id))[0]
@@ -197,9 +243,21 @@ export default {
   },
 };
 </script>
-<style>
+<style lang="scss">
 .fixedHeightScrollTable {
   height: 550px;
   overflow: scroll;
+}
+
+.el-dialog {
+  background: #f5f6fa;
+}
+
+.el-table__row {
+  a {
+    text-decoration: underline;
+    cursor: pointer;
+    color: #1d8cf8 !important;
+  }
 }
 </style>
