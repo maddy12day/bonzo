@@ -4,8 +4,17 @@ const prisma = new PrismaClient();
 
 export const getBaseWeeklyMetrics = async (req, res) => {
   try {
+
+    // TODO : Make demand_forecast_run_log_id dynamic
+    // const baseForecast = await prisma.demand_forecast_run_log.findUnique({
+    //   where: {
+    //     is_base_forecast: true
+    //   }
+    // })
     const forecastedWeeklyMetrics = await prisma.forecasted_weekly_metrics.findMany({
+     
       where: {
+
         demand_forecast_run_log_id: 1,
       },
       include: {
