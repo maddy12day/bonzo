@@ -313,14 +313,14 @@ export default {
 
     // check status after every 30 sec for user scenarios
     async checkScenarioStatus() {
-      if (this.callToIntervalAjax == true) {
+      if (this.callToIntervalAjax) {
         const scenarioTypesJson = await this.$axios.$get(
           `/get-scenario-status/${this.$auth.user.user_id}`,
           {
             progress: true,
           }
         );
-        if (scenarioTypesJson.scenario.status !== "Completed" && scenarioTypesJson.scenario.status !== "Failed") {
+        if (scenarioTypesJson.scenario.status !== "Completed" || scenarioTypesJson.scenario.status !== "Failed") {
           this.callToIntervalAjax = true;
           this.sharedScenariosList.scenarios[0].status = scenarioTypesJson.scenario.status;
         } else {
