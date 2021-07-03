@@ -2,12 +2,12 @@
   <div class="row">
     <div class="col-lg-12">
       <card card-body-classes="table-full-width">
-        <h4 slot="header" class="card-title text-bold font-weight-bold">
+        <h4 slot="header" class="card-title text-bold font-weight-bold mb-0">
           {{ tableHeading }}
         </h4>
         <el-table
           v-if="loadTable"
-          :data="tableData"
+          :data="pagedTableData"
           :row-class-name="tableRowClassName"
         >
           <el-table-column
@@ -162,6 +162,15 @@
             property="filter_sub_classes"
           ></el-table-column>
         </el-table>
+        <el-pagination
+          small
+          :page-size="3"
+          :pager-count="5"
+          layout="prev, pager, next"
+          :total="this.tableData.length"
+          @current-change="setPage"
+        >
+        </el-pagination>
       </card>
     </div>
 
@@ -199,14 +208,25 @@ export default {
       scenarioUnitSalesComparison: [],
       scenarioCategorySalesComparison: [],
       scenarioCategoryComparison: [],
+      page: 1,
+      pageSize: 3,
     };
   },
   computed: {
     tableData() {
       return this.scenarioTableData;
     },
+    pagedTableData() {
+      return this.tableData.slice(
+        this.pageSize * this.page - this.pageSize,
+        this.pageSize * this.page
+      );
+    },
   },
   methods: {
+    setPage(val) {
+      this.page = val;
+    },
     closeDialog() {
       this.dialogVisible = false;
     },
@@ -278,14 +298,37 @@ export default {
 }
 
 .el-table .warning-row {
-  background: rgb(253, 237, 236);
+  background: rgb(255, 244, 243);
 }
 
 .el-table .success-row {
-  background: rgb(234, 250, 241);
+  background: rgb(247, 255, 251);
 }
 
 .el-table .other-row {
-  background: rgb(254, 249, 231);
+  background: rgb(255, 252, 241);
+}
+
+.el-table__body-wrapper::-webkit-scrollbar {
+  /*width: 0;width is 0 to hide*/
+  width: 0px;
+  height: 5px;
+}
+.el-table__body-wrapper::-webkit-scrollbar-thumb {
+  border-radius: 2px;
+  height: 5px;
+  background: #eee;
+}
+.el-table__body-wrapper::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+  border-radius: 2px;
+  background: rgba(252, 242, 242, 0.4);
+}
+.el-table__body-wrapper::-webkit-scrollbar-track:hover {
+  background: #c5c5c5;
+}
+
+.card .card-body {
+  padding: 5px 15px 15px 15px;
 }
 </style>
