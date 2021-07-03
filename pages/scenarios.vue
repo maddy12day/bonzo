@@ -311,7 +311,7 @@ export default {
       this.showScenarioTable = true;
     },
 
-    // check status after every 5 sec for user scenarios
+    // check status after every 10 sec for user scenarios
     async checkScenarioStatus() {
       if (this.callToIntervalAjax == true) {
         const scenarioTypesJson = await this.$axios.$get(
@@ -341,7 +341,7 @@ export default {
     this.userAllScenarios();
     setInterval(() => {
       this.checkScenarioStatus();
-    }, 5000);
+    }, 10000);
   },
   computed: {
     sharedScenariosListCom() {
