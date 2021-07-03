@@ -165,7 +165,13 @@ export default {
       loadTable: false,
     };
   },
-  computed: {},
+  computed: {
+    computed: {
+      scenarioTableData() {
+        return this.scenarioTableData;
+      },
+    },
+  },
   methods: {
     getUserName: function(id) {
       let allUserInfo = JSON.parse(window.localStorage.getItem("allUsersInfo"));

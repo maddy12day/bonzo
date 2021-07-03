@@ -225,8 +225,6 @@ export default {
     },
     getSkusValues(values) {
       this.skuValues = values;
-      console.log(this.scenarioTypeValue);
-      console.log(this.startDateValue, this.endDateValue, this.amountValue);
     },
     getScenarioType(values) {
       this.scenarioTypeValue = values.value;
@@ -242,7 +240,7 @@ export default {
         scenario_name: this.scenarioNameValue,
         demand_planner_user_id: this.$auth.user.user_id,
         scenario_types: this.scenarioTypeValue,
-        amount: Number(this.amountValue),
+        amount: parseFloat(this.amountValue),
         is_dollar: false,
         start_date: new Date(this.startDateValue),
         end_date: new Date(this.endDateValue),
@@ -270,7 +268,9 @@ export default {
         `/create-scenario`,
         finalModel
       );
-      await this.userAllScenarios();
+      this.sharedScenariosList.scenarios.unshift(createScenarioJson.scenarioRes);
+      this.showScenarioTable = true;
+     /*  await this.userAllScenarios(); */
       this.notifyVue("top", "right");
     },
     async getScenarioTypes() {
