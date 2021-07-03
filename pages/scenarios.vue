@@ -117,7 +117,7 @@
     </div>
 
     <ScenarioTable
-      class="mt-4"
+      class="mt-4 fixedHeightScrollTable"
       tableHeading="Your Scenarios"
       :scenarioTableData="sharedScenariosList.scenarios"
       :type="'yourScenarios'"
@@ -321,9 +321,13 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .card .alert {
   position: relative !important;
   width: 100%;
+}
+.fixedHeightScrollTable {
+  height: 550px;
+  overflow: scroll;
 }
 </style>

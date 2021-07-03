@@ -7,6 +7,7 @@
       tableHeading="Shared Scenarios"
       :scenarioTableData="sharedScenariosList.scenarios"
       :type="'sharedScenarios'"
+      class="sharedScenarioTableScoll"
     />
 
     <card card-body-classes="table-full-width">
@@ -129,4 +130,9 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped>
+.sharedScenarioTableScoll {
+  height: 300px;
+  overflow: scroll;
+}
+</style>

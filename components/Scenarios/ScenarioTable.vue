@@ -167,13 +167,13 @@ export default {
   },
   computed: {},
   methods: {
-    getUserName: function (id) {
+    getUserName: function(id) {
       let allUserInfo = JSON.parse(window.localStorage.getItem("allUsersInfo"));
       let userName = allUserInfo.users.filter((user) => (user.id = id))[0]
         .first_name;
       return userName;
     },
-    addUserToScenarioTableData: function (scenarioTableData, type) {
+    addUserToScenarioTableData: function(scenarioTableData, type) {
       if ((type = "sharedScenarios")) {
         this.scenarioTableDataForTable = scenarioTableData.map((v) => ({
           ...v,
@@ -191,4 +191,9 @@ export default {
   },
 };
 </script>
-<style></style>
+<style>
+.fixedHeightScrollTable {
+  height: 550px;
+  overflow: scroll;
+}
+</style>
