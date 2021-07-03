@@ -5,10 +5,7 @@
         <h4 slot="header" class="card-title text-bold font-weight-bold">
           {{ tableHeading }}
         </h4>
-        <el-table
-          v-if="loadTable"
-          :data="tableData"
-        >
+        <el-table v-if="loadTable" :data="tableData">
           <el-table-column
             min-width="180"
             sortable

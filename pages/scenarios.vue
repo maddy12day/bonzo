@@ -160,15 +160,16 @@ export default {
       endDateValue: "",
       amountValue: "",
       scenarioNameValue: "",
+      callToIntervalAjax: true,
       showScenarioTable: false,
       type: ["", "info", "success", "warning", "danger"],
       notifications: {
         topCenter: false,
       },
       fixedHeightScrollTable: {
-        height: '550px',
-        overflow: 'scroll'
-}
+        height: "550px",
+        overflow: "scroll",
+      },
     };
   },
   components: {
@@ -272,11 +273,15 @@ export default {
         `/create-scenario`,
         finalModel
       );
-      this.sharedScenariosList.scenarios.unshift(createScenarioJson.scenarioRes);
+      this.sharedScenariosList.scenarios.unshift(
+        createScenarioJson.scenarioRes
+      );
       this.showScenarioTable = true;
-     /*  await this.userAllScenarios(); */
+      /*  await this.userAllScenarios(); */
+      this.callToIntervalAjax = true;
       this.notifyVue("top", "right");
     },
+
     async getScenarioTypes() {
       const scenarioTypesJson = await this.$axios.$get(
         `/get-all-scenario-types`,
@@ -291,6 +296,7 @@ export default {
         };
       });
     },
+
     async userAllScenarios() {
       let allUserInfo = JSON.parse(window.localStorage.getItem("allUsersInfo"));
       let currentUserId = allUserInfo.users.filter(
@@ -304,14 +310,40 @@ export default {
       );
       this.showScenarioTable = true;
     },
+
+    // check status after every 30 sec for user scenarios
+    async checkScenarioStatus() {
+      if (this.callToIntervalAjax == true) {
+        const scenarioTypesJson = await this.$axios.$get(
+          `/get-scenario-status/${this.$auth.user.user_id}`,
+          {
+            progress: true,
+          }
+        );
+        if (scenarioTypesJson.scenario.status == "Pending") {
+          this.callToIntervalAjax = true;
+          console.log("pending");
+        } else {
+          this.callToIntervalAjax = false;
+          this.sharedScenariosList.scenarios[0].status = "Completed";
+          console.log(this.categoriesValues, "pending");
+        }
+      }
+    },
   },
 
   async mounted() {
     console.log(this.$auth.user);
     this.getScenarioTypes();
     this.userAllScenarios();
+    setInterval(() => {
+      this.checkScenarioStatus();
+    }, 30000);
   },
   computed: {
+    sharedScenariosList() {
+      return this.sharedScenariosList;
+    },
     filtersType() {
       return [
         { name: "Regular", icon: "tim-icons icon-single-02" },
@@ -330,5 +362,4 @@ export default {
   position: relative !important;
   width: 100%;
 }
-
 </style>
