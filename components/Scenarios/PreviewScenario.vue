@@ -13,10 +13,11 @@
         </h4>
         <el-table :data="scenarioSalesSummary.result">
           <el-table-column
-            min-width="180"
+            min-width="150"
             sortable
             label="Planned Sales TY"
             property="planned_revenue"
+            align="right"
           >
             <template slot-scope="scope">
               {{ scope.row.planned_revenue | toLocaleStr }}
@@ -27,6 +28,7 @@
             sortable
             label="Forecast Sales TY"
             property="forecasted_revenue"
+            align="right"
           >
             <template slot-scope="scope">
               {{ scope.row.forecasted_revenue | toLocaleStr }}
@@ -37,6 +39,7 @@
             sortable
             label="Adjusted Sales TY"
             property="adjusted_revenue"
+            align="right"
           >
             <template slot-scope="scope">
               {{ scope.row.adjusted_revenue | toLocaleStr }}
@@ -47,6 +50,7 @@
             sortable
             label="Planned  Sales GM"
             property="planned_gm_percent"
+            align="right"
           >
           </el-table-column>
           <el-table-column
@@ -54,12 +58,14 @@
             sortable
             label="Forecast Sales GM"
             property="forecasted_gm_percent"
+            align="right"
           ></el-table-column>
           <el-table-column
             min-width="150"
             sortable
             label="Adjusted Sales GM"
             property="adjusted_gm_percent"
+            align="right"
           ></el-table-column>
         </el-table>
       </card>
@@ -73,10 +79,11 @@
         </h4>
         <el-table :data="scenarioSalesSummary.result">
           <el-table-column
-            min-width="180"
+            min-width="150"
             sortable
             label="Planned Sales TY"
             property="planned_units"
+            align="right"
           >
             <template slot-scope="scope">
               {{ scope.row.planned_units | toLocaleStr }}
@@ -87,6 +94,7 @@
             sortable
             label="Forecast Sales TY"
             property="forecasted_units"
+            align="right"
           >
             <template slot-scope="scope">
               {{ scope.row.forecasted_units | toLocaleStr }}
@@ -97,6 +105,7 @@
             sortable
             label="Adjusted Sales TY"
             property="adjusted_units"
+            align="right"
           >
             <template slot-scope="scope">
               {{ scope.row.adjusted_units | toLocaleStr }}
@@ -107,18 +116,21 @@
             sortable
             label="Planned  Sales GM"
             property="planned_gm_percent"
+            align="right"
           ></el-table-column>
           <el-table-column
             min-width="150"
             sortable
             label="Forecast Sales GM"
             property="forecasted_gm_percent"
+            align="right"
           ></el-table-column>
           <el-table-column
             min-width="150"
             sortable
             label="Adjusted Sales GM"
             property="adjusted_gm_percent"
+            align="right"
           ></el-table-column>
         </el-table>
       </card>
@@ -141,12 +153,24 @@
             property="Comparision"
           >
           </el-table-column>
-          <el-table-column min-width="150" sortable label="W1" property="W-1">
+          <el-table-column
+            min-width="150"
+            sortable
+            label="W1"
+            property="W-1"
+            align="right"
+          >
             <template slot-scope="scope">
               {{ scope.row["W-1"] | toLocaleStr }}
             </template></el-table-column
           >
-          <el-table-column min-width="150" sortable label="W2" property="W-2">
+          <el-table-column
+            min-width="150"
+            sortable
+            label="W2"
+            property="W-2"
+            align="right"
+          >
             <template slot-scope="scope">
               {{ scope.row["W-2"] | toLocaleStr }}
             </template>
@@ -164,10 +188,7 @@
         <h4 slot="header" class="card-title text-bold font-weight-bold">
           Sales Comparision
         </h4>
-        <el-table
-          v-if="scenarioUnitSalesComparison.parsedData"
-          :data="scenarioUnitSalesComparison.parsedData.Revenue"
-        >
+        <el-table :data="scenarioUnitSalesComparison.parsedData.Revenue">
           <el-table-column
             min-width="180"
             sortable
@@ -175,12 +196,24 @@
             property="Comparision"
           >
           </el-table-column>
-          <el-table-column min-width="150" sortable label="W1" property="W-1">
+          <el-table-column
+            min-width="150"
+            sortable
+            label="W1"
+            property="W-1"
+            align="right"
+          >
             <template slot-scope="scope">
               {{ scope.row["W-1"] | toLocaleStr }}
             </template>
           </el-table-column>
-          <el-table-column min-width="150" sortable label="W2" property="W-2">
+          <el-table-column
+            min-width="150"
+            sortable
+            label="W2"
+            property="W-2"
+            align="right"
+          >
             <template slot-scope="scope">
               {{ scope.row["W-2"] | toLocaleStr }}
             </template>
@@ -211,6 +244,7 @@
             sortable
             label="Planned Sales"
             property="planned_revenue"
+            align="right"
           >
             <template slot-scope="scope">
               {{ scope.row.planned_revenue | toLocaleStr }}
@@ -221,6 +255,7 @@
             sortable
             label="Forecast Sales"
             property="forecasted_revenue"
+            align="right"
           >
             <template slot-scope="scope">
               {{ scope.row.forecasted_revenue | toLocaleStr }}
@@ -231,6 +266,7 @@
             sortable
             label="Adjusted Sales"
             property="adjusted_revenue"
+            align="right"
           >
             <template slot-scope="scope">
               {{ scope.row.adjusted_revenue | toLocaleStr }}
@@ -241,36 +277,42 @@
             sortable
             label="Planned Sales(%)"
             property="planned_revenue_percent"
+            align="right"
           ></el-table-column>
           <el-table-column
             min-width="190"
             sortable
             label="Forecast Sales(%)"
             property="forecasted_revenue_percent"
+            align="right"
           ></el-table-column>
           <el-table-column
             min-width="190"
             sortable
             label="Adjusted Sales(%)"
             property="adjusted_revenue_percent"
+            align="right"
           ></el-table-column>
           <el-table-column
             min-width="150"
             sortable
             label="Planned GM"
             property="planned_gm_percent"
+            align="right"
           ></el-table-column>
           <el-table-column
             min-width="150"
             sortable
             label="Forecast GM"
             property="forecasted_gm_percent"
+            align="right"
           ></el-table-column>
           <el-table-column
             min-width="150"
             sortable
             label="Adjusted GM"
             property="adjusted_gm_percent"
+            align="right"
           ></el-table-column>
         </el-table>
       </card>
@@ -296,12 +338,24 @@
             property="Comparision"
           >
           </el-table-column>
-          <el-table-column min-width="150" sortable label="W1" property="W-1">
+          <el-table-column
+            min-width="150"
+            sortable
+            label="W1"
+            property="W-1"
+            align="right"
+          >
             <template slot-scope="scope">
               {{ scope.row["W-1"] | toLocaleStr }}
             </template>
           </el-table-column>
-          <el-table-column min-width="150" sortable label="W2" property="W-2">
+          <el-table-column
+            min-width="150"
+            sortable
+            label="W2"
+            property="W-2"
+            align="right"
+          >
             <template slot-scope="scope">
               {{ scope.row["W-2"] | toLocaleStr }}
             </template></el-table-column
@@ -331,12 +385,24 @@
             property="Comparision"
           >
           </el-table-column>
-          <el-table-column min-width="150" sortable label="W1" property="W-1">
+          <el-table-column
+            min-width="150"
+            sortable
+            label="W1"
+            property="W-1"
+            align="right"
+          >
             <template slot-scope="scope">
               {{ scope.row["W-1"] | toLocaleStr }}
             </template></el-table-column
           >
-          <el-table-column min-width="150" sortable label="W2" property="W-2">
+          <el-table-column
+            min-width="150"
+            sortable
+            label="W2"
+            property="W-2"
+            align="right"
+          >
             <template slot-scope="scope">
               {{ scope.row["W-2"] | toLocaleStr }}
             </template></el-table-column
