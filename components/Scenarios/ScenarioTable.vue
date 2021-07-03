@@ -15,13 +15,18 @@
             label="Name"
             property="scenario_name"
           >
-            <a
-              tabindex="0"
-              @click="handleScenarioClick(scope.row)"
-              slot-scope="scope"
-            >
-              {{ scope.row.scenario_name }}</a
-            >
+            <template slot-scope="scope">
+              <a
+                tabindex="0"
+                @click="handleScenarioClick(scope.row)"
+                v-if="scope.row.status == 'Completed'"
+              >
+                {{ scope.row.scenario_name }}</a
+              >
+              <span v-else>
+                {{ scope.row.scenario_name }}
+              </span>
+            </template>
           </el-table-column>
 
           <el-table-column
