@@ -185,7 +185,7 @@ export default {
       this.$notify({
         message:
           "Scenario submitted to model. Please check 'Your Scenarios' for updates in sometime.",
-        timeout: 30000,
+        timeout: 12000,
         icon: "tim-icons icon-bell-55",
         horizontalAlign: horizontalAlign,
         verticalAlign: verticalAlign,
@@ -311,7 +311,7 @@ export default {
       this.showScenarioTable = true;
     },
 
-    // check status after every 30 sec for user scenarios
+    // check status after every 10 sec for user scenarios
     async checkScenarioStatus() {
       if (this.callToIntervalAjax) {
         const scenarioTypesJson = await this.$axios.$get(
@@ -320,12 +320,17 @@ export default {
             progress: true,
           }
         );
-        if (scenarioTypesJson.scenario.status !== "Completed" || scenarioTypesJson.scenario.status !== "Failed") {
+        if (
+          scenarioTypesJson.scenario.status !== "Completed" ||
+          scenarioTypesJson.scenario.status !== "Failed"
+        ) {
           this.callToIntervalAjax = true;
-          this.sharedScenariosList.scenarios[0].status = scenarioTypesJson.scenario.status;
+          this.sharedScenariosList.scenarios[0].status =
+            scenarioTypesJson.scenario.status;
         } else {
           this.callToIntervalAjax = false;
-          this.sharedScenariosList.scenarios[0].status = scenarioTypesJson.scenario.status;
+          this.sharedScenariosList.scenarios[0].status =
+            scenarioTypesJson.scenario.status;
         }
       }
     },
@@ -336,7 +341,7 @@ export default {
     this.userAllScenarios();
     setInterval(() => {
       this.checkScenarioStatus();
-    }, 30000);
+    }, 10000);
   },
   computed: {
     sharedScenariosListCom() {

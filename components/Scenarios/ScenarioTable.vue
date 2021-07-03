@@ -5,7 +5,11 @@
         <h4 slot="header" class="card-title text-bold font-weight-bold">
           {{ tableHeading }}
         </h4>
-        <el-table v-if="loadTable" :data="tableData">
+        <el-table
+          v-if="loadTable"
+          :data="tableData"
+          :row-class-name="tableRowClassName"
+        >
           <el-table-column
             min-width="180"
             sortable
@@ -222,13 +226,13 @@ export default {
       );
       this.dialogVisible = true;
     },
-    getUserName: function(id) {
+    getUserName: function (id) {
       let allUserInfo = JSON.parse(window.localStorage.getItem("allUsersInfo"));
       let userName = allUserInfo.users.filter((user) => (user.id = id))[0]
         .first_name;
       return userName;
     },
-    addUserToScenarioTableData: function(scenarioTableData, type) {
+    addUserToScenarioTableData: function (scenarioTableData, type) {
       if ((type = "sharedScenarios")) {
         this.scenarioTableDataForTable = scenarioTableData.map((v) => ({
           ...v,
@@ -239,6 +243,15 @@ export default {
         this.scenarioTableDataForTable = scenarioTableData;
         this.loadTable = true;
       }
+    },
+    tableRowClassName({ row }) {
+      console.log("row.status", row.status);
+      if (row.status === "Completed") {
+        return "success-row";
+      } else if (row.status === "Failed") {
+        return "warning-row";
+      }
+      return "other-row";
     },
   },
   created() {
@@ -262,5 +275,17 @@ export default {
     cursor: pointer;
     color: #1d8cf8 !important;
   }
+}
+
+.el-table .warning-row {
+  background: rgb(253, 237, 236);
+}
+
+.el-table .success-row {
+  background: rgb(234, 250, 241);
+}
+
+.el-table .other-row {
+  background: rgb(254, 249, 231);
 }
 </style>
