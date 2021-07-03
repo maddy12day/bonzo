@@ -185,7 +185,7 @@ export default {
       this.$notify({
         message:
           "Scenario submitted to model. Please check 'Your Scenarios' for updates in sometime.",
-        timeout: 30000,
+        timeout: 12000,
         icon: "tim-icons icon-bell-55",
         horizontalAlign: horizontalAlign,
         verticalAlign: verticalAlign,
