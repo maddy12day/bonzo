@@ -197,7 +197,13 @@ export default {
       scenarioCategoryComparison: [],
     };
   },
-  computed: {},
+  computed: {
+    computed: {
+      scenarioTableData() {
+        return this.scenarioTableData;
+      },
+    },
+  },
   methods: {
     closeDialog() {
       this.dialogVisible = false;

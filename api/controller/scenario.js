@@ -101,8 +101,6 @@ export const createScenario = async (req, res) => {
         executed_by: `${executed_by.first_name} ${executed_by.last_name}`,
       },
     });
-    console.log(demandForecastRunlogRes);
-    console.log(scenarioRes);
     res.status(200).json({
       scenarioRes,
       status: 200,

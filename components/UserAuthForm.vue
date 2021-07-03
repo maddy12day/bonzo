@@ -65,8 +65,8 @@ export default {
       valid: false,
       showPassword: false,
       userInfo: {
-        email: "",
-        password: "",
+        email: "kristen.doherty@formabrands.com",
+        password: "k3J#R3#$w7rf*UD5",
       },
       ...validations,
     };
