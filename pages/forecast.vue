@@ -92,11 +92,16 @@
           </label>
         </div>
       </div>
-      <WeeklyMetricsTable
+      <ManualAdjustmentTable
+        v-if="activeTab == 'Weekly'"
+        :metricsTableData="baseMetricsList"
+        tableHeading="Edit Forecast Metrics"
+      />
+      <!-- <WeeklyMetricsTable
         v-if="activeTab == 'Weekly'"
         :metricsTableData="baseMetricsList"
         tableHeading="Weekly Forecast Metrics"
-      />
+      /> -->
       <MonthlyMetricsTable
         v-if="activeTab == 'Monthly'"
         :metricsTableData="baseMetricsList"
@@ -136,12 +141,14 @@ import WeeklyForecast from "../components/Forecast/ForecastBySkuTable.vue";
 import Card from "~/components/Cards/Card.vue";
 import WeeklyMetricsTable from "../components/Metrics/WeeklyMetricsTable.vue";
 import MonthlyMetricsTable from "../components/Metrics/MonthlyMetricsTable.vue";
+import ManualAdjustmentTable from "../components/Metrics/ManualAdjustmentTable.vue";
 
 export default {
   name: "Forecast",
   components: {
     MonthlyMetricsTable,
     WeeklyMetricsTable,
+    ManualAdjustmentTable,
     StatsWidget,
     RegularFilters,
     ProgramFilters,
