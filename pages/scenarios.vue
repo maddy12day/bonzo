@@ -119,7 +119,7 @@
     <ScenarioTable
       class="mt-4"
       tableHeading="Your Scenarios"
-      :scenarioTableData="sharedScenariosList.scenarios"
+      :scenarioTableData="sharedScenariosListCom.scenarios"
       :type="'yourScenarios'"
       v-if="showScenarioTable"
       useClass="fixedHeightScrollTable"
@@ -320,20 +320,18 @@ export default {
             progress: true,
           }
         );
-        if (scenarioTypesJson.scenario.status == "Pending") {
+        if (scenarioTypesJson.scenario.status !== "Completed" && scenarioTypesJson.scenario.status !== "Failed") {
           this.callToIntervalAjax = true;
-          console.log("pending");
+          this.sharedScenariosList.scenarios[0].status = scenarioTypesJson.scenario.status;
         } else {
           this.callToIntervalAjax = false;
-          this.sharedScenariosList.scenarios[0].status = "Completed";
-          console.log(this.categoriesValues, "pending");
+          this.sharedScenariosList.scenarios[0].status = scenarioTypesJson.scenario.status;
         }
       }
     },
   },
 
   async mounted() {
-    console.log(this.$auth.user);
     this.getScenarioTypes();
     this.userAllScenarios();
     setInterval(() => {
@@ -341,7 +339,7 @@ export default {
     }, 30000);
   },
   computed: {
-    sharedScenariosList() {
+    sharedScenariosListCom() {
       return this.sharedScenariosList;
     },
     filtersType() {

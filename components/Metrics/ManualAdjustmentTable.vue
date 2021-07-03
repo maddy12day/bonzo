@@ -21,9 +21,12 @@
             property="yearly_aggregate"
             align="right"
           >
-            <template slot-scope="scope">{{
+           <template slot-scope="scope">
+                <el-input v-model="scope.row.yearly_aggregate" ></el-input>
+              </template>
+          <!--   <template slot-scope="scope">{{
               scope.row.yearly_aggregate | toLocaleStr
-            }}</template>
+            }}</template> -->
           </el-table-column>
 
           <el-table-column
@@ -613,8 +616,11 @@ export default {
     [TableColumn.name]: TableColumn,
   },
   props: ["tableHeading", "metricsTableData"],
+
   data() {
-    return {};
+    return {
+    };
+    
   },
   computed: {},
   methods: {},
@@ -623,5 +629,4 @@ export default {
   },
 };
 </script>
-<style>
-</style>
+<style></style>

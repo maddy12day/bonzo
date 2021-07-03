@@ -11,6 +11,7 @@
             sortable
             label="Metrics Name"
             property="metrics_master.title"
+            :editablecontent="true"
           >
           </el-table-column>
 
