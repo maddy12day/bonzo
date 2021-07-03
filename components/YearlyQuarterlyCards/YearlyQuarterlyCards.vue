@@ -11,36 +11,67 @@
         <span
           v-if="title === 'Planned'"
           class="text-info display-4 font-weight-normal"
-          >{{ units | toLocaleStr }}</span
         >
+          <span v-if="units">
+            {{ units | toLocaleStr }}
+          </span>
+          <span v-else>
+            <i class="el-icon-loading"></i>
+          </span>
+        </span>
         <span
           v-if="title === 'This Year'"
           class="text-danger display-4 font-weight-normal"
-          >{{ units | toLocaleStr }}</span
         >
+          <span v-if="units">
+            {{ units | toLocaleStr }}
+          </span>
+          <span v-else>
+            <i class="el-icon-loading"></i>
+          </span>
+        </span>
+
         <span
           v-if="title === 'Forecast'"
           class="text-warning display-4 font-weight-normal"
-          >{{ units | toLocaleStr }}</span
         >
+          <span v-if="units">
+            {{ units | toLocaleStr }}
+          </span>
+          <span v-else>
+            <i class="el-icon-loading"></i>
+          </span>
+        </span>
       </h5>
       <h5 class="card-category">
         Revenue:
         <span
           v-if="title === 'Planned'"
           class="text-info display-4 font-weight-normal"
-          >$ {{ revenue | toLocaleStr }}</span
         >
+          <span v-if="revenue"> $ {{ revenue | toLocaleStr }} </span>
+          <span v-else>
+            <i class="el-icon-loading"></i>
+          </span>
+        </span>
         <span
           v-if="title === 'This Year'"
           class="text-danger display-4 font-weight-normal"
-          >$ {{ revenue | toLocaleStr }}</span
         >
+          <span v-if="revenue"> $ {{ revenue | toLocaleStr }} </span>
+          <span v-else>
+            <i class="el-icon-loading"></i>
+          </span>
+        </span>
         <span
           v-if="title === 'Forecast'"
           class="text-warning display-4 font-weight-normal"
-          >$ {{ revenue | toLocaleStr }}</span
         >
+          <span v-if="revenue"> $ {{ revenue | toLocaleStr }} </span>
+          <span v-else>
+            <i class="el-icon-loading"></i>
+          </span>
+        </span>
       </h5>
     </div>
   </div>

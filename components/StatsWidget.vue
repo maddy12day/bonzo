@@ -30,12 +30,14 @@
         <YearlyQuarterlyCard
           title="Planned"
           :units="`${
-            yearlyPlannedData[0] ? parseInt(yearlyPlannedData[0]._sum.units) : 'loading...'
+            yearlyPlannedData[0]
+              ? parseInt(yearlyPlannedData[0]._sum.units)
+              : ''
           }`"
           :revenue="`${
             yearlyPlannedData[0]
               ? parseInt(yearlyPlannedData[0]._sum.revenue)
-              : 'loading...'
+              : ''
           }`"
           class="border border-info"
         />
@@ -43,8 +45,8 @@
       <div class="col-md-4">
         <YearlyQuarterlyCard
           title="This Year"
-          :units="`${yearlySaleData[0] ? yearlySaleData[0].qtr_units : 'loading...'}`"
-          :revenue="`${yearlySaleData[0] ? yearlySaleData[0].qtr_revenue : 'loading...'}`"
+          :units="`${yearlySaleData[0] ? yearlySaleData[0].qtr_units : ''}`"
+          :revenue="`${yearlySaleData[0] ? yearlySaleData[0].qtr_revenue : ''}`"
           class="border border-danger"
         />
       </div>
@@ -52,10 +54,10 @@
         <YearlyQuarterlyCard
           title="Forecast"
           :units="`${
-            forecastYQData[1] ? forecastYQData[1].yearly_aggregate : 'loading...'
+            forecastYQData[1] ? forecastYQData[1].yearly_aggregate : ''
           }`"
           :revenue="`${
-            forecastYQData[0] ? forecastYQData[0].yearly_aggregate : 'loading...'
+            forecastYQData[0] ? forecastYQData[0].yearly_aggregate : ''
           }`"
           class="border border-warning"
         />
@@ -66,10 +68,10 @@
         <YearlyQuarterlyCard
           title="Planned"
           :units="`${
-            quarterlyPlannedData[0] ? quarterlyPlannedData[0].qtr_units : 'loading...'
+            quarterlyPlannedData[0] ? quarterlyPlannedData[0].qtr_units : ''
           }`"
           :revenue="`${
-            quarterlyPlannedData[0] ? quarterlyPlannedData[0].qtr_revenue : 'loading...'
+            quarterlyPlannedData[0] ? quarterlyPlannedData[0].qtr_revenue : ''
           }`"
           class="border border-info"
         />
@@ -78,10 +80,10 @@
         <YearlyQuarterlyCard
           title="This Year"
           :units="`${
-            quarterlySaleData[0] ? quarterlySaleData[0].qtr_units : 'loading...'
+            quarterlySaleData[0] ? quarterlySaleData[0].qtr_units : ''
           }`"
           :revenue="`${
-            quarterlySaleData[0] ? quarterlySaleData[0].qtr_revenue : 'loading...'
+            quarterlySaleData[0] ? quarterlySaleData[0].qtr_revenue : ''
           }`"
           class="border border-danger"
         />
@@ -89,8 +91,10 @@
       <div class="col-md-4">
         <YearlyQuarterlyCard
           title="Forecast"
-          :units="`${forecastYQData[1] ? forecastYQData[1].q1_aggregate : 'loading...'}`"
-          :revenue="`${forecastYQData[0] ? forecastYQData[0].q1_aggregate : 'loading...'}`"
+          :units="`${forecastYQData[1] ? forecastYQData[1].q1_aggregate : ''}`"
+          :revenue="`${
+            forecastYQData[0] ? forecastYQData[0].q1_aggregate : ''
+          }`"
           class="border border-warning"
         />
       </div>
@@ -100,10 +104,10 @@
         <YearlyQuarterlyCard
           title="Planned"
           :units="`${
-            quarterlyPlannedData[1] ? quarterlyPlannedData[1].qtr_units : 'loading...'
+            quarterlyPlannedData[1] ? quarterlyPlannedData[1].qtr_units : ''
           }`"
           :revenue="`${
-            quarterlyPlannedData[1] ? quarterlyPlannedData[1].qtr_revenue : 'loading...'
+            quarterlyPlannedData[1] ? quarterlyPlannedData[1].qtr_revenue : ''
           }`"
           class="border border-info"
         />
@@ -112,10 +116,10 @@
         <YearlyQuarterlyCard
           title="This Year"
           :units="`${
-            quarterlySaleData[1] ? quarterlySaleData[1].qtr_units : 'loading...'
+            quarterlySaleData[1] ? quarterlySaleData[1].qtr_units : ''
           }`"
           :revenue="`${
-            quarterlySaleData[1] ? quarterlySaleData[1].qtr_revenue : 'loading...'
+            quarterlySaleData[1] ? quarterlySaleData[1].qtr_revenue : ''
           }`"
           class="border border-danger"
         />
@@ -123,8 +127,10 @@
       <div class="col-md-4">
         <YearlyQuarterlyCard
           title="Forecast"
-          :units="`${forecastYQData[1] ? forecastYQData[1].q2_aggregate : 'loading...'}`"
-          :revenue="`${forecastYQData[0] ? forecastYQData[0].q2_aggregate : 'loading...'}`"
+          :units="`${forecastYQData[1] ? forecastYQData[1].q2_aggregate : ''}`"
+          :revenue="`${
+            forecastYQData[0] ? forecastYQData[0].q2_aggregate : ''
+          }`"
           class="border border-warning"
         />
       </div>
@@ -134,10 +140,10 @@
         <YearlyQuarterlyCard
           title="Planned"
           :units="`${
-            quarterlyPlannedData[2] ? quarterlyPlannedData[2].qtr_units : 'loading...'
+            quarterlyPlannedData[2] ? quarterlyPlannedData[2].qtr_units : ''
           }`"
           :revenue="`${
-            quarterlyPlannedData[2] ? quarterlyPlannedData[2].qtr_revenue : 0
+            quarterlyPlannedData[2] ? quarterlyPlannedData[2].qtr_revenue : ''
           }`"
           class="border border-info"
         />
@@ -146,10 +152,10 @@
         <YearlyQuarterlyCard
           title="This Year"
           :units="`${
-            quarterlySaleData[2] ? quarterlySaleData[2].qtr_units : 'No Sale yet'
+            quarterlySaleData[2] ? quarterlySaleData[2].qtr_units : ''
           }`"
           :revenue="`${
-            quarterlySaleData[2] ? quarterlySaleData[2].qtr_revenue : 'No Sale yet'
+            quarterlySaleData[2] ? quarterlySaleData[2].qtr_revenue : ''
           }`"
           class="border border-danger"
         />
@@ -157,8 +163,8 @@
       <div class="col-md-4">
         <YearlyQuarterlyCard
           title="Forecast"
-          :units="`${forecastYQData[1] ? forecastYQData[1].q3_aggregate : 'loading...'}`"
-          :revenue="`${forecastYQData ? forecastYQData[0].q3_aggregate : 'loading...'}`"
+          :units="`${forecastYQData[1] ? forecastYQData[1].q3_aggregate : ''}`"
+          :revenue="`${forecastYQData ? forecastYQData[0].q3_aggregate : ''}`"
           class="border border-warning"
         />
       </div>
@@ -168,10 +174,10 @@
         <YearlyQuarterlyCard
           title="Planned"
           :units="`${
-            quarterlyPlannedData[3] ? quarterlyPlannedData[3].qtr_units : 0
+            quarterlyPlannedData[3] ? quarterlyPlannedData[3].qtr_units : ''
           }`"
           :revenue="`${
-            quarterlyPlannedData[3] ? quarterlyPlannedData[3].qtr_revenue : 0
+            quarterlyPlannedData[3] ? quarterlyPlannedData[3].qtr_revenue : ''
           }`"
           class="border border-info"
         />
@@ -180,10 +186,10 @@
         <YearlyQuarterlyCard
           title="This Year"
           :units="`${
-            quarterlySaleData[3] ? quarterlySaleData[3].qtr_units : 'No Sale yet'
+            quarterlySaleData[3] ? quarterlySaleData[3].qtr_units : ''
           }`"
           :revenue="`${
-            quarterlySaleData[3] ? quarterlySaleData[3].qtr_revenue : 'No Sale yet'
+            quarterlySaleData[3] ? quarterlySaleData[3].qtr_revenue : ''
           }`"
           class="border border-danger"
         />
@@ -191,8 +197,10 @@
       <div class="col-md-4">
         <YearlyQuarterlyCard
           title="Forecast"
-          :units="`${forecastYQData[1] ? forecastYQData[1].q4_aggregate : 'loading...'}`"
-          :revenue="`${forecastYQData[0] ? forecastYQData[0].q4_aggregate : 'loading...'}`"
+          :units="`${forecastYQData[1] ? forecastYQData[1].q4_aggregate : ''}`"
+          :revenue="`${
+            forecastYQData[0] ? forecastYQData[0].q4_aggregate : ''
+          }`"
           class="border border-warning"
         />
       </div>
