@@ -146,10 +146,10 @@
         <YearlyQuarterlyCard
           title="This Year"
           :units="`${
-            quarterlySaleData[2] ? quarterlySaleData[2].qtr_units : 'No Sale'
+            quarterlySaleData[2] ? quarterlySaleData[2].qtr_units : 'No Sale yet'
           }`"
           :revenue="`${
-            quarterlySaleData[2] ? quarterlySaleData[2].qtr_revenue : 'No Sale'
+            quarterlySaleData[2] ? quarterlySaleData[2].qtr_revenue : 'No Sale yet'
           }`"
           class="border border-danger"
         />
@@ -180,10 +180,10 @@
         <YearlyQuarterlyCard
           title="This Year"
           :units="`${
-            quarterlySaleData[3] ? quarterlySaleData[3].qtr_units : 'No sale yet'
+            quarterlySaleData[3] ? quarterlySaleData[3].qtr_units : 'No Sale yet'
           }`"
           :revenue="`${
-            quarterlySaleData[3] ? quarterlySaleData[3].qtr_revenue : 'No sale yet'
+            quarterlySaleData[3] ? quarterlySaleData[3].qtr_revenue : 'No Sale yet'
           }`"
           class="border border-danger"
         />
