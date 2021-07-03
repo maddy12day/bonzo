@@ -26,7 +26,7 @@
       </div>
     </div>
     <div class="row" v-if="currentYQTab == 'Yearly'">
-      <div class="col-md-4">
+      <div class="col-md-4 mt-1">
         <YearlyQuarterlyCard
           title="Planned"
           :units="`${
@@ -42,7 +42,7 @@
           class="border border-info"
         />
       </div>
-      <div class="col-md-4">
+      <div class="col-md-4 mt-1">
         <YearlyQuarterlyCard
           title="This Year"
           :units="`${yearlySaleData[0] ? yearlySaleData[0].qtr_units : ''}`"
@@ -50,7 +50,7 @@
           class="border border-danger"
         />
       </div>
-      <div class="col-md-4">
+      <div class="col-md-4 mt-1">
         <YearlyQuarterlyCard
           title="Forecast"
           :units="`${
@@ -64,7 +64,7 @@
       </div>
     </div>
     <div class="row" v-if="currentYQTab == 'Q1'">
-      <div class="col-md-4">
+      <div class="col-md-4 mt-1">
         <YearlyQuarterlyCard
           title="Planned"
           :units="`${
@@ -76,7 +76,7 @@
           class="border border-info"
         />
       </div>
-      <div class="col-md-4">
+      <div class="col-md-4 mt-1">
         <YearlyQuarterlyCard
           title="This Year"
           :units="`${
@@ -88,7 +88,7 @@
           class="border border-danger"
         />
       </div>
-      <div class="col-md-4">
+      <div class="col-md-4 mt-1">
         <YearlyQuarterlyCard
           title="Forecast"
           :units="`${forecastYQData[1] ? forecastYQData[1].q1_aggregate : ''}`"
@@ -100,7 +100,7 @@
       </div>
     </div>
     <div class="row" v-if="currentYQTab == 'Q2'">
-      <div class="col-md-4">
+      <div class="col-md-4 mt-1">
         <YearlyQuarterlyCard
           title="Planned"
           :units="`${
@@ -112,7 +112,7 @@
           class="border border-info"
         />
       </div>
-      <div class="col-md-4">
+      <div class="col-md-4 mt-1">
         <YearlyQuarterlyCard
           title="This Year"
           :units="`${
@@ -124,7 +124,7 @@
           class="border border-danger"
         />
       </div>
-      <div class="col-md-4">
+      <div class="col-md-4 mt-1">
         <YearlyQuarterlyCard
           title="Forecast"
           :units="`${forecastYQData[1] ? forecastYQData[1].q2_aggregate : ''}`"
@@ -136,7 +136,7 @@
       </div>
     </div>
     <div class="row" v-if="currentYQTab == 'Q3'">
-      <div class="col-md-4">
+      <div class="col-md-4 mt-1">
         <YearlyQuarterlyCard
           title="Planned"
           :units="`${
@@ -148,7 +148,7 @@
           class="border border-info"
         />
       </div>
-      <div class="col-md-4">
+      <div class="col-md-4 mt-1">
         <YearlyQuarterlyCard
           title="This Year"
           :units="`${
@@ -160,7 +160,7 @@
           class="border border-danger"
         />
       </div>
-      <div class="col-md-4">
+      <div class="col-md-4 mt-1">
         <YearlyQuarterlyCard
           title="Forecast"
           :units="`${forecastYQData[1] ? forecastYQData[1].q3_aggregate : ''}`"
@@ -170,7 +170,7 @@
       </div>
     </div>
     <div class="row" v-if="currentYQTab == 'Q4'">
-      <div class="col-md-4">
+      <div class="col-md-4 mt-1">
         <YearlyQuarterlyCard
           title="Planned"
           :units="`${
@@ -182,7 +182,7 @@
           class="border border-info"
         />
       </div>
-      <div class="col-md-4">
+      <div class="col-md-4 mt-1">
         <YearlyQuarterlyCard
           title="This Year"
           :units="`${
@@ -194,7 +194,7 @@
           class="border border-danger"
         />
       </div>
-      <div class="col-md-4">
+      <div class="col-md-4 mt-1">
         <YearlyQuarterlyCard
           title="Forecast"
           :units="`${forecastYQData[1] ? forecastYQData[1].q4_aggregate : ''}`"
@@ -288,11 +288,11 @@ export default {
   computed: {
     yearlyQuarterlyTabs() {
       return [
-        { name: "Yearly" },
-        { name: "Q1" },
-        { name: "Q2" },
-        { name: "Q3" },
-        { name: "Q4" },
+        { name: "Yearly", icon: "tim-icons icon-planet" },
+        { name: "Q1", icon: "tim-icons icon-bullet-list-67" },
+        { name: "Q2", icon: "tim-icons icon-bullet-list-67" },
+        { name: "Q3", icon: "tim-icons icon-bullet-list-67" },
+        { name: "Q4", icon: "tim-icons icon-bullet-list-67" },
       ];
     },
   },

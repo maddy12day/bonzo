@@ -118,10 +118,10 @@ export default {
   computed: {
     Durations() {
       return [
-        { name: "Monthly", icon: "tim-icons icon-single-02" },
+        { name: "Monthly", icon: "tim-icons icon-calendar-60" },
         {
           name: "Weekly",
-          icon: "tim-icons icon-gift-2",
+          icon: "tim-icons icon-notes",
         },
       ];
     },
