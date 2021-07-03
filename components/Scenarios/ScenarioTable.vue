@@ -5,7 +5,10 @@
         <h4 slot="header" class="card-title text-bold font-weight-bold">
           {{ tableHeading }}
         </h4>
-        <el-table v-if="loadTable" :data="scenarioTableDataForTable">
+        <el-table
+          v-if="loadTable"
+          :data="tableData"
+        >
           <el-table-column
             min-width="180"
             sortable
@@ -180,7 +183,7 @@ export default {
     [Dialog.name]: Dialog,
     PreviewScenario,
   },
-  props: ["tableHeading", "scenarioTableData", "type"],
+  props: ["tableHeading", "scenarioTableData", "type", "useClass"],
   data() {
     return {
       scenarioTableDataForTable: [],
@@ -193,10 +196,8 @@ export default {
     };
   },
   computed: {
-    computed: {
-      scenarioTableData() {
-        return this.scenarioTableData;
-      },
+    tableData() {
+      return this.scenarioTableData;
     },
   },
   methods: {

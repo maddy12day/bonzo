@@ -117,11 +117,12 @@
     </div>
 
     <ScenarioTable
-      class="mt-4 fixedHeightScrollTable"
+      class="mt-4"
       tableHeading="Your Scenarios"
       :scenarioTableData="sharedScenariosList.scenarios"
       :type="'yourScenarios'"
       v-if="showScenarioTable"
+      useClass="fixedHeightScrollTable"
     />
   </div>
 </template>
@@ -164,6 +165,10 @@ export default {
       notifications: {
         topCenter: false,
       },
+      fixedHeightScrollTable: {
+        height: '550px',
+        overflow: 'scroll'
+}
     };
   },
   components: {
@@ -235,7 +240,6 @@ export default {
       this.activeFilterType = type;
     },
     async createScenario() {
-      this.showScenarioTable = false;
       const createScenarioModel = {
         scenario_name: this.scenarioNameValue,
         demand_planner_user_id: this.$auth.user.user_id,
@@ -326,8 +330,5 @@ export default {
   position: relative !important;
   width: 100%;
 }
-.fixedHeightScrollTable {
-  height: 550px;
-  overflow: scroll;
-}
+
 </style>
