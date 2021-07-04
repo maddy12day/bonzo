@@ -278,42 +278,63 @@
             label="Planned Sales(%)"
             property="planned_revenue_percent"
             align="right"
-          ></el-table-column>
+          >
+          </el-table-column>
           <el-table-column
             min-width="190"
             sortable
             label="Forecast Sales(%)"
             property="forecasted_revenue_percent"
             align="right"
-          ></el-table-column>
+          >
+            <template slot-scope="scope">
+              {{ scope.row.forecasted_revenue_percent | toTwoDigitsFloat }}
+            </template>
+          </el-table-column>
           <el-table-column
             min-width="190"
             sortable
             label="Adjusted Sales(%)"
             property="adjusted_revenue_percent"
             align="right"
-          ></el-table-column>
+          >
+            <template slot-scope="scope">
+              {{ scope.row.adjusted_revenue_percent | toTwoDigitsFloat }}
+            </template>
+          </el-table-column>
           <el-table-column
-            min-width="150"
+            min-width="170"
             sortable
-            label="Planned GM"
+            label="Planned GM(%)"
             property="planned_gm_percent"
             align="right"
-          ></el-table-column>
+          >
+            <template slot-scope="scope">
+              {{ scope.row.planned_gm_percent | toTwoDigitsFloat }}
+            </template>
+          </el-table-column>
           <el-table-column
-            min-width="150"
+            min-width="170"
             sortable
-            label="Forecast GM"
+            label="Forecast GM(%)"
             property="forecasted_gm_percent"
             align="right"
-          ></el-table-column>
+          >
+            <template slot-scope="scope">
+              {{ scope.row.forecasted_gm_percent | toTwoDigitsFloat }}
+            </template>
+          </el-table-column>
           <el-table-column
-            min-width="150"
+            min-width="170"
             sortable
-            label="Adjusted GM"
+            label="Adjusted GM(%)"
             property="adjusted_gm_percent"
             align="right"
-          ></el-table-column>
+          >
+            <template slot-scope="scope">
+              {{ scope.row.adjusted_gm_percent | toTwoDigitsFloat }}
+            </template>
+          </el-table-column>
         </el-table>
       </card>
 

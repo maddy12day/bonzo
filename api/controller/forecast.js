@@ -89,6 +89,7 @@ const whereQueryString = (obj, alias = "fseisbw") => {
 };
 
 export const getFilteredForecastData = async (req, res) => {
+    delete req.body.filterType;
   try {
     const filteredForecastData = await prisma.$queryRaw(`WITH iskus AS (
       select

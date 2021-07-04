@@ -6,6 +6,18 @@ Vue.prototype.moment = moment;
 Vue.filter("capitalize", (val) => val.toUpperCase());
 Vue.filter("toLocaleStr", (val) => Number(val).toLocaleString());
 
+
+Vue.filter("toTwoDigitsFloat", function (val) {
+  console.log("val,",val)
+  if (!val) {
+    return 0;
+  }
+  if (isNaN(val)) {
+    return val.toFixed(2);
+  }
+  return Number(val).toLocaleString();
+});
+
 Vue.filter("toLocaleStr", function(val) {
   if (!val) {
     return 0;
