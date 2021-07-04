@@ -465,19 +465,21 @@ export default {
             progress: true,
           }
         );
-        if (
-          adjustmentsJson && 
-          ["Completed", "Failed"].includes(adjustmentsJson.adjustment.status)
-        ) {
-          this.callToIntervalAjax = false;
-          this.disbleAdjustment = false;
-          this.baseAdjustmentsList.adjustments[0].status =
-            adjustmentsJson.adjustment.status;
-        } else {
-          this.disbleAdjustment = true;
-          this.callToIntervalAjax = true;
-          this.baseAdjustmentsList.adjustments[0].status =
-            adjustmentsJson.adjustment.status;
+        if (scenarioTypesJson) {
+          if (
+            adjustmentsJson &&
+            ["Completed", "Failed"].includes(adjustmentsJson.adjustment.status)
+          ) {
+            this.callToIntervalAjax = false;
+            this.disbleAdjustment = false;
+            this.baseAdjustmentsList.adjustments[0].status =
+              adjustmentsJson.adjustment.status;
+          } else {
+            this.disbleAdjustment = true;
+            this.callToIntervalAjax = true;
+            this.baseAdjustmentsList.adjustments[0].status =
+              adjustmentsJson.adjustment.status;
+          }
         }
       }
     },

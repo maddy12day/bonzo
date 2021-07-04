@@ -326,6 +326,7 @@ export default {
             progress: true,
           }
         );
+        if(scenarioTypesJson) {
         if (
           scenarioTypesJson && ["Completed", "Failed"].includes(scenarioTypesJson.scenario.status)
         ) {
@@ -340,6 +341,7 @@ export default {
           this.sharedScenariosList.scenarios[0].status =
             scenarioTypesJson.scenario.status;
         }
+      }
       }
     },
   },
