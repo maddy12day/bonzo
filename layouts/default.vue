@@ -35,11 +35,11 @@
       </template>
     </side-bar>
     <!--Share plugin (for demo purposes). You can remove it if don't plan on using it-->
-    <sidebar-share
+    <!-- <sidebar-share
       v-if="$auth.loggedIn"
       :background-color.sync="sidebarBackground"
     >
-    </sidebar-share>
+    </sidebar-share> -->
     <div class="main-panel" :data="sidebarBackground">
       <dashboard-navbar></dashboard-navbar>
       <router-view name="header"></router-view>

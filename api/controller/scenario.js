@@ -44,6 +44,9 @@ export const allSharedScenarios = async (req, res) => {
           },
         },
       },
+      orderBy: {
+        created_at: "desc",
+      },
     });
     res.status(200).json({
       scenarios,
@@ -92,18 +95,16 @@ export const createScenario = async (req, res) => {
         id: req.body.demand_planner_user_id,
       },
     });
-    const demandForecastRunlogRes = await prisma.demand_forecast_run_log.create(
-      {
-        data: {
-          is_base_forecast: false,
-          demand_planner_user_id: req.body.demand_planner_user_id,
-          scenario_id: scenarioRes.id,
-          status: "Pending",
-          forecast_type: "Scenario",
-          executed_by: `${executed_by.first_name} ${executed_by.last_name}`,
-        },
-      }
-    );
+    const demandForecastRunlogRes = await prisma.demand_forecast_run_log.create({
+      data: {
+        is_base_forecast: false,
+        demand_planner_user_id: req.body.demand_planner_user_id,
+        scenario_id: scenarioRes.id,
+        status: "Pending",
+        forecast_type: "Scenario",
+        executed_by: `${executed_by.first_name} ${executed_by.last_name}`,
+      },
+    });
     res.status(200).json({
       scenarioRes,
       status: 200,
@@ -285,9 +286,7 @@ export const getScenarioSalesSummary = async (req, res) => {
 //API: Scenario Unit & Sales Comparison
 export const getScenarioUnitSalesComparison = async (req, res) => {
   try {
-    let result = await prisma.$queryRaw(
-      `SELECT * FROM morphe_staging.scenario_influenced_metrics WHERE scenario_id = ${req.params.id};`
-    );
+    let result = await prisma.$queryRaw(`SELECT * FROM morphe_staging.scenario_influenced_metrics WHERE scenario_id = ${req.params.id};`);
     let parsedData = {};
     parsedData["Units"] = parseUnitSaleComparision(result);
     parsedData["Revenue"] = parseUnitRevenueComparision(result);
@@ -305,9 +304,7 @@ export const getScenarioUnitSalesComparison = async (req, res) => {
 //API: Scenario Category Total Sales Comparison
 export const getScenarioCategorySalesComparison = async (req, res) => {
   try {
-    const result = await prisma.$queryRaw(
-      `SELECT * from morphe_staging.scenario_influenced_leveled_aggregates WHERE scenario_id = ${req.params.id};`
-    );
+    const result = await prisma.$queryRaw(`SELECT * from morphe_staging.scenario_influenced_leveled_aggregates WHERE scenario_id = ${req.params.id};`);
     res.status(200).json({
       result,
     });
@@ -322,9 +319,7 @@ export const getScenarioCategorySalesComparison = async (req, res) => {
 //API: Scenario Category Unit & Sales Comparison
 export const getScenarioCategoryComparison = async (req, res) => {
   try {
-    const result = await prisma.$queryRaw(
-      `SELECT * from morphe_staging.scenario_influenced_leveled_metrics WHERE scenario_id = ${req.params.id};`
-    );
+    const result = await prisma.$queryRaw(`SELECT * from morphe_staging.scenario_influenced_leveled_metrics WHERE scenario_id = ${req.params.id};`);
     let parsedData = {};
     parsedData["Units"] = parseCategoryUnitComparision(result);
     parsedData["Revenue"] = parseCategorySaleComparision(result);
@@ -343,18 +338,18 @@ export const getScenarioCategoryComparison = async (req, res) => {
 // check user created scenarios status
 export const checkScenarioStatus = async (req, res) => {
   try {
-    console.log(req.params)
+    console.log(req.params);
     const scenario = await prisma.scenarios.findMany({
       where: {
-        demand_planner_user_id: parseInt(req.params.id)
+        demand_planner_user_id: parseInt(req.params.id),
       },
       orderBy: {
-        created_at: 'desc',
+        created_at: "desc",
       },
       select: {
         status: true,
-        id: true
-      }
+        id: true,
+      },
     });
     res.json({
       scenario: scenario[0],

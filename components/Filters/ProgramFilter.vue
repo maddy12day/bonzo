@@ -120,7 +120,7 @@
         ref="collections"
       />
     </div>
-    <div :class="showAplyFilterBtn? 'col-md-3 mt-2': 'col-md-5 mt-2'">
+    <div :class="showAplyFilterBtn ? 'col-md-3 mt-2' : 'col-md-5 mt-2'">
       <CustomMultiSelect
         :Options="skuOptions"
         placeholder="SKUs"
@@ -132,8 +132,8 @@
     </div>
     <div class="col-md-2 mt-1" v-if="showAplyFilterBtn">
       <button
-        class="btn btn-sm btn-dark btn-block "
-        style="line-height: 28px;"
+        class="btn btn-sm btn-dark btn-block applyFilterBtn"
+        style="line-height: 28px"
         @click="getAppliedFilters"
       >
         Apply Filters
@@ -2668,8 +2668,6 @@ export default {
   },
 
   async mounted() {
-
-
     const allRegularFilterJSON = await this.$axios.$get(
       "/program-filter-dropdown-cache",
       {
@@ -2732,10 +2730,7 @@ export default {
       res.response.program.collection,
       "All Collections"
     );
-    this.skuOptions = optionGenerator(
-      res.response.program.sku,
-      "All SKUs"
-    );
+    this.skuOptions = optionGenerator(res.response.program.sku, "All SKUs");
     this.brandOptions = optionGenerator(
       res.response.program.brand,
       "All Brands"
@@ -2744,3 +2739,9 @@ export default {
 };
 </script>
 <style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
+<style>
+.applyFilterBtn {
+  height: 43px;
+  margin-top: 4px;
+}
+</style>

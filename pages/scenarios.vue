@@ -70,7 +70,7 @@
             <base-input
               type="date"
               placeholder="start date"
-              class="bg-white mt-2"
+              class="mt-2"
               v-model="startDateValue"
             >
             </base-input>
@@ -80,7 +80,7 @@
             <base-input
               type="date"
               placeholder="start date"
-              class="bg-white mt-2"
+              class="mt-2"
               v-model="endDateValue"
             >
             </base-input>
@@ -90,7 +90,7 @@
             <base-input
               type="number"
               placeholder="amount"
-              class="bg-white mt-2"
+              class="mt-2"
               v-model="amountValue"
             >
             </base-input>
@@ -102,13 +102,16 @@
             <base-input
               type="text"
               placeholder="Scenario Name"
-              class="bg-white mt-1"
+              class="mt-1"
               v-model="scenarioNameValue"
             >
             </base-input>
           </div>
           <div class="col-md-3 mt-4 text-left">
-            <button class="btn btn-primary" @click="createScenario">
+            <button
+              class="btn btn-primary createScenarioBtn"
+              @click="createScenario"
+            >
               Create Scenario
             </button>
           </div>
@@ -313,7 +316,7 @@ export default {
 
     // check status after every 10 sec for user scenarios
     async checkScenarioStatus() {
-      if (this.callToIntervalAjax == true) {
+      if (this.callToIntervalAjax) {
         const scenarioTypesJson = await this.$axios.$get(
           `/get-scenario-status/${this.$auth.user.user_id}`,
           {
@@ -360,9 +363,20 @@ export default {
 };
 </script>
 
-<style scoped>
+<style css>
 .card .alert {
   position: relative !important;
   width: 100%;
+}
+.form-control {
+  border-radius: 5px !important;
+  border-color: #e8e8e8 !important;
+  height: 45px;
+  margin-top: -4px;
+}
+
+.createScenarioBtn {
+  height: 45px;
+  margin-top: 0px;
 }
 </style>

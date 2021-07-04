@@ -7,7 +7,6 @@
       tableHeading="Shared Scenarios"
       :scenarioTableData="sharedScenariosList.scenarios"
       :type="'sharedScenarios'"
-      class="sharedScenarioTableScoll"
     />
 
     <card card-body-classes="table-full-width">
@@ -119,10 +118,10 @@ export default {
   computed: {
     Durations() {
       return [
-        { name: "Monthly", icon: "tim-icons icon-single-02" },
+        { name: "Monthly", icon: "tim-icons icon-calendar-60" },
         {
           name: "Weekly",
-          icon: "tim-icons icon-gift-2",
+          icon: "tim-icons icon-notes",
         },
       ];
     },
@@ -131,8 +130,4 @@ export default {
 </script>
 
 <style scoped>
-.sharedScenarioTableScoll {
-  height: 300px;
-  overflow: scroll;
-}
 </style>

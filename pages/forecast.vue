@@ -2,61 +2,59 @@
   <div>
     <!-- Filters component (Vishal) -->
     <card card-body-classes="table-full-width">
-      <div class="col-md-12 text-right">
-        <div class="btn-group btn-group-toggle p-0 mb-2" data-toggle="buttons">
-          <label
-            v-for="(option, index) in filtersType"
-            :key="option.name"
-            class="btn btn-sm btn-primary btn-simple"
-            :id="index"
-            :class="{ active: activeFilterType == option.name }"
-          >
-            <input
-              type="radio"
-              name="options"
-              autocomplete="off"
-              checked=""
-              @click="showFilterType(option.name)"
-            />
-            <span class="d-none d-sm-block">{{ option.name }}</span>
-            <span class="d-block d-sm-none">
-              <i :class="option.icon"></i>
-            </span>
-          </label>
-        </div>
-        <RegularFilters
-          :showAplyFilterBtn="true"
-          v-if="activeFilterType == 'Regular'"
-          @appliedFilters="appliedFilters"
-          @getBroductSource="getProductSource"
-          @getBrandType="getBrandType"
-          @getLifyClycle="getLifeCycle"
-          @newNess="getNewness"
-          @getChannels="getChannelValues"
-          @getBrands="getBrandValus"
-          @getSubChannelValues="getSubChannelValues"
-          @getCollectionValus="getCollectionValues"
-          @getSkusValues="getSkusValues"
-          @getCategories="getCategoryValues"
-        />
-        <ProgramFilters
-          :showAplyFilterBtn="true"
-          v-if="activeFilterType == 'Program'"
-          @getBroductSource="getProductSource"
-          @getBrandType="getBrandType"
-          @getLifyClycle="getLifeCycle"
-          @newNess="getNewness"
-          @getBrands="getBrandValus"
-          @getChannels="getChannelValues"
-          @getPrograms="getPrograms"
-          @getSubChannel="getSubChannelValues"
-          @getCategories="getCategoryValues"
-          @getClass="getClassValues"
-          @getSubClass="getSubClassValues"
-          @getCollection="getCollectionValues"
-          @getSkusValues="getSkusValues"
-        />
+      <div class="btn-group btn-group-toggle p-0 mb-2" data-toggle="buttons">
+        <label
+          v-for="(option, index) in filtersType"
+          :key="option.name"
+          class="btn btn-sm btn-primary btn-simple"
+          :id="index"
+          :class="{ active: activeFilterType == option.name }"
+        >
+          <input
+            type="radio"
+            name="options"
+            autocomplete="off"
+            checked=""
+            @click="showFilterType(option.name)"
+          />
+          <span class="d-none d-sm-block">{{ option.name }}</span>
+          <span class="d-block d-sm-none">
+            <i :class="option.icon"></i>
+          </span>
+        </label>
       </div>
+      <RegularFilters
+        :showAplyFilterBtn="true"
+        v-if="activeFilterType == 'Regular'"
+        @appliedFilters="appliedFilters"
+        @getBroductSource="getProductSource"
+        @getBrandType="getBrandType"
+        @getLifyClycle="getLifeCycle"
+        @newNess="getNewness"
+        @getChannels="getChannelValues"
+        @getBrands="getBrandValus"
+        @getSubChannelValues="getSubChannelValues"
+        @getCollectionValus="getCollectionValues"
+        @getSkusValues="getSkusValues"
+        @getCategories="getCategoryValues"
+      />
+      <ProgramFilters
+        :showAplyFilterBtn="true"
+        v-if="activeFilterType == 'Program'"
+        @getBroductSource="getProductSource"
+        @getBrandType="getBrandType"
+        @getLifyClycle="getLifeCycle"
+        @newNess="getNewness"
+        @getBrands="getBrandValus"
+        @getChannels="getChannelValues"
+        @getPrograms="getPrograms"
+        @getSubChannel="getSubChannelValues"
+        @getCategories="getCategoryValues"
+        @getClass="getClassValues"
+        @getSubClass="getSubClassValues"
+        @getCollection="getCollectionValues"
+        @getSkusValues="getSkusValues"
+      />
     </card>
     <!-- Applied filters pills (Vishal) -->
 
