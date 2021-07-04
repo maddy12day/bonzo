@@ -27,6 +27,7 @@
         :showAplyFilterBtn="true"
         v-if="activeFilterType == 'Regular'"
         @appliedFilters="appliedFilters"
+        @resetFilter="resetFilter"
         @getBroductSource="getProductSource"
         @getBrandType="getBrandType"
         @getLifyClycle="getLifeCycle"
@@ -37,10 +38,13 @@
         @getCollectionValus="getCollectionValues"
         @getSkusValues="getSkusValues"
         @getCategories="getCategoryValues"
+        ref="regularFilter"
+        :key="regularFiltersComponentKey"
       />
       <ProgramFilters
         :showAplyFilterBtn="true"
         v-if="activeFilterType == 'Program'"
+        @resetFilter="resetFilter"
         @getBroductSource="getProductSource"
         @getBrandType="getBrandType"
         @getLifyClycle="getLifeCycle"
@@ -54,6 +58,7 @@
         @getSubClass="getSubClassValues"
         @getCollection="getCollectionValues"
         @getSkusValues="getSkusValues"
+        ref="programFilter"
       />
     </card>
     <!-- Applied filters pills (Vishal) -->
@@ -64,6 +69,7 @@
       :filteredRequestBody="regularFilters"
       ref="filterWidgets"
       v-if="isFilteredForecast"
+      :allAppliedFilters="allAppliedFilters"
     />
 
     <!-- Adjustments Table -->
@@ -110,18 +116,18 @@
       <WeeklyMetricsTable
         v-if="activeTab == 'Weekly' && !showManualAdj"
         :metricsTableData="baseMetricsList"
-        tableHeading="Weekly Forecast Metrics"
+        tableHeading="Base Weekly Forecast Metrics"
       />
       <MonthlyMetricsTable
         v-if="activeTab == 'Monthly'"
         :metricsTableData="baseMetricsList"
-        tableHeading="Monthly Forecast Metrics"
+        tableHeading="Base Monthly Forecast Metrics"
       />
       <div class="col-md-12 text-right">
         <button
-          :class="
-            `btn btn-primary btn-sm text-left ${disbledCom ? 'disabled' : ''}`
-          "
+          :class="`btn btn-primary btn-sm text-left ${
+            disbledCom ? 'disabled' : ''
+          }`"
           @click="switchToManualAdj"
           :disabled="disbledCom"
           v-if="!changeMABtnText && activeTab == 'Weekly'"
@@ -129,9 +135,9 @@
           Manual Ajustment
         </button>
         <button
-          :class="
-            `btn btn-primary btn-sm text-left ${disbledCom ? 'disabled' : ''}`
-          "
+          :class="`btn btn-primary btn-sm text-left ${
+            disbledCom ? 'disabled' : ''
+          }`"
           @click="createManualAdjustment"
           v-if="changeMABtnText"
           :disabled="disbledCom"
@@ -151,6 +157,12 @@
 
     <div v-if="isFilteredForecast">
       <card card-body-classes="table-full-width">
+        <div class="applied-filtes-div">
+          <h4 class="applied-filters">
+            Applied Filters({{ allAppliedFilters.length }}): &nbsp;&nbsp;&nbsp;
+          </h4>
+          <Tags :allAppliedFilters="allAppliedFilters" />
+        </div>
         <div class="col-md-12 text-right p-0">
           <div class="btn-group btn-group-toggle" data-toggle="buttons">
             <label
@@ -179,12 +191,14 @@
           v-if="filteredActiveTab == 'Weekly'"
           :filteredForecastMetrics="filteredForecastMetrics"
           tableHeading="Filtered Weekly Forecast Metrics"
+          :allAppliedFilters="allAppliedFilters"
         />
 
         <FilteredMonthlyMetricsTable
           v-if="filteredActiveTab == 'Monthly'"
           :filteredForecastMetrics="filteredForecastMetrics"
           tableHeading="Filtered Monthly Forecast Metrics"
+          :allAppliedFilters="allAppliedFilters"
         />
       </card>
       <h4 class="font-weight-bold">Top 10 SKUs Forecast</h4>
@@ -192,16 +206,19 @@
         :tableHeading="'Revenue'"
         :forecast_attribute="'retail_sales'"
         :weeklyforecast="weeklyforecast"
+        :allAppliedFilters="allAppliedFilters"
       />
       <WeeklyForecast
         :tableHeading="'Units Sales'"
         :forecast_attribute="'units_sales'"
         :weeklyforecast="weeklyforecast"
+        :allAppliedFilters="allAppliedFilters"
       />
       <WeeklyForecast
         :tableHeading="'AUR'"
         :forecast_attribute="'aur'"
         :weeklyforecast="weeklyforecast"
+        :allAppliedFilters="allAppliedFilters"
       />
     </div>
   </div>
@@ -220,6 +237,7 @@ import FilteredMonthlyMetricsTable from "../components/Metrics/FilteredMonthlyMe
 import FilteredWeeklyMetricsTable from "../components/Metrics/FilteredWeeklyMetricsTable.vue";
 import FilteredStatsWidget from "../components/FilteredStatsWidget.vue";
 import ManualAdjustmentTable from "../components/Metrics/ManualAdjustmentTable.vue";
+import Tags from "../components/Tags.vue";
 
 export default {
   name: "Forecast",
@@ -236,6 +254,7 @@ export default {
     FilteredWeeklyMetricsTable,
     FilteredMonthlyMetricsTable,
     FilteredStatsWidget,
+    Tags,
   },
 
   data() {
@@ -260,6 +279,8 @@ export default {
       filteredStatsWidgetData: {},
       showDiscardBtn: false,
       refreshWidget: false,
+      allAppliedFilters: [],
+      regularFiltersComponentKey: Math.random(),
     };
   },
   methods: {
@@ -396,6 +417,7 @@ export default {
           this.regularFilters
         );
       }
+      this.$store.commit("toggleCTAState");
       this.refreshWidget = true;
       this.notifyVue(
         "top",
@@ -483,7 +505,10 @@ export default {
         }
       }
     },
-
+    resetFilter() {
+      console.log("ioioio");
+      this.forceRerender();
+    },
     async appliedFilters() {
       this.notifyVue(
         "top",
@@ -504,6 +529,10 @@ export default {
         filter_skus: this.skuValues,
       };
       let requestedFilterOption = this.emptyFieldCleaner(this.regularFilters);
+      this.allAppliedFilters = [].concat.apply(
+        [],
+        Object.values(this.regularFilters)
+      );
       await this.getFilteredForecastData(requestedFilterOption);
       this.isFilteredForecast = true;
       this.filteredActiveTab = "Weekly";
@@ -526,6 +555,9 @@ export default {
           progress: true,
         }
       );
+    },
+    forceRerender() {
+      this.regularFiltersComponentKey += 1;
     },
   },
   computed: {

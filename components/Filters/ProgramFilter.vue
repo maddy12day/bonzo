@@ -135,6 +135,7 @@
         class="btn btn-sm btn-dark btn-block applyFilterBtn"
         style="line-height: 28px"
         @click="getAppliedFilters"
+        :disabled="applyCtaDisabled"
       >
         Apply Filters
       </button>
@@ -187,6 +188,11 @@ export default {
       collectionValues: [],
       skuValues: [],
     };
+  },
+  computed: {
+    applyCtaDisabled() {
+      return this.$store.state.regularFilterCTADisabled;
+    },
   },
   methods: {
     getProductSource(value) {
@@ -964,6 +970,7 @@ export default {
     },
     getAppliedFilters(value) {
       this.$emit("appliedFilters");
+      this.$store.commit("toggleCTAState");
     },
     getSelectedBrands(value) {
       const optionGenerator = (data, keyName) => {
@@ -2742,6 +2749,6 @@ export default {
 <style>
 .applyFilterBtn {
   height: 43px;
-  margin-top: 4px;
+  margin-top: 8px;
 }
 </style>

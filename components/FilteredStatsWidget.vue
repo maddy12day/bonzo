@@ -9,6 +9,12 @@
       "
     >
       <div class="col-md-12 text-right mb-2">
+        <div class="applied-filtes-div">
+          <h4 class="applied-filters">
+            Applied Filters({{ allAppliedFilters.length }}): &nbsp;&nbsp;&nbsp;
+          </h4>
+          <Tags :allAppliedFilters="allAppliedFilters" />
+        </div>
         <div class="btn-group btn-group-toggle" data-toggle="buttons">
           <label
             v-for="(option, index) in yearlyQuarterlyTabs"
@@ -349,9 +355,10 @@
 <script>
 import Card from "~/components/Cards/Card.vue";
 import YearlyQuarterlyCard from "../components/YearlyQuarterlyCards/YearlyQuarterlyCards.vue";
+import Tags from "../components/Tags.vue";
 
 export default {
-  props: ["regularFilters"],
+  props: ["regularFilters", "allAppliedFilters"],
   data() {
     return {
       forecastYQData: {},
@@ -367,10 +374,10 @@ export default {
   components: {
     Card,
     YearlyQuarterlyCard,
+    Tags,
   },
   methods: {
     async calloutByDuration(duration) {
-      console.log("duration--", duration);
       this.currentYQTab = duration;
     },
     async getFilteredStatsWidgetData(regularFilters) {
@@ -403,4 +410,13 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+.applied-filtes-div {
+  align-items: center;
+  display: flex;
+}
+.applied-filters {
+  text-align: left;
+  margin-bottom: 0;
+}
+</style>
