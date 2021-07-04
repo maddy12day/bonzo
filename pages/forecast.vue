@@ -61,6 +61,13 @@
     <!-- Base Year/Quarter Stats / Filtered Year/Quarter Stats (Vishal) -->
     <StatsWidget />
 
+    <!-- Adjustments Table -->
+    <AdjustmentTable
+      class="mt-4"
+      tableHeading="Base Model Adjustments"
+      :adjustmentTableData="baseAdjustmentsListCom.adjustments"
+    />
+
     <!-- Base Metrics / Filtered Metrics (Jubin) -->
     <!-- Filter: Revenue table (Jubin) -->
     <!-- Filter: Units table (Jubin) -->
@@ -139,9 +146,7 @@
           tableHeading="Filtered Monthly Forecast Metrics"
         />
       </card>
-      <h4 class="font-weight-bold">
-        Top 10 SKUs Forecast
-      </h4>
+      <h4 class="font-weight-bold">Top 10 SKUs Forecast</h4>
       <WeeklyForecast
         :tableHeading="'Revenue'"
         :forecast_attribute="'retail_sales'"
@@ -165,6 +170,7 @@
 import RegularFilters from "../components/Filters/RegularFilter.vue";
 import ProgramFilters from "../components/Filters/ProgramFilter.vue";
 import StatsWidget from "../components/StatsWidget.vue";
+import AdjustmentTable from "../components/Adjustments/AdjustmentTable.vue";
 import WeeklyForecast from "../components/Forecast/ForecastBySkuTable.vue";
 import Card from "~/components/Cards/Card.vue";
 import WeeklyMetricsTable from "../components/Metrics/WeeklyMetricsTable.vue";
@@ -178,6 +184,7 @@ export default {
     MonthlyMetricsTable,
     WeeklyMetricsTable,
     StatsWidget,
+    AdjustmentTable,
     RegularFilters,
     ProgramFilters,
     WeeklyForecast,
@@ -192,6 +199,7 @@ export default {
       isFilteredForecast: false,
       activeTab: "Weekly",
       filteredActiveTab: "Weekly",
+      baseAdjustmentsList: [],
       baseMetricsList: [],
       weeklyforecast: [],
       filteredForecastMetrics: [],
@@ -377,8 +385,19 @@ export default {
         type: this.type[type],
       });
     },
+    async getBaseAdjustments() {
+      this.baseAdjustmentsList = await this.$axios.$get(
+        "/get-base-adjustments",
+        {
+          progress: true,
+        }
+      );
+    },
   },
   computed: {
+    baseAdjustmentsListCom() {
+      return this.baseAdjustmentsList;
+    },
     Durations() {
       return [
         { name: "Monthly", icon: "tim-icons icon-single-02" },
@@ -408,6 +427,7 @@ export default {
     },
   },
   mounted() {
+    this.getBaseAdjustments();
     this.showMetricsByDuration("Weekly");
   },
 };
