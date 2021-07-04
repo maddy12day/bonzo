@@ -111,6 +111,7 @@
             <button
               class="btn btn-primary createScenarioBtn"
               @click="createScenario"
+              :disabled="callToIntervalAjaxSCom"
             >
               Create Scenario
             </button>
@@ -164,6 +165,7 @@ export default {
       amountValue: "",
       scenarioNameValue: "",
       callToIntervalAjax: true,
+      disabledScenarioBtn: false,
       showScenarioTable: false,
       type: ["", "info", "success", "warning", "danger"],
       notifications: {
@@ -316,7 +318,8 @@ export default {
 
     // check status after every 10 sec for user scenarios
     async checkScenarioStatus() {
-      if (this.callToIntervalAjax) {
+      console.log("this.callToIntervalAjaxSCom",this.callToIntervalAjaxSCom)
+      if (this.callToIntervalAjaxSCom) {
         const scenarioTypesJson = await this.$axios.$get(
           `/get-scenario-status/${this.$auth.user.user_id}`,
           {
@@ -324,14 +327,16 @@ export default {
           }
         );
         if (
-          scenarioTypesJson.scenario.status !== "Completed" ||
-          scenarioTypesJson.scenario.status !== "Failed"
+           ["Completed", "Failed"].includes(scenarioTypesJson.scenario.status)
         ) {
-          this.callToIntervalAjax = true;
+          this.callToIntervalAjax = false;
+          this.disabledScenarioBtn = false;
           this.sharedScenariosList.scenarios[0].status =
             scenarioTypesJson.scenario.status;
+            
         } else {
-          this.callToIntervalAjax = false;
+          this.callToIntervalAjax = true;
+          this.disabledScenarioBtn = true;
           this.sharedScenariosList.scenarios[0].status =
             scenarioTypesJson.scenario.status;
         }
@@ -347,6 +352,12 @@ export default {
     }, 10000);
   },
   computed: {
+     disbledCom() {
+      return this.disabledScenarioBtn;
+    },
+    callToIntervalAjaxSCom() {
+      return this.callToIntervalAjax;
+    },
     sharedScenariosListCom() {
       console.log(
         "***************** this.sharedScenariosList",

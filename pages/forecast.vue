@@ -119,29 +119,30 @@
       />
       <div class="col-md-12 text-right">
         <button
-          class="btn btn-primary btn-sm text-left"
+          :class="
+            `btn btn-primary btn-sm text-left ${disbledCom ? 'disabled' : ''}`
+          "
           @click="switchToManualAdj"
-          v-if="!changeMABtnText"
+          :disabled="disbledCom"
+          v-if="!changeMABtnText && activeTab == 'Weekly'"
         >
           Manual Ajustment
         </button>
         <button
-          :class="`btn btn-primary btn-sm text-left ${
-            disbleAdjustment ? 'disabled' : ''
-          }`"
+          :class="
+            `btn btn-primary btn-sm text-left ${disbledCom ? 'disabled' : ''}`
+          "
           @click="createManualAdjustment"
           v-if="changeMABtnText"
-          :disabled="disbleAdjustment"
+          :disabled="disbledCom"
         >
-          Run Forecast
+          Submit Adjustment
         </button>
         <button
-          :class="`btn btn-primary btn-sm ${
-            disbleAdjustment ? 'disabled' : ''
-          }`"
+          :class="`btn btn-primary btn-sm ${disbledCom ? 'disabled' : ''}`"
           @click="discardChanges"
           v-if="showDiscardBtn"
-          :disabled="disbleAdjustment"
+          :disabled="disbledCom"
         >
           discard
         </button>
@@ -309,7 +310,6 @@ export default {
     discardChanges() {
       this.showManualAdj = false;
       this.changeMABtnText = false;
-      this.showDiscardBtn = false;
     },
     getAdjustedValues(values) {
       if (values) {
@@ -457,7 +457,8 @@ export default {
 
     // check status after every 10 sec for user scenarios
     async checkManualAdjustmentStatus() {
-      if (this.callToIntervalAjax) {
+      // console.log(this.callToIntervalAjax)
+      if (this.callToIntervalAjaxCom) {
         const adjustmentsJson = await this.$axios.$get(
           `/get-adjustment-status/${this.$auth.user.user_id}`,
           {
@@ -465,18 +466,17 @@ export default {
           }
         );
         if (
-          adjustmentsJson.adjustment.status !== "Completed" ||
-          adjustmentsJson.adjustment.status !== "Failed"
+          ["Completed", "Failed"].includes(adjustmentsJson.adjustment.status)
         ) {
+          this.callToIntervalAjax = false;
+          this.disbleAdjustment = false;
+          this.baseAdjustmentsList.adjustments[0].status =
+            adjustmentsJson.adjustment.status;
+        } else {
           this.disbleAdjustment = true;
           this.callToIntervalAjax = true;
           this.baseAdjustmentsList.adjustments[0].status =
             adjustmentsJson.adjustment.status;
-        } else {
-          this.callToIntervalAjax = false;
-          this.baseAdjustmentsList.adjustments[0].status =
-            adjustmentsJson.adjustment.status;
-          this.disbleAdjustment = false;
         }
       }
     },
@@ -526,6 +526,9 @@ export default {
     },
   },
   computed: {
+    callToIntervalAjaxCom() {
+      return this.callToIntervalAjax;
+    },
     disbledCom() {
       return this.disbleAdjustment;
     },
