@@ -152,14 +152,16 @@
 </template>
 <script>
 import { Table, TableColumn } from "element-ui";
+import Tags from "../../components/Tags.vue";
 
 export default {
   name: "FilteredMonthlyMetricsTable",
   components: {
     [Table.name]: Table,
     [TableColumn.name]: TableColumn,
+    Tags,
   },
-  props: ["tableHeading", "filteredForecastMetrics"],
+  props: ["tableHeading", "filteredForecastMetrics", "allAppliedFilters"],
 };
 </script>
 <style></style>

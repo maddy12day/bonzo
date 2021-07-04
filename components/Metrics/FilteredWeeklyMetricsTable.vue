@@ -2,7 +2,7 @@
   <div class="row">
     <div class="col-lg-12">
       <card card-body-classes="table-full-width">
-        <h4 slot="header" class="card-title text-bold font-weight-bold">
+        <h4 class="card-title text-bold font-weight-bold">
           {{ tableHeading }}
         </h4>
         <el-table :data="filteredForecastMetrics.parsedFilteredForecastData">
@@ -592,13 +592,15 @@
 </template>
 <script>
 import { Table, TableColumn } from "element-ui";
+import Tags from "../../components/Tags.vue";
 
 export default {
   name: "FilteredWeeklyMetricsTable",
   components: {
     [Table.name]: Table,
     [TableColumn.name]: TableColumn,
+    Tags,
   },
-  props: ["tableHeading", "filteredForecastMetrics"],
+  props: ["tableHeading", "filteredForecastMetrics", "allAppliedFilters"],
 };
 </script>

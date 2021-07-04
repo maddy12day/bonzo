@@ -1,6 +1,13 @@
 <template>
   <card card-body-classes="table-full-width">
-    <h4 slot="header" class="card-title text-bold font-weight-bold">
+    <div class="applied-filtes-div">
+      <h4 class="applied-filters">
+        Applied Filters({{ allAppliedFilters.length }}): &nbsp;&nbsp;&nbsp;
+      </h4>
+      <Tags :allAppliedFilters="allAppliedFilters" />
+    </div>
+    <br />
+    <h4 class="card-title text-bold font-weight-bold">
       {{ tableHeading }}
     </h4>
     <el-table :data="weeklyforecast.parsedWeeklyData">
@@ -285,14 +292,21 @@
 </template>
 <script>
 import { Table, TableColumn } from "element-ui";
+import Tags from "../../components/Tags.vue";
 
 export default {
   name: "WeeklyForecast",
   components: {
     [Table.name]: Table,
     [TableColumn.name]: TableColumn,
+    Tags,
   },
-  props: ["tableHeading", "forecast_attribute", "weeklyforecast"],
+  props: [
+    "tableHeading",
+    "forecast_attribute",
+    "weeklyforecast",
+    "allAppliedFilters",
+  ],
   data() {
     return {
       forecastData: [],
@@ -301,11 +315,8 @@ export default {
   computed: {},
   methods: {
     async getFilteredForecastData() {
-      const data = await this.$axios.$get(`/get-filtered-forecast-data`, {
-        progress: true,
-      });
+      const data = await this.$axios.$get(`/get-filtered-forecast-data`);
       this.forecastData = data;
-      // this.loadFilteredData = true;
     },
   },
 };
