@@ -59,6 +59,12 @@
     <!-- Applied filters pills (Vishal) -->
 
     <!-- Base Year/Quarter Stats / Filtered Year/Quarter Stats (Vishal) -->
+    <StatsWidget v-if="!isFilteredForecast" />
+    <FilteredStatsWidget
+      :filteredRequestBody="regularFilters"
+      ref="filterWidgets"
+      v-if="isFilteredForecast"
+    />
 
     <!-- Adjustments Table -->
     <AdjustmentTable
@@ -72,8 +78,6 @@
     <!-- Filter: Units table (Jubin) -->
     <!-- Filter: AUR table (Jubin) -->
     <card card-body-classes="table-full-width" v-if="!isFilteredForecast">
-      <StatsWidget />
-
       <div class="col-md-12 text-right p-0">
         <div class="btn-group btn-group-toggle" data-toggle="buttons">
           <label
@@ -122,11 +126,9 @@
           Manual Ajustment
         </button>
         <button
-          :class="
-            `btn btn-primary btn-sm text-left ${
-              disbleAdjustment ? 'disabled' : ''
-            }`
-          "
+          :class="`btn btn-primary btn-sm text-left ${
+            disbleAdjustment ? 'disabled' : ''
+          }`"
           @click="createManualAdjustment"
           v-if="changeMABtnText"
           :disabled="disbleAdjustment"
@@ -134,9 +136,9 @@
           Run Forecast
         </button>
         <button
-          :class="
-            `btn btn-primary btn-sm ${disbleAdjustment ? 'disabled' : ''}`
-          "
+          :class="`btn btn-primary btn-sm ${
+            disbleAdjustment ? 'disabled' : ''
+          }`"
           @click="discardChanges"
           v-if="showDiscardBtn"
           :disabled="disbleAdjustment"
@@ -147,11 +149,6 @@
     </card>
 
     <div v-if="isFilteredForecast">
-      <FilteredStatsWidget
-        :filteredRequestBody="regularFilters"
-        ref="filterWidgets"
-      />
-
       <card card-body-classes="table-full-width">
         <div class="col-md-12 text-right p-0">
           <div class="btn-group btn-group-toggle" data-toggle="buttons">
