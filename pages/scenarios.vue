@@ -318,7 +318,7 @@ export default {
 
     // check status after every 10 sec for user scenarios
     async checkScenarioStatus() {
-      console.log("this.callToIntervalAjaxSCom",this.callToIntervalAjaxSCom)
+      console.log("this.callToIntervalAjaxSCom", this.callToIntervalAjaxSCom);
       if (this.callToIntervalAjaxSCom) {
         const scenarioTypesJson = await this.$axios.$get(
           `/get-scenario-status/${this.$auth.user.user_id}`,
@@ -326,22 +326,24 @@ export default {
             progress: true,
           }
         );
-        if(scenarioTypesJson) {
-        if (
-          scenarioTypesJson && ["Completed", "Failed"].includes(scenarioTypesJson.scenario.status)
-        ) {
-          this.callToIntervalAjax = false;
-          this.disabledScenarioBtn = false;
-          this.sharedScenariosList.scenarios[0].status =
-            scenarioTypesJson.scenario.status;
-            
-        } else {
-          this.callToIntervalAjax = true;
-          this.disabledScenarioBtn = true;
-          this.sharedScenariosList.scenarios[0].status =
-            scenarioTypesJson.scenario.status;
+        if (scenarioTypesJson) {
+          if (
+            scenarioTypesJson &&
+            ["Completed", "Failed", "Error"].includes(
+              scenarioTypesJson.scenario.status
+            )
+          ) {
+            this.callToIntervalAjax = false;
+            this.disabledScenarioBtn = false;
+            this.sharedScenariosList.scenarios[0].status =
+              scenarioTypesJson.scenario.status;
+          } else {
+            this.callToIntervalAjax = true;
+            this.disabledScenarioBtn = true;
+            this.sharedScenariosList.scenarios[0].status =
+              scenarioTypesJson.scenario.status;
+          }
         }
-      }
       }
     },
   },
@@ -354,7 +356,7 @@ export default {
     }, 10000);
   },
   computed: {
-     disbledCom() {
+    disbledCom() {
       return this.disabledScenarioBtn;
     },
     callToIntervalAjaxSCom() {
