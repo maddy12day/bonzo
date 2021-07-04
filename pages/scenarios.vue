@@ -348,6 +348,10 @@ export default {
   },
   computed: {
     sharedScenariosListCom() {
+      console.log(
+        "***************** this.sharedScenariosList",
+        this.sharedScenariosList
+      );
       return this.sharedScenariosList;
     },
     filtersType() {
