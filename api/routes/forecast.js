@@ -1,9 +1,10 @@
 import { Router } from "express";
-import { createManualAdjustment, getFilteredForecastData, getWeekendDates } from "../controller/forecast";
+import { getFilteredForecastData, getFilteredForecastMetrics, getFilteredStataData  } from "../controller/forecast";
 const router = Router();
 
 router.post("/get-filtered-forecast-data", getFilteredForecastData);
-router.get('/get-weekend-dates', getWeekendDates);
-router.post('/create-manualadjustment', createManualAdjustment)
+router.post("/get-filtered-forecast-metrics", getFilteredForecastMetrics);
+router.post("/get-filtered-stats", getFilteredStataData);
+
 
 export default router;

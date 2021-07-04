@@ -1,0 +1,79 @@
+[33mcommit 089eef13a21dd16b18df6350d03b31bcebbd33c8[m[33m ([m[1;36mHEAD -> [m[1;32mmanual_adjustments[m[33m, [m[1;31morigin/manual_adjustments[m[33m)[m
+Author: vishaldandwate8411 <vishal.dandwate@aretove.com>
+Date:   Sun Jul 4 17:25:03 2021 +0530
+
+    added changes
+
+[33mcommit 7b4d3c297a4085deed67fa9c774984ddbca0c60e[m
+Author: vishaldandwate8411 <vishal.dandwate@aretove.com>
+Date:   Sun Jul 4 15:13:18 2021 +0530
+
+    added changes for manual adjustment
+
+[33mcommit c187d8d5676e60ddb36d4afffe81df2cc584da52[m
+Merge: 37b23a3 76e318e
+Author: vishaldandwate8411 <vishal.dandwate@aretove.com>
+Date:   Sun Jul 4 07:25:19 2021 +0530
+
+    Merge branch 'master' of github.com:aretove/bonzo-3-ui into manual_adjustments
+
+[33mcommit 76e318e41476b7759fca3dcae63979e97d0f5047[m[33m ([m[1;31morigin/master[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Author: anilmitra440 <anilm@aretove.com>
+Date:   Sun Jul 4 05:22:59 2021 +0530
+
+    ui changes
+
+[33mcommit 09e01bacae4a07e6dd60804911b096e8175a1827[m
+Author: anilmitra440 <anilm@aretove.com>
+Date:   Sun Jul 4 05:01:11 2021 +0530
+
+    UI spruce up
+
+[33mcommit c786e5771bd26153c4e7d80e91dada4e17dd0ddf[m
+Author: anilmitra440 <anilm@aretove.com>
+Date:   Sun Jul 4 04:25:01 2021 +0530
+
+    added spinners to stats
+
+[33mcommit 648f5deae1c64f672a3cdaeaabccbc11c539fa70[m
+Author: anilmitra440 <anilm@aretove.com>
+Date:   Sun Jul 4 03:40:13 2021 +0530
+
+    Added pagination
+
+[33mcommit 323b083c0f016fd36741fdde777726c9cdd8ab06[m
+Author: anilmitra440 <anilm@aretove.com>
+Date:   Sun Jul 4 02:21:01 2021 +0530
+
+    Suppressed sidebar-share plugin.
+
+[33mcommit d90092fd6c5a473869572a427a9be8f25498d743[m
+Author: anilmitra440 <anilm@aretove.com>
+Date:   Sun Jul 4 02:15:57 2021 +0530
+
+    aligned filters in forecast screen
+
+[33mcommit 68de0e43aa804e37e7016b38ae966d94d16ba02b[m
+Merge: ed82f51 7e9477d
+Author: anilmitra440 <anilm@aretove.com>
+Date:   Sat Jul 3 22:13:46 2021 +0530
+
+    manual merge of scenarios vue
+
+[33mcommit 7e9477dbd62588af98e5321835a44b4da42858b3[m
+Author: anilmitra440 <anilm@aretove.com>
+Date:   Sat Jul 3 22:11:00 2021 +0530
+
+    Added colors to scenario table
+
+[33mcommit ed82f51da44830cf8edad11d1b975a7ba90ad9eb[m[33m ([m[1;32mfeature/forecast[m[33m)[m
+Author: vishaldandwate8411 <vishal.dandwate@aretove.com>
+Date:   Sat Jul 3 21:58:16 2021 +0530
+
+    added changes
+
+[33mcommit 37b23a3baff7538bfe3a68ba044a3e75a44c9eb8[m
+Author: anilmitra440 <anilm@aretove.com>
+Date:   Sat Jul 3 21:10:33 2021 +0530
+
+    WIP manual adjustments table
