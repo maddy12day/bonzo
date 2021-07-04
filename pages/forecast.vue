@@ -59,13 +59,14 @@
     <!-- Applied filters pills (Vishal) -->
 
     <!-- Base Year/Quarter Stats / Filtered Year/Quarter Stats (Vishal) -->
-    <StatsWidget />
 
     <!-- Base Metrics / Filtered Metrics (Jubin) -->
     <!-- Filter: Revenue table (Jubin) -->
     <!-- Filter: Units table (Jubin) -->
     <!-- Filter: AUR table (Jubin) -->
     <card card-body-classes="table-full-width" v-if="!isFilteredForecast">
+      <StatsWidget />
+
       <div class="col-md-12 text-right p-0">
         <div class="btn-group btn-group-toggle" data-toggle="buttons">
           <label
@@ -102,6 +103,11 @@
     </card>
 
     <div v-if="isFilteredForecast">
+      <FilteredStatsWidget
+        :filteredRequestBody="regularFilters"
+        ref="filterWidgets"
+      />
+
       <card card-body-classes="table-full-width">
         <div class="col-md-12 text-right p-0">
           <div class="btn-group btn-group-toggle" data-toggle="buttons">
@@ -171,6 +177,7 @@ import WeeklyMetricsTable from "../components/Metrics/WeeklyMetricsTable.vue";
 import MonthlyMetricsTable from "../components/Metrics/MonthlyMetricsTable.vue";
 import FilteredMonthlyMetricsTable from "../components/Metrics/FilteredMonthlyMetricsTable.vue";
 import FilteredWeeklyMetricsTable from "../components/Metrics/FilteredWeeklyMetricsTable.vue";
+import FilteredStatsWidget from "../components/FilteredStatsWidget.vue";
 
 export default {
   name: "Forecast",
@@ -184,6 +191,7 @@ export default {
     Card,
     FilteredWeeklyMetricsTable,
     FilteredMonthlyMetricsTable,
+    FilteredStatsWidget,
   },
 
   data() {
@@ -199,6 +207,8 @@ export default {
       filterWeekly: false,
       regularFilters: {},
       type: ["", "info", "success", "warning", "danger"],
+      filteredStatsWidgetData: {},
+      refreshWidget: false,
     };
   },
   methods: {
@@ -310,11 +320,21 @@ export default {
           `/get-filtered-forecast-metrics`,
           requestedFilterOption
         ),
+        // this.$axios.$get(`/get-filtered-stats`),
       ]);
 
       this.weeklyforecast = weeklyforecast;
 
       this.filteredForecastMetrics = filteredForecastMetrics;
+
+      // console.log(this.$refs);
+      if (this.refreshWidget) {
+        this.$refs.filterWidgets.getFilteredStatsWidgetData(
+          this.regularFilters
+        );
+      }
+      this.refreshWidget = true;
+      // this.filteredStatsWidgetData = filteredStatsWidgetData;
       this.notifyVue(
         "top",
         "right",
@@ -366,6 +386,7 @@ export default {
       await this.getFilteredForecastData(requestedFilterOption);
       this.isFilteredForecast = true;
       this.filteredActiveTab = "Weekly";
+      this.refreshWidget = true;
     },
     notifyVue(verticalAlign, horizontalAlign, message, type) {
       this.$notify({
@@ -376,6 +397,9 @@ export default {
         verticalAlign: verticalAlign,
         type: this.type[type],
       });
+    },
+    widgetRefresh() {
+      this.refreshWidget = fasle;
     },
   },
   computed: {
