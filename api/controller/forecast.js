@@ -177,6 +177,7 @@ export const getFilteredForecastMetrics = async (req, res) => {
   let duration = req.body.filterType;
   delete req.body.filterType;
   try {
+    console.log("req.body--", req.body);
     let whereStringDfbwm = whereQueryString(req.body, "dfbwm");
     let whereStringDfbwmValue = whereStringDfbwm ? whereStringDfbwm : "";
     let dfbwm2 = whereStringDfbwm ?
@@ -262,3 +263,172 @@ export const getFilteredForecastMetrics = async (req, res) => {
     });
   }
 };
+
+
+// Planned Query Generator
+const typlanQueryGeneratorByDurations = (
+  duration,
+  whereQueryString,
+  transaction_db
+) => {
+  let dateOffset;
+  let tableName;
+  let groubyCol;
+  let whereQueryStr = "";
+  duration.toLowerCase() == "week"
+    ? ((dateOffset = 1),
+      (tableName = `planned_weekly_units_revenue_by_channel_by_sku`),
+      (groubyCol = "week"))
+    : ((dateOffset = 0),
+      (tableName = `planned_monthly_units_revenue_by_channel_by_sku`),
+      (groubyCol = "month"));
+  if (whereQueryString) {
+    whereQueryStr = `AND  ${whereQueryString.replace(
+      /country/g,
+      "sub_channel"
+    )}`;
+  }
+
+  const query = `
+              SELECT
+              	${duration}(pwurbcbs.${groubyCol}end_date)-${dateOffset} AS date,
+              	ROUND(SUM(pwurbcbs.units), 0) AS total_units,
+              	ROUND(SUM(pwurbcbs.revenue), 0) AS total_revenue
+              FROM
+              	${transaction_db}.${tableName} pwurbcbs, 
+                ${transaction_db}.dim_products dp
+              WHERE
+              	dp.SKU = pwurbcbs.sku
+                AND pwurbcbs.channel <> 'Wholesale'
+               ${whereQueryStr}
+              GROUP BY
+              	${duration}(pwurbcbs.${groubyCol}end_date)`;
+  return query;
+};
+
+
+// This Year Sale Query Generator
+const thisYearSaleYearlyQuarterly = (
+  duration,
+  whereQueryString,
+  numofYear,
+  transaction_db
+) => {
+  let dateOffset;
+  let whereQueryStr = "";
+  if (whereQueryString) {
+    whereQueryStr = ` AND ${whereQueryString}`;
+  }
+  duration.toLowerCase() == "week" ? (dateOffset = 1) : (dateOffset = 0);
+  const query = `SELECT
+                   ${duration}(fseisbw.weekend)-${dateOffset} AS date,
+                   IFNULL(SUM(fseisbw.unit_sales), 0) AS total_units,
+                   IFNULL(SUM(fseisbw.revenue),0) AS total_revenue
+                 FROM
+                   ${transaction_db}.fact_sales_ending_inventory_sku_by_week fseisbw,
+                   ${transaction_db}.dim_products dp
+                 WHERE
+                   YEAR(fseisbw.weekend)=(YEAR(CURRENT_DATE())-${numofYear})
+                   AND fseisbw.sku IN (select sku from ${transaction_db}.planned_weekly_units_revenue_by_channel_by_sku)
+                   AND dp.SKU = fseisbw.sku 
+                  ${whereQueryStr}
+                   AND fseisbw.channel <> 'Wholesale'
+                 GROUP BY
+                   ${duration}(fseisbw.weekend)
+                 ORDER BY
+                   ${duration}(fseisbw.weekend);`;
+  return query;
+};
+
+
+// Forecast Query Generator
+const forecastQueryGenByDuration = (
+  duration,
+  whereQueryString,
+  numofYear,
+  transaction_db,
+  demand_forecast_run_log_id
+) => {
+  let changeAlias = whereQueryString ? `AND ${whereQueryString}` : "";
+  const query = `SELECT
+                    ${duration}(fseisbw.weekend) AS date,
+                  	IFNULL(	ROUND(SUM(fseisbw.retail_sales), 2),0) AS total_revenue,
+                  	IFNULL(	ROUND(SUM(fseisbw.units_sales), 0), 0) AS total_units
+                  FROM
+                  	${transaction_db}.demand_forecast_base_weekly_metrics fseisbw,
+                  	${transaction_db}.demand_forecast_run_log dfrl,
+                    ${transaction_db}.dim_products dp
+                  WHERE
+                  	YEAR(fseisbw.weekend)=(YEAR(CURRENT_DATE())+${numofYear})
+                    AND fseisbw.sku = dp.SKU
+                    AND fseisbw.channel <> 'Wholesale'
+                    AND dfrl.id = fseisbw.demand_forecast_run_log_id 
+                    AND dfrl.id = ${demand_forecast_run_log_id}
+                     ${changeAlias}
+                  GROUP BY
+                    ${duration}(fseisbw.weekend)
+                  ORDER BY 
+	                  ${duration}(fseisbw.weekend);`;
+  return query;
+};
+
+
+
+// Filtered Stats
+
+export const getFilteredStataData = async (req, res) => {
+  delete req.body.filterType;
+  let filter = req.body
+  console.log("body", filter);
+  
+  // Planned Sales Yearly
+  const filteredPlannedWhereQuery = whereQueryString(filter,"pwurbcbs");
+  const filteredPlannedDataQuery = typlanQueryGeneratorByDurations("YEAR", filteredPlannedWhereQuery, "morphe_staging");
+  
+  // This Year Sale Yearly
+  const filteredThisYearSaleWhereQuery = whereQueryString(filter);
+  const filteredThisYearSaleDataQuery = thisYearSaleYearlyQuarterly("YEAR", filteredThisYearSaleWhereQuery, 0, "morphe_staging");
+  
+  // Forecast Yearly
+  const filteredForecastWhereQuery = whereQueryString(filter);
+  const filteredForecastDataQuery = forecastQueryGenByDuration("YEAR", filteredForecastWhereQuery, 0, "morphe_staging", 1);
+  
+  // Planned Quarterly
+  const filteredQuarterlyPlannedWhereQuery = whereQueryString(filter,"pwurbcbs");
+  const filteredQuarterlyPlannedDataQuery = typlanQueryGeneratorByDurations("QUARTER", filteredQuarterlyPlannedWhereQuery, "morphe_staging");
+  
+  // This Year Quarterly
+  const filteredQuarterlyThisYearSaleWhereQuery = whereQueryString(filter);
+  const filteredQuarterlyThisYearSaleDataQuery = thisYearSaleYearlyQuarterly("QUARTER", filteredQuarterlyThisYearSaleWhereQuery, 0, "morphe_staging");
+  
+  // Forecast Quarterly
+  const filteredQuarterlyForecastWhereQuery = whereQueryString(filter);
+  const filteredQuarterlyForecastDataQuery = forecastQueryGenByDuration("QUARTER", filteredQuarterlyForecastWhereQuery,0, "morphe_staging",1);
+  
+  try {
+    let yearlyFilteredStats = await Promise.allSettled([
+      prisma.$queryRaw(filteredPlannedDataQuery),
+      prisma.$queryRaw(filteredThisYearSaleDataQuery),
+      prisma.$queryRaw(filteredForecastDataQuery)
+    ])
+
+    let quarterlyFilteredStats = await Promise.allSettled([
+      prisma.$queryRaw(filteredQuarterlyPlannedDataQuery),
+      prisma.$queryRaw(filteredQuarterlyThisYearSaleDataQuery),
+      prisma.$queryRaw(filteredQuarterlyForecastDataQuery)
+    ])
+
+    let filteredStats = {
+      yearlyFilteredStats: yearlyFilteredStats.map((item) => item.value),
+      quarterlyFilteredStats: quarterlyFilteredStats.map((item) => item.value),
+    }
+    res.status(200).json({
+      filteredStats,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Unable to Fetch Filtered Forecast Data",
+      error: `${error}`,
+    });
+  }
+}

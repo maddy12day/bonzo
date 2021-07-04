@@ -59,7 +59,6 @@
     <!-- Applied filters pills (Vishal) -->
 
     <!-- Base Year/Quarter Stats / Filtered Year/Quarter Stats (Vishal) -->
-    <StatsWidget />
 
     <!-- Adjustments Table -->
     <AdjustmentTable
@@ -73,6 +72,8 @@
     <!-- Filter: Units table (Jubin) -->
     <!-- Filter: AUR table (Jubin) -->
     <card card-body-classes="table-full-width" v-if="!isFilteredForecast">
+      <StatsWidget />
+
       <div class="col-md-12 text-right p-0">
         <div class="btn-group btn-group-toggle" data-toggle="buttons">
           <label
@@ -109,6 +110,11 @@
     </card>
 
     <div v-if="isFilteredForecast">
+      <FilteredStatsWidget
+        :filteredRequestBody="regularFilters"
+        ref="filterWidgets"
+      />
+
       <card card-body-classes="table-full-width">
         <div class="col-md-12 text-right p-0">
           <div class="btn-group btn-group-toggle" data-toggle="buttons">
@@ -177,6 +183,7 @@ import WeeklyMetricsTable from "../components/Metrics/WeeklyMetricsTable.vue";
 import MonthlyMetricsTable from "../components/Metrics/MonthlyMetricsTable.vue";
 import FilteredMonthlyMetricsTable from "../components/Metrics/FilteredMonthlyMetricsTable.vue";
 import FilteredWeeklyMetricsTable from "../components/Metrics/FilteredWeeklyMetricsTable.vue";
+import FilteredStatsWidget from "../components/FilteredStatsWidget.vue";
 
 export default {
   name: "Forecast",
@@ -191,6 +198,7 @@ export default {
     Card,
     FilteredWeeklyMetricsTable,
     FilteredMonthlyMetricsTable,
+    FilteredStatsWidget,
   },
 
   data() {
@@ -207,6 +215,8 @@ export default {
       filterWeekly: false,
       regularFilters: {},
       type: ["", "info", "success", "warning", "danger"],
+      filteredStatsWidgetData: {},
+      refreshWidget: false,
     };
   },
   methods: {
@@ -300,18 +310,9 @@ export default {
       this.activeFilterType = type;
     },
     async getFilteredForecastData(requestedFilterOption) {
-      // this.weeklyforecast = await this.$axios.$post(
-      //   `/get-filtered-forecast-data`,
-      //   requestedFilterOption
-      // );
-
       requestedFilterOption["filterType"] = "week";
       this.filterMonthly = false;
       this.filterWeekly = true;
-      // this.filteredForecastMetrics = await this.$axios.$post(
-      //   `/get-filtered-forecast-metrics`,
-      //   requestedFilterOption
-      // );
       const [weeklyforecast, filteredForecastMetrics] = await Promise.all([
         this.$axios.$post(`/get-filtered-forecast-data`, this.regularFilters),
         this.$axios.$post(
@@ -321,8 +322,13 @@ export default {
       ]);
 
       this.weeklyforecast = weeklyforecast;
-
       this.filteredForecastMetrics = filteredForecastMetrics;
+      if (this.refreshWidget) {
+        this.$refs.filterWidgets.getFilteredStatsWidgetData(
+          this.regularFilters
+        );
+      }
+      this.refreshWidget = true;
       this.notifyVue(
         "top",
         "right",
@@ -374,6 +380,7 @@ export default {
       await this.getFilteredForecastData(requestedFilterOption);
       this.isFilteredForecast = true;
       this.filteredActiveTab = "Weekly";
+      this.refreshWidget = true;
     },
     notifyVue(verticalAlign, horizontalAlign, message, type) {
       this.$notify({
