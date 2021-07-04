@@ -9,7 +9,7 @@
           <el-table-column
             min-width="170"
             sortable
-            label="etrics Name"
+            label="Metrics Name"
             property="metrics_master.title"
           >
           </el-table-column>
