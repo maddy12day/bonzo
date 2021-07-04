@@ -109,14 +109,14 @@
       >
         Apply Filter
       </button>
-      <button
+      <!-- <button
         class="btn btn-sm btn-dark btn-block applyFilterBtn"
         style="line-height: 28px"
         @click="resetFilterHandler"
         :disabled="applyCtaDisabled"
       >
         Reset Filters
-      </button>
+      </button> -->
     </div>
   </div>
 </template>
@@ -165,6 +165,9 @@ export default {
     },
   },
   methods: {
+    test() {
+      console.log("clled");
+    },
     appliedFilterHandler() {
       this.$emit("appliedFilters");
       this.$store.commit("toggleCTAState");
@@ -173,6 +176,7 @@ export default {
       this.$emit("resetFilter");
     },
     getProductSource(value) {
+      console.log("clled");
       const optionGenerator = (data, keyName) => {
         return [
           { name: keyName },

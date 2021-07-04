@@ -2,26 +2,33 @@
   <div>
     <!-- Filters component (Vishal) -->
     <card card-body-classes="table-full-width">
-      <div class="btn-group btn-group-toggle p-0 mb-2" data-toggle="buttons">
-        <label
-          v-for="(option, index) in filtersType"
-          :key="option.name"
-          class="btn btn-sm btn-primary btn-simple"
-          :id="index"
-          :class="{ active: activeFilterType == option.name }"
-        >
-          <input
-            type="radio"
-            name="options"
-            autocomplete="off"
-            checked=""
-            @click="showFilterType(option.name)"
-          />
-          <span class="d-none d-sm-block">{{ option.name }}</span>
-          <span class="d-block d-sm-none">
-            <i :class="option.icon"></i>
-          </span>
-        </label>
+      <div class="forecast-filter-buttons">
+        <div class="btn-group btn-group-toggle p-0 mb-2" data-toggle="buttons">
+          <label
+            v-for="(option, index) in filtersType"
+            :key="option.name"
+            class="btn btn-sm btn-primary btn-simple"
+            :id="index"
+            :class="{ active: activeFilterType == option.name }"
+          >
+            <input
+              type="radio"
+              name="options"
+              autocomplete="off"
+              checked=""
+              @click="showFilterType(option.name)"
+            />
+            <span class="d-none d-sm-block">{{ option.name }}</span>
+            <span class="d-block d-sm-none">
+              <i :class="option.icon"></i>
+            </span>
+          </label>
+        </div>
+        <div class="btn-custom-div">
+          <label class="btn btn-sm btn-dark btn-simple btn-custom">
+            <span class="d-none d-sm-block">Reset Filters</span>
+          </label>
+        </div>
       </div>
       <RegularFilters
         :showAplyFilterBtn="true"
@@ -608,6 +615,16 @@ export default {
 .card-body {
   h4 {
     margin: 0;
+  }
+
+  .forecast-filter-buttons {
+    display: flex;
+
+    .btn-custom-div {
+      position: absolute;
+      right: 0;
+      padding: 0 15px;
+    }
   }
 }
 </style>
