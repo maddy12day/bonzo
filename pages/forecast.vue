@@ -302,39 +302,25 @@ export default {
       this.activeFilterType = type;
     },
     async getFilteredForecastData(requestedFilterOption) {
-      // this.weeklyforecast = await this.$axios.$post(
-      //   `/get-filtered-forecast-data`,
-      //   requestedFilterOption
-      // );
-
       requestedFilterOption["filterType"] = "week";
       this.filterMonthly = false;
       this.filterWeekly = true;
-      // this.filteredForecastMetrics = await this.$axios.$post(
-      //   `/get-filtered-forecast-metrics`,
-      //   requestedFilterOption
-      // );
       const [weeklyforecast, filteredForecastMetrics] = await Promise.all([
         this.$axios.$post(`/get-filtered-forecast-data`, this.regularFilters),
         this.$axios.$post(
           `/get-filtered-forecast-metrics`,
           requestedFilterOption
         ),
-        // this.$axios.$get(`/get-filtered-stats`),
       ]);
 
       this.weeklyforecast = weeklyforecast;
-
       this.filteredForecastMetrics = filteredForecastMetrics;
-
-      // console.log(this.$refs);
       if (this.refreshWidget) {
         this.$refs.filterWidgets.getFilteredStatsWidgetData(
           this.regularFilters
         );
       }
       this.refreshWidget = true;
-      // this.filteredStatsWidgetData = filteredStatsWidgetData;
       this.notifyVue(
         "top",
         "right",

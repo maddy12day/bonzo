@@ -372,55 +372,7 @@ export default {
     async calloutByDuration(duration) {
       console.log("duration--", duration);
       this.currentYQTab = duration;
-      // const booleanDuration = ["Q1", "Q2", "Q3", "Q4"].find(
-      //   (vendor) => vendor === duration
-      // );
-      // if (booleanDuration) {
-      //   // this.quarterlySale();
-      //   // this.quarterlyPlanned();
-      // }
     },
-
-    // async quarterlySale() {
-    //   const quaterly = await this.$axios.$get(
-    //     "/based-quarterly-sale-this-year",
-    //     {
-    //       progress: true,
-    //     }
-    //   );
-    //   this.quarterlySaleData = quaterly.baseQuarterlySale;
-    // },
-
-    // async quarterlyPlanned() {
-    //   const quarterly = await this.$axios.$get("/based-quarterly-planned", {
-    //     progress: true,
-    //   });
-    //   this.quarterlyPlannedData = quarterly.baseQuarterlyPlanned;
-    // },
-
-    // async yearlySale() {
-    //   const yearly = await this.$axios.$get("/based-yearly-sale-this-year", {
-    //     progress: true,
-    //   });
-    //   this.yearlySaleData = yearly.baseYearlySale;
-    // },
-
-    // async yearlyPlanned() {
-    //   const yearly = await this.$axios.$get("/base-yearly-planned", {
-    //     progress: true,
-    //   });
-    //   this.yearlyPlannedData = yearly.baseYearlyPlanned;
-    // },
-
-    // async forecastYearlyQuarterly() {
-    //   const forecast = await this.$axios.$get(
-    //     "/base-yearly-quarterly-forecast",
-    //     {
-    //       progress: true,
-    //     }
-    //   );
-    //   this.forecastYQData = JSON.parse(forecast.baseYQForecast);
-    // },
     async getFilteredStatsWidgetData(regularFilters) {
       console.log("inside");
       const filteredStatsWidgetData = await this.$axios.$post(
@@ -432,20 +384,10 @@ export default {
         filteredStatsWidgetData.filteredStats.quarterlyFilteredStats;
       this.yearlyFilteredStats =
         filteredStatsWidgetData.filteredStats.yearlyFilteredStats;
-
-      // console.log(
-      //   this.forecastYQData,
-      //   "forecastYQData,",
-      //   this.yearlyFilteredStats
-      // );
-      // this.forecastYQData = JSON.parse(forecast.baseYQForecast);
     },
   },
   async created() {
-    // console.log(this.refreshWidget, "----");
     this.getFilteredStatsWidgetData(this.regularFilters);
-    // this.yearlySale();
-    // this.yearlyPlanned();
   },
   computed: {
     yearlyQuarterlyTabs() {

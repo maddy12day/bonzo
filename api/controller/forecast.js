@@ -265,9 +265,6 @@ export const getFilteredForecastMetrics = async (req, res) => {
 };
 
 
-
-
-
 // Planned Query Generator
 const typlanQueryGeneratorByDurations = (
   duration,
@@ -309,6 +306,8 @@ const typlanQueryGeneratorByDurations = (
   return query;
 };
 
+
+// This Year Sale Query Generator
 const thisYearSaleYearlyQuarterly = (
   duration,
   whereQueryString,
@@ -342,7 +341,7 @@ const thisYearSaleYearlyQuarterly = (
 };
 
 
-// Forecast
+// Forecast Query Generator
 const forecastQueryGenByDuration = (
   duration,
   whereQueryString,
@@ -378,9 +377,7 @@ const forecastQueryGenByDuration = (
 // Filtered Stats
 
 export const getFilteredStataData = async (req, res) => {
-    delete req.body.filterType;
-
-  // let filter = { "filter_product_sources": ["3RD PARTY"], "filter_newness": ["New"] }
+  delete req.body.filterType;
   let filter = req.body
   console.log("body", filter);
   
@@ -408,20 +405,7 @@ export const getFilteredStataData = async (req, res) => {
   const filteredQuarterlyForecastWhereQuery = whereQueryString(filter);
   const filteredQuarterlyForecastDataQuery = forecastQueryGenByDuration("QUARTER", filteredQuarterlyForecastWhereQuery,0, "morphe_staging",1);
   
-  
-  
   try {
-    // // Planned Sales Yearly
-    // const filteredPlannedStataData = await prisma.$queryRaw(filteredPlannedDataQuery);
-
-    // // This Year
-    // const filteredThisYearStataData = await prisma.$queryRaw(filteredThisYearSaleDataQuery);
-
-
-    // // This Year Sale Yearly
-    // const filteredForecastStataData = await prisma.$queryRaw(filteredForecastDataQuery);
-
-
     let yearlyFilteredStats = await Promise.allSettled([
       prisma.$queryRaw(filteredPlannedDataQuery),
       prisma.$queryRaw(filteredThisYearSaleDataQuery),
@@ -438,17 +422,6 @@ export const getFilteredStataData = async (req, res) => {
       yearlyFilteredStats: yearlyFilteredStats.map((item) => item.value),
       quarterlyFilteredStats: quarterlyFilteredStats.map((item) => item.value),
     }
-
-// data = data.map((item) => item.value),
-//     console.log("data", data);
-//     let finalData = {}
-  //   finalData["Yearly"] = {}
-  // finalData["Yearly"]["Planned"] = filteredPlannedStataData
-  // finalData["Yearly"]["Current"] = filteredThisYearStataData
-  // finalData["Yearly"]["Forecast"] = filteredForecastStataData
-  
-  // console.log("filteredThisYearSaleDataQuery", filteredStats);
-
     res.status(200).json({
       filteredStats,
     });
