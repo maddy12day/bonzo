@@ -97,8 +97,14 @@
           </label>
         </div>
       </div>
+      <ManualAdjustmentTable
+        v-if="activeTab == 'Weekly' && showManualAdj"
+        :metricsTableData="baseMetricsList"
+        tableHeading="Edit Forecast Metrics"
+        @EvtAdjValues="getAdjustedValues"
+      />
       <WeeklyMetricsTable
-        v-if="activeTab == 'Weekly'"
+        v-if="activeTab == 'Weekly' && !showManualAdj"
         :metricsTableData="baseMetricsList"
         tableHeading="Weekly Forecast Metrics"
       />
@@ -107,6 +113,37 @@
         :metricsTableData="baseMetricsList"
         tableHeading="Monthly Forecast Metrics"
       />
+      <div class="col-md-12 text-right">
+        <button
+          class="btn btn-primary btn-sm text-left"
+          @click="switchToManualAdj"
+          v-if="!changeMABtnText"
+        >
+          Manual Ajustment
+        </button>
+        <button
+          :class="
+            `btn btn-primary btn-sm text-left ${
+              disbleAdjustment ? 'disabled' : ''
+            }`
+          "
+          @click="createManualAdjustment"
+          v-if="changeMABtnText"
+          :disabled="disbleAdjustment"
+        >
+          Run Forecast
+        </button>
+        <button
+          :class="
+            `btn btn-primary btn-sm ${disbleAdjustment ? 'disabled' : ''}`
+          "
+          @click="discardChanges"
+          v-if="showManualAdj"
+          :disabled="disbleAdjustment"
+        >
+          discard
+        </button>
+      </div>
     </card>
 
     <div v-if="isFilteredForecast">
@@ -184,12 +221,14 @@ import MonthlyMetricsTable from "../components/Metrics/MonthlyMetricsTable.vue";
 import FilteredMonthlyMetricsTable from "../components/Metrics/FilteredMonthlyMetricsTable.vue";
 import FilteredWeeklyMetricsTable from "../components/Metrics/FilteredWeeklyMetricsTable.vue";
 import FilteredStatsWidget from "../components/FilteredStatsWidget.vue";
+import ManualAdjustmentTable from "../components/Metrics/ManualAdjustmentTable.vue";
 
 export default {
   name: "Forecast",
   components: {
     MonthlyMetricsTable,
     WeeklyMetricsTable,
+    ManualAdjustmentTable,
     StatsWidget,
     AdjustmentTable,
     RegularFilters,
@@ -214,12 +253,29 @@ export default {
       filterMonthly: false,
       filterWeekly: false,
       regularFilters: {},
-      type: ["", "info", "success", "warning", "danger"],
       filteredStatsWidgetData: {},
       refreshWidget: false,
+      showManualAdj: false,
+      changeMABtnText: false,
+      disbleAdjustment: false,
+      adustments: {},
+      type: ["", "info", "success", "warning", "danger"],
     };
   },
   methods: {
+    // notify
+    notifyVue(verticalAlign, horizontalAlign) {
+      let color = 4;
+      this.$notify({
+        message:
+          "Your adjustment is in progress. we will update you once it complete.",
+        timeout: 12000,
+        icon: "tim-icons icon-bell-55",
+        horizontalAlign: horizontalAlign,
+        verticalAlign: verticalAlign,
+        type: this.type[color],
+      });
+    },
     // filter value getter methods
     getProductSource(values) {
       this.productSourceValues = values;
@@ -263,6 +319,21 @@ export default {
     getScenarioType(values) {
       this.scenarioTypeValue = values.id;
     },
+    // manual adjustments
+    discardChanges() {
+      this.showManualAdj = false;
+      this.changeMABtnText = false;
+    },
+    getAdjustedValues(values) {
+      if (values) {
+        console.log(values);
+        this.changeMABtnText = true;
+        this.adustments = values;
+      }
+    },
+    switchToManualAdj() {
+      this.showManualAdj = true;
+    },
     async showMetricsByDuration(activeTab) {
       this.activeTab = activeTab;
       if (this.activeTab == "Weekly") {
@@ -275,6 +346,14 @@ export default {
         );
         this.baseMetricsList = JSON.parse(
           baseWeeklyMetricsListString.baseWeeklyMetrics
+        );
+        localStorage.setItem(
+          "baseVersionId",
+          this.baseMetricsList[0].demand_forecast_run_log_id
+        );
+        localStorage.setItem(
+          "adjustmentTableData",
+          JSON.stringify(this.baseMetricsList)
         );
       } else {
         // base metrics table for monthly
@@ -356,6 +435,31 @@ export default {
         }
       }
       return reqBody;
+    },
+    async createManualAdjustment() {
+      const res = await this.$axios.$post(`/create-manualadjustment`, {
+        adjusted_by_user_id: parseInt(this.$auth.user.user_id),
+        demand_forecast_run_log_id: parseInt(
+          localStorage.getItem("baseVersionId")
+        ),
+        filter_level: "baseVersion",
+        is_active: true,
+        adjusted_metrics_name: this.adustments.metrics_name,
+        adjusted_metrics_cell_date: new Date(this.adustments.weekend_date),
+        before_adjustment_value: parseFloat(this.adustments.old_value),
+        new_adjusted_value: parseFloat(this.adustments.new_value),
+        status: "Pending",
+      });
+      this.disbleAdjustment = true;
+      res.manualAjustment.status == "Pending"
+        ? this.notifyVue("top", "right")
+        : "";
+      if (res.manualAjustment.status == "Punding") {
+        this.showManualAdj = false;
+        this.changeMABtnText = false;
+      } else {
+        this.disbleAdjustment = false;
+      }
     },
     async appliedFilters() {
       this.notifyVue(
