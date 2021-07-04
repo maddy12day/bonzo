@@ -330,6 +330,7 @@ export default {
     // manual adjustments
     discardChanges() {
       this.showManualAdj = false;
+      this.showDiscardBtn = false;
       this.changeMABtnText = false;
     },
     getAdjustedValues(values) {
