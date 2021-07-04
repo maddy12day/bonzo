@@ -466,6 +466,7 @@ export default {
           }
         );
         if (
+          adjustmentsJson && 
           ["Completed", "Failed"].includes(adjustmentsJson.adjustment.status)
         ) {
           this.callToIntervalAjax = false;

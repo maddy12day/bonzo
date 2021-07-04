@@ -327,7 +327,7 @@ export default {
           }
         );
         if (
-           ["Completed", "Failed"].includes(scenarioTypesJson.scenario.status)
+          scenarioTypesJson && ["Completed", "Failed"].includes(scenarioTypesJson.scenario.status)
         ) {
           this.callToIntervalAjax = false;
           this.disabledScenarioBtn = false;
