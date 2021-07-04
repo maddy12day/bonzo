@@ -109,10 +109,20 @@ export default {
         JSON.stringify(this.userInfo)
       );
     },
+    async getWeekendDates() {
+     const weekendDates = await this.$axios.$get("/get-weekend-dates");
+      window.localStorage.setItem(
+        "allUsersInfo",
+        JSON.stringify(this.userInfo)
+      );
+
+      localStorage.setItem("weekendDates", JSON.stringify(weekendDates.weekends));
+    }
   },
   async mounted() {
     this.showMetricsByDuration("Weekly");
     this.getAllUserData();
+    this.getWeekendDates();
   },
 
   computed: {

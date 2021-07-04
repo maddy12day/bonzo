@@ -91,20 +91,44 @@
         </div>
       </div>
       <ManualAdjustmentTable
-        v-if="activeTab == 'Weekly'"
+        v-if="activeTab == 'Weekly' && showManualAdj"
         :metricsTableData="baseMetricsList"
         tableHeading="Edit Forecast Metrics"
+        @EvtAdjValues="getAdjustedValues"
       />
-      <!-- <WeeklyMetricsTable
-        v-if="activeTab == 'Weekly'"
+      <WeeklyMetricsTable
+        v-if="activeTab == 'Weekly' && !showManualAdj"
         :metricsTableData="baseMetricsList"
         tableHeading="Weekly Forecast Metrics"
-      /> -->
+      />
       <MonthlyMetricsTable
         v-if="activeTab == 'Monthly'"
         :metricsTableData="baseMetricsList"
         tableHeading="Monthly Forecast Metrics"
       />
+      <div class="col-md-12 text-right">
+        <button
+          class="btn btn-primary btn-sm text-left"
+          @click="switchToManualAdj"
+          v-if="!changeMABtnText"
+        >
+          Manual Ajustment
+        </button>
+        <button
+          class="btn btn-primary btn-sm text-left"
+          @click="createManualAdjustment"
+          v-if="changeMABtnText"
+        >
+          Run Forecast
+        </button>
+        <button
+          class="btn btn-primary btn-sm"
+          @click="discardChanges"
+          v-if="showManualAdj"
+        >
+          discard
+        </button>
+      </div>
     </card>
 
     <h4 v-if="isFilteredForecast" class="font-weight-bold">
@@ -161,6 +185,9 @@ export default {
       activeTab: "Weekly",
       baseMetricsList: [],
       weeklyforecast: [],
+      showManualAdj: false,
+      changeMABtnText: false,
+      adustments: {}
     };
   },
   methods: {
@@ -207,6 +234,21 @@ export default {
     getScenarioType(values) {
       this.scenarioTypeValue = values.id;
     },
+    // manual adjustments
+    discardChanges() {
+      this.showManualAdj = false;
+      this.changeMABtnText = false;
+    },
+    getAdjustedValues(values) {
+      if (values) {
+        console.log(values)
+        this.changeMABtnText = true;
+        this.adustments = values;
+      }
+    },
+    switchToManualAdj() {
+      this.showManualAdj = true;
+    },
     async showMetricsByDuration(activeTab) {
       this.activeTab = activeTab;
       if (this.activeTab == "Weekly") {
@@ -219,6 +261,11 @@ export default {
         );
         this.baseMetricsList = JSON.parse(
           baseWeeklyMetricsListString.baseWeeklyMetrics
+        );
+        localStorage.setItem("baseVersionId", this.baseMetricsList[0].demand_forecast_run_log_id);
+        localStorage.setItem(
+          "adjustmentTableData",
+          JSON.stringify(this.baseMetricsList)
         );
       } else {
         // base metrics table for monthly
@@ -264,6 +311,23 @@ export default {
         }
       }
       return reqBody;
+    },
+    async createManualAdjustment() {
+
+       await this.$axios.$post(
+        `/create-manualadjustment`,
+        {
+         adjusted_by_user_id: parseInt(this.$auth.user.user_id),
+         demand_forecast_run_log_id: parseInt(localStorage.getItem("baseVersionId")),
+         filter_level: "baseVersion",
+         is_active: true,
+         adjusted_metrics_name: this.adustments.metrics_name, 
+         adjusted_metrics_cell_date: new Date(this.adustments.weekend_date),
+         before_adjustment_value: parseFloat(this.adustments.old_value),
+         new_adjusted_value: parseFloat(this.adustments.new_value),   
+         status: "Pending", 
+        }
+      );
     },
     async appliedFilters() {
       const regularFilters = {
