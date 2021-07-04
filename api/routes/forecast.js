@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getFilteredForecastData, getFilteredForecastMetrics, getFilteredStataData } from "../controller/forecast";
+import { getFilteredForecastData, getFilteredForecastMetrics, getFilteredStataData  } from "../controller/forecast";
 const router = Router();
 
 router.post("/get-filtered-forecast-data", getFilteredForecastData);

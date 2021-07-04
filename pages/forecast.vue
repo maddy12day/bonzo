@@ -138,7 +138,7 @@
             `btn btn-primary btn-sm ${disbleAdjustment ? 'disabled' : ''}`
           "
           @click="discardChanges"
-          v-if="showManualAdj"
+          v-if="showDiscardBtn"
           :disabled="disbleAdjustment"
         >
           discard
@@ -249,33 +249,22 @@ export default {
       baseAdjustmentsList: [],
       baseMetricsList: [],
       weeklyforecast: [],
+      showManualAdj: false,
+      changeMABtnText: false,
+      disbleAdjustment: false,
+      callToIntervalAjax: true,
+      adustments: {},
+      type: ["", "info", "success", "warning", "danger"],
       filteredForecastMetrics: [],
       filterMonthly: false,
       filterWeekly: false,
       regularFilters: {},
       filteredStatsWidgetData: {},
+      showDiscardBtn: false,
       refreshWidget: false,
-      showManualAdj: false,
-      changeMABtnText: false,
-      disbleAdjustment: false,
-      adustments: {},
-      type: ["", "info", "success", "warning", "danger"],
     };
   },
   methods: {
-    // notify
-    notifyVue(verticalAlign, horizontalAlign) {
-      let color = 4;
-      this.$notify({
-        message:
-          "Your adjustment is in progress. we will update you once it complete.",
-        timeout: 12000,
-        icon: "tim-icons icon-bell-55",
-        horizontalAlign: horizontalAlign,
-        verticalAlign: verticalAlign,
-        type: this.type[color],
-      });
-    },
     // filter value getter methods
     getProductSource(values) {
       this.productSourceValues = values;
@@ -323,15 +312,18 @@ export default {
     discardChanges() {
       this.showManualAdj = false;
       this.changeMABtnText = false;
+      this.showDiscardBtn = false;
     },
     getAdjustedValues(values) {
       if (values) {
         console.log(values);
         this.changeMABtnText = true;
         this.adustments = values;
+        this.showDiscardBtn = true;
       }
     },
     switchToManualAdj() {
+      this.showDiscardBtn = true;
       this.showManualAdj = true;
     },
     async showMetricsByDuration(activeTab) {
@@ -436,6 +428,7 @@ export default {
       }
       return reqBody;
     },
+    // create manual adjustments
     async createManualAdjustment() {
       const res = await this.$axios.$post(`/create-manualadjustment`, {
         adjusted_by_user_id: parseInt(this.$auth.user.user_id),
@@ -450,17 +443,47 @@ export default {
         new_adjusted_value: parseFloat(this.adustments.new_value),
         status: "Pending",
       });
-      this.disbleAdjustment = true;
+      this.baseAdjustmentsList.adjustments.unshift(res.manualAjustment);
       res.manualAjustment.status == "Pending"
-        ? this.notifyVue("top", "right")
+        ? this.notifyVue("top", "right", "adjustment is in progress...")
         : "";
+      this.showDiscardBtn = false;
       if (res.manualAjustment.status == "Punding") {
         this.showManualAdj = false;
         this.changeMABtnText = false;
+        this.disbleAdjustment = true;
       } else {
         this.disbleAdjustment = false;
+        this.changeMABtnText = false;
       }
     },
+
+    // check status after every 10 sec for user scenarios
+    async checkManualAdjustmentStatus() {
+      if (this.callToIntervalAjax) {
+        const adjustmentsJson = await this.$axios.$get(
+          `/get-adjustment-status/${this.$auth.user.user_id}`,
+          {
+            progress: true,
+          }
+        );
+        if (
+          adjustmentsJson.adjustment.status !== "Completed" ||
+          adjustmentsJson.adjustment.status !== "Failed"
+        ) {
+          this.disbleAdjustment = true;
+          this.callToIntervalAjax = true;
+          this.baseAdjustmentsList.adjustments[0].status =
+            adjustmentsJson.adjustment.status;
+        } else {
+          this.callToIntervalAjax = false;
+          this.baseAdjustmentsList.adjustments[0].status =
+            adjustmentsJson.adjustment.status;
+          this.disbleAdjustment = false;
+        }
+      }
+    },
+
     async appliedFilters() {
       this.notifyVue(
         "top",
@@ -506,6 +529,9 @@ export default {
     },
   },
   computed: {
+    disbledCom() {
+      return this.disbleAdjustment;
+    },
     baseAdjustmentsListCom() {
       return this.baseAdjustmentsList;
     },
@@ -540,6 +566,9 @@ export default {
   mounted() {
     this.getBaseAdjustments();
     this.showMetricsByDuration("Weekly");
+    setInterval(() => {
+      this.checkManualAdjustmentStatus();
+    }, 10000);
   },
 };
 </script>

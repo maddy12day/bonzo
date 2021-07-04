@@ -126,7 +126,7 @@ export default {
   },
   computed: {
     tableData() {
-      return this.adjustmentTableData ? this.adjustmentTableData : [];
+      return this.adjustmentTableData && this.adjustmentTableData.length > 0 ? this.adjustmentTableData : [];
     },
     pagedTableData() {
       return this.tableData.slice(

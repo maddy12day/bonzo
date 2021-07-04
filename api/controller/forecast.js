@@ -10,7 +10,9 @@ const weeklyCommonTableDataMapping = (data) => {
   let counter = uniqueSkus.length <= 10 ? uniqueSkus.length : 10;
   const finalData = [];
   for (let i = 0; i < counter; i++) {
-    let arr = data.filter((item) => item.sku == uniqueSkus[i] && item.title == uniqueSkusTitle[i]);
+    let arr = data.filter(
+      (item) => item.sku == uniqueSkus[i] && item.title == uniqueSkusTitle[i]
+    );
     finalData.push({
       sku: uniqueSkus[i],
       title: uniqueSkusTitle[i],
@@ -89,7 +91,7 @@ const whereQueryString = (obj, alias = "fseisbw") => {
 };
 
 export const getFilteredForecastData = async (req, res) => {
-    delete req.body.filterType;
+  delete req.body.filterType;
   try {
     const filteredForecastData = await prisma.$queryRaw(`WITH iskus AS (
       select
@@ -99,7 +101,7 @@ export const getFilteredForecastData = async (req, res) => {
         morphe_staging.dim_products idp
       where
         idfbwm.sku = idp.SKU
-          AND ${whereQueryString( req.body,"idfbwm" ).replace(/dp/g,"idp")}
+          AND ${whereQueryString(req.body, "idfbwm").replace(/dp/g, "idp")}
         order by
           idfbwm.units_sales desc
         limit 10)
@@ -121,7 +123,7 @@ export const getFilteredForecastData = async (req, res) => {
           from
             iskus)
           AND dfbwm.sku = dp.SKU
-          AND ${whereQueryString(req.body,"dfbwm")}
+          AND ${whereQueryString(req.body, "dfbwm")}
         GROUP BY
           dfbwm.sku,
           dfbwm.weekend
@@ -140,7 +142,6 @@ export const getFilteredForecastData = async (req, res) => {
   }
 };
 
-
 const getMasterMetricData = async () => {
   try {
     const masterMetricData = await prisma.metrics_master.findMany({
@@ -149,29 +150,34 @@ const getMasterMetricData = async () => {
         title: true,
       },
     });
-    return masterMetricData
+    return masterMetricData;
   } catch (error) {
-    return error
+    return error;
   }
 };
 
-const parseFilteredForecastData = (type, masterMetricData, filteredForecastData) => {
-  let parsedData = []
+const parseFilteredForecastData = (
+  type,
+  masterMetricData,
+  filteredForecastData
+) => {
+  let parsedData = [];
   let typeIndex = type == "month" ? 12 : 52;
 
   for (let i = 0; i < filteredForecastData.length; i++) {
-    var obj = {}
+    var obj = {};
     if (masterMetricData[i]) {
       obj["Metrics Name"] = masterMetricData[i].title;
       for (let j = 0; j < typeIndex; j++) {
-        let index = j + 1
-        obj["w" + index] = filteredForecastData[j][`${masterMetricData[i].name}`]
+        let index = j + 1;
+        obj["w" + index] =
+          filteredForecastData[j][`${masterMetricData[i].name}`];
       }
-      parsedData.push(obj)
+      parsedData.push(obj);
     }
   }
   return parsedData;
-}
+};
 
 export const getFilteredForecastMetrics = async (req, res) => {
   let duration = req.body.filterType;
@@ -180,11 +186,11 @@ export const getFilteredForecastMetrics = async (req, res) => {
     console.log("req.body--", req.body);
     let whereStringDfbwm = whereQueryString(req.body, "dfbwm");
     let whereStringDfbwmValue = whereStringDfbwm ? whereStringDfbwm : "";
-    let dfbwm2 = whereStringDfbwm ?
-      ` AND ${whereStringDfbwm
-        .replace(/dp./g, "dp2.")
-        .replace(/dfbwm./g, "dfbwm2.")}` :
-      "";
+    let dfbwm2 = whereStringDfbwm
+      ? ` AND ${whereStringDfbwm
+          .replace(/dp./g, "dp2.")
+          .replace(/dfbwm./g, "dfbwm2.")}`
+      : "";
     let demand_forecast_run_log_id = 1;
     let transaction_db = "morphe_staging";
 
@@ -248,11 +254,15 @@ export const getFilteredForecastMetrics = async (req, res) => {
               AND
               ${whereStringDfbwmValue}
             GROUP BY
-             ${duration}(dfbwm.weekend);`
+             ${duration}(dfbwm.weekend);`;
 
     const filteredForecastData = await prisma.$queryRaw(query);
     let masterMetricData = await getMasterMetricData();
-    let parsedFilteredForecastData = parseFilteredForecastData(duration, masterMetricData, filteredForecastData)
+    let parsedFilteredForecastData = parseFilteredForecastData(
+      duration,
+      masterMetricData,
+      filteredForecastData
+    );
     res.status(200).json({
       parsedFilteredForecastData,
     });
@@ -263,7 +273,6 @@ export const getFilteredForecastMetrics = async (req, res) => {
     });
   }
 };
-
 
 // Planned Query Generator
 const typlanQueryGeneratorByDurations = (
@@ -306,7 +315,6 @@ const typlanQueryGeneratorByDurations = (
   return query;
 };
 
-
 // This Year Sale Query Generator
 const thisYearSaleYearlyQuarterly = (
   duration,
@@ -340,7 +348,6 @@ const thisYearSaleYearlyQuarterly = (
   return query;
 };
 
-
 // Forecast Query Generator
 const forecastQueryGenByDuration = (
   duration,
@@ -372,56 +379,87 @@ const forecastQueryGenByDuration = (
   return query;
 };
 
-
-
 // Filtered Stats
 
 export const getFilteredStataData = async (req, res) => {
   delete req.body.filterType;
-  let filter = req.body
+  let filter = req.body;
   console.log("body", filter);
-  
+
   // Planned Sales Yearly
-  const filteredPlannedWhereQuery = whereQueryString(filter,"pwurbcbs");
-  const filteredPlannedDataQuery = typlanQueryGeneratorByDurations("YEAR", filteredPlannedWhereQuery, "morphe_staging");
-  
+  const filteredPlannedWhereQuery = whereQueryString(filter, "pwurbcbs");
+  const filteredPlannedDataQuery = typlanQueryGeneratorByDurations(
+    "YEAR",
+    filteredPlannedWhereQuery,
+    "morphe_staging"
+  );
+
   // This Year Sale Yearly
   const filteredThisYearSaleWhereQuery = whereQueryString(filter);
-  const filteredThisYearSaleDataQuery = thisYearSaleYearlyQuarterly("YEAR", filteredThisYearSaleWhereQuery, 0, "morphe_staging");
-  
+  const filteredThisYearSaleDataQuery = thisYearSaleYearlyQuarterly(
+    "YEAR",
+    filteredThisYearSaleWhereQuery,
+    0,
+    "morphe_staging"
+  );
+
   // Forecast Yearly
   const filteredForecastWhereQuery = whereQueryString(filter);
-  const filteredForecastDataQuery = forecastQueryGenByDuration("YEAR", filteredForecastWhereQuery, 0, "morphe_staging", 1);
-  
+  const filteredForecastDataQuery = forecastQueryGenByDuration(
+    "YEAR",
+    filteredForecastWhereQuery,
+    0,
+    "morphe_staging",
+    1
+  );
+
   // Planned Quarterly
-  const filteredQuarterlyPlannedWhereQuery = whereQueryString(filter,"pwurbcbs");
-  const filteredQuarterlyPlannedDataQuery = typlanQueryGeneratorByDurations("QUARTER", filteredQuarterlyPlannedWhereQuery, "morphe_staging");
-  
+  const filteredQuarterlyPlannedWhereQuery = whereQueryString(
+    filter,
+    "pwurbcbs"
+  );
+  const filteredQuarterlyPlannedDataQuery = typlanQueryGeneratorByDurations(
+    "QUARTER",
+    filteredQuarterlyPlannedWhereQuery,
+    "morphe_staging"
+  );
+
   // This Year Quarterly
   const filteredQuarterlyThisYearSaleWhereQuery = whereQueryString(filter);
-  const filteredQuarterlyThisYearSaleDataQuery = thisYearSaleYearlyQuarterly("QUARTER", filteredQuarterlyThisYearSaleWhereQuery, 0, "morphe_staging");
-  
+  const filteredQuarterlyThisYearSaleDataQuery = thisYearSaleYearlyQuarterly(
+    "QUARTER",
+    filteredQuarterlyThisYearSaleWhereQuery,
+    0,
+    "morphe_staging"
+  );
+
   // Forecast Quarterly
   const filteredQuarterlyForecastWhereQuery = whereQueryString(filter);
-  const filteredQuarterlyForecastDataQuery = forecastQueryGenByDuration("QUARTER", filteredQuarterlyForecastWhereQuery,0, "morphe_staging",1);
-  
+  const filteredQuarterlyForecastDataQuery = forecastQueryGenByDuration(
+    "QUARTER",
+    filteredQuarterlyForecastWhereQuery,
+    0,
+    "morphe_staging",
+    1
+  );
+
   try {
     let yearlyFilteredStats = await Promise.allSettled([
       prisma.$queryRaw(filteredPlannedDataQuery),
       prisma.$queryRaw(filteredThisYearSaleDataQuery),
-      prisma.$queryRaw(filteredForecastDataQuery)
-    ])
+      prisma.$queryRaw(filteredForecastDataQuery),
+    ]);
 
     let quarterlyFilteredStats = await Promise.allSettled([
       prisma.$queryRaw(filteredQuarterlyPlannedDataQuery),
       prisma.$queryRaw(filteredQuarterlyThisYearSaleDataQuery),
-      prisma.$queryRaw(filteredQuarterlyForecastDataQuery)
-    ])
+      prisma.$queryRaw(filteredQuarterlyForecastDataQuery),
+    ]);
 
     let filteredStats = {
       yearlyFilteredStats: yearlyFilteredStats.map((item) => item.value),
       quarterlyFilteredStats: quarterlyFilteredStats.map((item) => item.value),
-    }
+    };
     res.status(200).json({
       filteredStats,
     });
@@ -431,4 +469,4 @@ export const getFilteredStataData = async (req, res) => {
       error: `${error}`,
     });
   }
-}
+};
