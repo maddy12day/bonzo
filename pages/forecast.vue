@@ -120,10 +120,10 @@
       <div class="col-md-12 text-right">
         <button
           :class="
-            `btn btn-primary btn-sm text-left ${disbledCom ? 'disabled' : ''}`
+            `btn btn-primary btn-sm text-left ${disbledCom || showManualAdj ? 'disabled' : ''}`
           "
           @click="switchToManualAdj"
-          :disabled="disbledCom"
+          :disabled="disbledCom || showManualAdj"
           v-if="!changeMABtnText && activeTab == 'Weekly'"
         >
           Manual Ajustment
@@ -144,7 +144,7 @@
           v-if="showDiscardBtn"
           :disabled="disbledCom"
         >
-          discard
+          Discard
         </button>
       </div>
     </card>
@@ -443,9 +443,10 @@ export default {
       });
       this.baseAdjustmentsList.adjustments.unshift(res.manualAjustment);
       res.manualAjustment.status == "Pending"
-        ? this.notifyVue("top", "right", "adjustment is in progress...")
+        ? this.notifyVue("top", "right", '"Adjustment" submitted for processing with model. Please check "Base Model Adjustments" section for updates')
         : "";
       this.showDiscardBtn = false;
+      this.showManualAdj = false;
       if (res.manualAjustment.status == "Punding") {
         this.showManualAdj = false;
         this.changeMABtnText = false;
