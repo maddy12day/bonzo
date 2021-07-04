@@ -27,9 +27,7 @@
               @click="showMetricsByDuration(option.name)"
             />
             <span class="d-none d-sm-block">{{ option.name }}</span>
-            <span class="d-block d-sm-none">
-              <i :class="option.icon"></i>
-            </span>
+            <span class="d-block d-sm-none">{{ option.name }}</span>
           </label>
         </div>
       </div>
@@ -110,14 +108,17 @@ export default {
       );
     },
     async getWeekendDates() {
-     const weekendDates = await this.$axios.$get("/get-weekend-dates");
+      const weekendDates = await this.$axios.$get("/get-weekend-dates");
       window.localStorage.setItem(
         "allUsersInfo",
         JSON.stringify(this.userInfo)
       );
 
-      localStorage.setItem("weekendDates", JSON.stringify(weekendDates.weekends));
-    }
+      localStorage.setItem(
+        "weekendDates",
+        JSON.stringify(weekendDates.weekends)
+      );
+    },
   },
   async mounted() {
     this.showMetricsByDuration("Weekly");
@@ -128,9 +129,10 @@ export default {
   computed: {
     Durations() {
       return [
-        { name: "Monthly", icon: "tim-icons icon-calendar-60" },
+        { name: "Monthly", acronym: "M", icon: "tim-icons icon-calendar-60" },
         {
           name: "Weekly",
+          acronym: "W",
           icon: "tim-icons icon-notes",
         },
       ];

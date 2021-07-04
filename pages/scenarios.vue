@@ -19,9 +19,7 @@
               @click="showFilterType(option.name)"
             />
             <span class="d-none d-sm-block">{{ option.name }}</span>
-            <span class="d-block d-sm-none">
-              <i :class="option.icon"></i>
-            </span>
+            <span class="d-block d-sm-none">{{ option.name }}</span>
           </label>
         </div>
         <RegularFilters
@@ -371,9 +369,10 @@ export default {
     },
     filtersType() {
       return [
-        { name: "Regular", icon: "tim-icons icon-single-02" },
+        { name: "Regular", acronym: "R", icon: "tim-icons icon-single-02" },
         {
           name: "Program",
+          acronym: "P",
           icon: "tim-icons icon-gift-2",
         },
       ];
