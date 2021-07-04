@@ -1465,9 +1465,10 @@ export default {
           new_value: value,
           weekend_date: JSON.parse(localStorage.getItem("weekendDates"))[innerIndex],
           old_value: oldTableData[index][`${innerIndex < 10 ? `w0${innerIndex}` : `w${innerIndex}`}` ],
-          metrics_name:  oldTableData[index]['metrics_name']
+          metrics_name:  oldTableData[index]['metrics_name'],
+          ele: e.target.parentNode.parentNode.parentNode 
         });
-        e.target.parentNode.parentNode.parentNode.style.background='#3da977';
+        e.target.parentNode.parentNode.parentNode.style.background='#ffeacb';
         this.isDisble = true;
       } else {
         this.isDisble = false;

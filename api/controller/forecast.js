@@ -171,13 +171,13 @@ export const createManualAdjustment = async (req, res) => {
     });
     const executed_by = await prisma.users.findUnique({
       where: {
-        id: req.body.demand_planner_user_id,
+        id: req.body.adjusted_by_user_id,
       },
     });
     const demandForecastRunlogRes = await prisma.demand_forecast_run_log.create({
       data: {
         is_base_forecast: false,
-        demand_planner_user_id: req.body.demand_planner_user_id,
+        demand_planner_user_id: req.body.adjusted_by_user_id,
         manual_adjustment_id: manualAjustment.id,
         ma_source_scenario_id: 0,
         status: "Pending",
@@ -186,6 +186,7 @@ export const createManualAdjustment = async (req, res) => {
       },
     });
     res.json({
+      manualAjustment,
       message: "adjustment created successfully"
     })
   }catch(error) {

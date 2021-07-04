@@ -115,16 +115,24 @@
           Manual Ajustment
         </button>
         <button
-          class="btn btn-primary btn-sm text-left"
+          :class="
+            `btn btn-primary btn-sm text-left ${
+              disbleAdjustment ? 'disabled' : ''
+            }`
+          "
           @click="createManualAdjustment"
           v-if="changeMABtnText"
+          :disabled="disbleAdjustment"
         >
           Run Forecast
         </button>
         <button
-          class="btn btn-primary btn-sm"
+          :class="
+            `btn btn-primary btn-sm ${disbleAdjustment ? 'disabled' : ''}`
+          "
           @click="discardChanges"
           v-if="showManualAdj"
+          :disabled="disbleAdjustment"
         >
           discard
         </button>
@@ -187,10 +195,25 @@ export default {
       weeklyforecast: [],
       showManualAdj: false,
       changeMABtnText: false,
-      adustments: {}
+      disbleAdjustment: false,
+      adustments: {},
+      type: ["", "info", "success", "warning", "danger"],
     };
   },
   methods: {
+    // notify
+    notifyVue(verticalAlign, horizontalAlign) {
+      let color = 4;
+      this.$notify({
+        message:
+          "Your adjustment is in progress. we will update you once it complete.",
+        timeout: 12000,
+        icon: "tim-icons icon-bell-55",
+        horizontalAlign: horizontalAlign,
+        verticalAlign: verticalAlign,
+        type: this.type[color],
+      });
+    },
     // filter value getter methods
     getProductSource(values) {
       this.productSourceValues = values;
@@ -241,7 +264,7 @@ export default {
     },
     getAdjustedValues(values) {
       if (values) {
-        console.log(values)
+        console.log(values);
         this.changeMABtnText = true;
         this.adustments = values;
       }
@@ -262,7 +285,10 @@ export default {
         this.baseMetricsList = JSON.parse(
           baseWeeklyMetricsListString.baseWeeklyMetrics
         );
-        localStorage.setItem("baseVersionId", this.baseMetricsList[0].demand_forecast_run_log_id);
+        localStorage.setItem(
+          "baseVersionId",
+          this.baseMetricsList[0].demand_forecast_run_log_id
+        );
         localStorage.setItem(
           "adjustmentTableData",
           JSON.stringify(this.baseMetricsList)
@@ -313,21 +339,29 @@ export default {
       return reqBody;
     },
     async createManualAdjustment() {
-
-       await this.$axios.$post(
-        `/create-manualadjustment`,
-        {
-         adjusted_by_user_id: parseInt(this.$auth.user.user_id),
-         demand_forecast_run_log_id: parseInt(localStorage.getItem("baseVersionId")),
-         filter_level: "baseVersion",
-         is_active: true,
-         adjusted_metrics_name: this.adustments.metrics_name, 
-         adjusted_metrics_cell_date: new Date(this.adustments.weekend_date),
-         before_adjustment_value: parseFloat(this.adustments.old_value),
-         new_adjusted_value: parseFloat(this.adustments.new_value),   
-         status: "Pending", 
-        }
-      );
+      const res = await this.$axios.$post(`/create-manualadjustment`, {
+        adjusted_by_user_id: parseInt(this.$auth.user.user_id),
+        demand_forecast_run_log_id: parseInt(
+          localStorage.getItem("baseVersionId")
+        ),
+        filter_level: "baseVersion",
+        is_active: true,
+        adjusted_metrics_name: this.adustments.metrics_name,
+        adjusted_metrics_cell_date: new Date(this.adustments.weekend_date),
+        before_adjustment_value: parseFloat(this.adustments.old_value),
+        new_adjusted_value: parseFloat(this.adustments.new_value),
+        status: "Pending",
+      });
+      this.disbleAdjustment = true;
+      res.manualAjustment.status == "Pending"
+        ? this.notifyVue("top", "right")
+        : "";
+      if (res.manualAjustment.status == "Punding") {
+        this.showManualAdj = false;
+        this.changeMABtnText = false;
+      } else {
+        this.disbleAdjustment = false;
+      }
     },
     async appliedFilters() {
       const regularFilters = {
