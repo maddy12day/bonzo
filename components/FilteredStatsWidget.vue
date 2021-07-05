@@ -373,7 +373,6 @@ export default {
       this.currentYQTab = duration;
     },
     async getFilteredStatsWidgetData(regularFilters) {
-      console.log("inside");
       const filteredStatsWidgetData = await this.$axios.$post(
         "/get-filtered-stats",
         regularFilters

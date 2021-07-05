@@ -6,7 +6,9 @@
         placeholder="Product Source"
         SelectedMessValue="Product Source"
         :multiple="true"
-        @customEvent="(event) => (getProductSource(event), updateGlobalFilterData(event))"
+        @customEvent="
+          (event) => (getProductSource(event), updateGlobalFilterData(event))
+        "
       />
     </div>
     <div class="col-md-3">
@@ -15,7 +17,9 @@
         placeholder="Brand Type"
         SelectedMessValue="Brand Type"
         :multiple="true"
-        @customEvent="(event) => (getBrandType(event), updateGlobalFilterData(event))"
+        @customEvent="
+          (event) => (getBrandType(event), updateGlobalFilterData(event))
+        "
         ref="brandType"
       />
     </div>
@@ -25,7 +29,9 @@
         placeholder="Life Cycle"
         SelectedMessValue="Life Cycle"
         :multiple="true"
-        @customEvent="(event) => (getLifeCycle(event), updateGlobalFilterData(event))"
+        @customEvent="
+          (event) => (getLifeCycle(event), updateGlobalFilterData(event))
+        "
         ref="lifeCycle"
       />
     </div>
@@ -35,7 +41,9 @@
         placeholder="Newness"
         SelectedMessValue="Newness"
         :multiple="true"
-         @customEvent="(event) => (getNewness(event), updateGlobalFilterData(event))"
+        @customEvent="
+          (event) => (getNewness(event), updateGlobalFilterData(event))
+        "
         ref="newness"
       />
     </div>
@@ -45,7 +53,9 @@
         placeholder="Brands"
         SelectedMessValue="Brands"
         :multiple="true"
-        @customEvent="(event) => (getChannelsByBrand(event), updateGlobalFilterData(event))"
+        @customEvent="
+          (event) => (getChannelsByBrand(event), updateGlobalFilterData(event))
+        "
         ref="brands"
       />
     </div>
@@ -55,7 +65,9 @@
         placeholder="Channel"
         SelectedMessValue="Channels"
         :multiple="true"
-        @customEvent="(event) => (getBrandByChannel(event), updateGlobalFilterData(event))"
+        @customEvent="
+          (event) => (getBrandByChannel(event), updateGlobalFilterData(event))
+        "
         ref="channels"
       />
     </div>
@@ -65,7 +77,11 @@
         placeholder="Sub Channels"
         SelectedMessValue="Sub Channels"
         :multiple="true"
-        @customEvent="(event) => (getSelectedSubChannel(event), updateGlobalFilterData(event))"
+        @customEvent="
+          (event) => (
+            getSelectedSubChannel(event), updateGlobalFilterData(event)
+          )
+        "
         ref="subChannels"
       />
     </div>
@@ -75,7 +91,11 @@
         placeholder="Categories"
         SelectedMessValue="Categories"
         :multiple="true"
-        @customEvent="(event) => (getSelectedCategories(event), updateGlobalFilterData(event))"
+        @customEvent="
+          (event) => (
+            getSelectedCategories(event), updateGlobalFilterData(event)
+          )
+        "
         ref="categories"
       />
     </div>
@@ -85,7 +105,11 @@
         placeholder="Collections"
         SelectedMessValue="Collections"
         :multiple="true"
-        @customEvent="(event) => (getSelectedCollections(event), updateGlobalFilterData(event))"
+        @customEvent="
+          (event) => (
+            getSelectedCollections(event), updateGlobalFilterData(event)
+          )
+        "
         ref="collections"
       />
     </div>
@@ -96,7 +120,9 @@
         placeholder="SKUs"
         SelectedMessValue="SKUs"
         :multiple="true"
-        @customEvent="(event) => (getSelectedSkus(event), updateGlobalFilterData(event))"
+        @customEvent="
+          (event) => (getSelectedSkus(event), updateGlobalFilterData(event))
+        "
         ref="skus"
       />
     </div>
@@ -161,14 +187,28 @@ export default {
   },
   computed: {
     applyCtaDisabled() {
-      return this.$store.state.appliedRegularFilter.length == 0 || this.$store.state.regularFilterCTADisabled == true ? true : false;
+      return this.$store.state.appliedRegularFilter.length == 0 ||
+        this.$store.state.regularFilterCTADisabled == true
+        ? true
+        : false;
     },
   },
   methods: {
     updateGlobalFilterData() {
       let globalFilterArray = [];
-      globalFilterArray = [...this.productSourceValues, ...this.brandTypeValues,...this.newNessValues,...this.brandValues,...this.channelValues,...this.lifeCycleValues,...this.subChannelValues,...this.categoryValues,...this.collectionValues,...this.skuValues];
-      this.$store.commit("updateRegularFilter",globalFilterArray);
+      globalFilterArray = [
+        ...this.productSourceValues,
+        ...this.brandTypeValues,
+        ...this.newNessValues,
+        ...this.brandValues,
+        ...this.channelValues,
+        ...this.lifeCycleValues,
+        ...this.subChannelValues,
+        ...this.categoryValues,
+        ...this.collectionValues,
+        ...this.skuValues,
+      ];
+      this.$store.commit("updateRegularFilter", globalFilterArray);
     },
     appliedFilterHandler() {
       this.$emit("appliedFilters");

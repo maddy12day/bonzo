@@ -24,7 +24,11 @@
             </span>
           </label>
         </div>
-        <div class="btn-custom-div" v-if="applyCtaDisabled" @click="resetFilter">
+        <div
+          class="btn-custom-div"
+          v-if="applyCtaDisabled"
+          @click="resetFilter"
+        >
           <label class="btn btn-sm btn-dark btn-simple btn-custom">
             <span class="d-none d-sm-block">Reset Filters</span>
           </label>
@@ -83,6 +87,7 @@
       ref="filterWidgets"
       v-if="isFilteredForecast"
       :allAppliedFilters="allAppliedFilters"
+      :key="filteredStatsComponentKey"
     />
 
     <!-- Adjustments Table -->
@@ -284,6 +289,7 @@ export default {
       refreshWidget: false,
       allAppliedFilters: [],
       regularFiltersComponentKey: Math.random(),
+      filteredStatsComponentKey: Math.random(),
     };
   },
   methods: {
@@ -338,7 +344,6 @@ export default {
     },
     getAdjustedValues(values) {
       if (values) {
-        console.log(values);
         this.changeMABtnText = true;
         this.adustments = values;
         this.showDiscardBtn = true;
@@ -417,11 +422,11 @@ export default {
 
       this.weeklyforecast = weeklyforecast;
       this.filteredForecastMetrics = filteredForecastMetrics;
-      if (this.refreshWidget) {
-        this.$refs.filterWidgets.getFilteredStatsWidgetData(
-          this.regularFilters
-        );
-      }
+      // if (this.refreshWidget) {
+      //   this.$refs.filterWidgets.getFilteredStatsWidgetData(
+      //     this.regularFilters
+      //   );
+      // }
       this.$store.commit("toggleCTAState");
       this.refreshWidget = true;
       this.notifyVue(
@@ -508,9 +513,22 @@ export default {
       }
     },
     resetFilter() {
-      console.log("ioioio");
       this.forceRerender();
-      this.$store.commit("updateRegularFilter",[]);
+      this.isFilteredForecast = false;
+      this.$store.commit("updateRegularFilter", []);
+      this.allAppliedFilters = [];
+    },
+    resetRegularFilter() {
+      this.productSourceValues = [];
+      this.brandTypeValues = [];
+      this.lifeCycleValues = [];
+      this.newNessValues = [];
+      this.brandValues = [];
+      this.channelValues = [];
+      this.subChannelsValues = [];
+      this.categoriesValues = [];
+      this.collectionValues = [];
+      this.skuValues = [];
     },
     async appliedFilters() {
       this.notifyVue(
@@ -531,7 +549,7 @@ export default {
         filter_collections: this.collectionValues,
         filter_skus: this.skuValues,
       };
-      console.log("this.regularFilters", this.regularFilters);
+      this.resetRegularFilter();
       let requestedFilterOption = this.emptyFieldCleaner(this.regularFilters);
       this.allAppliedFilters = [];
       for (let [key, value] of Object.entries(this.regularFilters)) {
@@ -564,6 +582,7 @@ export default {
     },
     forceRerender() {
       this.regularFiltersComponentKey += 1;
+      this.filteredStatsComponentKey += 1;
     },
   },
   computed: {
@@ -601,7 +620,10 @@ export default {
       ];
     },
     applyCtaDisabled() {
-      return this.$store.state.appliedRegularFilter.length == 0 || this.$store.state.regularFilterCTADisabled == true ? false : true;
+      return this.$store.state.appliedRegularFilter.length == 0 ||
+        this.$store.state.regularFilterCTADisabled == true
+        ? false
+        : true;
     },
   },
   mounted() {
