@@ -260,6 +260,7 @@ export default {
             "right",
             "Submitted scenario to model for merging with base. Check Scenario table for updates."
           );
+          this.$emit('scenarioStatus');
       }
     },
     async shareScenario() {
