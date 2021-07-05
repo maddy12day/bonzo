@@ -2,7 +2,7 @@
   <div class="row">
     <div class="col-lg-12">
       <card card-body-classes="table-full-width">
-        <h4 slot="header" class="card-title text-bold font-weight-bold">
+        <h4 class="card-title text-bold font-weight-bold">
           {{ tableHeading }}
         </h4>
         <el-table :data="filteredForecastMetrics.parsedFilteredForecastData">

@@ -323,9 +323,11 @@ export default {
     },
     tableRowClassName({ row }) {
       console.log("row.status", row.status);
-      if (row.status === "Completed") {
+      if (row.status === "Processing") {
+        return "processing-row";
+      } else if (row.status === "Completed") {
         return "success-row";
-      } else if (row.status === "Failed") {
+      } else if (row.status === "Failed" || row.status === "Error") {
         return "warning-row";
       }
       return "other-row";
@@ -360,6 +362,10 @@ export default {
 
 .el-table .success-row {
   background: rgb(247, 255, 251);
+}
+
+.el-table .processing-row {
+  background: rgb(227, 238, 255);
 }
 
 .el-table .other-row {

@@ -370,7 +370,6 @@ export default {
   },
   methods: {
     async calloutByDuration(duration) {
-      console.log("duration--", duration);
       this.currentYQTab = duration;
     },
     async getFilteredStatsWidgetData(regularFilters) {

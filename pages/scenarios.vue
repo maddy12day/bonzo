@@ -19,9 +19,7 @@
               @click="showFilterType(option.name)"
             />
             <span class="d-none d-sm-block">{{ option.name }}</span>
-            <span class="d-block d-sm-none">
-              <i :class="option.icon"></i>
-            </span>
+            <span class="d-block d-sm-none">{{ option.name }}</span>
           </label>
         </div>
         <RegularFilters
@@ -319,7 +317,7 @@ export default {
 
     // check status after every 10 sec for user scenarios
     async checkScenarioStatus() {
-      console.log("this.callToIntervalAjaxSCom",this.callToIntervalAjaxSCom)
+      console.log("this.callToIntervalAjaxSCom", this.callToIntervalAjaxSCom);
       if (this.callToIntervalAjaxSCom) {
         const scenarioTypesJson = await this.$axios.$get(
           `/get-scenario-status/${this.$auth.user.user_id}`,
@@ -327,22 +325,24 @@ export default {
             progress: true,
           }
         );
-        if(scenarioTypesJson) {
-        if (
-          scenarioTypesJson && ["Completed", "Failed"].includes(scenarioTypesJson.scenario.status)
-        ) {
-          this.callToIntervalAjax = false;
-          this.disabledScenarioBtn = false;
-          this.sharedScenariosList.scenarios[0].status =
-            scenarioTypesJson.scenario.status;
-            
-        } else {
-          this.callToIntervalAjax = true;
-          this.disabledScenarioBtn = true;
-          this.sharedScenariosList.scenarios[0].status =
-            scenarioTypesJson.scenario.status;
+        if (scenarioTypesJson) {
+          if (
+            scenarioTypesJson &&
+            ["Completed", "Failed", "Error"].includes(
+              scenarioTypesJson.scenario.status
+            )
+          ) {
+            this.callToIntervalAjax = false;
+            this.disabledScenarioBtn = false;
+            this.sharedScenariosList.scenarios[0].status =
+              scenarioTypesJson.scenario.status;
+          } else {
+            this.callToIntervalAjax = true;
+            this.disabledScenarioBtn = true;
+            this.sharedScenariosList.scenarios[0].status =
+              scenarioTypesJson.scenario.status;
+          }
         }
-      }
       }
     },
   },
@@ -355,7 +355,7 @@ export default {
     }, 10000);
   },
   computed: {
-     disbledCom() {
+    disbledCom() {
       return this.disabledScenarioBtn;
     },
     callToIntervalAjaxSCom() {
@@ -370,9 +370,10 @@ export default {
     },
     filtersType() {
       return [
-        { name: "Regular", icon: "tim-icons icon-single-02" },
+        { name: "Regular", acronym: "R", icon: "tim-icons icon-single-02" },
         {
           name: "Program",
+          acronym: "P",
           icon: "tim-icons icon-gift-2",
         },
       ];
