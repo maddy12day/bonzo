@@ -2,7 +2,8 @@ export const state = () => ({
   regularFilterCTADisabled: false,
   hideRegularFilterResetCTA: true,
   programFilterCTADisabled: false,
-  appliedRegularFilter: []
+  appliedRegularFilter: [],
+  isDataLoading: false,
 });
 
 export const mutations = {
@@ -17,5 +18,8 @@ export const mutations = {
   },
   updateRegularFilter(state, payload) {
     state.appliedRegularFilter = payload
+  },
+  updateLoadingstate(state, payload) {
+    state.isDataLoading = payload
   }
 };

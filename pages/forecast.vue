@@ -26,7 +26,16 @@
         </div>
         <div
           class="btn-custom-div"
-          v-if="applyCtaDisabled"
+          v-if="showRegularResetFilter && activeFilterType == 'Regular'"
+          @click="resetFilter"
+        >
+          <label class="btn btn-sm btn-dark btn-simple btn-custom">
+            <span class="d-none d-sm-block">Reset Filters</span>
+          </label>
+        </div>
+        <div
+          class="btn-custom-div"
+          v-if="showProgramResetFilter && activeFilterType == 'Program'"
           @click="resetFilter"
         >
           <label class="btn btn-sm btn-dark btn-simple btn-custom">
@@ -416,6 +425,7 @@ export default {
       requestedFilterOption["filterType"] = "week";
       this.filterMonthly = false;
       this.filterWeekly = true;
+      this.$store.commit("updateLoadingstate", true);
       const [weeklyforecast, filteredForecastMetrics] = await Promise.all([
         this.$axios.$post(`/get-filtered-forecast-data`, this.regularFilters),
         this.$axios.$post(
@@ -433,6 +443,7 @@ export default {
       // }
       this.$store.commit("toggleCTAState");
       this.$store.commit("toggleProgramFilterCTAState");
+      this.$store.commit("updateLoadingstate", false);
 
       this.refreshWidget = true;
       this.notifyVue(
@@ -632,11 +643,18 @@ export default {
         },
       ];
     },
-    applyCtaDisabled() {
-      return this.$store.state.appliedRegularFilter.length == 0 ||
-        this.$store.state.regularFilterCTADisabled == true
-        ? false
-        : true;
+    showRegularResetFilter() {
+      return this.$store.state.appliedRegularFilter.length > 0 &&
+        !this.$store.state.isDataLoading
+        ? true
+        : false;
+    },
+    showProgramResetFilter() {
+      console.log("---", this.$store.state.isDataLoading);
+      return this.$store.state.appliedRegularFilter.length > 0 &&
+        !this.$store.state.isDataLoading
+        ? true
+        : false;
     },
   },
   mounted() {

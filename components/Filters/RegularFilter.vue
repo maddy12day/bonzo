@@ -131,7 +131,7 @@
         class="btn btn-sm btn-primary btn-block applyFilterBtn"
         style="line-height: 28px"
         @click="appliedFilterHandler"
-        :disabled="applyCtaDisabled"
+        :disabled="!applyCtaDisabled"
       >
         Apply Filter
       </button>
@@ -187,8 +187,8 @@ export default {
   },
   computed: {
     applyCtaDisabled() {
-      return this.$store.state.appliedRegularFilter.length == 0 ||
-        this.$store.state.regularFilterCTADisabled == true
+      return this.$store.state.appliedRegularFilter.length > 0 &&
+        !this.$store.state.isDataLoading
         ? true
         : false;
     },
