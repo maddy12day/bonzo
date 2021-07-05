@@ -2,31 +2,37 @@
   <div>
     <!-- Filters component (Vishal) -->
     <card card-body-classes="table-full-width">
-      <div class="btn-group btn-group-toggle p-0 mb-2" data-toggle="buttons">
-        <label
-          v-for="(option, index) in filtersType"
-          :key="option.name"
-          class="btn btn-sm btn-primary btn-simple"
-          :id="index"
-          :class="{ active: activeFilterType == option.name }"
-        >
-          <input
-            type="radio"
-            name="options"
-            autocomplete="off"
-            checked=""
-            @click="showFilterType(option.name)"
-          />
-          <span class="d-none d-sm-block">{{ option.name }}</span>
-          <span class="d-block d-sm-none">
-            <i :class="option.icon"></i>
-          </span>
-        </label>
+      <div class="forecast-filter-buttons">
+        <div class="btn-group btn-group-toggle p-0 mb-2" data-toggle="buttons">
+          <label
+            v-for="(option, index) in filtersType"
+            :key="option.name"
+            class="btn btn-sm btn-primary btn-simple"
+            :id="index"
+            :class="{ active: activeFilterType == option.name }"
+          >
+            <input
+              type="radio"
+              name="options"
+              autocomplete="off"
+              checked=""
+              @click="showFilterType(option.name)"
+            />
+            <span class="d-none d-sm-block">{{ option.name }}</span>
+            <span class="d-block d-sm-none">{{ option.name }}</span>
+          </label>
+        </div>
+        <div class="btn-custom-div">
+          <label class="btn btn-sm btn-dark btn-simple btn-custom">
+            <span class="d-none d-sm-block">Reset Filters</span>
+          </label>
+        </div>
       </div>
       <RegularFilters
         :showAplyFilterBtn="true"
         v-if="activeFilterType == 'Regular'"
         @appliedFilters="appliedFilters"
+        @resetFilter="resetFilter"
         @getBroductSource="getProductSource"
         @getBrandType="getBrandType"
         @getLifyClycle="getLifeCycle"
@@ -37,10 +43,13 @@
         @getCollectionValus="getCollectionValues"
         @getSkusValues="getSkusValues"
         @getCategories="getCategoryValues"
+        ref="regularFilter"
+        :key="regularFiltersComponentKey"
       />
       <ProgramFilters
         :showAplyFilterBtn="true"
         v-if="activeFilterType == 'Program'"
+        @resetFilter="resetFilter"
         @getBroductSource="getProductSource"
         @getBrandType="getBrandType"
         @getLifyClycle="getLifeCycle"
@@ -54,7 +63,16 @@
         @getSubClass="getSubClassValues"
         @getCollection="getCollectionValues"
         @getSkusValues="getSkusValues"
+        ref="programFilter"
       />
+
+      <div class="applied-filter-container" v-if="allAppliedFilters.length > 0">
+        <br />
+        <h4 class="text-bold font-weight-bold">
+          Applied Filters
+        </h4>
+        <Tags :allAppliedFilters="allAppliedFilters" />
+      </div>
     </card>
     <!-- Applied filters pills (Vishal) -->
 
@@ -64,6 +82,7 @@
       :filteredRequestBody="regularFilters"
       ref="filterWidgets"
       v-if="isFilteredForecast"
+      :allAppliedFilters="allAppliedFilters"
     />
 
     <!-- Adjustments Table -->
@@ -95,9 +114,7 @@
               @click="showMetricsByDuration(option.name)"
             />
             <span class="d-none d-sm-block">{{ option.name }}</span>
-            <span class="d-block d-sm-none">
-              <i :class="option.icon"></i>
-            </span>
+            <span class="d-block d-sm-none">{{ option.name }}</span>
           </label>
         </div>
       </div>
@@ -110,18 +127,18 @@
       <WeeklyMetricsTable
         v-if="activeTab == 'Weekly' && !showManualAdj"
         :metricsTableData="baseMetricsList"
-        tableHeading="Weekly Forecast Metrics"
+        tableHeading="Base Weekly Forecast Metrics"
       />
       <MonthlyMetricsTable
         v-if="activeTab == 'Monthly'"
         :metricsTableData="baseMetricsList"
-        tableHeading="Monthly Forecast Metrics"
+        tableHeading="Base Monthly Forecast Metrics"
       />
       <div class="col-md-12 text-right">
         <button
-          :class="
-            `btn btn-primary btn-sm text-left ${disbledCom || showManualAdj ? 'disabled' : ''}`
-          "
+          :class="`btn btn-primary btn-sm text-left ${
+            disbledCom || showManualAdj ? 'disabled' : ''
+          }`"
           @click="switchToManualAdj"
           :disabled="disbledCom || showManualAdj"
           v-if="!changeMABtnText && activeTab == 'Weekly'"
@@ -129,9 +146,9 @@
           Manual Ajustment
         </button>
         <button
-          :class="
-            `btn btn-primary btn-sm text-left ${disbledCom ? 'disabled' : ''}`
-          "
+          :class="`btn btn-primary btn-sm text-left ${
+            disbledCom ? 'disabled' : ''
+          }`"
           @click="createManualAdjustment"
           v-if="changeMABtnText"
           :disabled="disbledCom"
@@ -168,9 +185,7 @@
                 @click="showFilteredMetricsByDuration(option.name)"
               />
               <span class="d-none d-sm-block">{{ option.name }}</span>
-              <span class="d-block d-sm-none">
-                <i :class="option.icon"></i>
-              </span>
+              <span class="d-block d-sm-none">{{ option.acronym }}</span>
             </label>
           </div>
         </div>
@@ -220,6 +235,7 @@ import FilteredMonthlyMetricsTable from "../components/Metrics/FilteredMonthlyMe
 import FilteredWeeklyMetricsTable from "../components/Metrics/FilteredWeeklyMetricsTable.vue";
 import FilteredStatsWidget from "../components/FilteredStatsWidget.vue";
 import ManualAdjustmentTable from "../components/Metrics/ManualAdjustmentTable.vue";
+import Tags from "../components/Tags.vue";
 
 export default {
   name: "Forecast",
@@ -236,6 +252,7 @@ export default {
     FilteredWeeklyMetricsTable,
     FilteredMonthlyMetricsTable,
     FilteredStatsWidget,
+    Tags,
   },
 
   data() {
@@ -260,6 +277,8 @@ export default {
       filteredStatsWidgetData: {},
       showDiscardBtn: false,
       refreshWidget: false,
+      allAppliedFilters: [],
+      regularFiltersComponentKey: Math.random(),
     };
   },
   methods: {
@@ -397,6 +416,7 @@ export default {
           this.regularFilters
         );
       }
+      this.$store.commit("toggleCTAState");
       this.refreshWidget = true;
       this.notifyVue(
         "top",
@@ -443,7 +463,11 @@ export default {
       });
       this.baseAdjustmentsList.adjustments.unshift(res.manualAjustment);
       res.manualAjustment.status == "Pending"
-        ? this.notifyVue("top", "right", '"Adjustment" submitted for processing with model. Please check "Base Model Adjustments" section for updates')
+        ? this.notifyVue(
+            "top",
+            "right",
+            '"Adjustment" submitted for processing with model. Please check "Base Model Adjustments" section for updates'
+          )
         : "";
       this.showDiscardBtn = false;
       this.showManualAdj = false;
@@ -485,7 +509,10 @@ export default {
         }
       }
     },
-
+    resetFilter() {
+      console.log("ioioio");
+      this.forceRerender();
+    },
     async appliedFilters() {
       this.notifyVue(
         "top",
@@ -506,6 +533,12 @@ export default {
         filter_skus: this.skuValues,
       };
       let requestedFilterOption = this.emptyFieldCleaner(this.regularFilters);
+      this.allAppliedFilters = [];
+      for (let [key, value] of Object.entries(this.regularFilters)) {
+        this.allAppliedFilters.push(
+          key.replace("filter_", "").replace("_", " ") + ": " + value.join(", ")
+        );
+      }
       await this.getFilteredForecastData(requestedFilterOption);
       this.isFilteredForecast = true;
       this.filteredActiveTab = "Weekly";
@@ -529,6 +562,9 @@ export default {
         }
       );
     },
+    forceRerender() {
+      this.regularFiltersComponentKey += 1;
+    },
   },
   computed: {
     callToIntervalAjaxCom() {
@@ -542,27 +578,30 @@ export default {
     },
     Durations() {
       return [
-        { name: "Monthly", icon: "tim-icons icon-single-02" },
+        { name: "Monthly", acronym: "M", icon: "tim-icons icon-single-02" },
         {
           name: "Weekly",
+          acronym: "W",
           icon: "tim-icons icon-gift-2",
         },
       ];
     },
     FilteredDurations() {
       return [
-        { name: "Monthly", icon: "tim-icons icon-single-02" },
+        { name: "Monthly", acronym: "M", icon: "tim-icons icon-single-02" },
         {
           name: "Weekly",
+          acronym: "W",
           icon: "tim-icons icon-gift-2",
         },
       ];
     },
     filtersType() {
       return [
-        { name: "Regular", icon: "tim-icons icon-single-02" },
+        { name: "Regular", acronym: "R", icon: "tim-icons icon-single-02" },
         {
           name: "Program",
+          acronym: "P",
           icon: "tim-icons icon-gift-2",
         },
       ];
@@ -582,6 +621,23 @@ export default {
 .card-body {
   h4 {
     margin: 0;
+  }
+
+  .forecast-filter-buttons {
+    display: flex;
+
+    .btn-custom-div {
+      position: absolute;
+      right: 0;
+      padding: 0 15px;
+    }
+  }
+
+  .applied-filter-container {
+    text-transform: capitalize;
+    h4 {
+      margin-bottom: 4px;
+    }
   }
 }
 </style>

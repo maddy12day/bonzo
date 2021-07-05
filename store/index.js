@@ -1,9 +1,9 @@
-// export const state = () => ({
-//   counter: 0,
-// });
+export const state = () => ({
+  regularFilterCTADisabled: false,
+});
 
-// export const mutations = {
-//   increment(state) {
-//     state.counter++;
-//   },
-// };
+export const mutations = {
+  toggleCTAState(state) {
+    state.regularFilterCTADisabled = !state.regularFilterCTADisabled;
+  },
+};

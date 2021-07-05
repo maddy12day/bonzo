@@ -18,9 +18,7 @@
               @click="calloutByDuration(option.name)"
             />
             <span class="d-none d-sm-block">{{ option.name }}</span>
-            <span class="d-block d-sm-none">
-              <i :class="option.icon"></i>
-            </span>
+            <span class="d-block d-sm-none">{{ option.acronym }}</span>
           </label>
         </div>
       </div>
@@ -288,11 +286,11 @@ export default {
   computed: {
     yearlyQuarterlyTabs() {
       return [
-        { name: "Yearly", icon: "tim-icons icon-planet" },
-        { name: "Q1", icon: "tim-icons icon-bullet-list-67" },
-        { name: "Q2", icon: "tim-icons icon-bullet-list-67" },
-        { name: "Q3", icon: "tim-icons icon-bullet-list-67" },
-        { name: "Q4", icon: "tim-icons icon-bullet-list-67" },
+        { name: "Yearly", acronym: "Y", icon: "tim-icons icon-planet" },
+        { name: "Q1", acronym: "Q1", icon: "tim-icons icon-bullet-list-67" },
+        { name: "Q2", acronym: "Q2", icon: "tim-icons icon-bullet-list-67" },
+        { name: "Q3", acronym: "Q3", icon: "tim-icons icon-bullet-list-67" },
+        { name: "Q4", acronym: "Q4", icon: "tim-icons icon-bullet-list-67" },
       ];
     },
   },

@@ -126,7 +126,9 @@ export default {
   },
   computed: {
     tableData() {
-      return this.adjustmentTableData && this.adjustmentTableData.length > 0 ? this.adjustmentTableData : [];
+      return this.adjustmentTableData && this.adjustmentTableData.length > 0
+        ? this.adjustmentTableData
+        : [];
     },
     pagedTableData() {
       return this.tableData.slice(
@@ -144,9 +146,11 @@ export default {
     },
     tableRowClassName({ row }) {
       console.log("row.status", row.status);
-      if (row.status === "Completed") {
+      if (row.status === "Processing") {
+        return "processing-row";
+      } else if (row.status === "Completed") {
         return "success-row";
-      } else if (row.status === "Failed") {
+      } else if (row.status === "Failed" || row.status === "Error") {
         return "warning-row";
       }
       return "other-row";
@@ -157,6 +161,10 @@ export default {
 <style lang="scss">
 .el-table .warning-row {
   background: rgb(255, 244, 243);
+}
+
+.el-table .processing-row {
+  background: rgb(227, 238, 255);
 }
 
 .el-table .success-row {

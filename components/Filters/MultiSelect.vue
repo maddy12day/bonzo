@@ -35,6 +35,7 @@ export default {
   methods: {
     getDropdownValue() {
       this.$emit("customEvent", this.values);
+      console.log("this.values", this.values);
     },
   },
 };

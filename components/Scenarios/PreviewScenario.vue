@@ -1,9 +1,9 @@
 <template>
   <div class="row">
-    <el-dialog :visible.sync="showDialog" width="90%">
-      <span slot="title"
-        ><i class="el-icon-info"></i>Scenario Forecast Preview</span
-      >
+    <el-dialog :visible.sync="showDialog" width="80%">
+      <h3 slot="title" class="mb-0">
+        <i class="el-icon-info"></i>&nbsp;Scenario Preview
+      </h3>
       <card
         card-body-classes="table-full-width"
         v-if="scenarioSalesSummary.result.length > 0"
@@ -139,7 +139,7 @@
         card-body-classes="table-full-width"
         v-if="
           scenarioUnitSalesComparison.parsedData &&
-            scenarioUnitSalesComparison.parsedData.Units.length > 0
+          scenarioUnitSalesComparison.parsedData.Units.length > 0
         "
       >
         <h4 slot="header" class="card-title text-bold font-weight-bold">
@@ -182,7 +182,7 @@
         card-body-classes="table-full-width"
         v-if="
           scenarioUnitSalesComparison.parsedData &&
-            scenarioUnitSalesComparison.parsedData.Revenue.length > 0
+          scenarioUnitSalesComparison.parsedData.Revenue.length > 0
         "
       >
         <h4 slot="header" class="card-title text-bold font-weight-bold">
@@ -225,7 +225,7 @@
         card-body-classes="table-full-width"
         v-if="
           scenarioCategorySalesComparison.result &&
-            scenarioCategorySalesComparison.result.length > 0
+          scenarioCategorySalesComparison.result.length > 0
         "
       >
         <h4 slot="header" class="card-title text-bold font-weight-bold">
@@ -342,7 +342,7 @@
         card-body-classes="table-full-width"
         v-if="
           scenarioUnitSalesComparison.parsedData &&
-            scenarioUnitSalesComparison.parsedData.Units.length > 0
+          scenarioUnitSalesComparison.parsedData.Units.length > 0
         "
       >
         <h4 slot="header" class="card-title text-bold font-weight-bold">
@@ -389,7 +389,7 @@
         card-body-classes="table-full-width"
         v-if="
           scenarioUnitSalesComparison.parsedData &&
-            scenarioUnitSalesComparison.parsedData.Revenue.length > 0
+          scenarioUnitSalesComparison.parsedData.Revenue.length > 0
         "
       >
         <h4 slot="header" class="card-title text-bold font-weight-bold">
@@ -432,8 +432,8 @@
       </card>
 
       <span slot="footer" class="dialog-footer">
-        <div class="text-right ">
-          <button class="btn btn-primary " @click="showDialog = false">
+        <div class="text-right">
+          <button class="btn btn-primary" @click="showDialog = false">
             Close
           </button>
         </div>
@@ -465,7 +465,7 @@ export default {
   },
   computed: {},
   watch: {
-    showDialog: function() {
+    showDialog: function () {
       if (!this.showDialog) {
         this.$emit("dialogVisible", false);
       }

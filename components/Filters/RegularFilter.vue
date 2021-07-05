@@ -79,7 +79,7 @@
         ref="categories"
       />
     </div>
-    <div class="col-md-4 mt-2">
+    <div class="col-md-3 mt-2">
       <CustomMultiSelect
         :Options="collectionsOptions"
         placeholder="Collections"
@@ -100,14 +100,23 @@
         ref="skus"
       />
     </div>
-    <div class="col-md-2 mt-1" v-if="showAplyFilterBtn">
+    <div class="col-md-3 mt-1 button-div" v-if="showAplyFilterBtn">
       <button
         class="btn btn-sm btn-primary btn-block applyFilterBtn"
         style="line-height: 28px"
         @click="appliedFilterHandler"
+        :disabled="applyCtaDisabled"
       >
-        Apply Filters
+        Apply Filter
       </button>
+      <!-- <button
+        class="btn btn-sm btn-dark btn-block applyFilterBtn"
+        style="line-height: 28px"
+        @click="resetFilterHandler"
+        :disabled="applyCtaDisabled"
+      >
+        Reset Filters
+      </button> -->
     </div>
   </div>
 </template>
@@ -150,11 +159,24 @@ export default {
       skuValues: [],
     };
   },
+  computed: {
+    applyCtaDisabled() {
+      return this.$store.state.regularFilterCTADisabled;
+    },
+  },
   methods: {
+    test() {
+      console.log("clled");
+    },
     appliedFilterHandler() {
       this.$emit("appliedFilters");
+      this.$store.commit("toggleCTAState");
+    },
+    resetFilterHandler() {
+      this.$emit("resetFilter");
     },
     getProductSource(value) {
+      console.log("clled");
       const optionGenerator = (data, keyName) => {
         return [
           { name: keyName },
@@ -1675,5 +1697,9 @@ export default {
 .applyFilterBtn {
   height: 43px;
   margin-top: 4px;
+}
+
+.button-div {
+  display: flex;
 }
 </style>

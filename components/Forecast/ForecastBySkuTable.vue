@@ -1,6 +1,6 @@
 <template>
   <card card-body-classes="table-full-width">
-    <h4 slot="header" class="card-title text-bold font-weight-bold">
+    <h4 class="card-title text-bold font-weight-bold">
       {{ tableHeading }}
     </h4>
     <el-table :data="weeklyforecast.parsedWeeklyData">
@@ -301,11 +301,8 @@ export default {
   computed: {},
   methods: {
     async getFilteredForecastData() {
-      const data = await this.$axios.$get(`/get-filtered-forecast-data`, {
-        progress: true,
-      });
+      const data = await this.$axios.$get(`/get-filtered-forecast-data`);
       this.forecastData = data;
-      // this.loadFilteredData = true;
     },
   },
 };
