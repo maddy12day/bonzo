@@ -35,6 +35,7 @@
           >
             <template slot-scope="scope">
               <el-input
+                type="number"
                 v-if="
                   weekNo() < 1 &&
                     !isDisble &&
@@ -63,6 +64,7 @@
           >
             <template slot-scope="scope">
               <el-input
+                type="number"
                 v-if="
                   weekNo() < 2 &&
                     !isDisble &&
@@ -91,6 +93,7 @@
           >
             <template slot-scope="scope">
               <el-input
+                type="number"
                 v-if="
                   weekNo() < 3 &&
                     !isDisble &&
@@ -119,6 +122,7 @@
           >
             <template slot-scope="scope">
               <el-input
+                type="number"
                 v-if="
                   weekNo() < 4 &&
                     !isDisble &&
@@ -147,6 +151,7 @@
           >
             <template slot-scope="scope">
               <el-input
+                type="number"
                 v-if="
                   weekNo() < 5 &&
                     !isDisble &&
@@ -175,6 +180,7 @@
           >
             <template slot-scope="scope">
               <el-input
+                type="number"
                 v-if="
                   weekNo() < 6 &&
                     !isDisble &&
@@ -203,6 +209,7 @@
           >
             <template slot-scope="scope">
               <el-input
+                type="number"
                 v-if="
                   weekNo() < 7 &&
                     !isDisble &&
@@ -231,6 +238,7 @@
           >
             <template slot-scope="scope">
               <el-input
+                type="number"
                 v-if="
                   weekNo() < 8 &&
                     !isDisble &&
@@ -259,6 +267,7 @@
           >
             <template slot-scope="scope">
               <el-input
+                type="number"
                 v-if="
                   weekNo() < 9 &&
                     !isDisble &&
@@ -286,6 +295,7 @@
           >
             <template slot-scope="scope">
               <el-input
+                type="number"
                 v-if="
                   weekNo() < 10 &&
                     !isDisble &&
@@ -314,6 +324,7 @@
           >
             <template slot-scope="scope">
               <el-input
+                type="number"
                 v-if="
                   weekNo() < 11 &&
                     !isDisble &&
@@ -342,6 +353,7 @@
           >
             <template slot-scope="scope">
               <el-input
+                type="number"
                 v-if="
                   weekNo() < 12 &&
                     !isDisble &&
@@ -370,6 +382,7 @@
           >
             <template slot-scope="scope">
               <el-input
+                type="number"
                 v-if="
                   weekNo() < 13 &&
                     !isDisble &&
@@ -398,6 +411,7 @@
           >
             <template slot-scope="scope">
               <el-input
+                type="number"
                 v-if="
                   weekNo() < 14 &&
                     !isDisble &&
@@ -426,6 +440,7 @@
           >
             <template slot-scope="scope">
               <el-input
+                type="number"
                 v-if="
                   weekNo() < 15 &&
                     !isDisble &&
@@ -454,6 +469,7 @@
           >
             <template slot-scope="scope">
               <el-input
+                type="number"
                 v-if="
                   weekNo() < 16 &&
                     !isDisble &&
@@ -482,6 +498,7 @@
           >
             <template slot-scope="scope">
               <el-input
+                type="number"
                 v-if="
                   weekNo() < 17 &&
                     !isDisble &&
@@ -510,6 +527,7 @@
           >
             <template slot-scope="scope">
               <el-input
+                type="number"
                 v-if="
                   weekNo() < 18 &&
                     !isDisble &&
@@ -538,6 +556,7 @@
           >
             <template slot-scope="scope">
               <el-input
+                type="number"
                 v-if="
                   weekNo() < 19 &&
                     !isDisble &&
@@ -566,6 +585,7 @@
           >
             <template slot-scope="scope">
               <el-input
+                type="number"
                 v-if="
                   weekNo() < 20 &&
                     !isDisble &&
@@ -594,6 +614,7 @@
           >
             <template slot-scope="scope">
               <el-input
+                type="number"
                 v-if="
                   weekNo() < 21 &&
                     !isDisble &&
@@ -622,6 +643,7 @@
           >
             <template slot-scope="scope">
               <el-input
+                type="number"
                 v-if="
                   weekNo() < 22 &&
                     !isDisble &&
@@ -650,6 +672,7 @@
           >
             <template slot-scope="scope">
               <el-input
+                type="number"
                 v-if="
                   weekNo() < 23 &&
                     !isDisble &&
@@ -678,6 +701,7 @@
           >
             <template slot-scope="scope">
               <el-input
+                type="number"
                 v-if="
                   weekNo() < 24 &&
                     !isDisble &&
@@ -706,6 +730,7 @@
           >
             <template slot-scope="scope">
               <el-input
+                type="number"
                 v-if="
                   weekNo() < 25 &&
                     !isDisble &&
@@ -734,6 +759,7 @@
           >
             <template slot-scope="scope">
               <el-input
+                type="number"
                 v-if="
                   weekNo() < 26 &&
                     !isDisble &&
@@ -762,6 +788,7 @@
           >
             <template slot-scope="scope">
               <el-input
+                type="number"
                 v-if="
                   weekNo() < 27 &&
                     !isDisble &&
@@ -790,6 +817,7 @@
           >
             <template slot-scope="scope">
               <el-input
+                type="number"
                 v-if="
                   weekNo() < 28 &&
                     !isDisble &&
@@ -818,6 +846,7 @@
           >
             <template slot-scope="scope">
               <el-input
+                type="number"
                 v-if="
                   weekNo() < 29 &&
                     !isDisble &&
@@ -846,6 +875,7 @@
           >
             <template slot-scope="scope">
               <el-input
+                type="number"
                 v-if="
                   weekNo() < 30 &&
                     !isDisble &&
@@ -874,6 +904,7 @@
           >
             <template slot-scope="scope">
               <el-input
+                type="number"
                 v-if="
                   weekNo() < 31 &&
                     !isDisble &&
@@ -930,6 +961,7 @@
           >
             <template slot-scope="scope">
               <el-input
+                type="number"
                 v-if="
                   weekNo() < 33 &&
                     !isDisble &&
@@ -958,6 +990,7 @@
           >
             <template slot-scope="scope">
               <el-input
+                type="number"
                 v-if="
                   weekNo() < 34 &&
                     !isDisble &&
@@ -986,6 +1019,7 @@
           >
             <template slot-scope="scope">
               <el-input
+                type="number"
                 v-if="
                   weekNo() < 35 &&
                     !isDisble &&
@@ -1014,6 +1048,7 @@
           >
             <template slot-scope="scope">
               <el-input
+                type="number"
                 v-if="
                   weekNo() < 36 &&
                     !isDisble &&
@@ -1042,6 +1077,7 @@
           >
             <template slot-scope="scope">
               <el-input
+                type="number"
                 v-if="
                   weekNo() < 37 &&
                     !isDisble &&
@@ -1070,6 +1106,7 @@
           >
             <template slot-scope="scope">
               <el-input
+                type="number"
                 v-if="
                   weekNo() < 38 &&
                     !isDisble &&
@@ -1098,6 +1135,7 @@
           >
             <template slot-scope="scope">
               <el-input
+                type="number"
                 v-if="
                   weekNo() < 39 &&
                     !isDisble &&
@@ -1126,6 +1164,7 @@
           >
             <template slot-scope="scope">
               <el-input
+                type="number"
                 v-if="
                   weekNo() < 40 &&
                     !isDisble &&
@@ -1154,6 +1193,7 @@
           >
             <template slot-scope="scope">
               <el-input
+                type="number"
                 v-if="
                   weekNo() < 41 &&
                     !isDisble &&
@@ -1182,6 +1222,7 @@
           >
             <template slot-scope="scope">
               <el-input
+                type="number"
                 v-if="
                   weekNo() < 42 &&
                     !isDisble &&
@@ -1210,6 +1251,7 @@
           >
             <template slot-scope="scope">
               <el-input
+                type="number"
                 v-if="
                   weekNo() < 43 &&
                     !isDisble &&
@@ -1238,6 +1280,7 @@
           >
             <template slot-scope="scope">
               <el-input
+                type="number"
                 v-if="
                   weekNo() < 44 &&
                     !isDisble &&
@@ -1266,6 +1309,7 @@
           >
             <template slot-scope="scope">
               <el-input
+                type="number"
                 v-if="
                   weekNo() < 45 &&
                     !isDisble &&
@@ -1294,6 +1338,7 @@
           >
             <template slot-scope="scope">
               <el-input
+                type="number"
                 v-if="
                   weekNo() < 46 &&
                     !isDisble &&
@@ -1322,6 +1367,7 @@
           >
             <template slot-scope="scope">
               <el-input
+                type="number"
                 v-if="
                   weekNo() < 47 &&
                     !isDisble &&
@@ -1350,6 +1396,7 @@
           >
             <template slot-scope="scope">
               <el-input
+                type="number"
                 v-if="
                   weekNo() < 48 &&
                     !isDisble &&
@@ -1378,6 +1425,7 @@
           >
             <template slot-scope="scope">
               <el-input
+                type="number"
                 v-if="
                   weekNo() < 49 &&
                     !isDisble &&
@@ -1406,6 +1454,7 @@
           >
             <template slot-scope="scope">
               <el-input
+                type="number"
                 v-if="
                   weekNo() < 50 &&
                     !isDisble &&
@@ -1434,6 +1483,7 @@
           >
             <template slot-scope="scope">
               <el-input
+                type="number"
                 v-if="
                   weekNo() < 51 &&
                     !isDisble &&
@@ -1462,6 +1512,7 @@
           >
             <template slot-scope="scope">
               <el-input
+                type="number"
                 v-if="
                   weekNo() < 52 &&
                     !isDisble &&
