@@ -65,45 +65,55 @@ const whereQueryString = (obj, alias = "fseisbw") => {
 };
 
 export const getFilteredForecastData = async (req, res) => {
+  let transaction_db = "morphe_staging";
   delete req.body.filterType;
   try {
-    const filteredForecastData = await prisma.$queryRaw(`WITH iskus AS (
-      select
-        distinct idfbwm.sku
-      from
-        morphe_staging.demand_forecast_base_weekly_metrics idfbwm,
-        morphe_staging.dim_products idp
-      where
-        idfbwm.sku = idp.SKU
-          AND ${whereQueryString(req.body, "idfbwm").replace(/dp/g, "idp")}
-        order by
-          idfbwm.units_sales desc
-        limit 10)
-        SELECT
-          dfbwm.sku as sku,
-          dp.title as title,
-          dfbwm.weekend as weekend,
-          ROUND(SUM(dfbwm.retail_sales), 0) AS retail_sales,
-          SUM(dfbwm.units_sales) AS units_sales,
-          ROUND((SUM(dfbwm.retail_sales) / SUM(dfbwm.units_sales)), 2) AS aur
-        FROM
-          morphe_staging.demand_forecast_base_weekly_metrics dfbwm,
-          morphe_staging.dim_products dp
-        WHERE
-          demand_forecast_run_log_id = 1
-          AND dfbwm.sku IN (
-          select
-            sku
-          from
-            iskus)
-          AND dfbwm.sku = dp.SKU
-          AND ${whereQueryString(req.body, "dfbwm")}
-        GROUP BY
-          dfbwm.sku,
-          dfbwm.weekend
-        ORDER BY
-          dfbwm.sku,
-          dfbwm.weekend;`);
+    let query = `
+                WITH iskus AS (
+                  select
+                    idfbwm.sku as sku,
+                    sum(idfbwm.units_sales) as unit_sales
+                  from
+                    ${transaction_db}.demand_forecast_base_weekly_metrics idfbwm
+                  where
+                    idfbwm.demand_forecast_run_log_id = (select id from ${transaction_db}.demand_forecast_run_log dfrl where is_base_forecast = true limit 1)
+                    and idfbwm.sku in (
+                      select
+                        idp.SKU
+                      from
+                        ${transaction_db}.dim_products idp
+                      where
+                        ${whereQueryString(req.body, "idfbwm").replace(/dp/g, "idp")})
+                  group by 1
+                  order by 2 desc
+                  limit 10)
+                SELECT
+                  dfbwm.sku AS sku,
+                  dp.title AS title,
+                  dfbwm.weekend AS weekend,
+                  ROUND(SUM(dfbwm.retail_sales), 0) AS retail_sales,
+                  SUM(dfbwm.units_sales) AS units_sales,
+                  ROUND((SUM(dfbwm.retail_sales) / SUM(dfbwm.units_sales)), 2) AS aur
+                FROM
+                  ${transaction_db}.demand_forecast_base_weekly_metrics dfbwm,
+                  ${transaction_db}.dim_products dp
+                WHERE
+                  demand_forecast_run_log_id = (select id from ${transaction_db}.demand_forecast_run_log dfrl where is_base_forecast = true limit 1)
+                  AND dfbwm.sku = dp.SKU
+                  AND dfbwm.sku IN (
+                    select
+                      sku
+                    from
+                      iskus)
+                GROUP BY
+                  dfbwm.sku,
+                  dfbwm.weekend
+                ORDER BY
+                  dfbwm.sku,
+                  dfbwm.weekend;`;
+
+    console.log("Top10DataQuery:::", query);
+    const filteredForecastData = await prisma.$queryRaw(query);
     let parsedWeeklyData = weeklyCommonTableDataMapping(filteredForecastData);
     res.status(200).json({
       parsedWeeklyData,
@@ -342,7 +352,6 @@ const forecastQueryGenByDuration = (duration, whereQueryString, numofYear, trans
 };
 
 // Filtered Stats getFilteredYearlyStatsData
-
 export const getFilteredYearlyStatsData = async (req, res) => {
   delete req.body.filterType;
   let filter = req.body;
