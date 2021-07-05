@@ -134,18 +134,18 @@
       </div>
       <ManualAdjustmentTable
         v-if="activeTab == 'Weekly' && showManualAdj"
-        :metricsTableData="baseMetricsList"
+        :metricsTableData="baseMetricsListCom"
         tableHeading="Edit Forecast Metrics"
         @EvtAdjValues="getAdjustedValues"
       />
       <WeeklyMetricsTable
         v-if="activeTab == 'Weekly' && !showManualAdj"
-        :metricsTableData="baseMetricsList"
+        :metricsTableData="baseMetricsListCom"
         tableHeading="Base Weekly Forecast Metrics"
       />
       <MonthlyMetricsTable
         v-if="activeTab == 'Monthly'"
-        :metricsTableData="baseMetricsList"
+        :metricsTableData="baseMetricsListCom"
         tableHeading="Base Monthly Forecast Metrics"
       />
       <div class="col-md-12 text-right">
@@ -483,6 +483,7 @@ export default {
         status: "Pending",
       });
       this.baseAdjustmentsList.adjustments.unshift(res.manualAjustment);
+      this.baseMetricsList = JSON.parse(localStorage.getItem("adjustmentTableData"))      
       res.manualAjustment.status == "Pending"
         ? this.notifyVue(
             "top",
@@ -492,6 +493,7 @@ export default {
         : "";
       this.showDiscardBtn = false;
       this.showManualAdj = false;
+      this.callToIntervalAjax = true;
       if (res.manualAjustment.status == "Punding") {
         this.showManualAdj = false;
         this.changeMABtnText = false;
@@ -611,6 +613,9 @@ export default {
     },
   },
   computed: {
+    baseMetricsListCom() {
+      return this.baseMetricsList;
+    },
     callToIntervalAjaxCom() {
       return this.callToIntervalAjax;
     },
