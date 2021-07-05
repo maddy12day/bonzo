@@ -6,7 +6,9 @@
         placeholder="Product Source"
         SelectedMessValue="Product Source"
         :multiple="true"
-        @customEvent="getProductSource"
+        @customEvent="
+          (event) => (getProductSource(event), updateGlobalFilterData(event))
+        "
       />
     </div>
     <div class="col-md-3">
@@ -15,7 +17,9 @@
         placeholder="Brand Type"
         SelectedMessValue="Brand Type"
         :multiple="true"
-        @customEvent="getBrandType"
+        @customEvent="
+          (event) => (getBrandType(event), updateGlobalFilterData(event))
+        "
         ref="brandType"
       />
     </div>
@@ -25,7 +29,9 @@
         placeholder="Life Cycle"
         SelectedMessValue="Life Cycle"
         :multiple="true"
-        @customEvent="getLifeCycle"
+        @customEvent="
+          (event) => (getLifeCycle(event), updateGlobalFilterData(event))
+        "
         ref="lifeCycle"
       />
     </div>
@@ -35,7 +41,9 @@
         placeholder="Newness"
         SelectedMessValue="Newness"
         :multiple="true"
-        @customEvent="getNewness"
+        @customEvent="
+          (event) => (getNewness(event), updateGlobalFilterData(event))
+        "
         ref="newness"
       />
     </div>
@@ -45,7 +53,9 @@
         placeholder="Brands"
         SelectedMessValue="Brands"
         :multiple="true"
-        @customEvent="getSelectedBrands"
+        @customEvent="
+          (event) => (getSelectedBrands(event), updateGlobalFilterData(event))
+        "
         ref="brands"
       />
     </div>
@@ -55,7 +65,9 @@
         placeholder="Programs"
         SelectedMessValue="Programs"
         :multiple="true"
-        @customEvent="getSelectedPrograms"
+        @customEvent="
+          (event) => (getSelectedPrograms(event), updateGlobalFilterData(event))
+        "
         ref="programs"
       />
     </div>
@@ -65,7 +77,11 @@
         placeholder="Channels"
         SelectedMessValue="Channels"
         :multiple="true"
-        @customEvent="getSelectProgramChannels"
+        @customEvent="
+          (event) => (
+            getSelectProgramChannels(event), updateGlobalFilterData(event)
+          )
+        "
         ref="channels"
       />
     </div>
@@ -75,7 +91,12 @@
         placeholder="Sub Channels"
         SelectedMessValue="Sub Channels"
         :multiple="true"
-        @customEvent="getSelectPrograChannelsSubChannels"
+        @customEvent="
+          (event) => (
+            getSelectPrograChannelsSubChannels(event),
+            updateGlobalFilterData(event)
+          )
+        "
         ref="subChannels"
       />
     </div>
@@ -85,7 +106,11 @@
         placeholder="Categories"
         SelectedMessValue="Categories"
         :multiple="true"
-        @customEvent="getSelectedCategories"
+        @customEvent="
+          (event) => (
+            getSelectedCategories(event), updateGlobalFilterData(event)
+          )
+        "
         ref="categories"
       />
     </div>
@@ -95,7 +120,9 @@
         placeholder="Classes"
         SelectedMessValue="Classes"
         :multiple="true"
-        @customEvent="getCategoryClasses"
+        @customEvent="
+          (event) => (getCategoryClasses(event), updateGlobalFilterData(event))
+        "
         ref="classes"
       />
     </div>
@@ -105,7 +132,9 @@
         placeholder="Sub Classes"
         SelectedMessValue="Sub Classes"
         :multiple="true"
-        @customEvent="classesSubClasses"
+        @customEvent="
+          (event) => (classesSubClasses(event), updateGlobalFilterData(event))
+        "
         ref="subClasses"
       />
     </div>
@@ -116,7 +145,11 @@
         placeholder="Collections"
         SelectedMessValue="Collections"
         :multiple="true"
-        @customEvent="subClaasesCollections"
+        @customEvent="
+          (event) => (
+            subClaasesCollections(event), updateGlobalFilterData(event)
+          )
+        "
         ref="collections"
       />
     </div>
@@ -126,13 +159,15 @@
         placeholder="SKUs"
         SelectedMessValue="SKUs"
         :multiple="true"
-        @customEvent="getSelectedSkus"
+        @customEvent="
+          (event) => (getSelectedSkus(event), updateGlobalFilterData(event))
+        "
         ref="skus"
       />
     </div>
     <div class="col-md-2 mt-1" v-if="showAplyFilterBtn">
       <button
-        class="btn btn-sm btn-dark btn-block applyFilterBtn"
+        class="btn btn-sm btn-primary btn-block applyFilterBtn"
         style="line-height: 28px"
         @click="getAppliedFilters"
         :disabled="applyCtaDisabled"
@@ -191,10 +226,51 @@ export default {
   },
   computed: {
     applyCtaDisabled() {
-      return this.$store.state.regularFilterCTADisabled;
+      console.log(
+        this.$store.state.appliedRegularFilter.length,
+        this.$store.state.programFilterCTADisabled
+      );
+      return this.$store.state.appliedRegularFilter.length == 0 ||
+        this.$store.state.programFilterCTADisabled == true
+        ? true
+        : false;
     },
   },
   methods: {
+    updateGlobalFilterData() {
+      let globalFilterArray = [];
+      globalFilterArray = [
+        ...this.productSourceValues,
+        ...this.brandTypeValues,
+        ...this.newnessValues,
+        ...this.brandValues,
+        ...this.channelValues,
+        ...this.lifeCycleValues,
+        ...this.subChannelValues,
+        ...this.categoriesValues,
+        ...this.collectionValues,
+        ...this.skuValues,
+        ...this.programValues,
+        ...this.subClassValues,
+        ...this.classesValues,
+      ];
+      // console.log(
+      //   // this.productSourceValues,
+      //   // this.brandTypeValues,
+      //   this.newnessValues
+      //   // this.brandValues,
+      //   // this.channelValues,
+      //   // this.lifeCycleValues,
+      //   // this.subChannelValues,
+      //   // this.categoriesValues,
+      //   // this.collectionValues,
+      //   // this.skuValues,
+      //   // this.programValues,
+      //   // this.subClassValues,
+      //   // this.classesValues
+      // );
+      this.$store.commit("updateRegularFilter", globalFilterArray);
+    },
     getProductSource(value) {
       const optionGenerator = (data, keyName) => {
         return [
@@ -970,7 +1046,7 @@ export default {
     },
     getAppliedFilters(value) {
       this.$emit("appliedFilters");
-      this.$store.commit("toggleCTAState");
+      this.$store.commit("toggleProgramFilterCTAState");
     },
     getSelectedBrands(value) {
       const optionGenerator = (data, keyName) => {
@@ -1305,7 +1381,7 @@ export default {
                   channels.push(
                     ...new Set(
                       optionGenerator(
-                        this.filterApiData.programprograms.channel[
+                        this.filterApiData.programCollabs.channel[
                           `('${psource}', '${brandType}', '${lifeC}', '${newnss}', '${brnd}', '${program}')`
                         ],
                         "All Channels"
@@ -1315,7 +1391,7 @@ export default {
                   subChannels.push(
                     ...new Set(
                       optionGenerator(
-                        this.filterApiData.programprograms.sub_channel[
+                        this.filterApiData.programCollabs.sub_channel[
                           `('${psource}', '${brandType}', '${lifeC}', '${newnss}', '${brnd}', '${program}')`
                         ],
                         "All Sub Channel"
@@ -1325,7 +1401,7 @@ export default {
                   categories.push(
                     ...new Set(
                       optionGenerator(
-                        this.filterApiData.programprograms.category[
+                        this.filterApiData.programCollabs.category[
                           `('${psource}', '${brandType}', '${lifeC}', '${newnss}', '${brnd}', '${program}')`
                         ],
                         "All Categories"
@@ -1335,7 +1411,7 @@ export default {
                   classes.push(
                     ...new Set(
                       optionGenerator(
-                        this.filterApiData.programprograms.class[
+                        this.filterApiData.programCollabs.class[
                           `('${psource}', '${brandType}', '${lifeC}', '${newnss}', '${brnd}', '${program}')`
                         ],
                         "All Classes"
@@ -1345,7 +1421,7 @@ export default {
                   subClasses.push(
                     ...new Set(
                       optionGenerator(
-                        this.filterApiData.programprograms.sub_class[
+                        this.filterApiData.programCollabs.sub_class[
                           `('${psource}', '${brandType}', '${lifeC}', '${newnss}', '${brnd}', '${program}')`
                         ],
                         "All Sub Classes"
@@ -1355,7 +1431,7 @@ export default {
                   collections.push(
                     ...new Set(
                       optionGenerator(
-                        this.filterApiData.programprograms.collection[
+                        this.filterApiData.programCollabs.collection[
                           `('${psource}', '${brandType}', '${lifeC}', '${newnss}', '${brnd}', '${program}')`
                         ],
                         "All Collections"
@@ -1365,7 +1441,7 @@ export default {
                   skus.push(
                     ...new Set(
                       optionGenerator(
-                        this.filterApiData.programprograms.sku[
+                        this.filterApiData.programCollabs.sku[
                           `('${psource}', '${brandType}', '${lifeC}', '${newnss}', '${brnd}', '${program}')`
                         ],
                         "All Skus"

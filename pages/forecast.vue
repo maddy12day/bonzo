@@ -54,6 +54,7 @@
       <ProgramFilters
         :showAplyFilterBtn="true"
         v-if="activeFilterType == 'Program'"
+        @appliedFilters="appliedFilters"
         @getBroductSource="getProductSource"
         @getBrandType="getBrandType"
         @getLifyClycle="getLifeCycle"
@@ -68,6 +69,7 @@
         @getCollection="getCollectionValues"
         @getSkusValues="getSkusValues"
         ref="programFilter"
+        :key="programFiltersComponentKey"
       />
 
       <div class="applied-filter-container" v-if="allAppliedFilters.length > 0">
@@ -290,6 +292,7 @@ export default {
       allAppliedFilters: [],
       regularFiltersComponentKey: Math.random(),
       filteredStatsComponentKey: Math.random(),
+      programFiltersComponentKey: Math.random(),
     };
   },
   methods: {
@@ -407,6 +410,7 @@ export default {
     },
     showFilterType(type) {
       this.activeFilterType = type;
+      this.$store.commit("updateRegularFilter", []);
     },
     async getFilteredForecastData(requestedFilterOption) {
       requestedFilterOption["filterType"] = "week";
@@ -428,6 +432,8 @@ export default {
       //   );
       // }
       this.$store.commit("toggleCTAState");
+      this.$store.commit("toggleProgramFilterCTAState");
+
       this.refreshWidget = true;
       this.notifyVue(
         "top",
@@ -529,6 +535,9 @@ export default {
       this.categoriesValues = [];
       this.collectionValues = [];
       this.skuValues = [];
+      this.filter_classes = [];
+      this.filter_sub_classes = [];
+      this.filter_programs = [];
     },
     async appliedFilters() {
       this.notifyVue(
@@ -548,6 +557,9 @@ export default {
         filter_categories: this.categoriesValues,
         filter_collections: this.collectionValues,
         filter_skus: this.skuValues,
+        filter_classes: this.classesValues,
+        filter_sub_classes: this.subClassesValues,
+        filter_programs: this.programValues,
       };
       this.resetRegularFilter();
       let requestedFilterOption = this.emptyFieldCleaner(this.regularFilters);
@@ -583,6 +595,7 @@ export default {
     forceRerender() {
       this.regularFiltersComponentKey += 1;
       this.filteredStatsComponentKey += 1;
+      this.programFiltersComponentKey += 1;
     },
   },
   computed: {
