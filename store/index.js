@@ -1,17 +1,25 @@
 export const state = () => ({
   regularFilterCTADisabled: false,
   hideRegularFilterResetCTA: true,
-  appliedRegularFilter: []
+  programFilterCTADisabled: false,
+  appliedRegularFilter: [],
+  isDataLoading: false,
 });
 
 export const mutations = {
   toggleCTAState(state) {
     state.regularFilterCTADisabled = !state.regularFilterCTADisabled;
   },
+  toggleProgramFilterCTAState(state) {
+    state.programFilterCTADisabled = !state.regularFilterCTADisabled;
+  },
   toggleFilterResetCTAState(state) {
     state.hideRegularFilterResetCTA = !state.hideRegularFilterResetCTA;
   },
   updateRegularFilter(state, payload) {
     state.appliedRegularFilter = payload
+  },
+  updateLoadingstate(state, payload) {
+    state.isDataLoading = payload
   }
 };

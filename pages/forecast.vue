@@ -22,7 +22,20 @@
             <span class="d-block d-sm-none">{{ option.name }}</span>
           </label>
         </div>
-        <div class="btn-custom-div" v-if="applyCtaDisabled" @click="resetFilter">
+        <div
+          class="btn-custom-div"
+          v-if="showRegularResetFilter && activeFilterType == 'Regular'"
+          @click="resetFilter"
+        >
+          <label class="btn btn-sm btn-dark btn-simple btn-custom">
+            <span class="d-none d-sm-block">Reset Filters</span>
+          </label>
+        </div>
+        <div
+          class="btn-custom-div"
+          v-if="showProgramResetFilter && activeFilterType == 'Program'"
+          @click="resetFilter"
+        >
           <label class="btn btn-sm btn-dark btn-simple btn-custom">
             <span class="d-none d-sm-block">Reset Filters</span>
           </label>
@@ -48,6 +61,7 @@
       <ProgramFilters
         :showAplyFilterBtn="true"
         v-if="activeFilterType == 'Program'"
+        @appliedFilters="appliedFilters"
         @getBroductSource="getProductSource"
         @getBrandType="getBrandType"
         @getLifyClycle="getLifeCycle"
@@ -62,6 +76,7 @@
         @getCollection="getCollectionValues"
         @getSkusValues="getSkusValues"
         ref="programFilter"
+        :key="programFiltersComponentKey"
       />
 
       <div class="applied-filter-container" v-if="allAppliedFilters.length > 0">
@@ -81,6 +96,7 @@
       ref="filterWidgets"
       v-if="isFilteredForecast"
       :allAppliedFilters="allAppliedFilters"
+      :key="filteredStatsComponentKey"
     />
 
     <!-- Adjustments Table -->
@@ -277,6 +293,8 @@ export default {
       refreshWidget: false,
       allAppliedFilters: [],
       regularFiltersComponentKey: Math.random(),
+      filteredStatsComponentKey: Math.random(),
+      programFiltersComponentKey: Math.random(),
     };
   },
   methods: {
@@ -331,7 +349,6 @@ export default {
     },
     getAdjustedValues(values) {
       if (values) {
-        console.log(values);
         this.changeMABtnText = true;
         this.adustments = values;
         this.showDiscardBtn = true;
@@ -395,11 +412,13 @@ export default {
     },
     showFilterType(type) {
       this.activeFilterType = type;
+      this.$store.commit("updateRegularFilter", []);
     },
     async getFilteredForecastData(requestedFilterOption) {
       requestedFilterOption["filterType"] = "week";
       this.filterMonthly = false;
       this.filterWeekly = true;
+      this.$store.commit("updateLoadingstate", true);
       const [weeklyforecast, filteredForecastMetrics] = await Promise.all([
         this.$axios.$post(`/get-filtered-forecast-data`, this.regularFilters),
         this.$axios.$post(
@@ -410,12 +429,15 @@ export default {
 
       this.weeklyforecast = weeklyforecast;
       this.filteredForecastMetrics = filteredForecastMetrics;
-      if (this.refreshWidget) {
-        this.$refs.filterWidgets.getFilteredStatsWidgetData(
-          this.regularFilters
-        );
-      }
+      // if (this.refreshWidget) {
+      //   this.$refs.filterWidgets.getFilteredStatsWidgetData(
+      //     this.regularFilters
+      //   );
+      // }
       this.$store.commit("toggleCTAState");
+      this.$store.commit("toggleProgramFilterCTAState");
+      this.$store.commit("updateLoadingstate", false);
+
       this.refreshWidget = true;
       this.notifyVue(
         "top",
@@ -509,9 +531,25 @@ export default {
       }
     },
     resetFilter() {
-      console.log("ioioio");
       this.forceRerender();
-      this.$store.commit("updateRegularFilter",[]);
+      this.isFilteredForecast = false;
+      this.$store.commit("updateRegularFilter", []);
+      this.allAppliedFilters = [];
+    },
+    resetRegularFilter() {
+      this.productSourceValues = [];
+      this.brandTypeValues = [];
+      this.lifeCycleValues = [];
+      this.newNessValues = [];
+      this.brandValues = [];
+      this.channelValues = [];
+      this.subChannelsValues = [];
+      this.categoriesValues = [];
+      this.collectionValues = [];
+      this.skuValues = [];
+      this.filter_classes = [];
+      this.filter_sub_classes = [];
+      this.filter_programs = [];
     },
     async appliedFilters() {
       this.notifyVue(
@@ -531,8 +569,11 @@ export default {
         filter_categories: this.categoriesValues,
         filter_collections: this.collectionValues,
         filter_skus: this.skuValues,
+        filter_classes: this.classesValues,
+        filter_sub_classes: this.subClassesValues,
+        filter_programs: this.programValues,
       };
-      console.log("this.regularFilters", this.regularFilters);
+      this.resetRegularFilter();
       let requestedFilterOption = this.emptyFieldCleaner(this.regularFilters);
       this.allAppliedFilters = [];
       for (let [key, value] of Object.entries(this.regularFilters)) {
@@ -565,6 +606,8 @@ export default {
     },
     forceRerender() {
       this.regularFiltersComponentKey += 1;
+      this.filteredStatsComponentKey += 1;
+      this.programFiltersComponentKey += 1;
     },
   },
   computed: {
@@ -607,8 +650,18 @@ export default {
         },
       ];
     },
-    applyCtaDisabled() {
-      return this.$store.state.appliedRegularFilter.length == 0 || this.$store.state.regularFilterCTADisabled == true ? false : true;
+    showRegularResetFilter() {
+      return this.$store.state.appliedRegularFilter.length > 0 &&
+        !this.$store.state.isDataLoading
+        ? true
+        : false;
+    },
+    showProgramResetFilter() {
+      console.log("---", this.$store.state.isDataLoading);
+      return this.$store.state.appliedRegularFilter.length > 0 &&
+        !this.$store.state.isDataLoading
+        ? true
+        : false;
     },
   },
   mounted() {
