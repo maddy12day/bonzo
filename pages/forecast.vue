@@ -101,7 +101,7 @@
     <!-- Base Year/Quarter Stats / Filtered Year/Quarter Stats (Vishal) -->
     <StatsWidget v-if="!isFilteredForecast" />
     <FilteredStatsWidget
-      :filteredRequestBody="regularFilters"
+      :filterPayload="filterPayload"
       ref="filterWidgets"
       v-if="isFilteredForecast"
       :allAppliedFilters="allAppliedFilters"
@@ -307,7 +307,7 @@ export default {
       filteredForecastMetrics: [],
       filterMonthly: false,
       filterWeekly: false,
-      regularFilters: {},
+      filterPayload: {},
       filteredStatsWidgetData: {},
       showDiscardBtn: false,
       refreshWidget: false,
@@ -415,7 +415,7 @@ export default {
     async showFilteredMetricsByDuration(activeTab) {
       this.filteredActiveTab = activeTab;
 
-      let requestedFilterOption = this.emptyFieldCleaner(this.regularFilters);
+      let requestedFilterOption = this.emptyFieldCleaner(this.filterPayload);
 
       if (this.filteredActiveTab == "Weekly") {
         requestedFilterOption["filterType"] = "week";
@@ -445,7 +445,7 @@ export default {
     async getFilteredTopSkus() {
       const topTenSkusData = await this.$axios.$post(
         `/get-filtered-forecast-data`,
-        this.regularFilters
+        this.filterPayload
       );
       this.topTenSkusData = topTenSkusData;
     },
@@ -583,7 +583,7 @@ export default {
     async appliedFilters() {
       this.isFilteredForecast = true;
       this.isFilteredPageDataLoading = true;
-      this.regularFilters = {
+      this.filterPayload = {
         filter_product_sources: this.productSourceValues,
         filter_brand_types: this.brandTypeValues,
         filter_life_cycles: this.lifeCycleValues,
@@ -599,9 +599,9 @@ export default {
         filter_programs: this.programValues,
       };
       this.resetFilterPayloadOptions();
-      let requestedFilterOption = this.emptyFieldCleaner(this.regularFilters);
+      let requestedFilterOption = this.emptyFieldCleaner(this.filterPayload);
       this.allAppliedFilters = [];
-      for (let [key, value] of Object.entries(this.regularFilters)) {
+      for (let [key, value] of Object.entries(this.filterPayload)) {
         this.allAppliedFilters.push(
           key.replace("filter_", "").replace("_", " ") + ": " + value.join(", ")
         );
