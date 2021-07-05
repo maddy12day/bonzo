@@ -20,7 +20,7 @@
               <a
                 tabindex="0"
                 @click="handleScenarioClick(scope.row)"
-                v-if="scope.row.status == 'Completed'"
+                v-if="['Completed', 'Merged'].includes(scope.row.status)"
               >
                 {{ scope.row.scenario_name }}</a
               >
@@ -329,6 +329,8 @@ export default {
         return "success-row";
       } else if (row.status === "Failed" || row.status === "Error") {
         return "warning-row";
+      }else if (row.status === "Merged") {
+        return "bg-secondary text-muted";
       }
       return "other-row";
     },
