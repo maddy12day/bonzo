@@ -211,8 +211,8 @@ export const getFilteredForecastMetrics = async (req, res) => {
                 LIMIT 1 )
                 SELECT
                   ${duration}(dfbwm.weekend) AS date,
-                  ROUND(SUM(dfbwm.retail_sales), 0) AS total_revenue,
-                  ROUND(SUM(dfbwm.units_sales), 0) AS total_units,
+                  ROUND(SUM(dfbwm.retail_sales), 0) AS retail_sales,
+                  ROUND(SUM(dfbwm.units_sales), 0) AS units_sales,
                   (CASE
                     WHEN (dfbwm.weekend>(
                     select
