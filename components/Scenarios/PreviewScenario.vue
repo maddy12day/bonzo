@@ -432,16 +432,11 @@
       </card>
 
       <span slot="footer" class="dialog-footer">
-<<<<<<< HEAD
         <div class="text-right ">
           <button class="btn btn-primary " @click="shareScenario">
            {{previewBtnText}}
           </button>
           <button class="btn btn-primary " @click="showDialog = false">
-=======
-        <div class="text-right">
-          <button class="btn btn-primary" @click="showDialog = false">
->>>>>>> 12cccc9a64032accbc77a5633893752d5e2826d5
             Close
           </button>
         </div>
