@@ -108,3 +108,23 @@ export const checkAdjustmentStatus = async (req, res) => {
     });
   }
 };
+
+
+
+// Get Adjustment Sales Summary 
+// Paramenter Passed: Adjustment ID
+export const getAdjustmentSalesSummary = async (req, res) => {
+  console.log("req.params.id--", req.params.id);
+  try {
+    const result = await prisma.$queryRaw(
+      `SELECT * from morphe_staging.adjustment_influenced_leveled_aggregates WHERE adjustment_id = ${req.params.id} AND level = "AGGREGATES";`
+    );
+    res.json({
+      result,
+    });
+  } catch (error) {
+    res.status(500).json({
+      error: `Unable to fetch results ${error}`,
+    });
+  }
+};

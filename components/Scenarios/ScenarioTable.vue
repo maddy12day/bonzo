@@ -20,7 +20,7 @@
               <a
                 tabindex="0"
                 @click="handleScenarioClick(scope.row)"
-                v-if="['Completed', 'Merged'].includes(scope.row.status)"
+                v-if="scope.row.status == 'Completed'"
               >
                 {{ scope.row.scenario_name }}</a
               >
@@ -177,14 +177,12 @@
     <!-- Scenario Forecast Preview -->
     <PreviewScenario
       v-if="dialogVisible"
-      @shareScenarioEvt="shareScenario"
       @dialogVisible="closeDialog"
       :dialogVisible="dialogVisible"
       :scenarioSalesSummary="scenarioSalesSummary"
       :scenarioUnitSalesComparison="scenarioUnitSalesComparison"
       :scenarioCategorySalesComparison="scenarioCategorySalesComparison"
       :scenarioCategoryComparison="scenarioCategoryComparison"
-      :previewBtnText="previewBtnText"
     />
   </div>
 </template>
@@ -200,13 +198,7 @@ export default {
     [Dialog.name]: Dialog,
     PreviewScenario,
   },
-  props: [
-    "tableHeading",
-    "scenarioTableData",
-    "type",
-    "useClass",
-    "previewBtnText",
-  ],
+  props: ["tableHeading", "scenarioTableData", "type", "useClass"],
   data() {
     return {
       scenarioTableDataForTable: [],
@@ -216,10 +208,8 @@ export default {
       scenarioUnitSalesComparison: [],
       scenarioCategorySalesComparison: [],
       scenarioCategoryComparison: [],
-      currentScenarioId: null,
       page: 1,
       pageSize: 3,
-      typeColor: ["", "info", "success", "warning", "danger"],
     };
   },
   computed: {
@@ -234,52 +224,6 @@ export default {
     },
   },
   methods: {
-    notifyVue(verticalAlign, horizontalAlign, message) {
-      let color = 4;
-      this.$notify({
-        message: message,
-        timeout: 12000,
-        icon: "tim-icons icon-bell-55",
-        horizontalAlign: horizontalAlign,
-        verticalAlign: verticalAlign,
-        type: this.typeColor[color],
-      });
-    },
-    //merge-scenario-with-base
-    async mergeScenario() {
-      const mergeScenario = await this.$axios.$post(
-        `/merge-scenario-with-base`,
-        {
-          baseVersionId: localStorage.getItem("baseVersionId"),
-          id: this.currentScenarioId,
-        }
-      );
-      if(mergeScenario) {
-          this.notifyVue(
-            "top",
-            "right",
-            "Submitted scenario to model for merging with base. Check Scenario table for updates."
-          );
-      }
-    },
-    async shareScenario() {
-      //share-scenario
-      if (this.previewBtnText == "Merge Scenario") {
-       this.mergeScenario();
-      } else {
-        const scenario = await this.$axios.$get(
-          `/share-scenario/${this.currentScenarioId}`
-        );
-
-        if (scenario) {
-          this.notifyVue(
-            "top",
-            "right",
-            "Scenario shared successfully. It will be visible to others on Dashboard."
-          );
-        }
-      }
-    },
     setPage(val) {
       this.page = val;
     },
@@ -287,7 +231,6 @@ export default {
       this.dialogVisible = false;
     },
     async handleScenarioClick(data) {
-      this.currentScenarioId = data.id;
       console.log("data--", this.dialogVisible);
       this.scenarioSalesSummary = await this.$axios.$get(
         `/get-scenario-sales-summary/${data.id}`
@@ -303,13 +246,13 @@ export default {
       );
       this.dialogVisible = true;
     },
-    getUserName: function (id) {
+    getUserName: function(id) {
       let allUserInfo = JSON.parse(window.localStorage.getItem("allUsersInfo"));
       let userName = allUserInfo.users.filter((user) => (user.id = id))[0]
         .first_name;
       return userName;
     },
-    addUserToScenarioTableData: function (scenarioTableData, type) {
+    addUserToScenarioTableData: function(scenarioTableData, type) {
       if ((type = "sharedScenarios")) {
         this.scenarioTableDataForTable = scenarioTableData.map((v) => ({
           ...v,
@@ -323,14 +266,10 @@ export default {
     },
     tableRowClassName({ row }) {
       console.log("row.status", row.status);
-      if (row.status === "Processing") {
-        return "processing-row";
-      } else if (row.status === "Completed") {
+      if (row.status === "Completed") {
         return "success-row";
-      } else if (row.status === "Failed" || row.status === "Error") {
+      } else if (row.status === "Failed") {
         return "warning-row";
-      }else if (row.status === "Merged") {
-        return "bg-secondary text-muted";
       }
       return "other-row";
     },
@@ -364,10 +303,6 @@ export default {
 
 .el-table .success-row {
   background: rgb(247, 255, 251);
-}
-
-.el-table .processing-row {
-  background: rgb(227, 238, 255);
 }
 
 .el-table .other-row {
