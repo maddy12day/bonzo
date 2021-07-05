@@ -51,14 +51,18 @@
             property="adjusted_by_user_id"
           >
           </el-table-column>
-
           <el-table-column
             min-width="150"
             sortable
             label="Adjustment On"
             property="adjusted_metrics_name"
-          ></el-table-column>
-
+            class-name="text-capitalize"
+          >
+            <template slot-scope="scope" >
+              {{ scope.row.adjusted_metrics_name.replace(/_/g, ' ' ) }}
+            </template>
+          </el-table-column>
+          
           <el-table-column
             min-width="150"
             sortable
@@ -193,7 +197,9 @@ export default {
 .el-table__body-wrapper::-webkit-scrollbar-track:hover {
   background: #c5c5c5;
 }
-
+.text-capitalize {
+  text-transform: capitalize;
+}
 .card .card-body {
   padding: 5px 15px 15px 15px;
 }

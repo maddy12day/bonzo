@@ -42,7 +42,7 @@ export const allSharedScenarios = async (req, res) => {
           select: {
             scenario_type: true,
           },
-        },
+        }
       },
       orderBy: {
         created_at: "desc",
