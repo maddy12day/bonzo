@@ -65,6 +65,14 @@
         @getSkusValues="getSkusValues"
         ref="programFilter"
       />
+
+      <div class="applied-filter-container" v-if="allAppliedFilters.length > 0">
+        <br />
+        <h4 class="text-bold font-weight-bold">
+          Applied Filters
+        </h4>
+        <Tags :allAppliedFilters="allAppliedFilters" />
+      </div>
     </card>
     <!-- Applied filters pills (Vishal) -->
 
@@ -160,12 +168,6 @@
 
     <div v-if="isFilteredForecast">
       <card card-body-classes="table-full-width">
-        <div class="applied-filtes-div">
-          <h4 class="applied-filters">
-            Applied Filters({{ allAppliedFilters.length }}): &nbsp;&nbsp;&nbsp;
-          </h4>
-          <Tags :allAppliedFilters="allAppliedFilters" />
-        </div>
         <div class="col-md-12 text-right p-0">
           <div class="btn-group btn-group-toggle" data-toggle="buttons">
             <label
@@ -192,14 +194,12 @@
           v-if="filteredActiveTab == 'Weekly'"
           :filteredForecastMetrics="filteredForecastMetrics"
           tableHeading="Filtered Weekly Forecast Metrics"
-          :allAppliedFilters="allAppliedFilters"
         />
 
         <FilteredMonthlyMetricsTable
           v-if="filteredActiveTab == 'Monthly'"
           :filteredForecastMetrics="filteredForecastMetrics"
           tableHeading="Filtered Monthly Forecast Metrics"
-          :allAppliedFilters="allAppliedFilters"
         />
       </card>
       <h4 class="font-weight-bold">Top 10 SKUs Forecast</h4>
@@ -207,19 +207,16 @@
         :tableHeading="'Revenue'"
         :forecast_attribute="'retail_sales'"
         :weeklyforecast="weeklyforecast"
-        :allAppliedFilters="allAppliedFilters"
       />
       <WeeklyForecast
         :tableHeading="'Units Sales'"
         :forecast_attribute="'units_sales'"
         :weeklyforecast="weeklyforecast"
-        :allAppliedFilters="allAppliedFilters"
       />
       <WeeklyForecast
         :tableHeading="'AUR'"
         :forecast_attribute="'aur'"
         :weeklyforecast="weeklyforecast"
-        :allAppliedFilters="allAppliedFilters"
       />
     </div>
   </div>
@@ -536,10 +533,12 @@ export default {
         filter_skus: this.skuValues,
       };
       let requestedFilterOption = this.emptyFieldCleaner(this.regularFilters);
-      this.allAppliedFilters = [].concat.apply(
-        [],
-        Object.values(this.regularFilters)
-      );
+      this.allAppliedFilters = [];
+      for (let [key, value] of Object.entries(this.regularFilters)) {
+        this.allAppliedFilters.push(
+          key.replace("filter_", "").replace("_", " ") + ": " + value.join(", ")
+        );
+      }
       await this.getFilteredForecastData(requestedFilterOption);
       this.isFilteredForecast = true;
       this.filteredActiveTab = "Weekly";
@@ -631,6 +630,13 @@ export default {
       position: absolute;
       right: 0;
       padding: 0 15px;
+    }
+  }
+
+  .applied-filter-container {
+    text-transform: capitalize;
+    h4 {
+      margin-bottom: 4px;
     }
   }
 }
