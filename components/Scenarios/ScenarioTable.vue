@@ -263,7 +263,7 @@ export default {
           this.notifyVue(
             "top",
             "right",
-            "you have successfully merged scenario with base"
+            "Submitted scenario to model for merging with base. Check Scenario table for updates."
           );
         }
       } else {
@@ -275,7 +275,7 @@ export default {
           this.notifyVue(
             "top",
             "right",
-            "you have successfully shared scenario "
+            "Scenario shared successfully. It will be visible to others on Dashboard."
           );
         }
       }
@@ -303,13 +303,13 @@ export default {
       );
       this.dialogVisible = true;
     },
-    getUserName: function(id) {
+    getUserName: function (id) {
       let allUserInfo = JSON.parse(window.localStorage.getItem("allUsersInfo"));
       let userName = allUserInfo.users.filter((user) => (user.id = id))[0]
         .first_name;
       return userName;
     },
-    addUserToScenarioTableData: function(scenarioTableData, type) {
+    addUserToScenarioTableData: function (scenarioTableData, type) {
       if ((type = "sharedScenarios")) {
         this.scenarioTableDataForTable = scenarioTableData.map((v) => ({
           ...v,
