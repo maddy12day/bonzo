@@ -36,7 +36,8 @@
             <template slot-scope="scope">
               <el-input
                 v-if="
-                  !isDisble &&
+                  weekNo() < 1 &&
+                    !isDisble &&
                     [
                       'Sales',
                       'Sales Build',
@@ -63,7 +64,8 @@
             <template slot-scope="scope">
               <el-input
                 v-if="
-                  !isDisble &&
+                  weekNo() < 2 &&
+                    !isDisble &&
                     [
                       'Sales',
                       'Sales Build',
@@ -90,7 +92,8 @@
             <template slot-scope="scope">
               <el-input
                 v-if="
-                  !isDisble &&
+                  weekNo() < 3 &&
+                    !isDisble &&
                     [
                       'Sales',
                       'Sales Build',
@@ -117,7 +120,8 @@
             <template slot-scope="scope">
               <el-input
                 v-if="
-                  !isDisble &&
+                  weekNo() < 4 &&
+                    !isDisble &&
                     [
                       'Sales',
                       'Sales Build',
@@ -144,7 +148,8 @@
             <template slot-scope="scope">
               <el-input
                 v-if="
-                  !isDisble &&
+                  weekNo() < 5 &&
+                    !isDisble &&
                     [
                       'Sales',
                       'Sales Build',
@@ -171,7 +176,8 @@
             <template slot-scope="scope">
               <el-input
                 v-if="
-                  !isDisble &&
+                  weekNo() < 6 &&
+                    !isDisble &&
                     [
                       'Sales',
                       'Sales Build',
@@ -198,7 +204,8 @@
             <template slot-scope="scope">
               <el-input
                 v-if="
-                  !isDisble &&
+                  weekNo() < 7 &&
+                    !isDisble &&
                     [
                       'Sales',
                       'Sales Build',
@@ -225,7 +232,8 @@
             <template slot-scope="scope">
               <el-input
                 v-if="
-                  !isDisble &&
+                  weekNo() < 8 &&
+                    !isDisble &&
                     [
                       'Sales',
                       'Sales Build',
@@ -252,7 +260,8 @@
             <template slot-scope="scope">
               <el-input
                 v-if="
-                  !isDisble &&
+                  weekNo() < 9 &&
+                    !isDisble &&
                     [
                       'Sales',
                       'Sales Build',
@@ -278,7 +287,8 @@
             <template slot-scope="scope">
               <el-input
                 v-if="
-                  !isDisble &&
+                  weekNo() < 10 &&
+                    !isDisble &&
                     [
                       'Sales',
                       'Sales Build',
@@ -305,7 +315,8 @@
             <template slot-scope="scope">
               <el-input
                 v-if="
-                  !isDisble &&
+                  weekNo() < 11 &&
+                    !isDisble &&
                     [
                       'Sales',
                       'Sales Build',
@@ -332,7 +343,8 @@
             <template slot-scope="scope">
               <el-input
                 v-if="
-                  !isDisble &&
+                  weekNo() < 12 &&
+                    !isDisble &&
                     [
                       'Sales',
                       'Sales Build',
@@ -359,7 +371,8 @@
             <template slot-scope="scope">
               <el-input
                 v-if="
-                  !isDisble &&
+                  weekNo() < 13 &&
+                    !isDisble &&
                     [
                       'Sales',
                       'Sales Build',
@@ -386,7 +399,8 @@
             <template slot-scope="scope">
               <el-input
                 v-if="
-                  !isDisble &&
+                  weekNo() < 14 &&
+                    !isDisble &&
                     [
                       'Sales',
                       'Sales Build',
@@ -413,7 +427,8 @@
             <template slot-scope="scope">
               <el-input
                 v-if="
-                  !isDisble &&
+                  weekNo() < 15 &&
+                    !isDisble &&
                     [
                       'Sales',
                       'Sales Build',
@@ -440,7 +455,8 @@
             <template slot-scope="scope">
               <el-input
                 v-if="
-                  !isDisble &&
+                  weekNo() < 16 &&
+                    !isDisble &&
                     [
                       'Sales',
                       'Sales Build',
@@ -467,7 +483,8 @@
             <template slot-scope="scope">
               <el-input
                 v-if="
-                  !isDisble &&
+                  weekNo() < 17 &&
+                    !isDisble &&
                     [
                       'Sales',
                       'Sales Build',
@@ -494,7 +511,8 @@
             <template slot-scope="scope">
               <el-input
                 v-if="
-                  !isDisble &&
+                  weekNo() < 18 &&
+                    !isDisble &&
                     [
                       'Sales',
                       'Sales Build',
@@ -521,7 +539,8 @@
             <template slot-scope="scope">
               <el-input
                 v-if="
-                  !isDisble &&
+                  weekNo() < 19 &&
+                    !isDisble &&
                     [
                       'Sales',
                       'Sales Build',
@@ -548,7 +567,8 @@
             <template slot-scope="scope">
               <el-input
                 v-if="
-                  !isDisble &&
+                  weekNo() < 20 &&
+                    !isDisble &&
                     [
                       'Sales',
                       'Sales Build',
@@ -575,7 +595,8 @@
             <template slot-scope="scope">
               <el-input
                 v-if="
-                  !isDisble &&
+                  weekNo() < 21 &&
+                    !isDisble &&
                     [
                       'Sales',
                       'Sales Build',
@@ -602,7 +623,8 @@
             <template slot-scope="scope">
               <el-input
                 v-if="
-                  !isDisble &&
+                  weekNo() < 22 &&
+                    !isDisble &&
                     [
                       'Sales',
                       'Sales Build',
@@ -629,7 +651,8 @@
             <template slot-scope="scope">
               <el-input
                 v-if="
-                  !isDisble &&
+                  weekNo() < 23 &&
+                    !isDisble &&
                     [
                       'Sales',
                       'Sales Build',
@@ -656,7 +679,8 @@
             <template slot-scope="scope">
               <el-input
                 v-if="
-                  !isDisble &&
+                  weekNo() < 24 &&
+                    !isDisble &&
                     [
                       'Sales',
                       'Sales Build',
@@ -683,7 +707,8 @@
             <template slot-scope="scope">
               <el-input
                 v-if="
-                  !isDisble &&
+                  weekNo() < 25 &&
+                    !isDisble &&
                     [
                       'Sales',
                       'Sales Build',
@@ -710,7 +735,8 @@
             <template slot-scope="scope">
               <el-input
                 v-if="
-                  !isDisble &&
+                  weekNo() < 26 &&
+                    !isDisble &&
                     [
                       'Sales',
                       'Sales Build',
@@ -737,7 +763,8 @@
             <template slot-scope="scope">
               <el-input
                 v-if="
-                  !isDisble &&
+                  weekNo() < 27 &&
+                    !isDisble &&
                     [
                       'Sales',
                       'Sales Build',
@@ -764,7 +791,8 @@
             <template slot-scope="scope">
               <el-input
                 v-if="
-                  !isDisble &&
+                  weekNo() < 28 &&
+                    !isDisble &&
                     [
                       'Sales',
                       'Sales Build',
@@ -791,7 +819,8 @@
             <template slot-scope="scope">
               <el-input
                 v-if="
-                  !isDisble &&
+                  weekNo() < 29 &&
+                    !isDisble &&
                     [
                       'Sales',
                       'Sales Build',
@@ -818,7 +847,8 @@
             <template slot-scope="scope">
               <el-input
                 v-if="
-                  !isDisble &&
+                  weekNo() < 30 &&
+                    !isDisble &&
                     [
                       'Sales',
                       'Sales Build',
@@ -845,7 +875,8 @@
             <template slot-scope="scope">
               <el-input
                 v-if="
-                  !isDisble &&
+                  weekNo() < 31 &&
+                    !isDisble &&
                     [
                       'Sales',
                       'Sales Build',
@@ -873,6 +904,7 @@
               <el-input
                 v-if="
                   !isDisble &&
+                    weekNo() < 32 &&
                     [
                       'Sales',
                       'Sales Build',
@@ -899,7 +931,8 @@
             <template slot-scope="scope">
               <el-input
                 v-if="
-                  !isDisble &&
+                  weekNo() < 33 &&
+                    !isDisble &&
                     [
                       'Sales',
                       'Sales Build',
@@ -926,7 +959,8 @@
             <template slot-scope="scope">
               <el-input
                 v-if="
-                  !isDisble &&
+                  weekNo() < 34 &&
+                    !isDisble &&
                     [
                       'Sales',
                       'Sales Build',
@@ -953,7 +987,8 @@
             <template slot-scope="scope">
               <el-input
                 v-if="
-                  !isDisble &&
+                  weekNo() < 35 &&
+                    !isDisble &&
                     [
                       'Sales',
                       'Sales Build',
@@ -980,7 +1015,8 @@
             <template slot-scope="scope">
               <el-input
                 v-if="
-                  !isDisble &&
+                  weekNo() < 36 &&
+                    !isDisble &&
                     [
                       'Sales',
                       'Sales Build',
@@ -1007,7 +1043,8 @@
             <template slot-scope="scope">
               <el-input
                 v-if="
-                  !isDisble &&
+                  weekNo() < 37 &&
+                    !isDisble &&
                     [
                       'Sales',
                       'Sales Build',
@@ -1034,7 +1071,8 @@
             <template slot-scope="scope">
               <el-input
                 v-if="
-                  !isDisble &&
+                  weekNo() < 38 &&
+                    !isDisble &&
                     [
                       'Sales',
                       'Sales Build',
@@ -1061,7 +1099,8 @@
             <template slot-scope="scope">
               <el-input
                 v-if="
-                  !isDisble &&
+                  weekNo() < 39 &&
+                    !isDisble &&
                     [
                       'Sales',
                       'Sales Build',
@@ -1088,7 +1127,8 @@
             <template slot-scope="scope">
               <el-input
                 v-if="
-                  !isDisble &&
+                  weekNo() < 40 &&
+                    !isDisble &&
                     [
                       'Sales',
                       'Sales Build',
@@ -1115,7 +1155,8 @@
             <template slot-scope="scope">
               <el-input
                 v-if="
-                  !isDisble &&
+                  weekNo() < 41 &&
+                    !isDisble &&
                     [
                       'Sales',
                       'Sales Build',
@@ -1142,7 +1183,8 @@
             <template slot-scope="scope">
               <el-input
                 v-if="
-                  !isDisble &&
+                  weekNo() < 42 &&
+                    !isDisble &&
                     [
                       'Sales',
                       'Sales Build',
@@ -1169,7 +1211,8 @@
             <template slot-scope="scope">
               <el-input
                 v-if="
-                  !isDisble &&
+                  weekNo() < 43 &&
+                    !isDisble &&
                     [
                       'Sales',
                       'Sales Build',
@@ -1196,7 +1239,8 @@
             <template slot-scope="scope">
               <el-input
                 v-if="
-                  !isDisble &&
+                  weekNo() < 44 &&
+                    !isDisble &&
                     [
                       'Sales',
                       'Sales Build',
@@ -1223,7 +1267,8 @@
             <template slot-scope="scope">
               <el-input
                 v-if="
-                  !isDisble &&
+                  weekNo() < 45 &&
+                    !isDisble &&
                     [
                       'Sales',
                       'Sales Build',
@@ -1250,7 +1295,8 @@
             <template slot-scope="scope">
               <el-input
                 v-if="
-                  !isDisble &&
+                  weekNo() < 46 &&
+                    !isDisble &&
                     [
                       'Sales',
                       'Sales Build',
@@ -1277,7 +1323,8 @@
             <template slot-scope="scope">
               <el-input
                 v-if="
-                  !isDisble &&
+                  weekNo() < 47 &&
+                    !isDisble &&
                     [
                       'Sales',
                       'Sales Build',
@@ -1304,7 +1351,8 @@
             <template slot-scope="scope">
               <el-input
                 v-if="
-                  !isDisble &&
+                  weekNo() < 48 &&
+                    !isDisble &&
                     [
                       'Sales',
                       'Sales Build',
@@ -1331,7 +1379,8 @@
             <template slot-scope="scope">
               <el-input
                 v-if="
-                  !isDisble &&
+                  weekNo() < 49 &&
+                    !isDisble &&
                     [
                       'Sales',
                       'Sales Build',
@@ -1358,7 +1407,8 @@
             <template slot-scope="scope">
               <el-input
                 v-if="
-                  !isDisble &&
+                  weekNo() < 50 &&
+                    !isDisble &&
                     [
                       'Sales',
                       'Sales Build',
@@ -1385,7 +1435,8 @@
             <template slot-scope="scope">
               <el-input
                 v-if="
-                  !isDisble &&
+                  weekNo() < 51 &&
+                    !isDisble &&
                     [
                       'Sales',
                       'Sales Build',
@@ -1412,7 +1463,8 @@
             <template slot-scope="scope">
               <el-input
                 v-if="
-                  !isDisble &&
+                  weekNo() < 52 &&
+                    !isDisble &&
                     [
                       'Sales',
                       'Sales Build',
@@ -1429,13 +1481,13 @@
             </template>
           </el-table-column>
         </el-table>
-       
       </card>
     </div>
   </div>
 </template>
 <script>
 import { Table, TableColumn } from "element-ui";
+import moment from "moment";
 
 export default {
   name: "dashboard",
@@ -1452,6 +1504,9 @@ export default {
   },
   computed: {},
   methods: {
+    weekNo() {
+      return moment(new Date()).week();
+    },
     onDataChange(e, value, index, innerIndex) {
       const oldTableData = JSON.parse(
         localStorage.getItem("adjustmentTableData")
@@ -1461,21 +1516,28 @@ export default {
           `${innerIndex < 10 ? `w0${innerIndex}` : `w${innerIndex}`}`
         ] !== value
       ) {
-        this.$emit('EvtAdjValues', {
+        this.$emit("EvtAdjValues", {
           new_value: value,
-          weekend_date: JSON.parse(localStorage.getItem("weekendDates"))[innerIndex],
-          old_value: oldTableData[index][`${innerIndex < 10 ? `w0${innerIndex}` : `w${innerIndex}`}` ],
-          metrics_name:  oldTableData[index]['metrics_name'],
-          ele: e.target.parentNode.parentNode.parentNode 
+          weekend_date: JSON.parse(localStorage.getItem("weekendDates"))[
+            innerIndex
+          ],
+          old_value:
+            oldTableData[index][
+              `${innerIndex < 10 ? `w0${innerIndex}` : `w${innerIndex}`}`
+            ],
+          metrics_name: oldTableData[index]["metrics_name"],
+          ele: e.target.parentNode.parentNode.parentNode,
         });
-        e.target.parentNode.parentNode.parentNode.style.background='#ffeacb';
+        e.target.parentNode.parentNode.parentNode.style.background = "#ffeacb";
         this.isDisble = true;
       } else {
         this.isDisble = false;
       }
     },
   },
-  mounted() {},
+  mounted() {
+    console.log(this.weekNo());
+  },
 };
 </script>
 <style></style>
