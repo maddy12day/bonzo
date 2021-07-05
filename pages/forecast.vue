@@ -24,7 +24,11 @@
         </div>
         <div
           class="btn-custom-div"
-          v-if="showRegularResetFilter && activeFilterType == 'Regular'"
+          v-if="
+            !isFilteredPageDataLoading &&
+            showRegularResetFilter &&
+            activeFilterType == 'Regular'
+          "
           @click="resetFilter"
         >
           <label class="btn btn-sm btn-dark btn-simple btn-custom">
@@ -33,12 +37,19 @@
         </div>
         <div
           class="btn-custom-div"
-          v-if="showProgramResetFilter && activeFilterType == 'Program'"
+          v-if="
+            !isFilteredPageDataLoading &&
+            showProgramResetFilter &&
+            activeFilterType == 'Program'
+          "
           @click="resetFilter"
         >
           <label class="btn btn-sm btn-dark btn-simple btn-custom">
             <span class="d-none d-sm-block">Reset Filters</span>
           </label>
+        </div>
+        <div v-if="isFilteredPageDataLoading" class="btn-custom-div">
+          <i class="display-4 el-icon-loading"></i>
         </div>
       </div>
       <RegularFilters
@@ -81,9 +92,7 @@
 
       <div class="applied-filter-container" v-if="allAppliedFilters.length > 0">
         <br />
-        <h4 class="text-bold font-weight-bold">
-          Applied Filters
-        </h4>
+        <h4 class="text-bold font-weight-bold">Applied Filters</h4>
         <Tags :allAppliedFilters="allAppliedFilters" />
       </div>
     </card>
@@ -101,6 +110,7 @@
 
     <!-- Adjustments Table -->
     <AdjustmentTable
+      v-if="!isFilteredForecast"
       class="mt-4"
       tableHeading="Base Model Adjustments"
       :adjustmentTableData="baseAdjustmentsListCom.adjustments"
@@ -180,59 +190,65 @@
       </div>
     </card>
 
-    <div v-if="isFilteredForecast">
-      <card card-body-classes="table-full-width">
-        <div class="col-md-12 text-right p-0">
-          <div class="btn-group btn-group-toggle" data-toggle="buttons">
-            <label
-              v-for="(option, index) in FilteredDurations"
-              :key="option.name"
-              class="btn btn-sm btn-primary btn-simple"
-              :id="index"
-              :class="{ active: filteredActiveTab == option.name }"
-            >
-              <input
-                type="radio"
-                name="options"
-                autocomplete="off"
-                checked=""
-                @click="showFilteredMetricsByDuration(option.name)"
-              />
-              <span class="d-none d-sm-block">{{ option.name }}</span>
-              <span class="d-block d-sm-none">{{ option.acronym }}</span>
-            </label>
-          </div>
+    <!-- <div v-if="isFilteredForecast"> -->
+    <card card-body-classes="table-full-width" v-if="isFilteredForecast">
+      <div class="col-md-12 text-right p-0">
+        <div class="btn-group btn-group-toggle" data-toggle="buttons">
+          <label
+            v-for="(option, index) in FilteredDurations"
+            :key="option.name"
+            class="btn btn-sm btn-primary btn-simple"
+            :id="index"
+            :class="{ active: filteredActiveTab == option.name }"
+          >
+            <input
+              type="radio"
+              name="options"
+              autocomplete="off"
+              checked=""
+              @click="showFilteredMetricsByDuration(option.name)"
+            />
+            <span class="d-none d-sm-block">{{ option.name }}</span>
+            <span class="d-block d-sm-none">{{ option.acronym }}</span>
+          </label>
         </div>
+      </div>
 
-        <FilteredWeeklyMetricsTable
-          v-if="filteredActiveTab == 'Weekly'"
-          :filteredForecastMetrics="filteredForecastMetrics"
-          tableHeading="Filtered Weekly Forecast Metrics"
-        />
+      <FilteredWeeklyMetricsTable
+        v-if="filteredActiveTab == 'Weekly'"
+        :filteredForecastMetrics="filteredForecastMetrics"
+        tableHeading="Filtered Weekly Forecast Metrics"
+      />
 
-        <FilteredMonthlyMetricsTable
-          v-if="filteredActiveTab == 'Monthly'"
-          :filteredForecastMetrics="filteredForecastMetrics"
-          tableHeading="Filtered Monthly Forecast Metrics"
-        />
-      </card>
-      <h4 class="font-weight-bold">Top 10 SKUs Forecast</h4>
-      <WeeklyForecast
-        :tableHeading="'Revenue'"
-        :forecast_attribute="'retail_sales'"
-        :weeklyforecast="weeklyforecast"
+      <FilteredMonthlyMetricsTable
+        v-if="filteredActiveTab == 'Monthly'"
+        :filteredForecastMetrics="filteredForecastMetrics"
+        tableHeading="Filtered Monthly Forecast Metrics"
       />
-      <WeeklyForecast
-        :tableHeading="'Units Sales'"
-        :forecast_attribute="'units_sales'"
-        :weeklyforecast="weeklyforecast"
-      />
-      <WeeklyForecast
-        :tableHeading="'AUR'"
-        :forecast_attribute="'aur'"
-        :weeklyforecast="weeklyforecast"
-      />
-    </div>
+    </card>
+
+    <h4 class="font-weight-bold" v-if="isFilteredForecast">
+      Top 10 SKUs Forecast
+    </h4>
+    <ForecastBySkuTable
+      v-if="isFilteredForecast"
+      :tableHeading="'Revenue'"
+      :forecast_attribute="'retail_sales'"
+      :topTenSkusData="topTenSkusData"
+    />
+    <ForecastBySkuTable
+      v-if="isFilteredForecast"
+      :tableHeading="'Units Sales'"
+      :forecast_attribute="'units_sales'"
+      :topTenSkusData="topTenSkusData"
+    />
+    <ForecastBySkuTable
+      v-if="isFilteredForecast"
+      :tableHeading="'AUR'"
+      :forecast_attribute="'aur'"
+      :topTenSkusData="topTenSkusData"
+    />
+    <!-- </div> -->
   </div>
 </template>
 
@@ -241,7 +257,7 @@ import RegularFilters from "../components/Filters/RegularFilter.vue";
 import ProgramFilters from "../components/Filters/ProgramFilter.vue";
 import StatsWidget from "../components/StatsWidget.vue";
 import AdjustmentTable from "../components/Adjustments/AdjustmentTable.vue";
-import WeeklyForecast from "../components/Forecast/ForecastBySkuTable.vue";
+import ForecastBySkuTable from "../components/Forecast/ForecastBySkuTable.vue";
 import Card from "~/components/Cards/Card.vue";
 import WeeklyMetricsTable from "../components/Metrics/WeeklyMetricsTable.vue";
 import MonthlyMetricsTable from "../components/Metrics/MonthlyMetricsTable.vue";
@@ -261,7 +277,7 @@ export default {
     AdjustmentTable,
     RegularFilters,
     ProgramFilters,
-    WeeklyForecast,
+    ForecastBySkuTable,
     Card,
     FilteredWeeklyMetricsTable,
     FilteredMonthlyMetricsTable,
@@ -271,13 +287,17 @@ export default {
 
   data() {
     return {
-      activeFilterType: "Regular",
       isFilteredForecast: false,
+      isFilteredPageDataLoading: false,
+      isFilteredWeeklyMetricsLoaded: false,
+      isFilteredStatsLoaded: false,
+      isTopSkuDataLoaded: false,
+      activeFilterType: "Regular",
       activeTab: "Weekly",
       filteredActiveTab: "Weekly",
       baseAdjustmentsList: [],
       baseMetricsList: [],
-      weeklyforecast: [],
+      topTenSkusData: [],
       showManualAdj: false,
       changeMABtnText: false,
       disbleAdjustment: false,
@@ -414,38 +434,41 @@ export default {
       this.activeFilterType = type;
       this.$store.commit("updateRegularFilter", []);
     },
-    async getFilteredForecastData(requestedFilterOption) {
+    async getFilteredWeeklyMetrics(requestedFilterOption) {
       requestedFilterOption["filterType"] = "week";
-      this.filterMonthly = false;
-      this.filterWeekly = true;
-      this.$store.commit("updateLoadingstate", true);
-      const [weeklyforecast, filteredForecastMetrics] = await Promise.all([
-        this.$axios.$post(`/get-filtered-forecast-data`, this.regularFilters),
-        this.$axios.$post(
-          `/get-filtered-forecast-metrics`,
-          requestedFilterOption
-        ),
-      ]);
-
-      this.weeklyforecast = weeklyforecast;
-      this.filteredForecastMetrics = filteredForecastMetrics;
-      // if (this.refreshWidget) {
-      //   this.$refs.filterWidgets.getFilteredStatsWidgetData(
-      //     this.regularFilters
-      //   );
-      // }
-      this.$store.commit("toggleCTAState");
-      this.$store.commit("toggleProgramFilterCTAState");
-      this.$store.commit("updateLoadingstate", false);
-
-      this.refreshWidget = true;
-      this.notifyVue(
-        "top",
-        "right",
-        "Filtered Results Fetched Successfully ",
-        3
+      const filteredWeeklyforecast = await this.$axios.$post(
+        `/get-filtered-forecast-metrics`,
+        requestedFilterOption
       );
+      this.filteredForecastMetrics = filteredWeeklyforecast;
     },
+    async getFilteredTopSkus() {
+      const topTenSkusData = await this.$axios.$post(
+        `/get-filtered-forecast-data`,
+        this.regularFilters
+      );
+      this.topTenSkusData = topTenSkusData;
+    },
+    // async getFilteredForecastData(requestedFilterOption) {
+    //   requestedFilterOption["filterType"] = "week";
+    //   this.filterMonthly = false;
+    //   this.filterWeekly = true;
+    //   this.$store.commit("updateLoadingstate", true);
+    //   const [weeklyforecast, filteredForecastMetrics] = await Promise.all([
+    //     this.$axios.$post(`/get-filtered-forecast-data`, this.regularFilters),
+    //     this.$axios.$post(
+    //       `/get-filtered-forecast-metrics`,
+    //       requestedFilterOption
+    //     ),
+    //   ]);
+
+    //   this.weeklyforecast = weeklyforecast;
+    //   this.filteredForecastMetrics = filteredForecastMetrics;
+
+    //   this.$store.commit("toggleCTAState");
+    //   this.$store.commit("toggleProgramFilterCTAState");
+    //   this.$store.commit("updateLoadingstate", false);
+    // },
     emptyFieldCleaner(reqBody) {
       for (let key in reqBody) {
         if (reqBody[key] == "" || reqBody[key] == undefined) {
@@ -483,7 +506,9 @@ export default {
         status: "Pending",
       });
       this.baseAdjustmentsList.adjustments.unshift(res.manualAjustment);
-      this.baseMetricsList = JSON.parse(localStorage.getItem("adjustmentTableData"))      
+      this.baseMetricsList = JSON.parse(
+        localStorage.getItem("adjustmentTableData")
+      );
       res.manualAjustment.status == "Pending"
         ? this.notifyVue(
             "top",
@@ -517,7 +542,9 @@ export default {
         if (adjustmentsJson) {
           if (
             adjustmentsJson &&
-            ["Completed", "Failed", "Error"].includes(adjustmentsJson.adjustment.status)
+            ["Completed", "Failed", "Error"].includes(
+              adjustmentsJson.adjustment.status
+            )
           ) {
             this.callToIntervalAjax = false;
             this.disbleAdjustment = false;
@@ -538,7 +565,7 @@ export default {
       this.$store.commit("updateRegularFilter", []);
       this.allAppliedFilters = [];
     },
-    resetRegularFilter() {
+    resetFilterPayloadOptions() {
       this.productSourceValues = [];
       this.brandTypeValues = [];
       this.lifeCycleValues = [];
@@ -554,12 +581,8 @@ export default {
       this.filter_programs = [];
     },
     async appliedFilters() {
-      this.notifyVue(
-        "top",
-        "right",
-        "Fetching Filtered Results. We'll notify you here once the Filtered Results are available",
-        4
-      );
+      this.isFilteredForecast = true;
+      this.isFilteredPageDataLoading = true;
       this.regularFilters = {
         filter_product_sources: this.productSourceValues,
         filter_brand_types: this.brandTypeValues,
@@ -575,7 +598,7 @@ export default {
         filter_sub_classes: this.subClassesValues,
         filter_programs: this.programValues,
       };
-      this.resetRegularFilter();
+      this.resetFilterPayloadOptions();
       let requestedFilterOption = this.emptyFieldCleaner(this.regularFilters);
       this.allAppliedFilters = [];
       for (let [key, value] of Object.entries(this.regularFilters)) {
@@ -583,10 +606,12 @@ export default {
           key.replace("filter_", "").replace("_", " ") + ": " + value.join(", ")
         );
       }
-      await this.getFilteredForecastData(requestedFilterOption);
-      this.isFilteredForecast = true;
-      this.filteredActiveTab = "Weekly";
-      this.refreshWidget = true;
+      // await this.getFilteredForecastData(requestedFilterOption);
+      this.getFilteredTopSkus();
+      await this.getFilteredWeeklyMetrics(requestedFilterOption);
+      this.isFilteredPageDataLoading = false;
+      this.$store.commit("toggleCTAState");
+      this.$store.commit("toggleProgramFilterCTAState");
     },
     notifyVue(verticalAlign, horizontalAlign, message, type) {
       this.$notify({
@@ -656,17 +681,11 @@ export default {
       ];
     },
     showRegularResetFilter() {
-      return this.$store.state.appliedRegularFilter.length > 0 &&
-        !this.$store.state.isDataLoading
-        ? true
-        : false;
+      return this.$store.state.appliedRegularFilter.length > 0 ? true : false;
     },
     showProgramResetFilter() {
       console.log("---", this.$store.state.isDataLoading);
-      return this.$store.state.appliedRegularFilter.length > 0 &&
-        !this.$store.state.isDataLoading
-        ? true
-        : false;
+      return this.$store.state.appliedRegularFilter.length > 0 ? true : false;
     },
   },
   mounted() {
