@@ -259,7 +259,7 @@ export default {
     async shareScenario() {
       //share-scenario
       if (this.previewBtnText == "Merge Scenario") {
-        if (this.mergeScenario().scenario.id) {
+        if (this.mergeScenario() !== null) {
           this.notifyVue(
             "top",
             "right",
