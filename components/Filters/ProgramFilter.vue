@@ -2749,6 +2749,5 @@ export default {
 <style>
 .applyFilterBtn {
   height: 43px;
-  margin-top: 8px;
 }
 </style>
