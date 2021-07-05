@@ -467,7 +467,7 @@ export default {
             progress: true,
           }
         );
-        if (scenarioTypesJson) {
+        if (adjustmentsJson) {
           if (
             adjustmentsJson &&
             ["Completed", "Failed"].includes(adjustmentsJson.adjustment.status)
