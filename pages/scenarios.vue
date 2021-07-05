@@ -328,7 +328,7 @@ export default {
         if (scenarioTypesJson) {
           if (
             scenarioTypesJson &&
-            ["Completed", "Failed", "Error"].includes(
+            ["Completed", "Failed", "Error", "Merged"].includes(
               scenarioTypesJson.scenario.status
             )
           ) {

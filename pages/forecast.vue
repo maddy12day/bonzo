@@ -453,7 +453,7 @@ export default {
           localStorage.getItem("baseVersionId")
         ),
         filter_level: "baseVersion",
-        is_active: true,
+        is_active: false,
         adjusted_metrics_name: this.adustments.metrics_name,
         adjusted_metrics_cell_date: new Date(this.adustments.weekend_date),
         before_adjustment_value: parseFloat(this.adustments.old_value),
@@ -493,7 +493,7 @@ export default {
         if (adjustmentsJson) {
           if (
             adjustmentsJson &&
-            ["Completed", "Failed"].includes(adjustmentsJson.adjustment.status)
+            ["Completed", "Failed", "Error"].includes(adjustmentsJson.adjustment.status)
           ) {
             this.callToIntervalAjax = false;
             this.disbleAdjustment = false;
