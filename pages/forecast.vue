@@ -471,6 +471,7 @@ export default {
         : "";
       this.showDiscardBtn = false;
       this.showManualAdj = false;
+      this.callToIntervalAjax = true;
       if (res.manualAjustment.status == "Punding") {
         this.showManualAdj = false;
         this.changeMABtnText = false;
