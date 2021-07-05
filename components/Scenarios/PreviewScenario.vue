@@ -279,6 +279,9 @@
             property="planned_revenue_percent"
             align="right"
           >
+            <template slot-scope="scope">
+              {{ scope.row.planned_revenue_percent | toTwoDigitsFloat }}
+            </template>
           </el-table-column>
           <el-table-column
             min-width="190"
