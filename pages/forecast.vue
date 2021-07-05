@@ -296,7 +296,7 @@ export default {
       this.newNessValues = values;
     },
     getBrandValus(values) {
-      this.getBrandValus = values;
+      this.brandValues = values;
     },
     getChannelValues(values) {
       this.channelValues = values;
@@ -379,6 +379,7 @@ export default {
     },
     async showFilteredMetricsByDuration(activeTab) {
       this.filteredActiveTab = activeTab;
+
       let requestedFilterOption = this.emptyFieldCleaner(this.regularFilters);
 
       if (this.filteredActiveTab == "Weekly") {
@@ -532,6 +533,7 @@ export default {
         filter_collections: this.collectionValues,
         filter_skus: this.skuValues,
       };
+      console.log("this.regularFilters", this.regularFilters);
       let requestedFilterOption = this.emptyFieldCleaner(this.regularFilters);
       this.allAppliedFilters = [];
       for (let [key, value] of Object.entries(this.regularFilters)) {

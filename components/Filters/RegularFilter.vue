@@ -6,7 +6,7 @@
         placeholder="Product Source"
         SelectedMessValue="Product Source"
         :multiple="true"
-        @customEvent="getProductSource"
+        @customEvent="(event) => (getProductSource(event), test(event))"
       />
     </div>
     <div class="col-md-3">
@@ -90,7 +90,7 @@
       />
     </div>
 
-    <div :class="showAplyFilterBtn ? 'col-md-6 mt-2' : 'col-md-8 mt-2'">
+    <div :class="showAplyFilterBtn ? 'col-md-7 mt-2' : 'col-md-8 mt-2'">
       <CustomMultiSelect
         :Options="skuOptions"
         placeholder="SKUs"
@@ -100,7 +100,7 @@
         ref="skus"
       />
     </div>
-    <div class="col-md-3 mt-1 button-div" v-if="showAplyFilterBtn">
+    <div class="col-md-2 mt-1 button-div" v-if="showAplyFilterBtn">
       <button
         class="btn btn-sm btn-primary btn-block applyFilterBtn"
         style="line-height: 28px"
@@ -165,8 +165,8 @@ export default {
     },
   },
   methods: {
-    test() {
-      console.log("clled");
+    test(value) {
+      console.log("clled000", value);
     },
     appliedFilterHandler() {
       this.$emit("appliedFilters");
