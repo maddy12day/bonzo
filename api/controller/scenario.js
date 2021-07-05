@@ -392,7 +392,6 @@ export const mergeScenarioWithBase = async (req, res) => {
         id: parseInt(req.body.id)
       },
       data: {
-        is_part_of_base: true,
         merged_with_base_id: parseInt(req.body.baseVersionId),
         status: "Merge Pending",
         merged_with_base_at: new Date(),
