@@ -1570,7 +1570,7 @@ export default {
         this.$emit("EvtAdjValues", {
           new_value: value,
           weekend_date: JSON.parse(localStorage.getItem("weekendDates"))[
-            innerIndex-1
+            innerIndex - 1
           ],
           old_value:
             oldTableData[index][

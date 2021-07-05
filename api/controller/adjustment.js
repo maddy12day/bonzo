@@ -46,7 +46,7 @@ export const getWeekendDates = async (req, res) => {
     });
   }
 }
-
+// create manual adjustment
 export const createManualAdjustment = async (req, res) => {
   try{
     console.log(req.body)
@@ -108,3 +108,30 @@ export const checkAdjustmentStatus = async (req, res) => {
     });
   }
 };
+// master metrics api
+export const getMasterMetricsData = async (req, res) => {
+  try {
+    const masterMetrics =  await prisma.metrics_master.findMany({
+      where: {
+        id: {
+          gt: 0
+        }
+      },
+      select: {
+        name: true,
+        title: true
+      }
+    });
+    const masterMetricsData = JSON.parse(JSON.stringify(
+      masterMetrics,
+      (key, value) => (typeof value === "bigint" ? value.toString() : value) // return everything else unchanged
+    ))
+    res.json({
+      masterMetricsData
+    });
+  }catch(error) {
+    res.json({
+      error:`error found in master metrics api ${error}`
+    });
+  }
+}
