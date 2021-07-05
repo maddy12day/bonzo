@@ -24,7 +24,7 @@
             </span>
           </label>
         </div>
-        <div class="btn-custom-div">
+        <div class="btn-custom-div" v-if="applyCtaDisabled" @click="resetFilter">
           <label class="btn btn-sm btn-dark btn-simple btn-custom">
             <span class="d-none d-sm-block">Reset Filters</span>
           </label>
@@ -34,7 +34,6 @@
         :showAplyFilterBtn="true"
         v-if="activeFilterType == 'Regular'"
         @appliedFilters="appliedFilters"
-        @resetFilter="resetFilter"
         @getBroductSource="getProductSource"
         @getBrandType="getBrandType"
         @getLifyClycle="getLifeCycle"
@@ -51,7 +50,6 @@
       <ProgramFilters
         :showAplyFilterBtn="true"
         v-if="activeFilterType == 'Program'"
-        @resetFilter="resetFilter"
         @getBroductSource="getProductSource"
         @getBrandType="getBrandType"
         @getLifyClycle="getLifeCycle"
@@ -512,6 +510,7 @@ export default {
     resetFilter() {
       console.log("ioioio");
       this.forceRerender();
+      this.$store.commit("updateRegularFilter",[]);
     },
     async appliedFilters() {
       this.notifyVue(
@@ -600,6 +599,9 @@ export default {
           icon: "tim-icons icon-gift-2",
         },
       ];
+    },
+    applyCtaDisabled() {
+      return this.$store.state.appliedRegularFilter.length == 0 || this.$store.state.regularFilterCTADisabled == true ? false : true;
     },
   },
   mounted() {
