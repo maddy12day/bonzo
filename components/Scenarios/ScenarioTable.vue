@@ -254,18 +254,18 @@ export default {
           id: this.currentScenarioId,
         }
       );
-      return mergeScenario;
-    },
-    async shareScenario() {
-      //share-scenario
-      if (this.previewBtnText == "Merge Scenario") {
-        if (this.mergeScenario().scenario.id) {
+      if(mergeScenario) {
           this.notifyVue(
             "top",
             "right",
             "Submitted scenario to model for merging with base. Check Scenario table for updates."
           );
-        }
+      }
+    },
+    async shareScenario() {
+      //share-scenario
+      if (this.previewBtnText == "Merge Scenario") {
+       this.mergeScenario();
       } else {
         const scenario = await this.$axios.$get(
           `/share-scenario/${this.currentScenarioId}`
