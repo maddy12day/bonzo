@@ -19,9 +19,7 @@
               @click="showFilterType(option.name)"
             />
             <span class="d-none d-sm-block">{{ option.name }}</span>
-            <span class="d-block d-sm-none">
-              <i :class="option.icon"></i>
-            </span>
+            <span class="d-block d-sm-none">{{ option.name }}</span>
           </label>
         </div>
         <RegularFilters
@@ -111,6 +109,7 @@
             <button
               class="btn btn-primary createScenarioBtn"
               @click="createScenario"
+              :disabled="callToIntervalAjaxSCom"
             >
               Create Scenario
             </button>
@@ -126,6 +125,7 @@
       :type="'yourScenarios'"
       v-if="showScenarioTable"
       useClass="fixedHeightScrollTable"
+      previewBtnText="Share Scenario"
     />
   </div>
 </template>
@@ -164,6 +164,7 @@ export default {
       amountValue: "",
       scenarioNameValue: "",
       callToIntervalAjax: true,
+      disabledScenarioBtn: false,
       showScenarioTable: false,
       type: ["", "info", "success", "warning", "danger"],
       notifications: {
@@ -316,24 +317,31 @@ export default {
 
     // check status after every 10 sec for user scenarios
     async checkScenarioStatus() {
-      if (this.callToIntervalAjax) {
+      console.log("this.callToIntervalAjaxSCom", this.callToIntervalAjaxSCom);
+      if (this.callToIntervalAjaxSCom) {
         const scenarioTypesJson = await this.$axios.$get(
           `/get-scenario-status/${this.$auth.user.user_id}`,
           {
             progress: true,
           }
         );
-        if (
-          scenarioTypesJson.scenario.status !== "Completed" ||
-          scenarioTypesJson.scenario.status !== "Failed"
-        ) {
-          this.callToIntervalAjax = true;
-          this.sharedScenariosList.scenarios[0].status =
-            scenarioTypesJson.scenario.status;
-        } else {
-          this.callToIntervalAjax = false;
-          this.sharedScenariosList.scenarios[0].status =
-            scenarioTypesJson.scenario.status;
+        if (scenarioTypesJson) {
+          if (
+            scenarioTypesJson &&
+            ["Completed", "Failed", "Error", "Merged"].includes(
+              scenarioTypesJson.scenario.status
+            )
+          ) {
+            this.callToIntervalAjax = false;
+            this.disabledScenarioBtn = false;
+            this.sharedScenariosList.scenarios[0].status =
+              scenarioTypesJson.scenario.status;
+          } else {
+            this.callToIntervalAjax = true;
+            this.disabledScenarioBtn = true;
+            this.sharedScenariosList.scenarios[0].status =
+              scenarioTypesJson.scenario.status;
+          }
         }
       }
     },
@@ -347,6 +355,12 @@ export default {
     }, 10000);
   },
   computed: {
+    disbledCom() {
+      return this.disabledScenarioBtn;
+    },
+    callToIntervalAjaxSCom() {
+      return this.callToIntervalAjax;
+    },
     sharedScenariosListCom() {
       console.log(
         "***************** this.sharedScenariosList",
@@ -356,9 +370,10 @@ export default {
     },
     filtersType() {
       return [
-        { name: "Regular", icon: "tim-icons icon-single-02" },
+        { name: "Regular", acronym: "R", icon: "tim-icons icon-single-02" },
         {
           name: "Program",
+          acronym: "P",
           icon: "tim-icons icon-gift-2",
         },
       ];

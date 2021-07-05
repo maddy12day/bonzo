@@ -19,9 +19,7 @@
               @click="showFilterType(option.name)"
             />
             <span class="d-none d-sm-block">{{ option.name }}</span>
-            <span class="d-block d-sm-none">
-              <i :class="option.icon"></i>
-            </span>
+            <span class="d-block d-sm-none">{{ option.name }}</span>
           </label>
         </div>
         <div
@@ -130,9 +128,7 @@
               @click="showMetricsByDuration(option.name)"
             />
             <span class="d-none d-sm-block">{{ option.name }}</span>
-            <span class="d-block d-sm-none">
-              <i :class="option.icon"></i>
-            </span>
+            <span class="d-block d-sm-none">{{ option.name }}</span>
           </label>
         </div>
       </div>
@@ -154,33 +150,32 @@
       />
       <div class="col-md-12 text-right">
         <button
-          class="btn btn-primary btn-sm text-left"
+          :class="`btn btn-primary btn-sm text-left ${
+            disbledCom || showManualAdj ? 'disabled' : ''
+          }`"
           @click="switchToManualAdj"
-          v-if="!changeMABtnText"
+          :disabled="disbledCom || showManualAdj"
+          v-if="!changeMABtnText && activeTab == 'Weekly'"
         >
           Manual Ajustment
         </button>
         <button
-          :class="
-            `btn btn-primary btn-sm text-left ${
-              disbleAdjustment ? 'disabled' : ''
-            }`
-          "
+          :class="`btn btn-primary btn-sm text-left ${
+            disbledCom ? 'disabled' : ''
+          }`"
           @click="createManualAdjustment"
           v-if="changeMABtnText"
-          :disabled="disbleAdjustment"
+          :disabled="disbledCom"
         >
-          Run Forecast
+          Submit Adjustment
         </button>
         <button
-          :class="
-            `btn btn-primary btn-sm ${disbleAdjustment ? 'disabled' : ''}`
-          "
+          :class="`btn btn-primary btn-sm ${disbledCom ? 'disabled' : ''}`"
           @click="discardChanges"
           v-if="showDiscardBtn"
-          :disabled="disbleAdjustment"
+          :disabled="disbledCom"
         >
-          discard
+          Discard
         </button>
       </div>
     </card>
@@ -204,9 +199,7 @@
                 @click="showFilteredMetricsByDuration(option.name)"
               />
               <span class="d-none d-sm-block">{{ option.name }}</span>
-              <span class="d-block d-sm-none">
-                <i :class="option.icon"></i>
-              </span>
+              <span class="d-block d-sm-none">{{ option.acronym }}</span>
             </label>
           </div>
         </div>
@@ -351,8 +344,8 @@ export default {
     // manual adjustments
     discardChanges() {
       this.showManualAdj = false;
-      this.changeMABtnText = false;
       this.showDiscardBtn = false;
+      this.changeMABtnText = false;
     },
     getAdjustedValues(values) {
       if (values) {
@@ -482,7 +475,7 @@ export default {
           localStorage.getItem("baseVersionId")
         ),
         filter_level: "baseVersion",
-        is_active: true,
+        is_active: false,
         adjusted_metrics_name: this.adustments.metrics_name,
         adjusted_metrics_cell_date: new Date(this.adustments.weekend_date),
         before_adjustment_value: parseFloat(this.adustments.old_value),
@@ -491,9 +484,14 @@ export default {
       });
       this.baseAdjustmentsList.adjustments.unshift(res.manualAjustment);
       res.manualAjustment.status == "Pending"
-        ? this.notifyVue("top", "right", "adjustment is in progress...")
+        ? this.notifyVue(
+            "top",
+            "right",
+            '"Adjustment" submitted for processing with model. Please check "Base Model Adjustments" section for updates'
+          )
         : "";
       this.showDiscardBtn = false;
+      this.showManualAdj = false;
       if (res.manualAjustment.status == "Punding") {
         this.showManualAdj = false;
         this.changeMABtnText = false;
@@ -506,26 +504,29 @@ export default {
 
     // check status after every 10 sec for user scenarios
     async checkManualAdjustmentStatus() {
-      if (this.callToIntervalAjax) {
+      // console.log(this.callToIntervalAjax)
+      if (this.callToIntervalAjaxCom) {
         const adjustmentsJson = await this.$axios.$get(
           `/get-adjustment-status/${this.$auth.user.user_id}`,
           {
             progress: true,
           }
         );
-        if (
-          adjustmentsJson.adjustment.status !== "Completed" ||
-          adjustmentsJson.adjustment.status !== "Failed"
-        ) {
-          this.disbleAdjustment = true;
-          this.callToIntervalAjax = true;
-          this.baseAdjustmentsList.adjustments[0].status =
-            adjustmentsJson.adjustment.status;
-        } else {
-          this.callToIntervalAjax = false;
-          this.baseAdjustmentsList.adjustments[0].status =
-            adjustmentsJson.adjustment.status;
-          this.disbleAdjustment = false;
+        if (adjustmentsJson) {
+          if (
+            adjustmentsJson &&
+            ["Completed", "Failed", "Error"].includes(adjustmentsJson.adjustment.status)
+          ) {
+            this.callToIntervalAjax = false;
+            this.disbleAdjustment = false;
+            this.baseAdjustmentsList.adjustments[0].status =
+              adjustmentsJson.adjustment.status;
+          } else {
+            this.disbleAdjustment = true;
+            this.callToIntervalAjax = true;
+            this.baseAdjustmentsList.adjustments[0].status =
+              adjustmentsJson.adjustment.status;
+          }
         }
       }
     },
@@ -610,6 +611,9 @@ export default {
     },
   },
   computed: {
+    callToIntervalAjaxCom() {
+      return this.callToIntervalAjax;
+    },
     disbledCom() {
       return this.disbleAdjustment;
     },
@@ -618,27 +622,30 @@ export default {
     },
     Durations() {
       return [
-        { name: "Monthly", icon: "tim-icons icon-single-02" },
+        { name: "Monthly", acronym: "M", icon: "tim-icons icon-single-02" },
         {
           name: "Weekly",
+          acronym: "W",
           icon: "tim-icons icon-gift-2",
         },
       ];
     },
     FilteredDurations() {
       return [
-        { name: "Monthly", icon: "tim-icons icon-single-02" },
+        { name: "Monthly", acronym: "M", icon: "tim-icons icon-single-02" },
         {
           name: "Weekly",
+          acronym: "W",
           icon: "tim-icons icon-gift-2",
         },
       ];
     },
     filtersType() {
       return [
-        { name: "Regular", icon: "tim-icons icon-single-02" },
+        { name: "Regular", acronym: "R", icon: "tim-icons icon-single-02" },
         {
           name: "Program",
+          acronym: "P",
           icon: "tim-icons icon-gift-2",
         },
       ];
