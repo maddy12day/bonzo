@@ -254,19 +254,19 @@ export default {
           id: this.currentScenarioId,
         }
       );
-      if(mergeScenario) {
-          this.notifyVue(
-            "top",
-            "right",
-            "Submitted scenario to model for merging with base. Check Scenario table for updates."
-          );
-          this.$emit('scenarioStatus');
+      if (mergeScenario) {
+        this.notifyVue(
+          "top",
+          "right",
+          "Submitted scenario to model for merging with base. Check Scenario table for updates."
+        );
+        this.$emit("scenarioStatus");
       }
     },
     async shareScenario() {
       //share-scenario
       if (this.previewBtnText == "Merge Scenario") {
-       this.mergeScenario();
+        this.mergeScenario();
       } else {
         const scenario = await this.$axios.$get(
           `/share-scenario/${this.currentScenarioId}`
@@ -304,13 +304,13 @@ export default {
       );
       this.dialogVisible = true;
     },
-    getUserName: function (id) {
+    getUserName: function(id) {
       let allUserInfo = JSON.parse(window.localStorage.getItem("allUsersInfo"));
       let userName = allUserInfo.users.filter((user) => (user.id = id))[0]
         .first_name;
       return userName;
     },
-    addUserToScenarioTableData: function (scenarioTableData, type) {
+    addUserToScenarioTableData: function(scenarioTableData, type) {
       if ((type = "sharedScenarios")) {
         this.scenarioTableDataForTable = scenarioTableData.map((v) => ({
           ...v,
@@ -330,8 +330,8 @@ export default {
         return "success-row";
       } else if (row.status === "Failed" || row.status === "Error") {
         return "warning-row";
-      }else if (row.status === "Merged") {
-        return "bg-secondary text-muted";
+      } else if (row.status === "Merged") {
+        return "processing-row";
       }
       return "other-row";
     },
@@ -358,7 +358,9 @@ export default {
     color: #1d8cf8 !important;
   }
 }
-
+.el-table .merged-row {
+  background: #e3eeff;
+}
 .el-table .warning-row {
   background: rgb(255, 244, 243);
 }
