@@ -127,6 +127,7 @@
       :type="'yourScenarios'"
       v-if="showScenarioTable"
       useClass="fixedHeightScrollTable"
+      previewBtnText="Share Scenario"
     />
   </div>
 </template>

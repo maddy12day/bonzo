@@ -360,3 +360,51 @@ export const checkScenarioStatus = async (req, res) => {
     });
   }
 };
+
+// share scenarios
+export const shareScenario = async (req, res) => {
+  try {
+    const scenario = await prisma.scenarios
+    .update({
+      where: {
+        id: parseInt(req.params.id)
+      },
+      data: {
+        is_shared: true
+      },
+    })
+    res.json({
+      scenario,
+      message: 'scenario shared successfully...',
+    });
+  } catch (error) {
+    res.status(500).json({
+      error: `something went wrong shared scenario api. ${error}`,
+    });
+  }
+}
+// merge scenarios
+export const mergeScenarioWithBase = async (req, res) => {
+  try {
+    const scenario = await prisma.scenarios
+    .update({
+      where: {
+        id: parseInt(req.body.id)
+      },
+      data: {
+        is_part_of_base: true,
+        merged_with_base_id: parseInt(req.body.baseVersionId),
+        status: "Merged",
+        merged_with_base_at: new Date(),
+      },
+    })
+    res.json({
+      scenario,
+      message: ' scenario successfully merged with base...',
+    });
+  } catch (error) {
+    res.status(500).json({
+      error: `something went wrong with merge scenario api. ${error}`,
+    });
+  }
+}

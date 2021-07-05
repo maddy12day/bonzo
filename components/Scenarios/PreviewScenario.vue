@@ -433,6 +433,9 @@
 
       <span slot="footer" class="dialog-footer">
         <div class="text-right ">
+          <button class="btn btn-primary " @click="shareScenario">
+           {{previewBtnText}}
+          </button>
           <button class="btn btn-primary " @click="showDialog = false">
             Close
           </button>
@@ -457,11 +460,18 @@ export default {
     "scenarioCategorySalesComparison",
     "scenarioCategoryComparison",
     "dialogVisible",
+    "previewBtnText"
   ],
   data() {
     return {
       showDialog: false,
     };
+  },
+  methods: {
+    shareScenario() {
+      this.$emit("shareScenarioEvt");
+      this.showDialog = false;
+    },
   },
   computed: {},
   watch: {

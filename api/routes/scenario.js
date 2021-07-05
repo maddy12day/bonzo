@@ -9,6 +9,8 @@ import {
   getScenarioCategorySalesComparison,
   getScenarioSalesSummary,
   checkScenarioStatus,
+  shareScenario,
+  mergeScenarioWithBase,
 } from "../controller/scenario";
 import { getAllUsers } from "../controller/user";
 
@@ -32,5 +34,7 @@ router.get(
 );
 router.get("/get-scenario-sales-summary/:id", getScenarioSalesSummary);
 router.get("/get-scenario-status/:id", checkScenarioStatus);
+router.get('/share-scenario/:id', shareScenario);
+router.post('/merge-scenario-with-base', mergeScenarioWithBase)
 
 export default router;

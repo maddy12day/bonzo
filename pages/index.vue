@@ -7,6 +7,7 @@
       tableHeading="Shared Scenarios"
       :scenarioTableData="sharedScenariosList.scenarios"
       :type="'sharedScenarios'"
+       previewBtnText="Merge Scenario"
     />
 
     <card card-body-classes="table-full-width">
@@ -71,6 +72,7 @@ export default {
     Card,
   },
   methods: {
+  
     async showMetricsByDuration(activeTab) {
       this.activeTab = activeTab;
       if (this.activeTab == "Weekly") {
@@ -87,6 +89,10 @@ export default {
         );
         this.baseMetricsList = JSON.parse(
           baseWeeklyMetricsListString.baseWeeklyMetrics
+        );
+          localStorage.setItem(
+          "baseVersionId",
+          this.baseMetricsList[0].demand_forecast_run_log_id
         );
       } else {
         // base metrics table for monthly
