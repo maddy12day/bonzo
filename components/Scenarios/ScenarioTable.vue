@@ -177,12 +177,14 @@
     <!-- Scenario Forecast Preview -->
     <PreviewScenario
       v-if="dialogVisible"
+      @shareScenarioEvt="shareScenario"
       @dialogVisible="closeDialog"
       :dialogVisible="dialogVisible"
       :scenarioSalesSummary="scenarioSalesSummary"
       :scenarioUnitSalesComparison="scenarioUnitSalesComparison"
       :scenarioCategorySalesComparison="scenarioCategorySalesComparison"
       :scenarioCategoryComparison="scenarioCategoryComparison"
+      :previewBtnText="previewBtnText"
     />
   </div>
 </template>
@@ -198,7 +200,13 @@ export default {
     [Dialog.name]: Dialog,
     PreviewScenario,
   },
-  props: ["tableHeading", "scenarioTableData", "type", "useClass"],
+  props: [
+    "tableHeading",
+    "scenarioTableData",
+    "type",
+    "useClass",
+    "previewBtnText",
+  ],
   data() {
     return {
       scenarioTableDataForTable: [],
@@ -208,8 +216,10 @@ export default {
       scenarioUnitSalesComparison: [],
       scenarioCategorySalesComparison: [],
       scenarioCategoryComparison: [],
+      currentScenarioId: null,
       page: 1,
       pageSize: 3,
+      typeColor: ["", "info", "success", "warning", "danger"],
     };
   },
   computed: {
@@ -224,6 +234,52 @@ export default {
     },
   },
   methods: {
+    notifyVue(verticalAlign, horizontalAlign, message) {
+      let color = 4;
+      this.$notify({
+        message: message,
+        timeout: 12000,
+        icon: "tim-icons icon-bell-55",
+        horizontalAlign: horizontalAlign,
+        verticalAlign: verticalAlign,
+        type: this.typeColor[color],
+      });
+    },
+    //merge-scenario-with-base
+    async mergeScenario() {
+      const mergeScenario = await this.$axios.$post(
+        `/merge-scenario-with-base`,
+        {
+          baseVersionId: localStorage.getItem("baseVersionId"),
+          id: this.currentScenarioId,
+        }
+      );
+      return mergeScenario;
+    },
+    async shareScenario() {
+      //share-scenario
+      if (this.previewBtnText == "Merge Scenario") {
+        if (this.mergeScenario().scenario.id) {
+          this.notifyVue(
+            "top",
+            "right",
+            "you have successfully merged scenario with base"
+          );
+        }
+      } else {
+        const scenario = await this.$axios.$get(
+          `/share-scenario/${this.currentScenarioId}`
+        );
+
+        if (scenario) {
+          this.notifyVue(
+            "top",
+            "right",
+            "you have successfully shared scenario "
+          );
+        }
+      }
+    },
     setPage(val) {
       this.page = val;
     },
@@ -231,6 +287,7 @@ export default {
       this.dialogVisible = false;
     },
     async handleScenarioClick(data) {
+      this.currentScenarioId = data.id;
       console.log("data--", this.dialogVisible);
       this.scenarioSalesSummary = await this.$axios.$get(
         `/get-scenario-sales-summary/${data.id}`
@@ -246,13 +303,13 @@ export default {
       );
       this.dialogVisible = true;
     },
-    getUserName: function (id) {
+    getUserName: function(id) {
       let allUserInfo = JSON.parse(window.localStorage.getItem("allUsersInfo"));
       let userName = allUserInfo.users.filter((user) => (user.id = id))[0]
         .first_name;
       return userName;
     },
-    addUserToScenarioTableData: function (scenarioTableData, type) {
+    addUserToScenarioTableData: function(scenarioTableData, type) {
       if ((type = "sharedScenarios")) {
         this.scenarioTableDataForTable = scenarioTableData.map((v) => ({
           ...v,
