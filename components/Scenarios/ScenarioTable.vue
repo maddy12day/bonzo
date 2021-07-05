@@ -250,8 +250,8 @@ export default {
       const mergeScenario = await this.$axios.$post(
         `/merge-scenario-with-base`,
         {
-          baseVersionId: localStorage.getItem("baseVersionId"),
-          id: this.currentScenarioId,
+          demand_planner_user_id: this.$auth.user.user_id,
+          id: this.currentScenarioId
         }
       );
       if (mergeScenario) {

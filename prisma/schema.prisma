@@ -81,7 +81,7 @@ model demand_forecast_run_log {
   scenario_id            Int?
   manual_adjustment_id   Int?
   ma_source_scenario_id  Int?
-  status                 String?   @db.VarChar(10)
+  status                 String?   @db.VarChar(20)
   error_message          String?   @db.VarChar(100)
 
   @@index([is_base_forecast], name: "dfrl_is_base_forecast_IDX")
