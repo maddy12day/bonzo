@@ -6,7 +6,7 @@
         placeholder="Product Source"
         SelectedMessValue="Product Source"
         :multiple="true"
-        @customEvent="(event) => (getProductSource(event), test(event))"
+        @customEvent="(event) => (getProductSource(event), updateGlobalFilterData(event))"
       />
     </div>
     <div class="col-md-3">
@@ -15,7 +15,7 @@
         placeholder="Brand Type"
         SelectedMessValue="Brand Type"
         :multiple="true"
-        @customEvent="getBrandType"
+        @customEvent="(event) => (getBrandType(event), updateGlobalFilterData(event))"
         ref="brandType"
       />
     </div>
@@ -25,7 +25,7 @@
         placeholder="Life Cycle"
         SelectedMessValue="Life Cycle"
         :multiple="true"
-        @customEvent="getLifeCycle"
+        @customEvent="(event) => (getLifeCycle(event), updateGlobalFilterData(event))"
         ref="lifeCycle"
       />
     </div>
@@ -35,7 +35,7 @@
         placeholder="Newness"
         SelectedMessValue="Newness"
         :multiple="true"
-        @customEvent="getNewness"
+         @customEvent="(event) => (getNewness(event), updateGlobalFilterData(event))"
         ref="newness"
       />
     </div>
@@ -45,7 +45,7 @@
         placeholder="Brands"
         SelectedMessValue="Brands"
         :multiple="true"
-        @customEvent="getChannelsByBrand"
+        @customEvent="(event) => (getChannelsByBrand(event), updateGlobalFilterData(event))"
         ref="brands"
       />
     </div>
@@ -55,7 +55,7 @@
         placeholder="Channel"
         SelectedMessValue="Channels"
         :multiple="true"
-        @customEvent="getBrandByChannel"
+        @customEvent="(event) => (getBrandByChannel(event), updateGlobalFilterData(event))"
         ref="channels"
       />
     </div>
@@ -65,7 +65,7 @@
         placeholder="Sub Channels"
         SelectedMessValue="Sub Channels"
         :multiple="true"
-        @customEvent="getSelectedSubChannel"
+        @customEvent="(event) => (getSelectedSubChannel(event), updateGlobalFilterData(event))"
         ref="subChannels"
       />
     </div>
@@ -75,7 +75,7 @@
         placeholder="Categories"
         SelectedMessValue="Categories"
         :multiple="true"
-        @customEvent="getSelectedCategories"
+        @customEvent="(event) => (getSelectedCategories(event), updateGlobalFilterData(event))"
         ref="categories"
       />
     </div>
@@ -85,7 +85,7 @@
         placeholder="Collections"
         SelectedMessValue="Collections"
         :multiple="true"
-        @customEvent="getSelectedCollections"
+        @customEvent="(event) => (getSelectedCollections(event), updateGlobalFilterData(event))"
         ref="collections"
       />
     </div>
@@ -96,7 +96,7 @@
         placeholder="SKUs"
         SelectedMessValue="SKUs"
         :multiple="true"
-        @customEvent="getSelectedSkus"
+        @customEvent="(event) => (getSelectedSkus(event), updateGlobalFilterData(event))"
         ref="skus"
       />
     </div>
@@ -161,22 +161,20 @@ export default {
   },
   computed: {
     applyCtaDisabled() {
-      return this.$store.state.regularFilterCTADisabled;
+      return this.$store.state.appliedRegularFilter.length == 0 || this.$store.state.regularFilterCTADisabled == true ? true : false;
     },
   },
   methods: {
-    test(value) {
-      console.log("clled000", value);
+    updateGlobalFilterData() {
+      let globalFilterArray = [];
+      globalFilterArray = [...this.productSourceValues, ...this.brandTypeValues,...this.newNessValues,...this.brandValues,...this.channelValues,...this.lifeCycleValues,...this.subChannelValues,...this.categoryValues,...this.collectionValues,...this.skuValues];
+      this.$store.commit("updateRegularFilter",globalFilterArray);
     },
     appliedFilterHandler() {
       this.$emit("appliedFilters");
       this.$store.commit("toggleCTAState");
     },
-    resetFilterHandler() {
-      this.$emit("resetFilter");
-    },
     getProductSource(value) {
-      console.log("clled");
       const optionGenerator = (data, keyName) => {
         return [
           { name: keyName },
