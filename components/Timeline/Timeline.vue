@@ -24,7 +24,7 @@
                 <p>Run ID: {{ genesisTimeLineNode.genesis_id }}</p>
                 <p>God User: {{ genesisTimeLineNode.god_user }}</p>
                 <p>
-                  <el-badge type="small" :value="genesisTimeLineNode.adjustment_count">
+                  <el-badge  :value="genesisTimeLineNode.adjustment_count">
                     <span class="badge badge-primary">Adjustments</span>
                   </el-badge>
                   <!--  @click="() => getGenesisData(genesisTimeLineNode)" -->

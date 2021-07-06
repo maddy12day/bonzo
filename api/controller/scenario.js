@@ -442,3 +442,20 @@ export const checkMergeScenarioStatus = async (req, res) => {
   }
 };
 
+//  get scenario details by click
+export const getScenarioDetailsById = async (req, res) =>  {
+  try{
+    const scenario = await prisma.scenarios.findUnique({
+      where: {
+        id: id
+      }
+    });
+    res.json({
+      scenario
+    });
+  }catch(error) {
+    res.json({
+      error: `something went wrong in getScenarioDetailsById ${error}.`
+    })
+  }
+}

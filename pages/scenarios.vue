@@ -123,7 +123,7 @@
       tableHeading="Your Scenarios"
       :scenarioTableData="sharedScenariosListCom.scenarios"
       :type="'yourScenarios'"
-      v-if="showScenarioTable"
+      v-if="showScenarioTable && sharedScenariosListCom.scenarios.length > 0"
       useClass="fixedHeightScrollTable"
       previewBtnText="Share Scenario"
     />
