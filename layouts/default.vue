@@ -162,5 +162,6 @@ $scaleSize: 0.95;
 .off-canvas-sidebar {
   height: calc(100vh - 60px);
   margin-top: 52px;
+  box-shadow: none;
 }
 </style>
