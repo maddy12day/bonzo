@@ -161,10 +161,6 @@ export const getFilteredForecastMetrics = async (req, res) => {
   let duration = req.body.filterType;
   delete req.body.filterType;
   try {
-<<<<<<< HEAD
-    console.log(whereQueryString(req.body, "idp"), "req.body--", whereQueryString(req.body, "idp").replace(/dp/g, "idp"));
-=======
->>>>>>> origin/feature/scenario-fixes
     let transaction_db = "morphe_staging";
 
     let query = `
