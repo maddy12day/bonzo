@@ -109,7 +109,7 @@
             <button
               class="btn btn-primary createScenarioBtn"
               @click="createScenario"
-              :disabled="callToIntervalAjaxSCom"
+              :disabled="disabledScenarioBtn"
             >
               Create Scenario
             </button>
@@ -281,7 +281,7 @@ export default {
         createScenarioJson.scenarioRes
       );
       this.showScenarioTable = true;
-      /*  await this.userAllScenarios(); */
+      this.disabledScenarioBtn = true;
       this.callToIntervalAjax = true;
       this.notifyVue("top", "right");
     },
@@ -302,12 +302,8 @@ export default {
     },
 
     async userAllScenarios() {
-      let allUserInfo = JSON.parse(window.localStorage.getItem("allUsersInfo"));
-      let currentUserId = allUserInfo.users.filter(
-        (user) => (user.email_id = this.$auth.user.email)
-      )[0].id;
       this.sharedScenariosList = await this.$axios.$get(
-        `/get-user-scenarios/${currentUserId}`,
+        `/get-user-scenarios/${this.$auth.user.user_id}`,
         {
           progress: true,
         }
@@ -325,7 +321,8 @@ export default {
             progress: true,
           }
         );
-        if (scenarioTypesJson) {
+        if (scenarioTypesJson !== {} && scenarioTypesJson.scenario) {
+          console.log("step====1")
           if (
             scenarioTypesJson &&
             ["Completed", "Failed", "Error", "Merged"].includes(
@@ -343,11 +340,14 @@ export default {
               scenarioTypesJson.scenario.status;
           }
         }
+      }else {
+         this.disabledScenarioBtn = false;
       }
     },
   },
 
   async mounted() {
+    console.log(this.$auth.user)
     this.getScenarioTypes();
     this.userAllScenarios();
     setInterval(() => {

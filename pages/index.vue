@@ -5,9 +5,10 @@
     <ScenarioTable
       v-if="sharedScenariosList.scenarios"
       tableHeading="Shared Scenarios"
-      :scenarioTableData="sharedScenariosList.scenarios"
+      :scenarioTableData="sharedScenariosListCom.scenarios"
       :type="'sharedScenarios'"
-       previewBtnText="Merge Scenario"
+      previewBtnText="Merge Scenario"
+      @scenarioStatus="scenarioMergeStatusUpdate"
     />
 
     <card card-body-classes="table-full-width">
@@ -60,6 +61,7 @@ export default {
       baseMetricsList: [],
       activeTab: "Weekly",
       userInfo: [],
+      callToIntervalAjax: true,
     };
   },
   components: {
@@ -70,7 +72,33 @@ export default {
     Card,
   },
   methods: {
-  
+    async scenarioMergeStatusUpdate() {
+      this.sharedScenariosList = await this.$axios.$get("/shared-scenarios", {
+        progress: true,
+      });
+    },
+    // check status after every 10 sec for user scenarios
+    async checkMergeScenarioStatus() {
+      console.log(
+        "this.callToIntervalAjaxSCom",
+        this.sharedScenariosList.scenarios
+      );
+      if (this.callToIntervalAjaxSCom) {
+        const scenarioTypesJson = await this.$axios.$get("/shared-scenarios", {
+          progress: true,
+        });
+        const mergedPending = scenarioTypesJson.scenarios.filter((item) =>
+          item.status.includes("Merge Pending")
+        );
+        if (mergedPending.length > 0) {
+          this.callToIntervalAjax = true;
+        } else {
+          this.callToIntervalAjax = false;
+        }
+        this.sharedScenariosList = scenarioTypesJson;
+      }
+    },
+
     async showMetricsByDuration(activeTab) {
       this.activeTab = activeTab;
       if (this.activeTab == "Weekly") {
@@ -88,7 +116,7 @@ export default {
         this.baseMetricsList = JSON.parse(
           baseWeeklyMetricsListString.baseWeeklyMetrics
         );
-          localStorage.setItem(
+        localStorage.setItem(
           "baseVersionId",
           this.baseMetricsList[0].demand_forecast_run_log_id
         );
@@ -130,9 +158,18 @@ export default {
     this.showMetricsByDuration("Weekly");
     this.getAllUserData();
     this.getWeekendDates();
+    setTimeout(() => {
+      this.checkMergeScenarioStatus();
+    }, 10000);
   },
 
   computed: {
+    callToIntervalAjaxSCom() {
+      return this.callToIntervalAjax;
+    },
+    sharedScenariosListCom() {
+      return this.sharedScenariosList;
+    },
     Durations() {
       return [
         { name: "Monthly", acronym: "M", icon: "tim-icons icon-calendar-60" },
@@ -147,5 +184,4 @@ export default {
 };
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

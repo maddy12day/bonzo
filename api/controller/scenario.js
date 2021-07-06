@@ -42,7 +42,7 @@ export const allSharedScenarios = async (req, res) => {
           select: {
             scenario_type: true,
           },
-        },
+        }
       },
       orderBy: {
         created_at: "desc",
@@ -119,7 +119,7 @@ export const createScenario = async (req, res) => {
 };
 
 // Function Used to Parse the data into El Table Friendly Format
-const parseCategoryUnitComparision = (results) => {
+export const parseCategoryUnitComparision = (results) => {
   const fields = ["Planned Units", "Adjusted Units", "Forecast Units"];
   let parsedData = [];
   for (let field of fields) {
@@ -156,7 +156,7 @@ const parseCategoryUnitComparision = (results) => {
 };
 
 // Function Used to Parse the data into El Table Friendly Format
-const parseCategorySaleComparision = (results) => {
+export const parseCategorySaleComparision = (results) => {
   const fields = ["Planned Revenue", "Adjusted Revenue", "Forecast Revenue"];
   let parsedData = [];
   for (let field of fields) {
@@ -392,11 +392,24 @@ export const mergeScenarioWithBase = async (req, res) => {
         id: parseInt(req.body.id)
       },
       data: {
-        merged_with_base_id: parseInt(req.body.baseVersionId),
         status: "Merge Pending",
-        merged_with_base_at: new Date(),
       },
-    })
+    });
+    const executed_by = await prisma.users.findUnique({
+      where: {
+        id: req.body.demand_planner_user_id,
+      },
+    });
+    const demandForecastRunlogRes = await prisma.demand_forecast_run_log.create({
+      data: {
+        is_base_forecast: false,
+        demand_planner_user_id: req.body.demand_planner_user_id,
+        scenario_id: req.body.id,
+        status: "Merge Pending",
+        forecast_type: "Merge",
+        executed_by: `${executed_by.first_name} ${executed_by.last_name}`,
+      },
+    });
     res.json({
       scenario,
       message: ' scenario successfully merged with base...',
@@ -407,3 +420,25 @@ export const mergeScenarioWithBase = async (req, res) => {
     });
   }
 }
+
+// check merge scenario status
+export const checkMergeScenarioStatus = async (req, res) => {
+  try {
+    const scenario = await prisma.scenarios.findMany({
+      where: {
+       status: "Merge Pending"
+      },
+      orderBy: {
+        created_at: "desc",
+      },
+    });
+    res.json({
+      scenario: scenario[0],
+    });
+  } catch (error) {
+    res.status(500).json({
+      error: `something went wrong in check merge scenario status api. ${error}`,
+    });
+  }
+};
+

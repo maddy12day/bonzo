@@ -5,7 +5,8 @@
       v-if="
         forecastYQData &&
           forecastYQData.filteredStats &&
-          forecastYQData.filteredStats.yearlyFilteredStats.length > 0
+          (forecastYQData.filteredStats.yearlyFilteredStats.length > 0 ||
+            forecastYQData.filteredStats.quarterlyFilteredStats.length > 0)
       "
     >
       <div class="col-md-12 text-right mb-2">
@@ -351,7 +352,7 @@ import Card from "~/components/Cards/Card.vue";
 import YearlyQuarterlyCard from "../components/YearlyQuarterlyCards/YearlyQuarterlyCards.vue";
 
 export default {
-  props: ["regularFilters"],
+  props: ["filterPayload"],
   data() {
     return {
       forecastYQData: {},
@@ -362,6 +363,8 @@ export default {
       currentYQTab: "Yearly",
       yearlyFilteredStats: [],
       quarterlyFilteredStats: [],
+      filterQuarterlyPayload: {},
+      isFilteredQuarterlyStatsFetched: false,
     };
   },
   components: {
@@ -371,11 +374,31 @@ export default {
   methods: {
     async calloutByDuration(duration) {
       this.currentYQTab = duration;
+      if (duration == "Yearly") {
+        this.getFilteredStatsWidgetData();
+        this.isFilteredQuarterlyStatsFetched = false;
+      } else {
+        if (!this.isFilteredQuarterlyStatsFetched) {
+          this.getFilteredQuarterlyStatsWidgetData();
+          this.isFilteredQuarterlyStatsFetched = true;
+        }
+      }
     },
-    async getFilteredStatsWidgetData(regularFilters) {
+    async getFilteredQuarterlyStatsWidgetData() {
       const filteredStatsWidgetData = await this.$axios.$post(
-        "/get-filtered-stats",
-        regularFilters
+        "/get-filtered-quarterly-stats",
+        this.filterQuarterlyPayload
+      );
+      this.forecastYQData = filteredStatsWidgetData;
+      this.quarterlyFilteredStats =
+        filteredStatsWidgetData.filteredStats.quarterlyFilteredStats;
+      this.yearlyFilteredStats =
+        filteredStatsWidgetData.filteredStats.yearlyFilteredStats;
+    },
+    async getFilteredStatsWidgetData() {
+      const filteredStatsWidgetData = await this.$axios.$post(
+        "/get-filtered-yearly-stats",
+        this.filterQuarterlyPayload
       );
       this.forecastYQData = filteredStatsWidgetData;
       this.quarterlyFilteredStats =
@@ -385,7 +408,12 @@ export default {
     },
   },
   async created() {
-    this.getFilteredStatsWidgetData(this.regularFilters);
+    console.log(
+      "FilteredStatsWidget::: this.filterPayload",
+      this.filterPayload
+    );
+    this.filterQuarterlyPayload = this.filterPayload;
+    this.getFilteredStatsWidgetData();
   },
   computed: {
     yearlyQuarterlyTabs() {

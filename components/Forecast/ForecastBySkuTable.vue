@@ -3,7 +3,7 @@
     <h4 class="card-title text-bold font-weight-bold">
       {{ tableHeading }}
     </h4>
-    <el-table :data="weeklyforecast.parsedWeeklyData">
+    <el-table :data="topTenSkusData.parsedWeeklyData">
       <el-table-column min-width="150" sortable label="SKU" property="sku">
       </el-table-column>
       <el-table-column min-width="250" sortable label="Title" property="title">
@@ -287,12 +287,12 @@
 import { Table, TableColumn } from "element-ui";
 
 export default {
-  name: "WeeklyForecast",
+  name: "ForecastBySkuTable",
   components: {
     [Table.name]: Table,
     [TableColumn.name]: TableColumn,
   },
-  props: ["tableHeading", "forecast_attribute", "weeklyforecast"],
+  props: ["tableHeading", "forecast_attribute", "topTenSkusData"],
   data() {
     return {
       forecastData: [],

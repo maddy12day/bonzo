@@ -224,6 +224,53 @@ export default {
     },
   },
   methods: {
+    notifyVue(verticalAlign, horizontalAlign, message) {
+      let color = 4;
+      this.$notify({
+        message: message,
+        timeout: 12000,
+        icon: "tim-icons icon-bell-55",
+        horizontalAlign: horizontalAlign,
+        verticalAlign: verticalAlign,
+        type: this.typeColor[color],
+      });
+    },
+    //merge-scenario-with-base
+    async mergeScenario() {
+      const mergeScenario = await this.$axios.$post(
+        `/merge-scenario-with-base`,
+        {
+          demand_planner_user_id: this.$auth.user.user_id,
+          id: this.currentScenarioId,
+        }
+      );
+      if (mergeScenario) {
+        this.notifyVue(
+          "top",
+          "right",
+          "Submitted scenario to model for merging with base. Check Scenario table for updates."
+        );
+        this.$emit("scenarioStatus");
+      }
+    },
+    async shareScenario() {
+      //share-scenario
+      if (this.previewBtnText == "Merge Scenario") {
+        this.mergeScenario();
+      } else {
+        const scenario = await this.$axios.$get(
+          `/share-scenario/${this.currentScenarioId}`
+        );
+
+        if (scenario) {
+          this.notifyVue(
+            "top",
+            "right",
+            "Scenario shared successfully. It will be visible to others on Dashboard."
+          );
+        }
+      }
+    },
     setPage(val) {
       this.page = val;
     },
@@ -270,6 +317,8 @@ export default {
         return "success-row";
       } else if (row.status === "Failed") {
         return "warning-row";
+      } else if (row.status === "Merged") {
+        return "processing-row";
       }
       return "other-row";
     },
@@ -296,7 +345,9 @@ export default {
     color: #1d8cf8 !important;
   }
 }
-
+.el-table .merged-row {
+  background: #e3eeff;
+}
 .el-table .warning-row {
   background: rgb(255, 244, 243);
 }

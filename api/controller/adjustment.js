@@ -1,4 +1,5 @@
 import { PrismaClient } from "@prisma/client";
+import { parseCategorySaleComparision, parseCategoryUnitComparision } from "../controller/scenario";
 
 const prisma = new PrismaClient();
 
@@ -46,7 +47,7 @@ export const getWeekendDates = async (req, res) => {
     });
   }
 }
-
+// create manual adjustment
 export const createManualAdjustment = async (req, res) => {
   try{
     console.log(req.body)
@@ -109,6 +110,33 @@ export const checkAdjustmentStatus = async (req, res) => {
   }
 };
 
+// master metrics api
+export const getMasterMetricsData = async (req, res) => {
+  try {
+    const masterMetrics =  await prisma.metrics_master.findMany({
+      where: {
+        id: {
+          gt: 0
+        }
+      },
+      select: {
+        name: true,
+        title: true
+      }
+    });
+    const masterMetricsData = JSON.parse(JSON.stringify(
+      masterMetrics,
+      (key, value) => (typeof value === "bigint" ? value.toString() : value) // return everything else unchanged
+    ))
+    res.json({
+      masterMetricsData
+    });
+  }catch(error) {
+    res.json({
+      error:`error found in master metrics api ${error}`
+    });
+  }
+}
 
 
 // Get Adjustment Sales Summary 
@@ -125,6 +153,58 @@ export const getAdjustmentSalesSummary = async (req, res) => {
   } catch (error) {
     res.status(500).json({
       error: `Unable to fetch results ${error}`,
+    });
+  }
+};
+
+//API: Adjustment Category Unit & Sales Comparison
+export const getAdjustmentCategoryComparison = async (req, res) => {
+  try {
+    const result = await prisma.$queryRaw(`SELECT * from morphe_staging.adjustment_influenced_leveled_metrics WHERE adjustment_id = ${req.params.id};`);
+    let parsedData = {};
+    parsedData["Units"] = parseCategoryUnitComparision(result);
+    parsedData["Revenue"] = parseCategorySaleComparision(result);
+
+    res.status(200).json({
+      parsedData,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Unable to Fetch Data",
+      error: `${error}`,
+    });
+  }
+};
+
+//API: Adjustment Category Total Sales Comparison
+export const getAdjustmentCategorySalesComparison = async (req, res) => {
+  try {
+    const result = await prisma.$queryRaw(`SELECT * from morphe_staging.adjustment_influenced_leveled_aggregates WHERE adjustment_id = ${req.params.id};`);
+    res.status(200).json({
+      result,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Unable to Fetch Data",
+      error: `${error}`,
+    });
+  }
+};
+
+//API: Adjustment Unit & Sales Comparison
+export const getAdjustmentUnitSalesComparison = async (req, res) => {
+  try {
+    let result = await prisma.$queryRaw(`SELECT * FROM morphe_staging.adjustment_influenced_metrics WHERE adjustment_id = ${req.params.id};`);
+    let parsedData = {};
+    parsedData["Units"] = parseCategoryUnitComparision(result);
+    parsedData["Revenue"] = parseCategorySaleComparision(result);
+    res.status(200).json({
+      parsedData,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Unable to Fetch Data",
+      error: `${error}`,
     });
   }
 };

@@ -5,7 +5,9 @@
       :key="index"
       :type="'warning'"
     >
-      {{ item }}
+      <div v-html="tagHtmlMarkup(item)"></div>
+
+      <!-- {{ item }} -- {{ returnHTML(item) }} -->
     </el-tag>
   </div>
 </template>
@@ -21,9 +23,18 @@ export default {
   data() {
     return {};
   },
-  computed: {},
+  methods: {
+    tagHtmlMarkup(item) {
+      let tagData = item.split(":");
+      return `<span class"filter-category"><b>${tagData[0]}: </b></span>${tagData[1]}`;
+    },
+  },
   watch: {},
   created() {},
 };
 </script>
-<style lang="scss"></style>
+<style lang="scss">
+.filter-category {
+  font-size: 16px;
+}
+</style>
