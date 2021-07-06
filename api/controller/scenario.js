@@ -119,7 +119,7 @@ export const createScenario = async (req, res) => {
 };
 
 // Function Used to Parse the data into El Table Friendly Format
-const parseCategoryUnitComparision = (results) => {
+export const parseCategoryUnitComparision = (results) => {
   const fields = ["Planned Units", "Adjusted Units", "Forecast Units"];
   let parsedData = [];
   for (let field of fields) {
@@ -156,7 +156,7 @@ const parseCategoryUnitComparision = (results) => {
 };
 
 // Function Used to Parse the data into El Table Friendly Format
-const parseCategorySaleComparision = (results) => {
+export const parseCategorySaleComparision = (results) => {
   const fields = ["Planned Revenue", "Adjusted Revenue", "Forecast Revenue"];
   let parsedData = [];
   for (let field of fields) {
