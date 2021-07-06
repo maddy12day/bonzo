@@ -1,4 +1,7 @@
 .el-table .cell {
   word-break: break-word !important;
 }
-
+.el-collapse-item__header {
+  padding-left: 24px;
+  font-size: 17px !important;
+}
