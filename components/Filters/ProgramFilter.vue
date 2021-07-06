@@ -226,10 +226,6 @@ export default {
   },
   computed: {
     applyCtaDisabled() {
-      console.log(
-        this.$store.state.appliedRegularFilter.length,
-        this.$store.state.programFilterCTADisabled
-      );
       return this.$store.state.appliedRegularFilter.length > 0 &&
         !this.$store.state.isDataLoading
         ? true
@@ -254,21 +250,6 @@ export default {
         ...this.subClassValues,
         ...this.classesValues,
       ];
-      // console.log(
-      //   // this.productSourceValues,
-      //   // this.brandTypeValues,
-      //   this.newnessValues
-      //   // this.brandValues,
-      //   // this.channelValues,
-      //   // this.lifeCycleValues,
-      //   // this.subChannelValues,
-      //   // this.categoriesValues,
-      //   // this.collectionValues,
-      //   // this.skuValues,
-      //   // this.programValues,
-      //   // this.subClassValues,
-      //   // this.classesValues
-      // );
       this.$store.commit("updateRegularFilter", globalFilterArray);
     },
     getProductSource(value) {

@@ -36,7 +36,6 @@ export const getWeekendDates = async (req, res) => {
        weekend: true
      },
     })
-    console.log(weekends)
     res.status(200).json({
       weekends: weekends.map(item => item.weekend.toISOString().split('T')[0])
     })
@@ -50,7 +49,6 @@ export const getWeekendDates = async (req, res) => {
 // create manual adjustment
 export const createManualAdjustment = async (req, res) => {
   try{
-    console.log(req.body)
     const manualAjustment = await prisma.manual_adjustments.create({
       data: {
         ...req.body      
@@ -142,7 +140,6 @@ export const getMasterMetricsData = async (req, res) => {
 // Get Adjustment Sales Summary 
 // Paramenter Passed: Adjustment ID
 export const getAdjustmentSalesSummary = async (req, res) => {
-  console.log("req.params.id--", req.params.id);
   try {
     const result = await prisma.$queryRaw(
       `SELECT * from morphe_staging.adjustment_influenced_leveled_aggregates WHERE adjustment_id = ${req.params.id} AND level = "AGGREGATES";`

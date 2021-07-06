@@ -619,7 +619,6 @@ export default {
   computed: {},
   methods: {},
   mounted() {
-    console.log(this.metricsTableData);
   },
 };
 </script>

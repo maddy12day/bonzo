@@ -136,7 +136,6 @@ export default {
     },
     async handleScenarioClick(data) {
       this.currentScenarioId = data.id;
-      console.log("data--", this.dialogVisible);
       this.scenarioSalesSummary = await this.$axios.$get(
         `/get-scenario-sales-summary/${data.id}`
       );
