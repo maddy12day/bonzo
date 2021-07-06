@@ -32,7 +32,7 @@ const whereQueryString = (obj, alias = "fseisbw") => {
       str2 += `TRIM(dp.product_morphe_new_brand_3p) IN (
         ${item[1].map((str) => `'${str.trim()}'`).join(",")}) AND `;
     } else if (item[0] == "filter_life_cycles") {
-      str2 += `dp.life_cycle IN (${item[1].map((str) => `'${str.trim()}'`).join(",")}) AND `;
+      str2 += `dp.life_cycle IN (${item[1].map((str) => `' ${str.trim()}'`).join(",")}) AND `;
     } else if (item[0] == "filter_newness") {
       item[1].map((str) => {
         if (str == "New") {
@@ -160,11 +160,35 @@ const parseFilteredForecastData = (type, masterMetricData, filteredForecastData)
 
 export const getFilteredForecastMetrics = async (req, res) => {
   let duration = req.body.filterType;
+      
   delete req.body.filterType;
   try {
-    console.log(whereQueryString(req.body, "idp"),"req.body--", whereQueryString(req.body, "idp").replace(/dp/g, "idp"));
+    console.log(whereQueryString(req.body, "idp"),"req.body--", whereQueryString(req.body, "  idp").replace(/dp/g, "idp").replace(/idp.country/g, "dfbwm.country"));
     let transaction_db = "morphe_staging";
 
+    let countryQuery;
+    let regularQuery; 
+
+    let regularFilter = {};
+    let countryFilter = {}
+    for(let item in req.body) {
+      if(item !== "filter_sub_channels" && item !== "filter_channels") {
+        regularFilter[item] = req.body[item];
+      } else {
+        countryFilter[item] = req.body[item];
+      }
+    }
+    // .replace(/ dp/g, "idp").replace(/ANDdp.life_cycle/g, 'AND idp.life_cycle')
+     countryFilter && countryFilter != {} ? countryQuery = `AND ${whereQueryString(countryFilter, "dfbwm")}` : countryQuery = ''
+     regularFilter && regularFilter != {} ? regularQuery = `AND ${whereQueryString(regularFilter, "idp")}` : regularQuery = ''
+     
+     
+    //  regularQuery === "AND" ? regularQuery = '' : regularQuery;
+    
+    
+    console.log(countryFilter,"countryQuery",countryQuery);
+    console.log(regularFilter,"regularQuery --- ",regularQuery);
+  
     let query = `
                 WITH current_base_forecast_run_log_id AS (
                 select
@@ -180,7 +204,8 @@ export const getFilteredForecastMetrics = async (req, res) => {
                 from
                   ${transaction_db}.dim_products idp
                 where
-                  ${whereQueryString(req.body, "idp").replace(/dp/g, "idp")} ),
+                idp.id > 0
+                ${regularQuery}),
                 comp_units_revs AS (
                 SELECT
                   ${duration}(dfbwm2.weekend)-1 AS cur_date,
@@ -245,6 +270,7 @@ export const getFilteredForecastMetrics = async (req, res) => {
                   ${transaction_db}.demand_forecast_base_weekly_metrics dfbwm
                 WHERE
                   YEAR(dfbwm.weekend)=(YEAR(CURRENT_DATE()))
+                  ${countryQuery}
                   AND dfbwm.demand_forecast_run_log_id = (
                   select
                     id
@@ -258,7 +284,7 @@ export const getFilteredForecastMetrics = async (req, res) => {
                 GROUP BY
                   ${duration}(dfbwm.weekend);`;
 
-    // console.log("The beast query...", query);
+    console.log("The beast query...", query);
     const filteredForecastData = await prisma.$queryRaw(query);
     let masterMetricData = await getMasterMetricData();
     let parsedFilteredForecastData = parseFilteredForecastData(duration, masterMetricData, filteredForecastData);
