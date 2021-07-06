@@ -154,14 +154,14 @@ $scaleSize: 0.95;
   animation-name: zoomOut95;
 }
 
-.main-panel > .content {
-  padding: 50px 30px 30px 280px;
-}
+// .main-panel > .content {
+//   padding: 50px 30px 30px 280px;
+// }
 
 .sidebar,
 .off-canvas-sidebar {
-  height: calc(100vh - 60px);
-  margin-top: 52px;
+  // height: calc(100vh - 60px);
+  // margin-top: 52px;
   box-shadow: none !important;
 }
 
