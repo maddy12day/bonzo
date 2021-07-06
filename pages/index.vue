@@ -17,7 +17,7 @@
     <StatsWidget />
 
     <ScenarioTable
-      v-if="sharedScenariosListCom.scenarios.length > 0"
+      v-if="sharedScenariosListCom.scenarios"
       tableHeading="Shared Scenarios"
       :scenarioTableData="sharedScenariosListCom.scenarios"
       :type="'sharedScenarios'"
