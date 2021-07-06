@@ -317,7 +317,7 @@ export default {
 }
 .timeline-horizontal .timeline-item .timeline-panel {
   top: auto;
-  bottom: 64px;
+  bottom: 48px;;
   display: inline-block;
   float: none !important;
   left: 0 !important;
