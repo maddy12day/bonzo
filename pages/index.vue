@@ -1,5 +1,9 @@
 <template>
   <div>
+    <div class="card pt-2">
+      <h4 class="card-title pl-2 card-title text-bold font-weight-bold mb-0">Merged Scenario History</h4>
+      <Timeline :genesisTimeLineNode="genesisNodeTimeline" :timeLineData="mergedScenariosTimeLine"/>
+    </div>
     <StatsWidget />
 
     <ScenarioTable
@@ -53,6 +57,7 @@ import ScenarioTable from "../components/Scenarios/ScenarioTable.vue";
 import WeeklyMetricsTable from "../components/Metrics/WeeklyMetricsTable.vue";
 import MonthlyMetricsTable from "../components/Metrics/MonthlyMetricsTable.vue";
 import Card from "~/components/Cards/Card.vue";
+import Timeline from '../components/Timeline/Timeline.vue';
 
 export default {
   data() {
@@ -62,6 +67,8 @@ export default {
       activeTab: "Weekly",
       userInfo: [],
       callToIntervalAjax: true,
+      genesisNodeTimeline: [],
+      mergedScenariosTimeLine: []
     };
   },
   components: {
@@ -70,12 +77,31 @@ export default {
     WeeklyMetricsTable,
     MonthlyMetricsTable,
     Card,
+    Timeline
   },
   methods: {
     async scenarioMergeStatusUpdate() {
       this.sharedScenariosList = await this.$axios.$get("/shared-scenarios", {
         progress: true,
       });
+    },
+    // timeline api call
+    async getTimelineDetails() {
+      const mergedScenario = await this.$axios.$get(
+          "/merge-scenario-time-line",
+          {
+            progress: true,
+          }
+        );
+        this.mergedScenariosTimeLine = mergedScenario.mergeScenarios;
+        const genesisNode = await this.$axios.$get(
+          "/genesis-node-time-line",
+          {
+            progress: true,
+          }
+        );
+        this.genesisNodeTimeline = genesisNode.genensis[0];
+        console.log(this.mergedScenariosTimeLine, this.genesisNodeTimeline);
     },
     // check status after every 10 sec for user scenarios
     async checkMergeScenarioStatus() {
@@ -155,6 +181,7 @@ export default {
     },
   },
   async mounted() {
+    this.getTimelineDetails();
     this.showMetricsByDuration("Weekly");
     this.getAllUserData();
     this.getWeekendDates();

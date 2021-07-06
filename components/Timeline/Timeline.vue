@@ -1,6 +1,6 @@
 <template>
-  <CRow>
-    <CCol md="12" class="pl-2 ">
+  <div>
+    <div md="12" class="pl-2 ">
       <div
         style="display:inline-block;width:100%;overflow: auto;"
         class="pt-5 custom-timeline-container"
@@ -24,24 +24,21 @@
                 <p>Run ID: {{ genesisTimeLineNode.genesis_id }}</p>
                 <p>God User: {{ genesisTimeLineNode.god_user }}</p>
                 <p>
-                  <button
-                    class="btn btn-dark btn-sm mr-1"
-                    @click="() => getGenesisData(genesisTimeLineNode)"
-                    v-scroll-to="'#scrollDashboardContainer'"
-                  >
+                  <button class="btn btn-dark btn-sm mr-1">
                     View details
                   </button>
-                  <button
-                    v-if="genesisTimeLineNode.adjustment_count > 0"
-                    class="btn btn-info btn-sm mr-1"
-                    @click="() => genesisAdjustmentDetails(genesisTimeLineNode)"
+                  <!--  @click="() => getGenesisData(genesisTimeLineNode)" -->
+                  <!--  <base-button
+                  @click="() => genesisAdjustmentDetails(genesisTimeLineNode)"
+                  v-if="genesisTimeLineNode.adjustment_count > 0"
+                  type="primary"
+                  size='sm'
+                  class="btn-small"
+                >
+                  Adjustments &nbsp;<badge type="info" >
+                    {{ genesisTimeLineNode.adjustment_count }}</badge
                   >
-                    Adjustments<span
-                      class="ml-1 p-1 badge badge-light custom-badge"
-                    >
-                      {{ genesisTimeLineNode.adjustment_count }}
-                    </span>
-                  </button>
+                </base-button> -->
                 </p>
               </div>
             </div>
@@ -65,8 +62,8 @@
                 </p>
               </div>
               <div class="timeline-body">
-                <p>Run ID: {{ data.base_id }}</p>
-                <p>Planner Name: {{ data.demand_planner_name }}</p>
+                <p>Run ID: {{ data.id }}</p>
+                <p>Planner Name: {{ data.first_name }} {{ data.last_name }}</p>
                 <p>
                   Scenario Type: {{ data.scenario_type }} ({{ data.amount }}%)
                 </p>
@@ -75,8 +72,7 @@
                 <p>
                   <button
                     class="btn btn-dark  btn-sm mr-1"
-                    @click="() => sendCurrentObject(data)"
-                    v-scroll-to="'#scrollDashboardContainer'"
+                    @click="() => handleScenarioClick(data)"
                   >
                     View details
                   </button>
@@ -85,11 +81,10 @@
                     class="btn btn-info btn-sm mr-1"
                     @click="() => showAdjustments(data)"
                   >
-                    Adjustments<span
-                      class="ml-1 p-1 badge badge-light custom-badge"
-                    >
-                      {{ data.adjustment_count }}
-                    </span>
+                    Adjustments
+                    <i class="ml-1 p-1 badge badge-light">
+                      {{ data.amount }}
+                    </i>
                   </button>
                 </p>
               </div>
@@ -97,18 +92,42 @@
           </li>
         </ul>
       </div>
-    </CCol>
-  </CRow>
+      <!-- Scenario Forecast Preview -->
+      <PreviewScenario
+        v-if="dialogVisible"
+        @dialogVisible="closeDialog"
+        :dialogVisible="dialogVisible"
+        :scenarioSalesSummary="scenarioSalesSummary"
+        :scenarioUnitSalesComparison="scenarioUnitSalesComparison"
+        :scenarioCategorySalesComparison="scenarioCategorySalesComparison"
+        :scenarioCategoryComparison="scenarioCategoryComparison"
+        :previewBtnText="'Unmerge'"
+      />
+    </div>
+  </div>
 </template>
 <script>
-
 import moment from "moment";
-
+import PreviewScenario from "../Scenarios/PreviewScenario.vue";
 export default {
   name: "TimeLine",
-  components: {},
+  components: {
+    PreviewScenario,
+  },
   data() {
-    return {};
+    return {
+      scenarioTableDataForTable: [],
+      loadTable: false,
+      dialogVisible: false,
+      scenarioSalesSummary: [],
+      scenarioUnitSalesComparison: [],
+      scenarioCategorySalesComparison: [],
+      scenarioCategoryComparison: [],
+      currentScenarioId: null,
+      page: 1,
+      pageSize: 3,
+      typeColor: ["", "info", "success", "warning", "danger"],
+    };
   },
   props: [
     "genesisTimeLineNode",
@@ -117,17 +136,27 @@ export default {
     "showAdjustmentsEvt",
   ],
   methods: {
-    unmergedScenario(obj) {
-      const isConfirm = window.confirm(
-        `About to unmerge "${obj.scenario_name}". Proceed?`
+    closeDialog() {
+      this.dialogVisible = false;
+    },
+    async handleScenarioClick(data) {
+      this.currentScenarioId = data.id;
+      console.log("data--", this.dialogVisible);
+      this.scenarioSalesSummary = await this.$axios.$get(
+        `/get-scenario-sales-summary/${data.id}`
       );
-      if (isConfirm) {
-        this.$emit("unmergedScenarioEvt", obj);
-      }
+      this.scenarioUnitSalesComparison = await this.$axios.$get(
+        `/get-scenario-unit-sales-comparison/${data.id}`
+      );
+      this.scenarioCategorySalesComparison = await this.$axios.$get(
+        `/get-scenario-category-sales-comparison/${data.id}`
+      );
+      this.scenarioCategoryComparison = await this.$axios.$get(
+        `/get-scenario-category-comparison/${data.id}`
+      );
+      this.dialogVisible = true;
     },
-    getGenesisData(obj) {
-      this.$emit("genesisNodeEvent", obj);
-    },
+
     sendCurrentObject(data) {
       this.$emit("customTimelineEvent", data);
     },

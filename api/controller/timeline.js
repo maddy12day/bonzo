@@ -32,10 +32,36 @@ export const getGenensisNodeDetails = async (req, res) => {
     });
   }
 };
-
-const getMergeScenarioTimeLineNodes = async (req, res) => {
+// merge scenario
+export const getMergeScenarioTimeLineNodes = async (req, res) => {
   try {
-    const mergeScenarios = await prisma.$queryRaw(``);
+    const mergeScenarios = await prisma.$queryRaw(`
+                                                  SELECT 
+                                                  s.id,
+                                                  s.demand_planner_user_id,
+                                                  s.scenario_name,
+                                                  s.scenario_type_id,
+                                                  s.amount,
+                                                  s.is_dollar,
+                                                  s.start_date,
+                                                  s.end_date,
+                                                  s.is_active,
+                                                  s.status,
+                                                  s.is_shared,
+                                                  s.is_part_of_base,
+                                                  s.merged_with_base_at,
+                                                  s.merged_with_base_id,
+                                                  u.first_name, 
+                                                  u.last_name,
+                                                  st.scenario_type
+                                                  from morphe_staging.scenarios s, morphe_staging.users u, morphe_staging.scenario_types st
+                                                  where status = 'Merged'  
+                                                  and s.demand_planner_user_id = u.id
+                                                  and st.id = s.scenario_type_id 
+                                                  order by s.merged_with_base_at;`);
+    res.json({
+      mergeScenarios,
+    });
   } catch (error) {
     res.json({
       error: `something went wrong in get merged scenario time line data api ${error}`,
