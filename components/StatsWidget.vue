@@ -39,6 +39,7 @@
           }`"
           class="border border-info"
         />
+         <p>*Plan does not contain all the skus</p>
       </div>
       <div class="col-md-4 mt-1">
         <YearlyQuarterlyCard
@@ -73,6 +74,7 @@
           }`"
           class="border border-info"
         />
+         <p>*Plan does not contain all the skus</p>
       </div>
       <div class="col-md-4 mt-1">
         <YearlyQuarterlyCard
@@ -109,6 +111,7 @@
           }`"
           class="border border-info"
         />
+         <p>*Plan does not contain all the skus</p>
       </div>
       <div class="col-md-4 mt-1">
         <YearlyQuarterlyCard
@@ -145,6 +148,7 @@
           }`"
           class="border border-info"
         />
+         <p>*Plan does not contain all the skus</p>
       </div>
       <div class="col-md-4 mt-1">
         <YearlyQuarterlyCard
@@ -179,6 +183,7 @@
           }`"
           class="border border-info"
         />
+         <p>*Plan does not contain all the skus</p>
       </div>
       <div class="col-md-4 mt-1">
         <YearlyQuarterlyCard

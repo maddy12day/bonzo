@@ -2,7 +2,7 @@
   <div>
     <el-collapse class="mb-2">
       <el-collapse-item
-        :title="'Merged Scenario History'"
+        :title="'Model Timeline'"
         :class="'font-weght-bold display-3'"
       >
         <div class="card pt-2">
@@ -17,7 +17,10 @@
     <StatsWidget />
 
     <ScenarioTable
-      v-if="sharedScenariosListCom.scenarios"
+      v-if="
+        sharedScenariosList.scenarios &&
+        sharedScenariosListCom.scenarios.length > 0
+      "
       tableHeading="Shared Scenarios"
       :scenarioTableData="sharedScenariosListCom.scenarios"
       :type="'sharedScenarios'"

@@ -110,7 +110,7 @@
 
     <!-- Adjustments Table -->
     <AdjustmentTable
-      v-if="!isFilteredForecast"
+      v-if="!isFilteredForecast && [...baseAdjustmentsListCom.adjustments].length > 0"
       class="mt-4"
       tableHeading="Base Model Adjustments"
       :adjustmentTableData="baseAdjustmentsListCom.adjustments"
@@ -531,7 +531,6 @@ export default {
 
     // check status after every 10 sec for user scenarios
     async checkManualAdjustmentStatus() {
-      // console.log(this.callToIntervalAjax)
       if (this.callToIntervalAjaxCom) {
         const adjustmentsJson = await this.$axios.$get(
           `/get-adjustment-status/${this.$auth.user.user_id}`,
@@ -684,7 +683,6 @@ export default {
       return this.$store.state.appliedRegularFilter.length > 0 ? true : false;
     },
     showProgramResetFilter() {
-      console.log("---", this.$store.state.isDataLoading);
       return this.$store.state.appliedRegularFilter.length > 0 ? true : false;
     },
   },
