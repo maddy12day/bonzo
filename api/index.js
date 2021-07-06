@@ -9,6 +9,7 @@ import cache from "./routes/cache";
 import bonzoMl from "./routes/bonzo-ml";
 import forecast from "./routes/forecast";
 import adjustment from "./routes/adjustment";
+import timeline from './routes/timeline';
 
 const app = express();
 
@@ -21,6 +22,7 @@ app.use(cache);
 app.use(bonzoMl);
 app.use(forecast);
 app.use(adjustment);
+app.use(timeline);
 
 /**
  * logic for our api will go here
