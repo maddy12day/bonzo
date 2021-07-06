@@ -164,4 +164,8 @@ $scaleSize: 0.95;
   margin-top: 52px;
   box-shadow: none !important;
 }
+
+.btn {
+  box-shadow: none !important;
+}
 </style>
