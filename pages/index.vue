@@ -3,7 +3,6 @@
      <el-collapse class="mb-2">
       <el-collapse-item :title="'Merged Scenario History'" :class="'font-weght-bold display-3'" >
        <div class="card pt-2">
-               <h4 class="card-title pl-2 card-title text-bold font-weight-bold mb-0">Merged Scenario History</h4>
       <Timeline :genesisTimeLineNode="genesisNodeTimeline" :timeLineData="mergedScenariosTimeLine"/>
     </div>
       </el-collapse-item>
