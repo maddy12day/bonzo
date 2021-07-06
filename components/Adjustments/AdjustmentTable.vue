@@ -109,10 +109,19 @@
         </el-pagination>
       </card>
     </div>
+
+    <!-- Preview -->
+    <PreviewManualAdjustment
+      v-if="dialogVisible"
+      @dialogVisible="closeDialog"
+      :dialogVisible="dialogVisible"
+    />
   </div>
 </template>
 <script>
 import { Table, TableColumn, Dialog } from "element-ui";
+import PreviewManualAdjustment from "../../components/Scenarios/PreviewManualAdjustment.vue"
+
 
 export default {
   name: "AdjustmentTable",
@@ -120,12 +129,14 @@ export default {
     [Table.name]: Table,
     [TableColumn.name]: TableColumn,
     [Dialog.name]: Dialog,
+    PreviewManualAdjustment
   },
   props: ["tableHeading", "adjustmentTableData"],
   data() {
     return {
       page: 1,
       pageSize: 2,
+      dialogVisible: false,
     };
   },
   computed: {
@@ -146,7 +157,8 @@ export default {
       this.page = val;
     },
     async handleAdjustmentClick(data) {
-      alert("Get Adjustment influenced metrics and show modal popup.");
+      this.dialogVisible = true;
+      // alert("Get Adjustment influenced metrics and show modal popup.");
     },
     tableRowClassName({ row }) {
       console.log("row.status", row.status);
