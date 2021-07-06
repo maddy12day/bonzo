@@ -1,17 +1,23 @@
 <template>
   <div>
-     <el-collapse class="mb-2">
-      <el-collapse-item :title="'Merged Scenario History'" :class="'font-weght-bold display-3'" >
-       <div class="card pt-2">
-      <Timeline :genesisTimeLineNode="genesisNodeTimeline" :timeLineData="mergedScenariosTimeLine"/>
-    </div>
+    <el-collapse class="mb-2">
+      <el-collapse-item
+        :title="'Merged Scenario History'"
+        :class="'font-weght-bold display-3'"
+      >
+        <div class="card pt-2">
+          <Timeline
+            :genesisTimeLineNode="genesisNodeTimeline"
+            :timeLineData="mergedScenariosTimeLine"
+          />
+        </div>
       </el-collapse-item>
     </el-collapse>
-   
+
     <StatsWidget />
 
     <ScenarioTable
-      v-if="sharedScenariosList.scenarios"
+      v-if="sharedScenariosListCom.scenarios.length > 0"
       tableHeading="Shared Scenarios"
       :scenarioTableData="sharedScenariosListCom.scenarios"
       :type="'sharedScenarios'"
@@ -61,7 +67,7 @@ import ScenarioTable from "../components/Scenarios/ScenarioTable.vue";
 import WeeklyMetricsTable from "../components/Metrics/WeeklyMetricsTable.vue";
 import MonthlyMetricsTable from "../components/Metrics/MonthlyMetricsTable.vue";
 import Card from "~/components/Cards/Card.vue";
-import Timeline from '../components/Timeline/Timeline.vue';
+import Timeline from "../components/Timeline/Timeline.vue";
 
 export default {
   data() {
@@ -72,7 +78,7 @@ export default {
       userInfo: [],
       callToIntervalAjax: true,
       genesisNodeTimeline: [],
-      mergedScenariosTimeLine: []
+      mergedScenariosTimeLine: [],
     };
   },
   components: {
@@ -81,7 +87,7 @@ export default {
     WeeklyMetricsTable,
     MonthlyMetricsTable,
     Card,
-    Timeline
+    Timeline,
   },
   methods: {
     async scenarioMergeStatusUpdate() {
@@ -92,20 +98,17 @@ export default {
     // timeline api call
     async getTimelineDetails() {
       const mergedScenario = await this.$axios.$get(
-          "/merge-scenario-time-line",
-          {
-            progress: true,
-          }
-        );
-        this.mergedScenariosTimeLine = mergedScenario.mergeScenarios;
-        const genesisNode = await this.$axios.$get(
-          "/genesis-node-time-line",
-          {
-            progress: true,
-          }
-        );
-        this.genesisNodeTimeline = genesisNode.genensis[0];
-        console.log(this.mergedScenariosTimeLine, this.genesisNodeTimeline);
+        "/merge-scenario-time-line",
+        {
+          progress: true,
+        }
+      );
+      this.mergedScenariosTimeLine = mergedScenario.mergeScenarios;
+      const genesisNode = await this.$axios.$get("/genesis-node-time-line", {
+        progress: true,
+      });
+      this.genesisNodeTimeline = genesisNode.genensis[0];
+      console.log(this.mergedScenariosTimeLine, this.genesisNodeTimeline);
     },
     // check status after every 10 sec for user scenarios
     async checkMergeScenarioStatus() {
