@@ -162,7 +162,7 @@ export const getFilteredForecastMetrics = async (req, res) => {
   let duration = req.body.filterType;
   delete req.body.filterType;
   try {
-    console.log(whereQueryString(req.body, "idp"),"req.body--", whereQueryString(req.body, "idp").replace(/dp/g, "idp"));
+    console.log(whereQueryString(req.body, "idp"), "req.body--", whereQueryString(req.body, "idp").replace(/dp/g, "idp"));
     let transaction_db = "morphe_staging";
 
     let query = `
@@ -312,7 +312,7 @@ const thisYearSaleYearlyQuarterly = (duration, whereQueryString, numofYear, tran
   let dateOffset;
   let whereQueryStr = "";
   if (whereQueryString) {
-    whereQueryStr = ` AND ${whereQueryString}`;
+    whereQueryStr = ` ${whereQueryString}`;
   }
   duration.toLowerCase() == "week" ? (dateOffset = 1) : (dateOffset = 0);
   const query = `
@@ -331,11 +331,6 @@ const thisYearSaleYearlyQuarterly = (duration, whereQueryString, numofYear, tran
                   from
                     ${transaction_db}.dim_products dp
                   where
-                    SKU in (
-                      select
-                        sku
-                      from
-                        ${transaction_db}.planned_weekly_units_revenue_by_channel_by_sku)
                     ${whereQueryStr} )
                 GROUP BY
                   ${duration}(fseisbw.weekend)
@@ -440,7 +435,6 @@ export const getFilteredYearlyStatsData = async (req, res) => {
     });
   }
 };
-
 
 // Filtered Stats getFilteredYearlyStatsData
 export const getFilteredQuarterlyStatsData = async (req, res) => {
