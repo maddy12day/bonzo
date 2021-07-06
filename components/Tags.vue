@@ -6,8 +6,6 @@
       :type="'warning'"
     >
       <div v-html="tagHtmlMarkup(item)"></div>
-
-      <!-- {{ item }} -- {{ returnHTML(item) }} -->
     </el-tag>
   </div>
 </template>

@@ -20,7 +20,7 @@
               <a
                 tabindex="0"
                 @click="handleScenarioClick(scope.row)"
-                v-if="scope.row.status == 'Completed'"
+                v-if="['Completed', 'Merged'].includes(scope.row.status)"
               >
                 {{ scope.row.scenario_name }}</a
               >
@@ -177,12 +177,14 @@
     <!-- Scenario Forecast Preview -->
     <PreviewScenario
       v-if="dialogVisible"
+      @shareScenarioEvt="shareScenario"
       @dialogVisible="closeDialog"
       :dialogVisible="dialogVisible"
       :scenarioSalesSummary="scenarioSalesSummary"
       :scenarioUnitSalesComparison="scenarioUnitSalesComparison"
       :scenarioCategorySalesComparison="scenarioCategorySalesComparison"
       :scenarioCategoryComparison="scenarioCategoryComparison"
+      :previewBtnText="previewBtnText"
     />
   </div>
 </template>
@@ -198,7 +200,13 @@ export default {
     [Dialog.name]: Dialog,
     PreviewScenario,
   },
-  props: ["tableHeading", "scenarioTableData", "type", "useClass"],
+  props: [
+    "tableHeading",
+    "scenarioTableData",
+    "type",
+    "useClass",
+    "previewBtnText",
+  ],
   data() {
     return {
       scenarioTableDataForTable: [],
@@ -208,8 +216,10 @@ export default {
       scenarioUnitSalesComparison: [],
       scenarioCategorySalesComparison: [],
       scenarioCategoryComparison: [],
+      currentScenarioId: null,
       page: 1,
       pageSize: 3,
+      typeColor: ["", "info", "success", "warning", "danger"],
     };
   },
   computed: {
@@ -241,7 +251,7 @@ export default {
         `/merge-scenario-with-base`,
         {
           demand_planner_user_id: this.$auth.user.user_id,
-          id: this.currentScenarioId,
+          id: this.currentScenarioId
         }
       );
       if (mergeScenario) {
@@ -278,6 +288,7 @@ export default {
       this.dialogVisible = false;
     },
     async handleScenarioClick(data) {
+      this.currentScenarioId = data.id;
       console.log("data--", this.dialogVisible);
       this.scenarioSalesSummary = await this.$axios.$get(
         `/get-scenario-sales-summary/${data.id}`
@@ -313,9 +324,11 @@ export default {
     },
     tableRowClassName({ row }) {
       console.log("row.status", row.status);
-      if (row.status === "Completed") {
+      if (row.status === "Processing") {
+        return "processing-row";
+      } else if (row.status === "Completed") {
         return "success-row";
-      } else if (row.status === "Failed") {
+      } else if (row.status === "Failed" || row.status === "Error") {
         return "warning-row";
       } else if (row.status === "Merged") {
         return "processing-row";
@@ -354,6 +367,10 @@ export default {
 
 .el-table .success-row {
   background: rgb(247, 255, 251);
+}
+
+.el-table .processing-row {
+  background: rgb(227, 238, 255);
 }
 
 .el-table .other-row {
