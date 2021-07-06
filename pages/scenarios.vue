@@ -281,7 +281,7 @@ export default {
         createScenarioJson.scenarioRes
       );
       this.showScenarioTable = true;
-      /*  await this.userAllScenarios(); */
+      this.disabledScenarioBtn = true;
       this.callToIntervalAjax = true;
       this.notifyVue("top", "right");
     },
