@@ -105,14 +105,9 @@ export default {
           }
         );
         this.genesisNodeTimeline = genesisNode.genensis[0];
-        console.log(this.mergedScenariosTimeLine, this.genesisNodeTimeline);
     },
     // check status after every 10 sec for user scenarios
     async checkMergeScenarioStatus() {
-      console.log(
-        "this.callToIntervalAjaxSCom",
-        this.sharedScenariosList.scenarios
-      );
       if (this.callToIntervalAjaxSCom) {
         const scenarioTypesJson = await this.$axios.$get("/shared-scenarios", {
           progress: true,

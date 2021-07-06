@@ -338,7 +338,6 @@ export const getScenarioCategoryComparison = async (req, res) => {
 // check user created scenarios status
 export const checkScenarioStatus = async (req, res) => {
   try {
-    console.log(req.params);
     const scenario = await prisma.scenarios.findMany({
       where: {
         demand_planner_user_id: parseInt(req.params.id),

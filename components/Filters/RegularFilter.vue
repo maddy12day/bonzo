@@ -1672,7 +1672,6 @@ export default {
     const res = await this.$axios.$get("filter-all-options-dropdown-cache", {
       progress: true,
     });
-    console.log("res", res);
     const optionGenerator = (data, keyName) => {
       return [
         { name: keyName },

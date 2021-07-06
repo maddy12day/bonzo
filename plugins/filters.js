@@ -7,7 +7,6 @@ Vue.filter("capitalize", (val) => val.toUpperCase());
 Vue.filter("toLocaleStr", (val) => Number(val).toLocaleString());
 
 Vue.filter("toTwoDigitsFloat", function(val) {
-  console.log("val,", val);
   if (!val) {
     return 0;
   }
