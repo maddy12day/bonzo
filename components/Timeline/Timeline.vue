@@ -16,13 +16,13 @@
                 <p>
                   <small class="text-muted"
                     ><i class="glyphicon glyphicon-time"></i>
-                    {{ formatData(genesisTimeLineNode.genesis_time) }}</small
+                   Created At: {{ formatData(genesisTimeLineNode.genesis_time) }}</small
                   >
                 </p>
               </div>
               <div class="timeline-body">
                 <p>Run ID: {{ genesisTimeLineNode.genesis_id }}</p>
-                <p>God User: {{ genesisTimeLineNode.god_user }}</p>
+                <p>Created By: {{ genesisTimeLineNode.god_user }}</p>
                 <p>
                   <el-badge  :value="genesisTimeLineNode.adjustment_count">
                     <span class="badge badge-primary">Adjustments</span>
