@@ -90,7 +90,7 @@ export default {
   },
   data() {
     return {
-      sidebarBackground: "vue", //vue|blue|orange|green|red|primary
+      sidebarBackground: "primary", //vue|blue|orange|green|red|primary
     };
   },
   computed: {
@@ -152,5 +152,15 @@ $scaleSize: 0.95;
 
 .main-panel .zoomOut {
   animation-name: zoomOut95;
+}
+
+.main-panel > .content {
+  padding: 50px 30px 30px 280px;
+}
+
+.sidebar,
+.off-canvas-sidebar {
+  height: calc(100vh - 60px);
+  margin-top: 52px;
 }
 </style>

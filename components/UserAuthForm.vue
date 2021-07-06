@@ -1,5 +1,5 @@
 <template>
-  <card class="w-75">
+  <card>
     <div class="row">
       <div class="col-md-6">
         <h5 slot="header" class="title mt-5 text-center">
@@ -43,7 +43,7 @@
       </div>
       <div class="col-md-6">
         <div class="text-center">
-          <img src="/icon.png" class="w-75" />
+          <img src="/icon.png" class="mx-auto w-75" />
         </div>
         <div>
           <h4 class="text-center">
