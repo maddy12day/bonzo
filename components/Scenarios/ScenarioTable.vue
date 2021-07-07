@@ -289,7 +289,6 @@ export default {
     },
     async handleScenarioClick(data) {
       this.currentScenarioId = data.id;
-      console.log("data--", this.dialogVisible);
       this.scenarioSalesSummary = await this.$axios.$get(
         `/get-scenario-sales-summary/${data.id}`
       );
@@ -323,7 +322,6 @@ export default {
       }
     },
     tableRowClassName({ row }) {
-      console.log("row.status", row.status);
       if (row.status === "Processing") {
         return "processing-row";
       } else if (row.status === "Completed") {

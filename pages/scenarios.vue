@@ -358,7 +358,7 @@ export default {
     callToIntervalAjaxSCom() {
       return this.callToIntervalAjax;
     },
-    sharedScenariosListCom() {
+    sharedScenariosListCom() {  
       return this.sharedScenariosList;
     },
     filtersType() {
