@@ -112,6 +112,7 @@ export const getBaseYearlyPlanned = async (req, res) => {
       by: ["plan_year"],
       where: {
         plan_year: "2021",
+        channel: {in: ['Ecomm','Retail']},
       },
       _sum: {
         units: true,
