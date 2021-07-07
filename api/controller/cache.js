@@ -21,9 +21,7 @@ export const regularFilterDropdownData = async (req, res) => {
         "collections",
       ],
       (err, data2) => {
-        const data = JSON.parse(JSON.stringify(data2))
-        console.log("data", data.collections);
-        
+        const data = JSON.parse(JSON.stringify(data2))        
         res.status(200).send({
           response: {
             productSource:(data.productSource),
