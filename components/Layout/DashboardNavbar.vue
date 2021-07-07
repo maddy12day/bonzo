@@ -16,9 +16,12 @@
           <span class="navbar-toggler-bar bar3"></span>
         </button>
       </div>
-      <a v-if="$auth.loggedIn" class="navbar-brand ml-xl-3 ml-5" href="/" >{{
-        routeName
-      }}</a>
+      <a
+        v-if="$auth.loggedIn"
+        class="navbar-brand ml-xl-3 ml-5 hide-desktop"
+        href="/"
+        >{{ routeName }}</a
+      >
     </div>
 
     <ul

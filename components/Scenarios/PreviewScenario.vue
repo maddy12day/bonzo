@@ -52,6 +52,9 @@
             property="planned_gm_percent"
             align="right"
           >
+            <template slot-scope="scope">
+              {{ scope.row.planned_gm_percent | toTwoDigitsFloat }}
+            </template>
           </el-table-column>
           <el-table-column
             min-width="150"
@@ -59,14 +62,22 @@
             label="Forecast Sales GM"
             property="forecasted_gm_percent"
             align="right"
-          ></el-table-column>
+          >
+            <template slot-scope="scope">
+              {{ scope.row.forecasted_gm_percent | toTwoDigitsFloat }}
+            </template>
+          </el-table-column>
           <el-table-column
             min-width="150"
             sortable
             label="Adjusted Sales GM"
             property="adjusted_gm_percent"
             align="right"
-          ></el-table-column>
+          >
+            <template slot-scope="scope">
+              {{ scope.row.adjusted_gm_percent | toTwoDigitsFloat }}
+            </template>
+          </el-table-column>
         </el-table>
       </card>
 
@@ -117,21 +128,31 @@
             label="Planned  Sales GM"
             property="planned_gm_percent"
             align="right"
-          ></el-table-column>
+            ><template slot-scope="scope">
+              {{ scope.row.planned_gm_percent | toTwoDigitsFloat }}
+            </template>
+          </el-table-column>
           <el-table-column
             min-width="150"
             sortable
             label="Forecast Sales GM"
             property="forecasted_gm_percent"
             align="right"
-          ></el-table-column>
+            ><template slot-scope="scope">
+              {{ scope.row.forecasted_gm_percent | toTwoDigitsFloat }}
+            </template>
+          </el-table-column>
           <el-table-column
             min-width="150"
             sortable
             label="Adjusted Sales GM"
             property="adjusted_gm_percent"
             align="right"
-          ></el-table-column>
+          >
+            <template slot-scope="scope">
+              {{ scope.row.adjusted_gm_percent | toTwoDigitsFloat }}
+            </template>
+          </el-table-column>
         </el-table>
       </card>
 
@@ -139,7 +160,7 @@
         card-body-classes="table-full-width"
         v-if="
           scenarioUnitSalesComparison.parsedData &&
-          scenarioUnitSalesComparison.parsedData.Units.length > 0
+            scenarioUnitSalesComparison.parsedData.Units.length > 0
         "
       >
         <h4 slot="header" class="card-title text-bold font-weight-bold">
@@ -182,7 +203,7 @@
         card-body-classes="table-full-width"
         v-if="
           scenarioUnitSalesComparison.parsedData &&
-          scenarioUnitSalesComparison.parsedData.Revenue.length > 0
+            scenarioUnitSalesComparison.parsedData.Revenue.length > 0
         "
       >
         <h4 slot="header" class="card-title text-bold font-weight-bold">
@@ -225,7 +246,7 @@
         card-body-classes="table-full-width"
         v-if="
           scenarioCategorySalesComparison.result &&
-          scenarioCategorySalesComparison.result.length > 0
+            scenarioCategorySalesComparison.result.length > 0
         "
       >
         <h4 slot="header" class="card-title text-bold font-weight-bold">
@@ -345,7 +366,7 @@
         card-body-classes="table-full-width"
         v-if="
           scenarioUnitSalesComparison.parsedData &&
-          scenarioUnitSalesComparison.parsedData.Units.length > 0
+            scenarioUnitSalesComparison.parsedData.Units.length > 0
         "
       >
         <h4 slot="header" class="card-title text-bold font-weight-bold">
@@ -392,7 +413,7 @@
         card-body-classes="table-full-width"
         v-if="
           scenarioUnitSalesComparison.parsedData &&
-          scenarioUnitSalesComparison.parsedData.Revenue.length > 0
+            scenarioUnitSalesComparison.parsedData.Revenue.length > 0
         "
       >
         <h4 slot="header" class="card-title text-bold font-weight-bold">
@@ -437,7 +458,7 @@
       <span slot="footer" class="dialog-footer">
         <div class="text-right ">
           <button class="btn btn-primary " @click="shareScenario">
-           {{previewBtnText}}
+            {{ previewBtnText }}
           </button>
           <button class="btn btn-primary " @click="showDialog = false">
             Close
@@ -463,7 +484,7 @@ export default {
     "scenarioCategorySalesComparison",
     "scenarioCategoryComparison",
     "dialogVisible",
-    "previewBtnText"
+    "previewBtnText",
   ],
   data() {
     return {
@@ -478,7 +499,7 @@ export default {
   },
   computed: {},
   watch: {
-    showDialog: function () {
+    showDialog: function() {
       if (!this.showDialog) {
         this.$emit("dialogVisible", false);
       }
