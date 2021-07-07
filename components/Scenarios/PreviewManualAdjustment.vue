@@ -2,16 +2,20 @@
   <div class="row">
     <el-dialog :visible.sync="showDialog" width="90%">
       <span slot="title"
-        ><i class="el-icon-info"></i>Scenario Forecast Preview</span
+        ><i class="el-icon-info"></i>Manual AdjustmentTable Preview</span
       >
+
       <card
         card-body-classes="table-full-width"
-        v-if="scenarioSalesSummary.result.length > 0"
+        v-if="
+          adjustmentSalesSummary.result &&
+            adjustmentSalesSummary.result.length > 0
+        "
       >
         <h4 slot="header" class="card-title text-bold font-weight-bold">
           Sales Summary Revenue
         </h4>
-        <el-table :data="scenarioSalesSummary.result">
+        <el-table :data="adjustmentSalesSummary.result">
           <el-table-column
             min-width="150"
             sortable
@@ -49,263 +53,6 @@
             min-width="150"
             sortable
             label="Planned  Sales GM"
-            property="planned_gm_percent"
-            align="right"
-          >
-          </el-table-column>
-          <el-table-column
-            min-width="150"
-            sortable
-            label="Forecast Sales GM"
-            property="forecasted_gm_percent"
-            align="right"
-          ></el-table-column>
-          <el-table-column
-            min-width="150"
-            sortable
-            label="Adjusted Sales GM"
-            property="adjusted_gm_percent"
-            align="right"
-          ></el-table-column>
-        </el-table>
-      </card>
-
-      <card
-        card-body-classes="table-full-width"
-        v-if="scenarioSalesSummary.result.length > 0"
-      >
-        <h4 slot="header" class="card-title text-bold font-weight-bold">
-          Sales Summary Units
-        </h4>
-        <el-table :data="scenarioSalesSummary.result">
-          <el-table-column
-            min-width="150"
-            sortable
-            label="Planned Sales TY"
-            property="planned_units"
-            align="right"
-          >
-            <template slot-scope="scope">
-              {{ scope.row.planned_units | toLocaleStr }}
-            </template>
-          </el-table-column>
-          <el-table-column
-            min-width="150"
-            sortable
-            label="Forecast Sales TY"
-            property="forecasted_units"
-            align="right"
-          >
-            <template slot-scope="scope">
-              {{ scope.row.forecasted_units | toLocaleStr }}
-            </template>
-          </el-table-column>
-          <el-table-column
-            min-width="150"
-            sortable
-            label="Adjusted Sales TY"
-            property="adjusted_units"
-            align="right"
-          >
-            <template slot-scope="scope">
-              {{ scope.row.adjusted_units | toLocaleStr }}
-            </template>
-          </el-table-column>
-          <el-table-column
-            min-width="150"
-            sortable
-            label="Planned  Sales GM"
-            property="planned_gm_percent"
-            align="right"
-          ></el-table-column>
-          <el-table-column
-            min-width="150"
-            sortable
-            label="Forecast Sales GM"
-            property="forecasted_gm_percent"
-            align="right"
-          ></el-table-column>
-          <el-table-column
-            min-width="150"
-            sortable
-            label="Adjusted Sales GM"
-            property="adjusted_gm_percent"
-            align="right"
-          ></el-table-column>
-        </el-table>
-      </card>
-
-      <card
-        card-body-classes="table-full-width"
-        v-if="
-          scenarioUnitSalesComparison.parsedData &&
-            scenarioUnitSalesComparison.parsedData.Units.length > 0
-        "
-      >
-        <h4 slot="header" class="card-title text-bold font-weight-bold">
-          Unit Comparision
-        </h4>
-        <el-table :data="scenarioUnitSalesComparison.parsedData.Units">
-          <el-table-column
-            min-width="180"
-            sortable
-            label="Comparision"
-            property="Comparision"
-          >
-          </el-table-column>
-          <el-table-column
-            min-width="150"
-            sortable
-            label="W1"
-            property="W-1"
-            align="right"
-          >
-            <template slot-scope="scope">
-              {{ scope.row["W-1"] | toLocaleStr }}
-            </template></el-table-column
-          >
-          <el-table-column
-            min-width="150"
-            sortable
-            label="W2"
-            property="W-2"
-            align="right"
-          >
-            <template slot-scope="scope">
-              {{ scope.row["W-2"] | toLocaleStr }}
-            </template>
-          </el-table-column>
-        </el-table>
-      </card>
-
-      <card
-        card-body-classes="table-full-width"
-        v-if="
-          scenarioUnitSalesComparison.parsedData &&
-            scenarioUnitSalesComparison.parsedData.Revenue.length > 0
-        "
-      >
-        <h4 slot="header" class="card-title text-bold font-weight-bold">
-          Sales Comparision
-        </h4>
-        <el-table :data="scenarioUnitSalesComparison.parsedData.Revenue">
-          <el-table-column
-            min-width="180"
-            sortable
-            label="Comparision"
-            property="Comparision"
-          >
-          </el-table-column>
-          <el-table-column
-            min-width="150"
-            sortable
-            label="W1"
-            property="W-1"
-            align="right"
-          >
-            <template slot-scope="scope">
-              {{ scope.row["W-1"] | toLocaleStr }}
-            </template>
-          </el-table-column>
-          <el-table-column
-            min-width="150"
-            sortable
-            label="W2"
-            property="W-2"
-            align="right"
-          >
-            <template slot-scope="scope">
-              {{ scope.row["W-2"] | toLocaleStr }}
-            </template>
-          </el-table-column>
-        </el-table>
-      </card>
-
-      <card
-        card-body-classes="table-full-width"
-        v-if="
-          scenarioCategorySalesComparison.result &&
-            scenarioCategorySalesComparison.result.length > 0
-        "
-      >
-        <h4 slot="header" class="card-title text-bold font-weight-bold">
-          Category Total Sales Comparision
-        </h4>
-        <el-table :data="scenarioCategorySalesComparison.result">
-          <el-table-column
-            min-width="180"
-            sortable
-            label="Name"
-            property="level_value"
-          >
-          </el-table-column>
-          <el-table-column
-            min-width="180"
-            sortable
-            label="Planned Sales"
-            property="planned_revenue"
-            align="right"
-          >
-            <template slot-scope="scope">
-              {{ scope.row.planned_revenue | toLocaleStr }}
-            </template>
-          </el-table-column>
-          <el-table-column
-            min-width="180"
-            sortable
-            label="Forecast Sales"
-            property="forecasted_revenue"
-            align="right"
-          >
-            <template slot-scope="scope">
-              {{ scope.row.forecasted_revenue | toLocaleStr }}
-            </template>
-          </el-table-column>
-          <el-table-column
-            min-width="180"
-            sortable
-            label="Adjusted Sales"
-            property="adjusted_revenue"
-            align="right"
-          >
-            <template slot-scope="scope">
-              {{ scope.row.adjusted_revenue | toLocaleStr }}
-            </template>
-          </el-table-column>
-          <el-table-column
-            min-width="180"
-            sortable
-            label="Planned Sales(%)"
-            property="planned_revenue_percent"
-            align="right"
-          >
-          </el-table-column>
-          <el-table-column
-            min-width="190"
-            sortable
-            label="Forecast Sales(%)"
-            property="forecasted_revenue_percent"
-            align="right"
-          >
-            <template slot-scope="scope">
-              {{ scope.row.forecasted_revenue_percent | toTwoDigitsFloat }}
-            </template>
-          </el-table-column>
-          <el-table-column
-            min-width="190"
-            sortable
-            label="Adjusted Sales(%)"
-            property="adjusted_revenue_percent"
-            align="right"
-          >
-            <template slot-scope="scope">
-              {{ scope.row.adjusted_revenue_percent | toTwoDigitsFloat }}
-            </template>
-          </el-table-column>
-          <el-table-column
-            min-width="170"
-            sortable
-            label="Planned GM(%)"
             property="planned_gm_percent"
             align="right"
           >
@@ -314,9 +61,9 @@
             </template>
           </el-table-column>
           <el-table-column
-            min-width="170"
+            min-width="150"
             sortable
-            label="Forecast GM(%)"
+            label="Forecast Sales GM"
             property="forecasted_gm_percent"
             align="right"
           >
@@ -325,9 +72,9 @@
             </template>
           </el-table-column>
           <el-table-column
-            min-width="170"
+            min-width="150"
             sortable
-            label="Adjusted GM(%)"
+            label="Adjusted Sales GM"
             property="adjusted_gm_percent"
             align="right"
           >
@@ -341,64 +88,58 @@
       <card
         card-body-classes="table-full-width"
         v-if="
-          scenarioUnitSalesComparison.parsedData &&
-            scenarioUnitSalesComparison.parsedData.Units.length > 0
+          adjustmentSalesSummary.result &&
+            adjustmentSalesSummary.result.length > 0
         "
       >
         <h4 slot="header" class="card-title text-bold font-weight-bold">
-          Category Units Comparision
+          Sales Summary Units
         </h4>
-        <el-table
-          v-if="scenarioUnitSalesComparison.parsedData"
-          :data="scenarioUnitSalesComparison.parsedData.Units"
-        >
-          <el-table-column
-            min-width="180"
-            sortable
-            label="Comparision"
-            property="Comparision"
-          >
-          </el-table-column>
-          <el-table-column
-            min-width="150"
-            sortable
-            label="W1"
-            property="W-1"
-            align="right"
-          >
-            <template slot-scope="scope">
-              {{ scope.row["W-1"] | toLocaleStr }}
-            </template>
-          </el-table-column>
-          <el-table-column
-            min-width="150"
-            sortable
-            label="W2"
-            property="W-2"
-            align="right"
-          >
-            <template slot-scope="scope">
-              {{ scope.row["W-2"] | toLocaleStr }}
-            </template></el-table-column
-          >
+        {{ adjustmentSalesSummary.result }}
+        [[[[]]]]
+        <el-table>
+          <div v-for="(column, index) in adjustmentSalesSummary.result">
+            {{ column }} ===
+            <el-table-column
+              v-bind="column"
+              :label="column.id"
+              :prop="column.prop"
+              :key="index"
+            >
+              <template slot-scope="scope">
+                <template v-if="!column.render">
+                  <template v-if="column.formatter">
+                    <span v-html="column.formatter(scope.row, column)" />
+                  </template>
+                  <template v-else>
+                    <span>{{ scope.row[column.prop] }}</span>
+                  </template>
+                </template>
+                <template v-else>
+                  <render-dom
+                    :column="column"
+                    :row="scope.row"
+                    :render="column.render"
+                    :index="index"
+                  />
+                </template>
+              </template>
+            </el-table-column>
+          </div>
         </el-table>
       </card>
-
-      <!-- 7 -->
+      <!-- 
       <card
         card-body-classes="table-full-width"
         v-if="
-          scenarioUnitSalesComparison.parsedData &&
-            scenarioUnitSalesComparison.parsedData.Revenue.length > 0
+          adjustmentUnitSalesComparison.parsedData &&
+            adjustmentUnitSalesComparison.parsedData.Units.length > 0
         "
       >
         <h4 slot="header" class="card-title text-bold font-weight-bold">
-          Category Sales Comparision
+          Units Comparision
         </h4>
-        <el-table
-          v-if="scenarioUnitSalesComparison.parsedData"
-          :data="scenarioUnitSalesComparison.parsedData.Revenue"
-        >
+        <el-table :data="adjustmentUnitSalesComparison.parsedData.Units">
           <el-table-column
             min-width="180"
             sortable
@@ -406,30 +147,44 @@
             property="Comparision"
           >
           </el-table-column>
-          <el-table-column
-            min-width="150"
-            sortable
-            label="W1"
-            property="W-1"
-            align="right"
+           <template
+            v-for="(column, index) in adjustmentUnitSalesComparison.parsedData
+              .Units"
           >
-            <template slot-scope="scope">
-              {{ scope.row["W-1"] | toLocaleStr }}
-            </template></el-table-column
-          >
-          <el-table-column
-            min-width="150"
-            sortable
-            label="W2"
-            property="W-2"
-            align="right"
-          >
-            <template slot-scope="scope">
-              {{ scope.row["W-2"] | toLocaleStr }}
-            </template></el-table-column
-          >
+            <el-table-column
+              v-bind="column"
+              :label="column.label"
+              :prop="column.prop"
+              :key="index"
+            >
+            </el-table-column>
+          </template> 
         </el-table>
-      </card>
+      </card> -->
+
+      <!-- <template v-for="(column, index) in columns">
+      <el-table-column
+        v-bind="column"
+        :label="column.label"
+        :prop="column.prop"
+        :key="index"
+        :show-overflow-tooltip="options.showOverflowTooltip"
+      >
+        <template slot-scope="scope">
+          <template v-if="!column.render">
+            <template v-if="column.formatter">
+              <span v-html="column.formatter(scope.row, column)" />
+            </template>
+            <template v-else>
+              <span>{{ scope.row[column.prop] }}</span>
+            </template>
+          </template>
+          <template v-else>
+            <render-dom :column="column" :row="scope.row" :render="column.render" :index="index" />
+          </template>
+        </template>
+      </el-table-column>
+    </template> -->
 
       <span slot="footer" class="dialog-footer">
         <div class="text-right ">
@@ -443,6 +198,7 @@
 </template>
 <script>
 import { Table, TableColumn, Dialog } from "element-ui";
+import moment from "moment";
 
 export default {
   name: "dashboard",
@@ -451,16 +207,14 @@ export default {
     [TableColumn.name]: TableColumn,
     [Dialog.name]: Dialog,
   },
-  props: [
-    "scenarioSalesSummary",
-    "scenarioUnitSalesComparison",
-    "scenarioCategorySalesComparison",
-    "scenarioCategoryComparison",
-    "dialogVisible",
-  ],
+  props: ["dialogVisible"],
   data() {
     return {
       showDialog: false,
+      adjustmentSalesSummary: {},
+      adjustmentUnitSalesComparison: {},
+      adjustmentCategorySalesComparison: {},
+      adjustmentCategoryComparison: {},
     };
   },
   computed: {},
@@ -471,8 +225,29 @@ export default {
       }
     },
   },
+  methods: {
+    weekNO(weekend) {
+      moment;
+    },
+    async getAdjustmentSalesSummary() {
+      this.adjustmentSalesSummary = await this.$axios.$get(
+        `/get-adjustment-sales-summary/1`
+      );
+      console.log("scenarioSalesSummary---", this.adjustmentSalesSummary);
+    },
+    async getAdjustmentUnitSalesComparison() {
+      this.adjustmentUnitSalesComparison = await this.$axios.$get(
+        `/get-adjustment-unit-sales-comparison/1`
+      );
+    },
+  },
   created() {
-    this.showDialog = this.dialogVisible;
+    console.log("inisde");
+    this.showDialog = true;
+  },
+  mounted() {
+    this.getAdjustmentSalesSummary();
+    this.getAdjustmentUnitSalesComparison();
   },
 };
 </script>

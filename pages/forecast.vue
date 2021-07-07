@@ -26,8 +26,8 @@
           class="btn-custom-div"
           v-if="
             !isFilteredPageDataLoading &&
-            showRegularResetFilter &&
-            activeFilterType == 'Regular'
+              showRegularResetFilter &&
+              activeFilterType == 'Regular'
           "
           @click="resetFilter"
         >
@@ -39,8 +39,8 @@
           class="btn-custom-div"
           v-if="
             !isFilteredPageDataLoading &&
-            showProgramResetFilter &&
-            activeFilterType == 'Program'
+              showProgramResetFilter &&
+              activeFilterType == 'Program'
           "
           @click="resetFilter"
         >
@@ -110,7 +110,10 @@
 
     <!-- Adjustments Table -->
     <AdjustmentTable
-      v-if="!isFilteredForecast && [...baseAdjustmentsListCom.adjustments].length > 0"
+      v-if="
+        !isFilteredForecast &&
+          [...baseAdjustmentsListCom.adjustments].length > 0
+      "
       class="mt-4"
       tableHeading="Base Model Adjustments"
       :adjustmentTableData="baseAdjustmentsListCom.adjustments"
@@ -160,9 +163,11 @@
       />
       <div class="col-md-12 text-right">
         <button
-          :class="`btn btn-primary btn-sm text-left ${
-            disbledCom || showManualAdj ? 'disabled' : ''
-          }`"
+          :class="
+            `btn btn-primary btn-sm text-left ${
+              disbledCom || showManualAdj ? 'disabled' : ''
+            }`
+          "
           @click="switchToManualAdj"
           :disabled="disbledCom || showManualAdj"
           v-if="!changeMABtnText && activeTab == 'Weekly'"
@@ -170,9 +175,9 @@
           Manual Adjustment
         </button>
         <button
-          :class="`btn btn-primary btn-sm text-left ${
-            disbledCom ? 'disabled' : ''
-          }`"
+          :class="
+            `btn btn-primary btn-sm text-left ${disbledCom ? 'disabled' : ''}`
+          "
           @click="createManualAdjustment"
           v-if="changeMABtnText"
           :disabled="disbledCom"
@@ -424,7 +429,10 @@ export default {
         requestedFilterOption["filterType"] = "month";
         this.filterMonthly = true;
       }
-
+      requestedFilterOption = {
+        filter_product_sources: ["FORMA BRANDS", "3RD PARTY"],
+        filterType: "week",
+      };
       this.filteredForecastMetrics = await this.$axios.$post(
         `/get-filtered-forecast-metrics`,
         requestedFilterOption
@@ -436,6 +444,10 @@ export default {
     },
     async getFilteredWeeklyMetrics(requestedFilterOption) {
       requestedFilterOption["filterType"] = "week";
+      requestedFilterOption = {
+        filter_product_sources: ["FORMA BRANDS", "3RD PARTY"],
+        filterType: "week",
+      };
       const filteredWeeklyforecast = await this.$axios.$post(
         `/get-filtered-forecast-metrics`,
         requestedFilterOption
@@ -443,9 +455,13 @@ export default {
       this.filteredForecastMetrics = filteredWeeklyforecast;
     },
     async getFilteredTopSkus() {
+      requestedFilterOption = {
+        filter_product_sources: ["FORMA BRANDS", "3RD PARTY"],
+        filterType: "week",
+      };
       const topTenSkusData = await this.$axios.$post(
         `/get-filtered-forecast-data`,
-        this.filterPayload
+        requestedFilterOption
       );
       this.topTenSkusData = topTenSkusData;
     },
