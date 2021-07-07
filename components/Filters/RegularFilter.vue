@@ -131,7 +131,6 @@
         class="btn btn-sm btn-primary btn-block applyFilterBtn"
         style="line-height: 28px"
         @click="appliedFilterHandler"
-        :disabled="!applyCtaDisabled"
       >
         Apply Filter
       </button>
@@ -1719,13 +1718,13 @@ export default {
 
     this.skuOptions = optionGenerator(res.response.regular.sku, "All SKUs");
 
-    const allRegularFilterJSON = await this.$axios.$get(
-      "/regular-filter-dropdown-cache",
-      {
-        progress: true,
-      }
-    );
-    this.filterApiData = allRegularFilterJSON.response;
+    // const allRegularFilterJSON = await this.$axios.$get(
+    //   "/regular-filter-dropdown-cache",
+    //   {
+    //     progress: true,
+    //   }
+    // );
+    this.filterApiData = {}; //allRegularFilterJSON.response;
   },
 };
 </script>

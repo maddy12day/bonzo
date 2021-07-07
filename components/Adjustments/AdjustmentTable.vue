@@ -58,11 +58,11 @@
             property="adjusted_metrics_name"
             class-name="text-capitalize"
           >
-            <template slot-scope="scope" >
-              {{ scope.row.adjusted_metrics_name.replace(/_/g, ' ' ) }}
+            <template slot-scope="scope">
+              {{ scope.row.adjusted_metrics_name.replace(/_/g, " ") }}
             </template>
           </el-table-column>
-          
+
           <el-table-column
             min-width="150"
             sortable
@@ -113,15 +113,13 @@
     <!-- Preview -->
     <PreviewManualAdjustment
       v-if="dialogVisible"
-      @dialogVisible="closeDialog"
       :dialogVisible="dialogVisible"
     />
   </div>
 </template>
 <script>
 import { Table, TableColumn, Dialog } from "element-ui";
-import PreviewManualAdjustment from "../../components/Scenarios/PreviewManualAdjustment.vue"
-
+import PreviewManualAdjustment from "../../components/Scenarios/PreviewManualAdjustment.vue";
 
 export default {
   name: "AdjustmentTable",
@@ -129,7 +127,7 @@ export default {
     [Table.name]: Table,
     [TableColumn.name]: TableColumn,
     [Dialog.name]: Dialog,
-    PreviewManualAdjustment
+    PreviewManualAdjustment,
   },
   props: ["tableHeading", "adjustmentTableData"],
   data() {
