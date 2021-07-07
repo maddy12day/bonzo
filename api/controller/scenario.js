@@ -338,7 +338,6 @@ export const getScenarioCategoryComparison = async (req, res) => {
 // check user created scenarios status
 export const checkScenarioStatus = async (req, res) => {
   try {
-    console.log(req.params);
     const scenario = await prisma.scenarios.findMany({
       where: {
         demand_planner_user_id: parseInt(req.params.id),
@@ -442,3 +441,20 @@ export const checkMergeScenarioStatus = async (req, res) => {
   }
 };
 
+//  get scenario details by click
+export const getScenarioDetailsById = async (req, res) =>  {
+  try{
+    const scenario = await prisma.scenarios.findUnique({
+      where: {
+        id: id
+      }
+    });
+    res.json({
+      scenario
+    });
+  }catch(error) {
+    res.json({
+      error: `something went wrong in getScenarioDetailsById ${error}.`
+    })
+  }
+}

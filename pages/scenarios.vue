@@ -123,7 +123,7 @@
       tableHeading="Your Scenarios"
       :scenarioTableData="sharedScenariosListCom.scenarios"
       :type="'yourScenarios'"
-      v-if="showScenarioTable"
+      v-if="showScenarioTable && sharedScenariosListCom.scenarios.length > 0"
       useClass="fixedHeightScrollTable"
       previewBtnText="Share Scenario"
     />
@@ -313,7 +313,6 @@ export default {
 
     // check status after every 10 sec for user scenarios
     async checkScenarioStatus() {
-      console.log("this.callToIntervalAjaxSCom", this.callToIntervalAjaxSCom);
       if (this.callToIntervalAjaxSCom) {
         const scenarioTypesJson = await this.$axios.$get(
           `/get-scenario-status/${this.$auth.user.user_id}`,
@@ -322,7 +321,6 @@ export default {
           }
         );
         if (scenarioTypesJson !== {} && scenarioTypesJson.scenario) {
-          console.log("step====1")
           if (
             scenarioTypesJson &&
             ["Completed", "Failed", "Error", "Merged"].includes(
@@ -347,7 +345,6 @@ export default {
   },
 
   async mounted() {
-    console.log(this.$auth.user)
     this.getScenarioTypes();
     this.userAllScenarios();
     setInterval(() => {
@@ -362,10 +359,6 @@ export default {
       return this.callToIntervalAjax;
     },
     sharedScenariosListCom() {
-      console.log(
-        "***************** this.sharedScenariosList",
-        this.sharedScenariosList
-      );
       return this.sharedScenariosList;
     },
     filtersType() {

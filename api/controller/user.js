@@ -8,8 +8,6 @@ export const registerUser = async (req, res) => {
   try {
     const { email, password, first_name, last_name } = req.body;
     const pass_hash = bcrypt.hashSync(password, 10);
-    console.log("req.body", req.body);
-    console.log("pass_hash", pass_hash);
     const user = await prisma.users.create({
       data: {
         email_id: email,
@@ -49,7 +47,6 @@ export const authenticateUser = async (req, res) => {
       const isAuthenticate = bcrypt.compareSync(password, current_user.password);
       if (isAuthenticate) {
         const token = jwt.sign({ email, first_name, last_name, user_id}, process.env.BONZO_AI_TOKEN_SALT, { expiresIn: "24h" });
-        console.log("token", token);
         res.status(200).send({
           message: "Authentication successful",
           token: token,

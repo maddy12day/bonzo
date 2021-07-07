@@ -16,7 +16,7 @@
           <span class="navbar-toggler-bar bar3"></span>
         </button>
       </div>
-      <a v-if="$auth.loggedIn" class="navbar-brand ml-xl-3 ml-5" href="/">{{
+      <a v-if="$auth.loggedIn" class="navbar-brand ml-xl-3 ml-5" href="/" >{{
         routeName
       }}</a>
     </div>
@@ -69,7 +69,6 @@ export default {
   },
   methods: {
     logOut() {
-      console.log("logout clicked...");
       localStorage.removeItem("token");
       this.$router.push("/");
     },

@@ -112,7 +112,6 @@ export const getFilteredForecastData = async (req, res) => {
                   dfbwm.sku,
                   dfbwm.weekend;`;
 
-    // console.log("Top10DataQuery:::", query);
     const filteredForecastData = await prisma.$queryRaw(query);
     let parsedWeeklyData = weeklyCommonTableDataMapping(filteredForecastData);
     res.status(200).json({
@@ -338,7 +337,7 @@ const thisYearSaleYearlyQuarterly = (duration, whereQueryString, numofYear, tran
   let dateOffset;
   let whereQueryStr = "";
   if (whereQueryString) {
-    whereQueryStr = ` AND ${whereQueryString}`;
+    whereQueryStr = ` ${whereQueryString}`;
   }
   duration.toLowerCase() == "week" ? (dateOffset = 1) : (dateOffset = 0);
   const query = `
@@ -357,11 +356,6 @@ const thisYearSaleYearlyQuarterly = (duration, whereQueryString, numofYear, tran
                   from
                     ${transaction_db}.dim_products dp
                   where
-                    SKU in (
-                      select
-                        sku
-                      from
-                        ${transaction_db}.planned_weekly_units_revenue_by_channel_by_sku)
                     ${whereQueryStr} )
                 GROUP BY
                   ${duration}(fseisbw.weekend)
@@ -409,7 +403,6 @@ const forecastQueryGenByDuration = (duration, whereQueryString, numofYear, trans
 export const getFilteredYearlyStatsData = async (req, res) => {
   delete req.body.filterType;
   let filter = req.body;
-  // console.log("body", filter);
 
   // Planned Sales Yearly
   const filteredPlannedWhereQuery = whereQueryString(filter, "pwurbcbs");
@@ -436,10 +429,6 @@ export const getFilteredYearlyStatsData = async (req, res) => {
   // const filteredQuarterlyForecastDataQuery = forecastQueryGenByDuration("QUARTER", filteredQuarterlyForecastWhereQuery, 0, "morphe_staging", 1);
 
   try {
-    // console.log("filteredPlannedDataQuery:::", filteredPlannedDataQuery);
-    // console.log("filteredThisYearSaleDataQuery:::", filteredThisYearSaleDataQuery);
-    // console.log("filteredForecastDataQuery:::", filteredForecastDataQuery);
-
     let yearlyFilteredStats = await Promise.allSettled([
       prisma.$queryRaw(filteredPlannedDataQuery),
       prisma.$queryRaw(filteredThisYearSaleDataQuery),
@@ -467,12 +456,10 @@ export const getFilteredYearlyStatsData = async (req, res) => {
   }
 };
 
-
 // Filtered Stats getFilteredYearlyStatsData
 export const getFilteredQuarterlyStatsData = async (req, res) => {
   delete req.body.filterType;
   let filter = req.body;
-  console.log("body", filter);
 
   // // Planned Sales Yearly
   // const filteredPlannedWhereQuery = whereQueryString(filter, "pwurbcbs");
@@ -499,10 +486,6 @@ export const getFilteredQuarterlyStatsData = async (req, res) => {
   const filteredQuarterlyForecastDataQuery = forecastQueryGenByDuration("QUARTER", filteredQuarterlyForecastWhereQuery, 0, "morphe_staging");
 
   try {
-    // console.log("filteredPlannedDataQuery:::", filteredPlannedDataQuery);
-    // console.log("filteredThisYearSaleDataQuery:::", filteredThisYearSaleDataQuery);
-    // console.log("filteredForecastDataQuery:::", filteredForecastDataQuery);
-
     // let yearlyFilteredStats = await Promise.allSettled([
     //   prisma.$queryRaw(filteredPlannedDataQuery),
     //   prisma.$queryRaw(filteredThisYearSaleDataQuery),

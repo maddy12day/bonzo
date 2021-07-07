@@ -408,10 +408,6 @@ export default {
     },
   },
   async created() {
-    console.log(
-      "FilteredStatsWidget::: this.filterPayload",
-      this.filterPayload
-    );
     this.filterQuarterlyPayload = this.filterPayload;
     this.getFilteredStatsWidgetData();
   },

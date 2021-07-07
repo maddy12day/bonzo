@@ -161,7 +161,6 @@ export default {
       // alert("Get Adjustment influenced metrics and show modal popup.");
     },
     tableRowClassName({ row }) {
-      console.log("row.status", row.status);
       if (row.status === "Processing") {
         return "processing-row";
       } else if (row.status === "Completed") {

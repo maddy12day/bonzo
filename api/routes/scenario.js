@@ -12,6 +12,7 @@ import {
   shareScenario,
   mergeScenarioWithBase,
   checkMergeScenarioStatus,
+  getScenarioDetailsById,
 } from "../controller/scenario";
 import { getAllUsers } from "../controller/user";
 
@@ -38,5 +39,6 @@ router.get("/get-scenario-status/:id", checkScenarioStatus);
 router.get('/share-scenario/:id', shareScenario);
 router.post('/merge-scenario-with-base', mergeScenarioWithBase);
 router.get('/merge-scenario-status', checkMergeScenarioStatus)
+router.get('/get-scenario-detail-by-id', getScenarioDetailsById)
 
 export default router;

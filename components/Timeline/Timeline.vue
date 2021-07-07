@@ -16,17 +16,17 @@
                 <p>
                   <small class="text-muted"
                     ><i class="glyphicon glyphicon-time"></i>
-                    {{ formatData(genesisTimeLineNode.genesis_time) }}</small
+                   Created At: {{ formatData(genesisTimeLineNode.genesis_time) }}</small
                   >
                 </p>
               </div>
               <div class="timeline-body">
                 <p>Run ID: {{ genesisTimeLineNode.genesis_id }}</p>
-                <p>God User: {{ genesisTimeLineNode.god_user }}</p>
+                <p>Created By: {{ genesisTimeLineNode.god_user }}</p>
                 <p>
-                  <button class="btn btn-dark btn-sm mr-1">
-                    View details
-                  </button>
+                  <el-badge  :value="genesisTimeLineNode.adjustment_count">
+                    <span class="badge badge-primary">Adjustments</span>
+                  </el-badge>
                   <!--  @click="() => getGenesisData(genesisTimeLineNode)" -->
                   <!--  <base-button
                   @click="() => genesisAdjustmentDetails(genesisTimeLineNode)"
@@ -70,13 +70,8 @@
                 <p>Start Date: {{ dateFormat(data.start_date) }}</p>
                 <p>End Date: {{ dateFormat(data.end_date) }}</p>
                 <p>
-                  <button
-                    class="btn btn-dark  btn-sm mr-1"
-                    @click="() => handleScenarioClick(data)"
-                  >
-                    View details
-                  </button>
-                  <button
+                   <span class="badge badge-primary custom-badge"  @click="() => handleScenarioClick(data)">View Details</span>
+                 <!--  <button
                     v-if="data.adjustment_count > 0"
                     class="btn btn-info btn-sm mr-1"
                     @click="() => showAdjustments(data)"
@@ -85,7 +80,7 @@
                     <i class="ml-1 p-1 badge badge-light">
                       {{ data.amount }}
                     </i>
-                  </button>
+                  </button> -->
                 </p>
               </div>
             </div>
@@ -141,7 +136,6 @@ export default {
     },
     async handleScenarioClick(data) {
       this.currentScenarioId = data.id;
-      console.log("data--", this.dialogVisible);
       this.scenarioSalesSummary = await this.$axios.$get(
         `/get-scenario-sales-summary/${data.id}`
       );
@@ -345,7 +339,7 @@ export default {
   left: 39px;
 }
 .custom-badge {
-  border-radius: 50%;
+ cursor: pointer;
 }
 /* ================================================== */
 </style>
