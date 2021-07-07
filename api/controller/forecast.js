@@ -98,6 +98,7 @@ export const getFilteredForecastData = async (req, res) => {
                   ${transaction_db}.demand_forecast_base_weekly_metrics dfbwm,
                   ${transaction_db}.dim_products dp
                 WHERE
+
                   demand_forecast_run_log_id = (select id from ${transaction_db}.demand_forecast_run_log dfrl where is_base_forecast = true limit 1)
                   AND dfbwm.sku = dp.SKU
                   AND dfbwm.sku IN (
@@ -376,8 +377,9 @@ const forecastQueryGenByDuration = (duration, whereQueryString, numofYear, trans
 
 // Filtered Stats getFilteredYearlyStatsData
 export const getFilteredYearlyStatsData = async (req, res) => {
-  delete filter.filterType;
   let filter = req.body;
+  delete filter.filterType;
+  
 
   // Planned Sales Yearly
   const filteredPlannedWhereQuery = whereQueryString(filter, "pwurbcbs");

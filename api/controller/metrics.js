@@ -191,7 +191,7 @@ export const getBaseThisYearlySale = async (req, res) => {
                                                     ROUND(SUM(unit_sales),0) AS qtr_units
                                                   FROM morphe_staging.fact_sales_ending_inventory_sku_by_week fseisbw 
                                                   WHERE 
-                                                    year(weekend) = year(CURRENT_TIMESTAMP)
+                                                    year(weekend) = year(CURRENT_TIMESTAMP) AND fseisbw.channel <> 'Wholesale'
                                                   GROUP BY 
                                                     Year(weekend);`);
     res.status(200).json({
