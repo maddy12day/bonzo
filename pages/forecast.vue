@@ -167,7 +167,7 @@
           :disabled="disbledCom || showManualAdj"
           v-if="!changeMABtnText && activeTab == 'Weekly'"
         >
-          Manual Ajustment
+          Manual Adjustment
         </button>
         <button
           :class="`btn btn-primary btn-sm text-left ${
