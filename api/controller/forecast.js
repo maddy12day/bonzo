@@ -159,10 +159,29 @@ const parseFilteredForecastData = (type, masterMetricData, filteredForecastData)
 };
 
 export const getFilteredForecastMetrics = async (req, res) => {
-    let filter = {"filter_product_sources":["FORMA BRANDS","3RD PARTY"],"filterType":"week"}
-
   let duration = req.body.filterType;
   delete req.body.filterType;
+
+  let countryQuery;
+  let regularQuery; 
+
+  let regularFilter = {};
+  let countryFilter = {}
+
+  for (let item in req.body) {
+    if (item !== "filter_sub_channels" && item !== "filter_channels") {
+      regularFilter[item] = req.body[item];
+    } else {
+      countryFilter[item] = req.body[item];
+    }
+  }
+  countryFilter != null ? countryQuery = `AND ${whereQueryString(countryFilter, "dfbwm")}` : countryQuery = ''
+  regularFilter != null ? regularQuery = `AND ${whereQueryString(regularFilter, "dp")}` : regularQuery = ''
+  
+  if (regularQuery.length == 4) {
+    regularQuery = '';
+  }
+
   try {
     let transaction_db = "morphe_staging";
 
@@ -177,11 +196,12 @@ export const getFilteredForecastMetrics = async (req, res) => {
                 limit 1 ),
                 iskus AS (
                 select
-                  idp.SKU as sku
+                  dp.SKU as sku
                 from
-                  ${transaction_db}.dim_products idp
+                  ${transaction_db}.dim_products dp
                 where
-                  ${whereQueryString(req.body, "idp").replace(/dp/g, "idp")} ),
+                  dp.id > 0
+                 ${regularQuery}),
                 comp_units_revs AS (
                 SELECT
                   ${duration}(dfbwm2.weekend)+1 AS cur_date,
@@ -246,6 +266,7 @@ export const getFilteredForecastMetrics = async (req, res) => {
                   ${transaction_db}.demand_forecast_base_weekly_metrics dfbwm
                 WHERE
                   YEAR(dfbwm.weekend)=(YEAR(CURRENT_DATE()))
+                  ${countryQuery}
                   AND dfbwm.demand_forecast_run_log_id = (
                   select
                     id
@@ -259,7 +280,6 @@ export const getFilteredForecastMetrics = async (req, res) => {
                 GROUP BY
                   ${duration}(dfbwm.weekend);`;
     
-    console.log("quert---", query);
     
     const filteredForecastData = await prisma.$queryRaw(query);
     let masterMetricData = await getMasterMetricData();
