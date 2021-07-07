@@ -219,8 +219,7 @@ export const getFilteredForecastMetrics = async (req, res) => {
                     select
                       w01
                     from
-                      first_weekend)) THEN ROUND( SUM(dfbwm.units_sales) / (select cur.cur_unit_sales from comp_units_revs cur 
-                         = ${duration}(dfbwm.weekend)), 2)
+                      first_weekend)) THEN ROUND( SUM(dfbwm.units_sales) / (select cur.cur_unit_sales from comp_units_revs cur where cur.cur_date = ${duration}(dfbwm.weekend)), 2)
                     ELSE 1
                   END) AS units_sales_build,
                   (CASE
@@ -260,6 +259,8 @@ export const getFilteredForecastMetrics = async (req, res) => {
                 GROUP BY
                   ${duration}(dfbwm.weekend);`;
     
+    console.log("quert---", query);
+    
     const filteredForecastData = await prisma.$queryRaw(query);
     let masterMetricData = await getMasterMetricData();
     let parsedFilteredForecastData = parseFilteredForecastData(duration, masterMetricData, filteredForecastData);
@@ -289,13 +290,13 @@ const typlanQueryGeneratorByDurations = (duration, whereQueryString, transaction
 
   const query = `
               SELECT
-                ${duration}(pwurbcbs.${groubyCol}end_date)-${dateOffset} AS date,
                 ROUND(SUM(pwurbcbs.units), 0) AS total_units,
                 ROUND(SUM(pwurbcbs.revenue), 0) AS total_revenue
               FROM
                 ${transaction_db}.${tableName} pwurbcbs
               WHERE
                 pwurbcbs.channel <> 'Wholesale'
+                AND pwurbcbs.plan_year = YEAR(CURRENT_DATE())
                 AND pwurbcbs.sku in (
                 select
                   SKU
@@ -304,7 +305,7 @@ const typlanQueryGeneratorByDurations = (duration, whereQueryString, transaction
                 where
                   ${whereQueryStr})
               GROUP BY
-                ${duration}(pwurbcbs.${groubyCol}end_date)`;
+                pwurbcbs.plan_year`;
   return query;
 };
 
@@ -337,6 +338,9 @@ const thisYearSaleYearlyQuarterly = (duration, whereQueryString, numofYear, tran
                   ${duration}(fseisbw.weekend)
                 ORDER BY
                   ${duration}(fseisbw.weekend);`;
+  
+
+  console.log("Query----", query);
   return query;
 };
 
@@ -384,6 +388,10 @@ export const getFilteredYearlyStatsData = async (req, res) => {
   // Planned Sales Yearly
   const filteredPlannedWhereQuery = whereQueryString(filter, "pwurbcbs");
   const filteredPlannedDataQuery = typlanQueryGeneratorByDurations("YEAR", filteredPlannedWhereQuery, "morphe_staging");
+
+
+  console.log("filteredPlannedDataQuery,,", filteredPlannedDataQuery);
+
 
   // This Year Sale Yearly
   const filteredThisYearSaleWhereQuery = whereQueryString(filter);
