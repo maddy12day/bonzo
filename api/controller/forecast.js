@@ -32,7 +32,7 @@ const whereQueryString = (obj, alias = "fseisbw") => {
       str2 += `TRIM(dp.product_morphe_new_brand_3p) IN (
         ${item[1].map((str) => `'${str.trim()}'`).join(",")}) AND `;
     } else if (item[0] == "filter_life_cycles") {
-      str2 += `dp.life_cycle IN (${item[1].map((str) => `' ${str.trim()}'`).join(",")}) AND `;
+      str2 += `dp.life_cycle IN (${item[1].map((str) => `'${str.trim()}'`).join(",")}) AND `;
     } else if (item[0] == "filter_newness") {
       item[1].map((str) => {
         if (str == "New") {
@@ -98,6 +98,7 @@ export const getFilteredForecastData = async (req, res) => {
                   ${transaction_db}.demand_forecast_base_weekly_metrics dfbwm,
                   ${transaction_db}.dim_products dp
                 WHERE
+
                   demand_forecast_run_log_id = (select id from ${transaction_db}.demand_forecast_run_log dfrl where is_base_forecast = true limit 1)
                   AND dfbwm.sku = dp.SKU
                   AND dfbwm.sku IN (
@@ -158,37 +159,13 @@ const parseFilteredForecastData = (type, masterMetricData, filteredForecastData)
 };
 
 export const getFilteredForecastMetrics = async (req, res) => {
-  let filter = {"filter_product_sources":["FORMA BRANDS","3RD PARTY"],"filterType":"week"}
-  let duration = filter.filterType;
-      
+    let filter = {"filter_product_sources":["FORMA BRANDS","3RD PARTY"],"filterType":"week"}
+
+  let duration = req.body.filterType;
   delete req.body.filterType;
   try {
-    console.log(whereQueryString(req.body, "idp"),"req.body--", whereQueryString(req.body, "  idp").replace(/dp/g, "idp").replace(/idp.country/g, "dfbwm.country"));
     let transaction_db = "morphe_staging";
 
-    let countryQuery;
-    let regularQuery; 
-
-    let regularFilter = {};
-    let countryFilter = {}
-    for(let item in req.body) {
-      if(item !== "filter_sub_channels" && item !== "filter_channels") {
-        regularFilter[item] = req.body[item];
-      } else {
-        countryFilter[item] = req.body[item];
-      }
-    }
-    // .replace(/ dp/g, "idp").replace(/ANDdp.life_cycle/g, 'AND idp.life_cycle')
-     countryFilter && countryFilter != {} ? countryQuery = `AND ${whereQueryString(countryFilter, "dfbwm")}` : countryQuery = ''
-     regularFilter && regularFilter != {} ? regularQuery = `AND ${whereQueryString(regularFilter, "idp")}` : regularQuery = ''
-     
-     
-    //  regularQuery === "AND" ? regularQuery = '' : regularQuery;
-    
-    
-    console.log(countryFilter,"countryQuery",countryQuery);
-    console.log(regularFilter,"regularQuery --- ",regularQuery);
-  
     let query = `
                 WITH current_base_forecast_run_log_id AS (
                 select
@@ -204,11 +181,10 @@ export const getFilteredForecastMetrics = async (req, res) => {
                 from
                   ${transaction_db}.dim_products idp
                 where
-                idp.id > 0
-                ${regularQuery}),
+                  ${whereQueryString(req.body, "idp").replace(/dp/g, "idp")} ),
                 comp_units_revs AS (
                 SELECT
-                  ${duration}(dfbwm2.weekend)-1 AS cur_date,
+                  ${duration}(dfbwm2.weekend)+1 AS cur_date,
                   SUM(dfbwm2.units_sales) as cur_unit_sales,
                   SUM(dfbwm2.retail_sales) as cur_retail_sales
                 FROM
@@ -243,7 +219,8 @@ export const getFilteredForecastMetrics = async (req, res) => {
                     select
                       w01
                     from
-                      first_weekend)) THEN ROUND( SUM(dfbwm.units_sales) / (select cur.cur_unit_sales from comp_units_revs cur where cur.cur_date = ${duration}(dfbwm.weekend) ), 2)
+                      first_weekend)) THEN ROUND( SUM(dfbwm.units_sales) / (select cur.cur_unit_sales from comp_units_revs cur 
+                         = ${duration}(dfbwm.weekend)), 2)
                     ELSE 1
                   END) AS units_sales_build,
                   (CASE
@@ -270,7 +247,6 @@ export const getFilteredForecastMetrics = async (req, res) => {
                   ${transaction_db}.demand_forecast_base_weekly_metrics dfbwm
                 WHERE
                   YEAR(dfbwm.weekend)=(YEAR(CURRENT_DATE()))
-                  ${countryQuery}
                   AND dfbwm.demand_forecast_run_log_id = (
                   select
                     id
@@ -283,8 +259,7 @@ export const getFilteredForecastMetrics = async (req, res) => {
                     iskus)
                 GROUP BY
                   ${duration}(dfbwm.weekend);`;
-
-    console.log("The beast query...", query);
+    
     const filteredForecastData = await prisma.$queryRaw(query);
     let masterMetricData = await getMasterMetricData();
     let parsedFilteredForecastData = parseFilteredForecastData(duration, masterMetricData, filteredForecastData);
@@ -307,7 +282,7 @@ const typlanQueryGeneratorByDurations = (duration, whereQueryString, transaction
   let whereQueryStr = "";
   duration.toLowerCase() == "week"
     ? ((dateOffset = 1), (tableName = `planned_weekly_units_revenue_by_channel_by_sku`), (groubyCol = "week"))
-    : ((dateOffset = 0), (tableName = `planned_monthly_units_revenue_by_channel_by_sku`), (groubyCol = "month"));
+    : ((dateOffset = 0), (tableName = `planned_weekly_units_revenue_by_channel_by_sku`), (groubyCol = "month"));
   if (whereQueryString) {
     whereQueryStr = `${whereQueryString.replace(/country/g, "sub_channel")}`;
   }
@@ -402,8 +377,9 @@ const forecastQueryGenByDuration = (duration, whereQueryString, numofYear, trans
 
 // Filtered Stats getFilteredYearlyStatsData
 export const getFilteredYearlyStatsData = async (req, res) => {
-  delete req.body.filterType;
   let filter = req.body;
+  delete filter.filterType;
+  
 
   // Planned Sales Yearly
   const filteredPlannedWhereQuery = whereQueryString(filter, "pwurbcbs");
