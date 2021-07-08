@@ -14,6 +14,13 @@
           >
           </el-table-column>
           <el-table-column
+            min-width="170"
+            sortable
+            label="Yearly"
+            property="yearly_aggregate"
+            align="right"
+          ></el-table-column>
+          <el-table-column
             min-width="150"
             sortable
             label="Jan"

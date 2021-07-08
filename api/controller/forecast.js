@@ -133,6 +133,24 @@ const getMasterMetricData = async () => {
         name: true,
         title: true,
       },
+      where: {
+        name: {
+          in: ['retail_sales',
+            'retail_sales_build',
+            'units_sales',
+            'units_sales_build',
+            'gm',
+            'aur',
+            'gm_percent',
+            'wos',
+            'sell_through',
+            'inventory_ins_units',
+            'inventory_ins_cost',
+            'receipt_units',
+            'receipt_cost'
+          ]
+        },
+      }
     });
     return masterMetricData;
   } catch (error) {
@@ -143,14 +161,42 @@ const getMasterMetricData = async () => {
 const parseFilteredForecastData = (type, masterMetricData, filteredForecastData) => {
   let parsedData = [];
   let typeIndex = type == "month" ? 12 : 52;
-
-  for (let i = 0; i < filteredForecastData.length; i++) {
+  let revenueTotal = 0
+  let unitsTotal = 0
+  
+  for (let i = 0; i <= filteredForecastData.length; i++) {
     var obj = {};
+    let sum = 0;
+    
+    let indexForAvg = 0; 
     if (masterMetricData[i]) {
       obj["Metrics Name"] = masterMetricData[i].title;
-      for (let j = 0; j < typeIndex; j++) {
-        let index = j + 1;
-        obj["w" + index] = filteredForecastData[j][`${masterMetricData[i].name}`];
+      if (obj["Metrics Name"] == "Sales" || obj["Metrics Name"] == "Units Sales" || obj["Metrics Name"] == "GM$" || obj["Metrics Name"] == "Inventory INS Units" || obj["Metrics Name"] == "Inventory INS Cost" || obj["Metrics Name"] == "Inventory DC Units" || obj["Metrics Name"] == "Inventory DC Cost" || obj["Metrics Name"] == "Receipt Units" || obj["Metrics Name"] == "Receipt Cost" || obj["Metrics Name"] == "AUR") {
+        for (let j = 0; j < typeIndex; j++) {
+          let index = j + 1;
+          obj["w" + index] = filteredForecastData[j][`${masterMetricData[i].name}`];
+          sum = sum + filteredForecastData[j][`${masterMetricData[i].name}`];
+          indexForAvg = index;
+        }
+        if (obj["Metrics Name"] == "Sales") {
+          revenueTotal = sum
+        } else if (obj["Metrics Name"] == "Units Sales"){
+          unitsTotal = sum
+        }
+        obj["yearly_aggregate"] = sum;
+      } else if (obj["Metrics Name"] == "Sales Build" || obj["Metrics Name"] == "Units Sales Build" || obj["Metrics Name"] == "GM%" || obj["Metrics Name"] == "Sell Through %" || obj["Metrics Name"] == "WOS") { 
+        for (let j = 0; j < typeIndex; j++) {
+          let index = j + 1;
+          obj["w" + index] = filteredForecastData[j][`${masterMetricData[i].name}`];
+          sum = sum + filteredForecastData[j][`${masterMetricData[i].name}`];
+          indexForAvg = index;
+        }
+        obj["yearly_aggregate"] = (sum / indexForAvg).toFixed(2);
+      }
+      if (obj["Metrics Name"] == "AUR") { 
+        if (obj["Metrics Name"] == "AUR") {
+         obj["yearly_aggregate"] = (revenueTotal/unitsTotal).toFixed(2);
+        }
       }
       parsedData.push(obj);
     }
@@ -159,8 +205,6 @@ const parseFilteredForecastData = (type, masterMetricData, filteredForecastData)
 };
 
 export const getFilteredForecastMetrics = async (req, res) => {
-    let filter = {"filter_product_sources":["FORMA BRANDS","3RD PARTY"],"filterType":"week"}
-
   let duration = req.body.filterType;
   delete req.body.filterType;
 
@@ -244,8 +288,7 @@ export const getFilteredForecastMetrics = async (req, res) => {
                     select
                       w01
                     from
-                      first_weekend)) THEN ROUND( SUM(dfbwm.units_sales) / (select cur.cur_unit_sales from comp_units_revs cur 
-                         = ${duration}(dfbwm.weekend)), 2)
+                      first_weekend)) THEN ROUND( SUM(dfbwm.units_sales) / (select cur.cur_unit_sales from comp_units_revs cur where cur.cur_date  = ${duration}(dfbwm.weekend)), 2)
                     ELSE 1
                   END) AS units_sales_build,
                   (CASE
@@ -263,11 +306,8 @@ export const getFilteredForecastMetrics = async (req, res) => {
                   ROUND(((ROUND(SUM(dfbwm.units_sales), 0) / ROUND(SUM(dfbwm.receipt_units), 0))* 100), 2) AS sell_through,
                   ROUND(SUM(dfbwm.inventory_ins_units), 0) AS inventory_ins_units,
                   ROUND(SUM(dfbwm.inventory_ins_cost), 0) AS inventory_ins_cost,
-                  ROUND(SUM(dfbwm.inventory_dc_units), 0) AS inventory_dc_units,
-                  ROUND(SUM(dfbwm.inventory_dc_cost), 0) AS inventory_dc_cost,
                   ROUND(SUM(dfbwm.receipt_units), 0) AS receipt_units,
-                  ROUND(SUM(dfbwm.receipt_cost), 0) AS receipt_cost,
-                  ROUND(AVG(dfbwm.aps), 2) AS aps
+                  ROUND(SUM(dfbwm.receipt_cost), 0) AS receipt_cost
                 FROM
                   ${transaction_db}.demand_forecast_base_weekly_metrics dfbwm
                 WHERE
