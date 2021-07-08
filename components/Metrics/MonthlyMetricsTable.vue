@@ -11,6 +11,8 @@
             sortable
             label="Metrics Name"
             property="metrics_master.title"
+            class-name="metrics-fix-header"
+            cell-class-name="el-table-custom-background-cell"
             :editablecontent="true"
             fixed
           >
@@ -179,8 +181,19 @@ export default {
     return {};
   },
   computed: {},
-  methods: {},
+  methods: {
+   classChecker({ row, column }) {
+    return "custom-background-metrics-title"
+   }
+  },
   mounted() {},
 };
 </script>
-<style></style>
+<style scope>
+.custom-background-metrics-title {
+  background: white !important;
+}
+.el-table_1_column_1   {
+background-color: white !important;
+}
+</style>

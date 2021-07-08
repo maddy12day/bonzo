@@ -10,6 +10,7 @@
             min-width="170"
             sortable
             label="Metrics Name"
+            class-name="metrics-fix-header"
             property="metrics_master.title"
             fixed
           >
@@ -1590,4 +1591,6 @@ export default {
   mounted() {},
 };
 </script>
-<style></style>
+<style>
+
+</style>

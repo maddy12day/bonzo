@@ -11,6 +11,7 @@
             sortable
             label="Metrics Name"
             property="Metrics Name"
+            class-name="metrics-fix-header"
             fixed
           >
           </el-table-column>
