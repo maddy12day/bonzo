@@ -12,6 +12,7 @@
             label="Metrics Name"
             property="metrics_master.title"
             :editablecontent="true"
+            fixed
           >
           </el-table-column>
 
