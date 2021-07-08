@@ -2,16 +2,21 @@
   <div class="row">
     <el-dialog :visible.sync="showDialog" width="90%">
       <span slot="title"
-        ><i class="el-icon-info"></i>Scenario Forecast Preview</span
+        ><i class="el-icon-info"></i>Manual AdjustmentTable Preview</span
       >
+      <!--   </div>
+      </div> -->
       <card
         card-body-classes="table-full-width"
-        v-if="scenarioSalesSummary.result.length > 0"
+        v-if="
+          adjustmentSalesSummary.result &&
+          adjustmentSalesSummary.result.length > 0
+        "
       >
         <h4 slot="header" class="card-title text-bold font-weight-bold">
           Sales Summary Revenue
         </h4>
-        <el-table :data="scenarioSalesSummary.result">
+        <el-table :data="adjustmentSalesSummary.result">
           <el-table-column
             min-width="150"
             sortable
@@ -52,6 +57,13 @@
             property="planned_gm_percent"
             align="right"
           >
+            <template slot-scope="scope">
+              {{
+                scope.row.planned_gm_percent
+                  ? scope.row.planned_gm_percen.toFixed(2)
+                  : 0 | toTwoDigitsFloat
+              }}
+            </template>
           </el-table-column>
           <el-table-column
             min-width="150"
@@ -59,30 +71,48 @@
             label="Forecast Sales GM"
             property="forecasted_gm_percent"
             align="right"
-          ></el-table-column>
+          >
+            <template slot-scope="scope">
+              {{
+                scope.row.forecasted_gm_percent
+                  ? scope.row.forecasted_gm_percent.toFixed(2)
+                  : 0 | toTwoDigitsFloat
+              }}
+            </template>
+          </el-table-column>
           <el-table-column
             min-width="150"
             sortable
             label="Adjusted Sales GM"
             property="adjusted_gm_percent"
             align="right"
-          ></el-table-column>
+          >
+            <template slot-scope="scope">
+              {{
+                scope.row.adjusted_gm_percent
+                  ? scope.row.adjusted_gm_percent.toFixed(2)
+                  : 0 | toTwoDigitsFloat
+              }}
+            </template>
+          </el-table-column>
         </el-table>
       </card>
-
       <card
         card-body-classes="table-full-width"
-        v-if="scenarioSalesSummary.result.length > 0"
+        v-if="
+          adjustmentSalesSummary.result &&
+          adjustmentSalesSummary.result.length > 0
+        "
       >
         <h4 slot="header" class="card-title text-bold font-weight-bold">
           Sales Summary Units
         </h4>
-        <el-table :data="scenarioSalesSummary.result">
+        <el-table :data="adjustmentSalesSummary.result">
           <el-table-column
             min-width="150"
             sortable
             label="Planned Sales TY"
-            property="planned_units"
+            property="planned_revenue"
             align="right"
           >
             <template slot-scope="scope">
@@ -93,7 +123,7 @@
             min-width="150"
             sortable
             label="Forecast Sales TY"
-            property="forecasted_units"
+            property="forecasted_revenue"
             align="right"
           >
             <template slot-scope="scope">
@@ -104,7 +134,7 @@
             min-width="150"
             sortable
             label="Adjusted Sales TY"
-            property="adjusted_units"
+            property="adjusted_revenue"
             align="right"
           >
             <template slot-scope="scope">
@@ -117,323 +147,181 @@
             label="Planned  Sales GM"
             property="planned_gm_percent"
             align="right"
-          ></el-table-column>
+          >
+            <template slot-scope="scope">
+              {{
+                scope.row.planned_gm_percent
+                  ? scope.row.planned_gm_percent.toFixed(2)
+                  : 0 | toTwoDigitsFloat
+              }}
+            </template>
+          </el-table-column>
           <el-table-column
             min-width="150"
             sortable
             label="Forecast Sales GM"
             property="forecasted_gm_percent"
             align="right"
-          ></el-table-column>
+          >
+            <template slot-scope="scope">
+              {{
+                scope.row.forecasted_gm_percent
+                  ? scope.row.forecasted_gm_percent.toFixed(2)
+                  : 0 | toTwoDigitsFloat
+              }}
+            </template>
+          </el-table-column>
           <el-table-column
             min-width="150"
             sortable
             label="Adjusted Sales GM"
             property="adjusted_gm_percent"
             align="right"
-          ></el-table-column>
-        </el-table>
-      </card>
-
-      <card
-        card-body-classes="table-full-width"
-        v-if="
-          scenarioUnitSalesComparison.parsedData &&
-            scenarioUnitSalesComparison.parsedData.Units.length > 0
-        "
-      >
-        <h4 slot="header" class="card-title text-bold font-weight-bold">
-          Unit Comparision
-        </h4>
-        <el-table :data="scenarioUnitSalesComparison.parsedData.Units">
-          <el-table-column
-            min-width="180"
-            sortable
-            label="Comparision"
-            property="Comparision"
-          >
-          </el-table-column>
-          <el-table-column
-            min-width="150"
-            sortable
-            label="W1"
-            property="W-1"
-            align="right"
           >
             <template slot-scope="scope">
-              {{ scope.row["W-1"] | toLocaleStr }}
-            </template></el-table-column
-          >
-          <el-table-column
-            min-width="150"
-            sortable
-            label="W2"
-            property="W-2"
-            align="right"
-          >
-            <template slot-scope="scope">
-              {{ scope.row["W-2"] | toLocaleStr }}
+              {{
+                scope.row.adjusted_gm_percent
+                  ? scope.row.adjusted_gm_percent.toFixed(2)
+                  : 0 | toTwoDigitsFloat
+              }}
             </template>
           </el-table-column>
         </el-table>
       </card>
-
-      <card
-        card-body-classes="table-full-width"
-        v-if="
-          scenarioUnitSalesComparison.parsedData &&
-            scenarioUnitSalesComparison.parsedData.Revenue.length > 0
-        "
-      >
-        <h4 slot="header" class="card-title text-bold font-weight-bold">
-          Sales Comparision
-        </h4>
-        <el-table :data="scenarioUnitSalesComparison.parsedData.Revenue">
-          <el-table-column
-            min-width="180"
-            sortable
-            label="Comparision"
-            property="Comparision"
-          >
-          </el-table-column>
-          <el-table-column
-            min-width="150"
-            sortable
-            label="W1"
-            property="W-1"
-            align="right"
-          >
-            <template slot-scope="scope">
-              {{ scope.row["W-1"] | toLocaleStr }}
-            </template>
-          </el-table-column>
-          <el-table-column
-            min-width="150"
-            sortable
-            label="W2"
-            property="W-2"
-            align="right"
-          >
-            <template slot-scope="scope">
-              {{ scope.row["W-2"] | toLocaleStr }}
-            </template>
-          </el-table-column>
-        </el-table>
+      <card v-if="adjustmentUnitSalesCategoryComparison.parsedData">
+        <h4 class="font-weight-bold">Category Summary Comparison</h4>
+        <table class="table table-bordered bg-white overflow-auto">
+          <thead v-if="adjustmentUnitSalesCategoryComparison.parsedData">
+            <tr>
+              <th class="theader">Category</th>
+              <th class="theader">Planned Units</th>
+              <th class="theader">Forecast Units</th>
+              <th class="theader">Adjusted Units</th>
+              <th class="theader">Planned Sale</th>
+              <th class="theader">Forecast Sale</th>
+              <th class="theader">Adjusted Sale</th>
+              <th class="theader">planned Sale(%)</th>
+              <th class="theader">Forecast Sale(%)</th>
+              <th class="theader">Adjusted Sale(%)</th>
+              <th class="theader">Planned GM(%)</th>
+              <th class="theader">Forecast GM(%)</th>
+              <th class="theader">Ajusted GM(%)</th>
+            </tr>
+          </thead>
+          <tbody v-if="categorySummery.result">
+            <tr
+              v-for="(col2, index) in categorySummery.result"
+              :key="Math.random(index, 100)"
+            >
+              <td class="text-right">{{ col2.level_value }}</td>
+              <td class="text-right">{{ col2.planned_units | toLocaleStr }}</td>
+              <td class="text-right">
+                {{ col2.forecasted_units | toLocaleStr }}
+              </td>
+              <td class="text-right">
+                {{ col2.adjusted_units | toLocaleStr }}
+              </td>
+              <td class="text-right">
+                {{ col2.planned_revenue | toLocaleStr }}
+              </td>
+              <td class="text-right">
+                {{ col2.forecasted_revenue | toLocaleStr }}
+              </td>
+              <td class="text-right">
+                {{ col2.adjusted_revenue | toLocaleStr }}
+              </td>
+              <td class="text-right">
+                {{ col2.planned_revenue_percent.toFixed(2) }}
+              </td>
+              <td class="text-right">
+                {{ col2.forecasted_revenue_percent.toFixed(2) }}
+              </td>
+              <td class="text-right">
+                {{ col2.adjusted_revenue_percent.toFixed(2) }}
+              </td>
+              <td class="text-right">
+                {{ col2.planned_gm_percent.toFixed(2) }}
+              </td>
+              <td class="text-right">
+                {{ col2.forecasted_gm_percent.toFixed(2) }}
+              </td>
+              <td class="text-right">
+                {{ col2.adjusted_gm_percent.toFixed(2) }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </card>
-
-      <card
-        card-body-classes="table-full-width"
-        v-if="
-          scenarioCategorySalesComparison.result &&
-            scenarioCategorySalesComparison.result.length > 0
-        "
-      >
-        <h4 slot="header" class="card-title text-bold font-weight-bold">
-          Category Total Sales Comparision
-        </h4>
-        <el-table :data="scenarioCategorySalesComparison.result">
-          <el-table-column
-            min-width="180"
-            sortable
-            label="Name"
-            property="level_value"
-          >
-          </el-table-column>
-          <el-table-column
-            min-width="180"
-            sortable
-            label="Planned Sales"
-            property="planned_revenue"
-            align="right"
-          >
-            <template slot-scope="scope">
-              {{ scope.row.planned_revenue | toLocaleStr }}
-            </template>
-          </el-table-column>
-          <el-table-column
-            min-width="180"
-            sortable
-            label="Forecast Sales"
-            property="forecasted_revenue"
-            align="right"
-          >
-            <template slot-scope="scope">
-              {{ scope.row.forecasted_revenue | toLocaleStr }}
-            </template>
-          </el-table-column>
-          <el-table-column
-            min-width="180"
-            sortable
-            label="Adjusted Sales"
-            property="adjusted_revenue"
-            align="right"
-          >
-            <template slot-scope="scope">
-              {{ scope.row.adjusted_revenue | toLocaleStr }}
-            </template>
-          </el-table-column>
-          <el-table-column
-            min-width="180"
-            sortable
-            label="Planned Sales(%)"
-            property="planned_revenue_percent"
-            align="right"
-          >
-          </el-table-column>
-          <el-table-column
-            min-width="190"
-            sortable
-            label="Forecast Sales(%)"
-            property="forecasted_revenue_percent"
-            align="right"
-          >
-            <template slot-scope="scope">
-              {{ scope.row.forecasted_revenue_percent | toTwoDigitsFloat }}
-            </template>
-          </el-table-column>
-          <el-table-column
-            min-width="190"
-            sortable
-            label="Adjusted Sales(%)"
-            property="adjusted_revenue_percent"
-            align="right"
-          >
-            <template slot-scope="scope">
-              {{ scope.row.adjusted_revenue_percent | toTwoDigitsFloat }}
-            </template>
-          </el-table-column>
-          <el-table-column
-            min-width="170"
-            sortable
-            label="Planned GM(%)"
-            property="planned_gm_percent"
-            align="right"
-          >
-            <template slot-scope="scope">
-              {{ scope.row.planned_gm_percent | toTwoDigitsFloat }}
-            </template>
-          </el-table-column>
-          <el-table-column
-            min-width="170"
-            sortable
-            label="Forecast GM(%)"
-            property="forecasted_gm_percent"
-            align="right"
-          >
-            <template slot-scope="scope">
-              {{ scope.row.forecasted_gm_percent | toTwoDigitsFloat }}
-            </template>
-          </el-table-column>
-          <el-table-column
-            min-width="170"
-            sortable
-            label="Adjusted GM(%)"
-            property="adjusted_gm_percent"
-            align="right"
-          >
-            <template slot-scope="scope">
-              {{ scope.row.adjusted_gm_percent | toTwoDigitsFloat }}
-            </template>
-          </el-table-column>
-        </el-table>
+      <card v-if="adjustmentUnitSalesCategoryComparison.parsedData">
+        <h4 class="font-weight-bold">Category Revenue Comparision</h4>
+        <table class="bg-danger table table-bordered bg-white overflow-auto">
+          <thead v-if="adjustmentUnitSalesCategoryComparison.parsedData">
+            <tr>
+              <th
+                v-for="(col, index2) in Object.keys(
+                  this.adjustmentUnitSalesCategoryComparison.parsedData
+                    .Revenue[0]
+                )"
+                :key="Math.random(index2, 300)"
+              >
+                {{ col }}
+              </th>
+            </tr>
+          </thead>
+          <tbody v-if="adjustmentUnitSalesCategoryComparison.parsedData">
+            <tr
+              v-for="(col2, index) in adjustmentUnitSalesCategoryComparison
+                .parsedData.Revenue"
+              :key="Math.random(index, 100)"
+            >
+              <td
+                v-for="(col2, index) in Object.values(col2)"
+                :key="Math.random(index, 200)"
+              >
+                {{ index > 0 ? col2.toFixed(2) : col2 }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </card>
-
-      <card
-        card-body-classes="table-full-width"
-        v-if="
-          scenarioUnitSalesComparison.parsedData &&
-            scenarioUnitSalesComparison.parsedData.Units.length > 0
-        "
-      >
-        <h4 slot="header" class="card-title text-bold font-weight-bold">
-          Category Units Comparision
-        </h4>
-        <el-table
-          v-if="scenarioUnitSalesComparison.parsedData"
-          :data="scenarioUnitSalesComparison.parsedData.Units"
-        >
-          <el-table-column
-            min-width="180"
-            sortable
-            label="Comparision"
-            property="Comparision"
-          >
-          </el-table-column>
-          <el-table-column
-            min-width="150"
-            sortable
-            label="W1"
-            property="W-1"
-            align="right"
-          >
-            <template slot-scope="scope">
-              {{ scope.row["W-1"] | toLocaleStr }}
-            </template>
-          </el-table-column>
-          <el-table-column
-            min-width="150"
-            sortable
-            label="W2"
-            property="W-2"
-            align="right"
-          >
-            <template slot-scope="scope">
-              {{ scope.row["W-2"] | toLocaleStr }}
-            </template></el-table-column
-          >
-        </el-table>
+      <card v-if="adjustmentUnitSalesCategoryComparison.parsedData">
+        <h4 class="font-weight-bold">Category Units Comparision</h4>
+        <table class="bg-danger table table-bordered bg-white overflow-auto">
+          <thead>
+            <tr>
+              <th
+                v-for="(col, index2) in Object.keys(
+                  this.adjustmentUnitSalesCategoryComparison.parsedData.Units[0]
+                )"
+                :key="Math.random(index2, 300)"
+              >
+                {{ col }}
+              </th>
+            </tr>
+          </thead>
+          <tbody v-if="adjustmentUnitSalesCategoryComparison.parsedData">
+            <tr
+              v-for="(col2, index) in adjustmentUnitSalesCategoryComparison
+                .parsedData.Units"
+              :key="Math.random(index, 100)"
+            >
+              <td
+                v-for="(col2, index) in Object.values(col2)"
+                :key="Math.random(index, 200)"
+              >
+                {{ index > 0 ? parseInt(col2) : col2 }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </card>
-
-      <!-- 7 -->
-      <card
-        card-body-classes="table-full-width"
-        v-if="
-          scenarioUnitSalesComparison.parsedData &&
-            scenarioUnitSalesComparison.parsedData.Revenue.length > 0
-        "
-      >
-        <h4 slot="header" class="card-title text-bold font-weight-bold">
-          Category Sales Comparision
-        </h4>
-        <el-table
-          v-if="scenarioUnitSalesComparison.parsedData"
-          :data="scenarioUnitSalesComparison.parsedData.Revenue"
-        >
-          <el-table-column
-            min-width="180"
-            sortable
-            label="Comparision"
-            property="Comparision"
-          >
-          </el-table-column>
-          <el-table-column
-            min-width="150"
-            sortable
-            label="W1"
-            property="W-1"
-            align="right"
-          >
-            <template slot-scope="scope">
-              {{ scope.row["W-1"] | toLocaleStr }}
-            </template></el-table-column
-          >
-          <el-table-column
-            min-width="150"
-            sortable
-            label="W2"
-            property="W-2"
-            align="right"
-          >
-            <template slot-scope="scope">
-              {{ scope.row["W-2"] | toLocaleStr }}
-            </template></el-table-column
-          >
-        </el-table>
-      </card>
-
+      <span slot="footer" class="dialog-footer"> </span>
       <span slot="footer" class="dialog-footer">
-        <div class="text-right ">
-          <button class="btn btn-primary " @click="showDialog = false">
+        <div class="text-right">
+          <button class="btn btn-primary" @click="showDialog = false">
+            Activate
+          </button>
+          <button class="btn btn-primary" @click="showDialog = false">
             Close
           </button>
         </div>
@@ -443,6 +331,7 @@
 </template>
 <script>
 import { Table, TableColumn, Dialog } from "element-ui";
+import moment from "moment";
 
 export default {
   name: "dashboard",
@@ -451,33 +340,70 @@ export default {
     [TableColumn.name]: TableColumn,
     [Dialog.name]: Dialog,
   },
-  props: [
-    "scenarioSalesSummary",
-    "scenarioUnitSalesComparison",
-    "scenarioCategorySalesComparison",
-    "scenarioCategoryComparison",
-    "dialogVisible",
-  ],
+  props: ["dialogVisible", "adjustmentId"],
   data() {
     return {
       showDialog: false,
+      adjustmentSalesSummary: {},
+      adjustmentUnitSalesComparison: {},
+      adjustmentCategorySalesComparison: {},
+      adjustmentCategoryComparison: {},
+      adjustmentUnitSalesCategoryComparison: {},
+      categoriesCol: [],
+      categorySummery: [],
     };
   },
   computed: {},
   watch: {
-    showDialog: function() {
+    showDialog: function () {
       if (!this.showDialog) {
-        this.$emit("dialogVisible", false);
+        this.$emit("dialogVisibleEvt", false);
       }
     },
   },
+  methods: {
+    async getAdjustmentSalesSummary() {
+      this.adjustmentSalesSummary = await this.$axios.$get(
+        `/get-adjustment-sales-summary/${this.adjustmentId}`
+      );
+    },
+    async getAdjustmentUnitSalesComparison() {
+      this.adjustmentUnitSalesComparison = await this.$axios.$get(
+        `/get-adjustment-unit-sales-comparison/${this.adjustmentId}`
+      );
+    },
+    async getAdjustmentUnitSalesCategoryComparison() {
+      this.adjustmentUnitSalesCategoryComparison = await this.$axios.$get(
+        `/get-adjustment-category-comparison/${this.adjustmentId}`
+      );
+    },
+    async getCategorySummery() {
+      this.categorySummery = await this.$axios.$get(
+        `/get-adjustment-category-sales-comparison/${this.adjustmentId}`
+      );
+    },
+  },
   created() {
+    console.log("inisde");
     this.showDialog = this.dialogVisible;
+  },
+  mounted() {
+    this.getAdjustmentSalesSummary();
+    this.getAdjustmentUnitSalesComparison();
+    this.getAdjustmentUnitSalesCategoryComparison();
+    this.getCategorySummery();
   },
 };
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 .el-dialog {
   background: #f5f6fa;
+}
+.theader {
+  font-size: 10px !important;
+}
+table,
+tr td {
+  padding: 5px 10px !important;
 }
 </style>

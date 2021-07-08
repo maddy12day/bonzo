@@ -58,11 +58,11 @@
             property="adjusted_metrics_name"
             class-name="text-capitalize"
           >
-            <template slot-scope="scope" >
-              {{ scope.row.adjusted_metrics_name.replace(/_/g, ' ' ) }}
+            <template slot-scope="scope">
+              {{ scope.row.adjusted_metrics_name.replace(/_/g, " ") }}
             </template>
           </el-table-column>
-          
+
           <el-table-column
             min-width="150"
             sortable
@@ -109,10 +109,19 @@
         </el-pagination>
       </card>
     </div>
+
+    <!-- Preview -->
+    <PreviewManualAdjustment
+      v-if="dialogVisible"
+      :dialogVisible="dialogVisible"
+      @dialogVisibleEvt="handleDialogue"
+      :adjustmentId="adjustmentId"
+    />
   </div>
 </template>
 <script>
 import { Table, TableColumn, Dialog } from "element-ui";
+import PreviewManualAdjustment from "../../components/Scenarios/PreviewManualAdjustment.vue";
 
 export default {
   name: "AdjustmentTable",
@@ -120,12 +129,15 @@ export default {
     [Table.name]: Table,
     [TableColumn.name]: TableColumn,
     [Dialog.name]: Dialog,
+    PreviewManualAdjustment,
   },
   props: ["tableHeading", "adjustmentTableData"],
   data() {
     return {
       page: 1,
       pageSize: 2,
+      dialogVisible: false,
+      adjustmentId: null,
     };
   },
   computed: {
@@ -142,11 +154,17 @@ export default {
     },
   },
   methods: {
+    handleDialogue() {
+      this.dialogVisible = false;
+    },
     setPage(val) {
       this.page = val;
     },
     async handleAdjustmentClick(data) {
-      alert("Get Adjustment influenced metrics and show modal popup.");
+      this.adjustmentId = data.id;
+      console.log(this.adjustmentId);
+      this.dialogVisible = true;
+      // alert("Get Adjustment influenced metrics and show modal popup.");
     },
     tableRowClassName({ row }) {
       if (row.status === "Processing") {

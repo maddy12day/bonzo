@@ -8,11 +8,11 @@ export const getBaseAdjustments = async (req, res) => {
   try {
     const adjustments = await prisma.manual_adjustments.findMany({
       where: {
-        filter_level: "baseVersion"
+        filter_level: "baseVersion",
       },
       orderBy: {
-        created_at: 'desc'
-      }
+        created_at: "desc",
+      },
     });
     res.status(200).json({
       adjustments,
@@ -27,32 +27,32 @@ export const getBaseAdjustments = async (req, res) => {
 
 // weekend dates for manual adustments
 export const getWeekendDates = async (req, res) => {
-  try{
+  try {
     const weekends = await prisma.dim_morphe_retail_weekends.findMany({
-     where: {
-     year: "2021"
-     },
-     select: {
-       weekend: true
-     },
-    })
+      where: {
+        year: "2021",
+      },
+      select: {
+        weekend: true,
+      },
+    });
     res.status(200).json({
-      weekends: weekends.map(item => item.weekend.toISOString().split('T')[0])
-    })
-  }catch(error) {
+      weekends: weekends.map((item) => item.weekend.toISOString().split("T")[0]),
+    });
+  } catch (error) {
     res.status(500).json({
       message: "something went wrong in getWeekendDates api",
       error: `${error}`,
     });
   }
-}
+};
 // create manual adjustment
 export const createManualAdjustment = async (req, res) => {
-  try{
+  try {
     const manualAjustment = await prisma.manual_adjustments.create({
       data: {
-        ...req.body      
-      }
+        ...req.body,
+      },
     });
     const executed_by = await prisma.users.findUnique({
       where: {
@@ -72,16 +72,14 @@ export const createManualAdjustment = async (req, res) => {
     });
     res.json({
       manualAjustment,
-      message: "adjustment created successfully"
-    })
-  }catch(error) {
+      message: "adjustment created successfully",
+    });
+  } catch (error) {
     res.status(500).json({
-      message: "something went wrong in getWeekendDates api"
-    })
-    }
+      message: "something went wrong in getWeekendDates api",
+    });
   }
-
-
+};
 
 // check user created adjustments status
 export const checkAdjustmentStatus = async (req, res) => {
@@ -111,33 +109,34 @@ export const checkAdjustmentStatus = async (req, res) => {
 // master metrics api
 export const getMasterMetricsData = async (req, res) => {
   try {
-    const masterMetrics =  await prisma.metrics_master.findMany({
+    const masterMetrics = await prisma.metrics_master.findMany({
       where: {
         id: {
-          gt: 0
-        }
+          gt: 0,
+        },
       },
       select: {
         name: true,
-        title: true
-      }
+        title: true,
+      },
     });
-    const masterMetricsData = JSON.parse(JSON.stringify(
-      masterMetrics,
-      (key, value) => (typeof value === "bigint" ? value.toString() : value) // return everything else unchanged
-    ))
+    const masterMetricsData = JSON.parse(
+      JSON.stringify(
+        masterMetrics,
+        (key, value) => (typeof value === "bigint" ? value.toString() : value) // return everything else unchanged
+      )
+    );
     res.json({
-      masterMetricsData
+      masterMetricsData,
     });
-  }catch(error) {
+  } catch (error) {
     res.json({
-      error:`error found in master metrics api ${error}`
+      error: `error found in master metrics api ${error}`,
     });
   }
-}
+};
 
-
-// Get Adjustment Sales Summary 
+// Get Adjustment Sales Summary
 // Paramenter Passed: Adjustment ID
 export const getAdjustmentSalesSummary = async (req, res) => {
   try {
@@ -176,7 +175,9 @@ export const getAdjustmentCategoryComparison = async (req, res) => {
 //API: Adjustment Category Total Sales Comparison
 export const getAdjustmentCategorySalesComparison = async (req, res) => {
   try {
-    const result = await prisma.$queryRaw(`SELECT * from morphe_staging.adjustment_influenced_leveled_aggregates WHERE adjustment_id = ${req.params.id};`);
+    const result = await prisma.$queryRaw(
+      `SELECT * from morphe_staging.adjustment_influenced_leveled_aggregates WHERE adjustment_id = ${req.params.id} AND level = "CATEGORY";`
+    );
     res.status(200).json({
       result,
     });
