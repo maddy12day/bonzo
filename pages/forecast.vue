@@ -493,6 +493,13 @@ export default {
           });
         }
       }
+      // for (let key in reqBody) {
+
+      //   if (reqBody[key] == null || reqBody[key] == undefined) {
+      //     delete reqBody[key];
+      //     console.log("reqBody,", reqBody);
+      //   }
+      // }
       return reqBody;
     },
     // create manual adjustments
@@ -616,6 +623,7 @@ export default {
       this.isFilteredPageDataLoading = false;
       this.$store.commit("toggleCTAState");
       this.$store.commit("toggleProgramFilterCTAState");
+      this.filteredStatsComponentKey += 1;
     },
     notifyVue(verticalAlign, horizontalAlign, message, type) {
       this.$notify({
