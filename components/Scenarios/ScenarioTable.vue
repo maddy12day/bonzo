@@ -116,7 +116,7 @@
           ></el-table-column>
 
           <el-table-column
-            min-width="150"
+            min-width="350"
             sortable
             label="Collections"
             property="filter_collections"
@@ -144,7 +144,7 @@
           ></el-table-column>
 
           <el-table-column
-            min-width="150"
+            min-width="300"
             sortable
             label="Categories"
             property="filter_categories"
