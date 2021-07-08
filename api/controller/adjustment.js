@@ -1,5 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import { parseCategorySaleComparision, parseCategoryUnitComparision } from "../controller/scenario";
+// import moment from "moment";
+
 
 const prisma = new PrismaClient();
 
@@ -163,7 +165,7 @@ export const getAdjustmentCategoryComparison = async (req, res) => {
     parsedData["Revenue"] = parseCategorySaleComparision(result);
 
     res.status(200).json({
-      parsedData,
+      parsedData, result
     });
   } catch (error) {
     res.status(500).json({
@@ -176,7 +178,7 @@ export const getAdjustmentCategoryComparison = async (req, res) => {
 //API: Adjustment Category Total Sales Comparison
 export const getAdjustmentCategorySalesComparison = async (req, res) => {
   try {
-    const result = await prisma.$queryRaw(`SELECT * from morphe_staging.adjustment_influenced_leveled_aggregates WHERE adjustment_id = ${req.params.id};`);
+    const result = await prisma.$queryRaw(`SELECT * from morphe_staging.adjustment_influenced_leveled_aggregates WHERE adjustment_id = ${req.params.id} AND level = "CATEGORY";`);
     res.status(200).json({
       result,
     });
@@ -188,15 +190,73 @@ export const getAdjustmentCategorySalesComparison = async (req, res) => {
   }
 };
 
+export const getWeekendDate = async () => {
+  try{
+    const weekends = await prisma.dim_morphe_retail_weekends.findMany({
+     where: {
+     year: "2021"
+     },
+     select: {
+       weekend: true
+     },
+    })
+
+    return weekends;
+    
+  }catch(error) {
+    return error;
+  }
+}
+
+
+// export const parseCategoryUnitComparision = (results) => {
+//   const fields = ["Planned Units", "Adjusted Units", "Forecast Units"];
+//   let parsedData = [];
+//   for (let field of fields) {
+//     const newObject = {};
+
+//     newObject["Comparision"] = field;
+//     if (field == "Planned Units") {
+//       for (let result of results) {
+//         let currWeek = moment(new Date(result.weekend)).week();
+//         newObject[`W-${currWeek}`] = result.planned_units;
+//         parsedData.push(newObject);
+//       }
+//     } else if (field == "Adjusted Units") {
+//       for (let result of results) {
+//         let currWeek = moment(new Date(result.weekend)).week();
+//         newObject[`W-${currWeek}`] = result.adjusted_units;
+//         parsedData.push(newObject);
+//       }
+//     } else {
+//       for (let result of results) {
+//         let currWeek = moment(new Date(result.weekend)).week();
+//         newObject[`W-${currWeek}`] = result.forecasted_units;
+//         parsedData.push(newObject);
+//       }
+//     }
+//   }
+//   parsedData.sort((a, b) => {
+//     if (a.Comparision == b.Comparision) {
+//     }
+//   });
+//   parsedData = [...new Set(parsedData)];
+//   return parsedData;
+// };
+
+
 //API: Adjustment Unit & Sales Comparison
 export const getAdjustmentUnitSalesComparison = async (req, res) => {
   try {
     let result = await prisma.$queryRaw(`SELECT * FROM morphe_staging.adjustment_influenced_metrics WHERE adjustment_id = ${req.params.id};`);
     let parsedData = {};
-    parsedData["Units"] = parseCategoryUnitComparision(result);
-    parsedData["Revenue"] = parseCategorySaleComparision(result);
+    // let weekendDates = await getWeekendDate();
+    // console.log(moment(new Date("2021-11-26T00:00:00.000Z")).week(),"weekendDates--");
+    
+    // parsedData["Units"] = parseCategoryUnitComparision(result);
+    // parsedData["Revenue"] = parseCategorySaleComparision(result);
     res.status(200).json({
-      parsedData,
+      parsedData,result
     });
   } catch (error) {
     res.status(500).json({

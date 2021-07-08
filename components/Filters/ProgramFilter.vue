@@ -2732,74 +2732,75 @@ export default {
   },
 
   async mounted() {
-    const allRegularFilterJSON = await this.$axios.$get(
-      "/program-filter-dropdown-cache",
-      {
-        progress: true,
-      }
-    );
-    this.filterApiData = allRegularFilterJSON.response;
-    const res = await this.$axios.$get("filter-all-options-dropdown-cache", {
-      progress: true,
-    });
-    const optionGenerator = (data, keyName) => {
-      return [
-        { name: keyName },
-        ...[...new Set(Object.values(data))].map((item) => {
-          return { name: item };
-        }),
-      ];
-    };
-    this.productSourceOptions = optionGenerator(
-      res.response.program.product_source,
-      "All Sources"
-    );
-    this.lifeCycleOptions = optionGenerator(
-      res.response.program.life_cycle,
-      "All Life Cycles"
-    );
-    this.brandTypeOptions = optionGenerator(
-      res.response.program.brand_type,
-      "All Brand Type"
-    );
-    this.newnessOptions = optionGenerator(
-      res.response.program.newness,
-      "All Newness"
-    );
-    this.programs = optionGenerator(
-      res.response.program.collab,
-      "All Programs"
-    );
-    this.channelOptions = optionGenerator(
-      res.response.program.channel,
-      "All Channels"
-    );
-    this.programSubChannels = optionGenerator(
-      res.response.program.sub_channel,
-      "All Sub Channels"
-    );
-    this.categoryOptions = optionGenerator(
-      res.response.program.category,
-      "All Categories"
-    );
-    this.classesOptions = optionGenerator(
-      res.response.program.class,
-      "All Classes"
-    );
-    this.subClassesOptions = optionGenerator(
-      res.response.program.sub_class,
-      "All Sub Classes"
-    );
-    this.programCollectionsOptions = optionGenerator(
-      res.response.program.collection,
-      "All Collections"
-    );
-    this.skuOptions = optionGenerator(res.response.program.sku, "All SKUs");
-    this.brandOptions = optionGenerator(
-      res.response.program.brand,
-      "All Brands"
-    );
-  },
+     const allRegularFilterJSON = await this.$axios.$get(
+       "/program-filter-dropdown-cache",
+       {
+         progress: true,
+       }
+     );
+       this.filterApiData = allRegularFilterJSON.response;
+       const res = await this.$axios.$get("filter-all-options-dropdown-cache", {
+         progress: true,
+       });
+       const optionGenerator = (data, keyName) => {
+         return [
+           { name: keyName },
+           ...[...new Set(Object.values(data))].map((item) => {
+             return { name: item };
+           }),
+         ];
+       };
+       this.productSourceOptions = optionGenerator(
+         res.response.program.product_source,
+         "All Sources"
+       );
+       this.lifeCycleOptions = optionGenerator(
+         res.response.program.life_cycle,
+         "All Life Cycles"
+       );
+       this.brandTypeOptions = optionGenerator(
+         res.response.program.brand_type,
+         "All Brand Type"
+       );
+       this.newnessOptions = optionGenerator(
+         res.response.program.newness,
+         "All Newness"
+       );
+       this.programs = optionGenerator(
+         res.response.program.collab,
+         "All Programs"
+       );
+       this.channelOptions = optionGenerator(
+         res.response.program.channel,
+         "All Channels"
+       );
+       this.programSubChannels = optionGenerator(
+         res.response.program.sub_channel,
+         "All Sub Channels"
+       );
+       this.categoryOptions = optionGenerator(
+         res.response.program.category,
+         "All Categories"
+       );
+       this.classesOptions = optionGenerator(
+         res.response.program.class,
+         "All Classes"
+       );
+       this.subClassesOptions = optionGenerator(
+         res.response.program.sub_class,
+         "All Sub Classes"
+       );
+       this.programCollectionsOptions = optionGenerator(
+         res.response.program.collection,
+         "All Collections"
+       );
+       this.skuOptions = optionGenerator(res.response.program.sku, "All SKUs");
+       this.brandOptions = optionGenerator(
+         res.response.program.brand,
+         "All Brands"
+       );
+  }
+  
 };
 </script>
 <style src="vue-multiselect/dist/vue-multiselect.min.css"></style>

@@ -1,4 +1,5 @@
 import { PrismaClient } from "@prisma/client";
+import moment from "moment";
 
 const prisma = new PrismaClient();
 
@@ -129,20 +130,20 @@ export const parseCategoryUnitComparision = (results) => {
     newObject["Comparision"] = field;
     if (field == "Planned Units") {
       for (let result of results) {
-        index++;
-        newObject[`W-${index}`] = result.planned_units;
+        let currWeek = moment(new Date(result.weekend)).week();
+        newObject[`W-${currWeek}`] = result.planned_units;
         parsedData.push(newObject);
       }
     } else if (field == "Adjusted Units") {
       for (let result of results) {
-        index++;
-        newObject[`W-${index}`] = result.adjusted_units;
+        let currWeek = moment(new Date(result.weekend)).week();
+        newObject[`W-${currWeek}`] = result.adjusted_units;
         parsedData.push(newObject);
       }
     } else {
       for (let result of results) {
-        index++;
-        newObject[`W-${index}`] = result.forecasted_units;
+        let currWeek = moment(new Date(result.weekend)).week();
+        newObject[`W-${currWeek}`] = result.forecasted_units;
         parsedData.push(newObject);
       }
     }
@@ -166,20 +167,20 @@ export const parseCategorySaleComparision = (results) => {
     newObject["Comparision"] = field;
     if (field == "Planned Revenue") {
       for (let result of results) {
-        index++;
-        newObject[`W-${index}`] = result.planned_revenue;
+        let currWeek = moment(new Date(result.weekend)).week();
+        newObject[`W-${currWeek}`] = result.planned_revenue;
         parsedData.push(newObject);
       }
     } else if (field == "Adjusted Revenue") {
       for (let result of results) {
-        index++;
-        newObject[`W-${index}`] = result.adjusted_revenue;
+        let currWeek = moment(new Date(result.weekend)).week();
+        newObject[`W-${currWeek}`] = result.adjusted_revenue;
         parsedData.push(newObject);
       }
     } else {
       for (let result of results) {
-        index++;
-        newObject[`W-${index}`] = result.forecasted_revenue;
+         let currWeek = moment(new Date(result.weekend)).week();
+        newObject[`W-${currWeek}`] = result.forecasted_revenue;
         parsedData.push(newObject);
       }
     }
@@ -197,26 +198,25 @@ const parseUnitSaleComparision = (results) => {
   const fields = ["Planned Units", "Adjusted Units", "Forecast Units"];
   let parsedData = [];
   for (let field of fields) {
-    let index = 0;
     const newObject = {};
 
     newObject["Comparision"] = field;
     if (field == "Planned Units") {
       for (let result of results) {
-        index++;
-        newObject[`W-${index}`] = result.planned_units;
+        let currWeek = moment(new Date(result.weekend)).week();
+        newObject[`W-${currWeek}`] = result.planned_units;
         parsedData.push(newObject);
       }
     } else if (field == "Adjusted Units") {
       for (let result of results) {
-        index++;
-        newObject[`W-${index}`] = result.adjusted_units;
+        let currWeek = moment(new Date(result.weekend)).week();
+        newObject[`W-${currWeek}`] = result.adjusted_units;
         parsedData.push(newObject);
       }
     } else {
       for (let result of results) {
-        index++;
-        newObject[`W-${index}`] = result.forecasted_units;
+        let currWeek = moment(new Date(result.weekend)).week();
+        newObject[`W-${currWeek}`] = result.forecasted_units;
         parsedData.push(newObject);
       }
     }
@@ -234,26 +234,25 @@ const parseUnitRevenueComparision = (results) => {
   const fields = ["Planned Revenue", "Adjusted Revenue", "Forecast Revenue"];
   let parsedData = [];
   for (let field of fields) {
-    let index = 0;
     const newObject = {};
 
     newObject["Comparision"] = field;
     if (field == "Planned Revenue") {
       for (let result of results) {
-        index++;
-        newObject[`W-${index}`] = result.planned_revenue;
+        let currWeek = moment(new Date(result.weekend)).week();
+        newObject[`W-${currWeek}`] = result.planned_revenue;
         parsedData.push(newObject);
       }
     } else if (field == "Adjusted Revenue") {
       for (let result of results) {
-        index++;
-        newObject[`W-${index}`] = result.adjusted_revenue;
+        let currWeek = moment(new Date(result.weekend)).week();
+        newObject[`W-${currWeek}`] = result.adjusted_revenue;
         parsedData.push(newObject);
       }
     } else {
       for (let result of results) {
-        index++;
-        newObject[`W-${index}`] = result.forecasted_revenue;
+         let currWeek = moment(new Date(result.weekend)).week();
+        newObject[`W-${currWeek}`] = result.forecasted_revenue;
         parsedData.push(newObject);
       }
     }
