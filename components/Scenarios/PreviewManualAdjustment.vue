@@ -58,7 +58,11 @@
             align="right"
           >
             <template slot-scope="scope">
-              {{ scope.row.planned_gm_percent? scope.row.planned_gm_percen.toFixed(2): 0 | toTwoDigitsFloat }}
+              {{
+                scope.row.planned_gm_percent
+                  ? scope.row.planned_gm_percen.toFixed(2)
+                  : 0 | toTwoDigitsFloat
+              }}
             </template>
           </el-table-column>
           <el-table-column
@@ -69,7 +73,11 @@
             align="right"
           >
             <template slot-scope="scope">
-              {{ scope.row.forecasted_gm_percent? scope.row.forecasted_gm_percent.toFixed(2): 0 | toTwoDigitsFloat }}
+              {{
+                scope.row.forecasted_gm_percent
+                  ? scope.row.forecasted_gm_percent.toFixed(2)
+                  : 0 | toTwoDigitsFloat
+              }}
             </template>
           </el-table-column>
           <el-table-column
@@ -80,7 +88,11 @@
             align="right"
           >
             <template slot-scope="scope">
-              {{ scope.row.adjusted_gm_percent ?  scope.row.adjusted_gm_percent.toFixed(2): 0 | toTwoDigitsFloat }}
+              {{
+                scope.row.adjusted_gm_percent
+                  ? scope.row.adjusted_gm_percent.toFixed(2)
+                  : 0 | toTwoDigitsFloat
+              }}
             </template>
           </el-table-column>
         </el-table>
@@ -137,7 +149,11 @@
             align="right"
           >
             <template slot-scope="scope">
-              {{ scope.row.planned_gm_percent? scope.row.planned_gm_percent.toFixed(2):0 | toTwoDigitsFloat }}
+              {{
+                scope.row.planned_gm_percent
+                  ? scope.row.planned_gm_percent.toFixed(2)
+                  : 0 | toTwoDigitsFloat
+              }}
             </template>
           </el-table-column>
           <el-table-column
@@ -148,7 +164,11 @@
             align="right"
           >
             <template slot-scope="scope">
-              {{ scope.row.forecasted_gm_percent?scope.row.forecasted_gm_percent.toFixed(2): 0 | toTwoDigitsFloat }}
+              {{
+                scope.row.forecasted_gm_percent
+                  ? scope.row.forecasted_gm_percent.toFixed(2)
+                  : 0 | toTwoDigitsFloat
+              }}
             </template>
           </el-table-column>
           <el-table-column
@@ -159,7 +179,11 @@
             align="right"
           >
             <template slot-scope="scope">
-              {{ scope.row.adjusted_gm_percent? scope.row.adjusted_gm_percent.toFixed(2):0 | toTwoDigitsFloat }}
+              {{
+                scope.row.adjusted_gm_percent
+                  ? scope.row.adjusted_gm_percent.toFixed(2)
+                  : 0 | toTwoDigitsFloat
+              }}
             </template>
           </el-table-column>
         </el-table>
@@ -169,19 +193,19 @@
         <table class="table table-bordered bg-white overflow-auto">
           <thead v-if="adjustmentUnitSalesCategoryComparison.parsedData">
             <tr>
-              <th>Category</th>
-              <th>Planned Units</th>
-              <th>Forecast Units</th>
-              <th>Adjusted Units</th>
-              <th>Planned Sale</th>
-              <th>Forecast Sale</th>
-              <th>Adjusted Sale</th>
-              <th>planned Sale(%)</th>
-              <th>Forecast Sale(%)</th>
-              <th>Adjusted Sale(%)</th>
-              <th>Planned GM(%)</th>
-              <th>Forecast GM(%)</th>
-              <th>Ajusted GM(%)</th>
+              <th class="theader">Category</th>
+              <th class="theader">Planned Units</th>
+              <th class="theader">Forecast Units</th>
+              <th class="theader">Adjusted Units</th>
+              <th class="theader">Planned Sale</th>
+              <th class="theader">Forecast Sale</th>
+              <th class="theader">Adjusted Sale</th>
+              <th class="theader">planned Sale(%)</th>
+              <th class="theader">Forecast Sale(%)</th>
+              <th class="theader">Adjusted Sale(%)</th>
+              <th class="theader">Planned GM(%)</th>
+              <th class="theader">Forecast GM(%)</th>
+              <th class="theader">Ajusted GM(%)</th>
             </tr>
           </thead>
           <tbody v-if="categorySummery.result">
@@ -189,19 +213,19 @@
               v-for="(col2, index) in categorySummery.result"
               :key="Math.random(index, 100)"
             >
-              <td>{{ col2.level_value  }}</td>
-              <td>{{ col2.planned_units | toLocaleStr }}</td>
-              <td>{{ col2.forecasted_units | toLocaleStr }}</td>
-              <td>{{ col2.adjusted_units | toLocaleStr }}</td>
-              <td>{{ col2.planned_revenue | toLocaleStr }}</td>
-              <td>{{ col2.forecasted_revenue | toLocaleStr }}</td>
-              <td>{{ col2.adjusted_revenue | toLocaleStr}}</td>
-              <td>{{ col2.planned_revenue_percent.toFixed(2) }}</td>
-              <td>{{ col2.forecasted_revenue_percent.toFixed(2) }}</td>
-              <td>{{ col2.adjusted_revenue_percent.toFixed(2) }}</td>
-              <td>{{ col2.planned_gm_percent.toFixed(2) }}</td>
-              <td>{{ col2.forecasted_gm_percent.toFixed(2) }}</td>
-              <td>{{ col2.adjusted_gm_percent.toFixed(2) }}</td>
+              <td class="text-right">{{ col2.level_value }}</td>
+              <td class="text-right">{{ col2.planned_units | toLocaleStr }}</td>
+              <td class="text-right">{{ col2.forecasted_units | toLocaleStr }}</td>
+              <td class="text-right">{{ col2.adjusted_units | toLocaleStr }}</td>
+              <td class="text-right">{{ col2.planned_revenue | toLocaleStr }}</td>
+              <td class="text-right">{{ col2.forecasted_revenue | toLocaleStr }}</td>
+              <td class="text-right">{{ col2.adjusted_revenue | toLocaleStr }}</td>
+              <td class="text-right">{{ col2.planned_revenue_percent.toFixed(2) }}</td>
+              <td class="text-right">{{ col2.forecasted_revenue_percent.toFixed(2) }}</td>
+              <td class="text-right">{{ col2.adjusted_revenue_percent.toFixed(2) }}</td>
+              <td class="text-right">{{ col2.planned_gm_percent.toFixed(2) }}</td>
+              <td class="text-right">{{ col2.forecasted_gm_percent.toFixed(2) }}</td>
+              <td class="text-right">{{ col2.adjusted_gm_percent.toFixed(2) }}</td>
             </tr>
           </tbody>
         </table>
@@ -245,8 +269,7 @@
             <tr>
               <th
                 v-for="(col, index2) in Object.keys(
-                  this.adjustmentUnitSalesCategoryComparison.parsedData
-                    .Units[0]
+                  this.adjustmentUnitSalesCategoryComparison.parsedData.Units[0]
                 )"
                 :key="Math.random(index2, 300)"
               >
@@ -270,9 +293,13 @@
           </tbody>
         </table>
       </card>
-
+      <span slot="footer" class="dialog-footer">
+      </span>
       <span slot="footer" class="dialog-footer">
         <div class="text-right ">
+          <button class="btn btn-primary " @click="showDialog = false">
+            Activate
+          </button>
           <button class="btn btn-primary " @click="showDialog = false">
             Close
           </button>
@@ -350,5 +377,11 @@ export default {
 <style lang="scss">
 .el-dialog {
   background: #f5f6fa;
+}
+.theader{
+  font-size: 10px !important;
+}
+table, tr td {
+  padding: 5px 10px !important;
 }
 </style>
