@@ -163,10 +163,10 @@ export const getFilteredForecastMetrics = async (req, res) => {
   delete req.body.filterType;
 
   let countryQuery;
-  let regularQuery; 
+  let regularQuery;
 
   let regularFilter = {};
-  let countryFilter = {}
+  let countryFilter = {};
 
   for (let item in req.body) {
     if (item !== "filter_sub_channels" && item !== "filter_channels") {
@@ -175,11 +175,14 @@ export const getFilteredForecastMetrics = async (req, res) => {
       countryFilter[item] = req.body[item];
     }
   }
-  countryFilter != null ? countryQuery = `AND ${whereQueryString(countryFilter, "dfbwm")}` : countryQuery = ''
-  regularFilter != null ? regularQuery = `AND ${whereQueryString(regularFilter, "dp")}` : regularQuery = ''
-  
+  countryFilter != null ? (countryQuery = `AND ${whereQueryString(countryFilter, "dfbwm")}`) : (countryQuery = "");
+  regularFilter != null ? (regularQuery = `AND ${whereQueryString(regularFilter, "dp")}`) : (regularQuery = "");
+
   if (regularQuery.length == 4) {
-    regularQuery = '';
+    regularQuery = "";
+  }
+  if (countryQuery.length == 4) {
+    countryQuery = "";
   }
 
   try {
@@ -279,8 +282,7 @@ export const getFilteredForecastMetrics = async (req, res) => {
                     iskus)
                 GROUP BY
                   ${duration}(dfbwm.weekend);`;
-    
-    
+
     const filteredForecastData = await prisma.$queryRaw(query);
     let masterMetricData = await getMasterMetricData();
     let parsedFilteredForecastData = parseFilteredForecastData(duration, masterMetricData, filteredForecastData);
@@ -358,7 +360,6 @@ const thisYearSaleYearlyQuarterly = (duration, whereQueryString, numofYear, tran
                   ${duration}(fseisbw.weekend)
                 ORDER BY
                   ${duration}(fseisbw.weekend);`;
-  
 
   console.log("Query----", query);
   return query;
@@ -403,15 +404,12 @@ const forecastQueryGenByDuration = (duration, whereQueryString, numofYear, trans
 export const getFilteredYearlyStatsData = async (req, res) => {
   let filter = req.body;
   delete filter.filterType;
-  
 
   // Planned Sales Yearly
   const filteredPlannedWhereQuery = whereQueryString(filter, "pwurbcbs");
   const filteredPlannedDataQuery = typlanQueryGeneratorByDurations("YEAR", filteredPlannedWhereQuery, "morphe_staging");
 
-
   console.log("filteredPlannedDataQuery,,", filteredPlannedDataQuery);
-
 
   // This Year Sale Yearly
   const filteredThisYearSaleWhereQuery = whereQueryString(filter);
