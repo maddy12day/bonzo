@@ -429,10 +429,6 @@ export default {
         requestedFilterOption["filterType"] = "month";
         this.filterMonthly = true;
       }
-      requestedFilterOption = {
-        filter_product_sources: ["FORMA BRANDS", "3RD PARTY"],
-        filterType: "week",
-      };
       this.filteredForecastMetrics = await this.$axios.$post(
         `/get-filtered-forecast-metrics`,
         requestedFilterOption
@@ -444,10 +440,6 @@ export default {
     },
     async getFilteredWeeklyMetrics(requestedFilterOption) {
       requestedFilterOption["filterType"] = "week";
-      requestedFilterOption = {
-        filter_product_sources: ["FORMA BRANDS", "3RD PARTY"],
-        filterType: "week",
-      };
       const filteredWeeklyforecast = await this.$axios.$post(
         `/get-filtered-forecast-metrics`,
         requestedFilterOption
@@ -455,13 +447,9 @@ export default {
       this.filteredForecastMetrics = filteredWeeklyforecast;
     },
     async getFilteredTopSkus() {
-      requestedFilterOption = {
-        filter_product_sources: ["FORMA BRANDS", "3RD PARTY"],
-        filterType: "week",
-      };
       const topTenSkusData = await this.$axios.$post(
         `/get-filtered-forecast-data`,
-        requestedFilterOption
+        this.filterPayload
       );
       this.topTenSkusData = topTenSkusData;
     },

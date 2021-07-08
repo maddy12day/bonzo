@@ -245,7 +245,7 @@ export const getFilteredForecastMetrics = async (req, res) => {
                       w01
                     from
                       first_weekend)) THEN ROUND( SUM(dfbwm.units_sales) / (select cur.cur_unit_sales from comp_units_revs cur 
-                         = ${duration}(dfbwm.weekend)), 2)
+                         where cur.cur_date= ${duration}(dfbwm.weekend)), 2)
                     ELSE 1
                   END) AS units_sales_build,
                   (CASE
