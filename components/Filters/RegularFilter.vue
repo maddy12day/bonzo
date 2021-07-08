@@ -1724,7 +1724,7 @@ export default {
          progress: true,
        }
      );
-    this.filterApiData = {}; //allRegularFilterJSON.response;
+    this.filterApiData = allRegularFilterJSON.response;
   },
 };
 </script>
