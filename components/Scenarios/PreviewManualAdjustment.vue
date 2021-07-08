@@ -10,7 +10,7 @@
         card-body-classes="table-full-width"
         v-if="
           adjustmentSalesSummary.result &&
-            adjustmentSalesSummary.result.length > 0
+          adjustmentSalesSummary.result.length > 0
         "
       >
         <h4 slot="header" class="card-title text-bold font-weight-bold">
@@ -101,7 +101,7 @@
         card-body-classes="table-full-width"
         v-if="
           adjustmentSalesSummary.result &&
-            adjustmentSalesSummary.result.length > 0
+          adjustmentSalesSummary.result.length > 0
         "
       >
         <h4 slot="header" class="card-title text-bold font-weight-bold">
@@ -189,7 +189,7 @@
         </el-table>
       </card>
       <card v-if="adjustmentUnitSalesCategoryComparison.parsedData">
-        <h4 class="font-weight-bold">Category Summery Comparision</h4>
+        <h4 class="font-weight-bold">Category Summary Comparison</h4>
         <table class="table table-bordered bg-white overflow-auto">
           <thead v-if="adjustmentUnitSalesCategoryComparison.parsedData">
             <tr>
@@ -215,17 +215,39 @@
             >
               <td class="text-right">{{ col2.level_value }}</td>
               <td class="text-right">{{ col2.planned_units | toLocaleStr }}</td>
-              <td class="text-right">{{ col2.forecasted_units | toLocaleStr }}</td>
-              <td class="text-right">{{ col2.adjusted_units | toLocaleStr }}</td>
-              <td class="text-right">{{ col2.planned_revenue | toLocaleStr }}</td>
-              <td class="text-right">{{ col2.forecasted_revenue | toLocaleStr }}</td>
-              <td class="text-right">{{ col2.adjusted_revenue | toLocaleStr }}</td>
-              <td class="text-right">{{ col2.planned_revenue_percent.toFixed(2) }}</td>
-              <td class="text-right">{{ col2.forecasted_revenue_percent.toFixed(2) }}</td>
-              <td class="text-right">{{ col2.adjusted_revenue_percent.toFixed(2) }}</td>
-              <td class="text-right">{{ col2.planned_gm_percent.toFixed(2) }}</td>
-              <td class="text-right">{{ col2.forecasted_gm_percent.toFixed(2) }}</td>
-              <td class="text-right">{{ col2.adjusted_gm_percent.toFixed(2) }}</td>
+              <td class="text-right">
+                {{ col2.forecasted_units | toLocaleStr }}
+              </td>
+              <td class="text-right">
+                {{ col2.adjusted_units | toLocaleStr }}
+              </td>
+              <td class="text-right">
+                {{ col2.planned_revenue | toLocaleStr }}
+              </td>
+              <td class="text-right">
+                {{ col2.forecasted_revenue | toLocaleStr }}
+              </td>
+              <td class="text-right">
+                {{ col2.adjusted_revenue | toLocaleStr }}
+              </td>
+              <td class="text-right">
+                {{ col2.planned_revenue_percent.toFixed(2) }}
+              </td>
+              <td class="text-right">
+                {{ col2.forecasted_revenue_percent.toFixed(2) }}
+              </td>
+              <td class="text-right">
+                {{ col2.adjusted_revenue_percent.toFixed(2) }}
+              </td>
+              <td class="text-right">
+                {{ col2.planned_gm_percent.toFixed(2) }}
+              </td>
+              <td class="text-right">
+                {{ col2.forecasted_gm_percent.toFixed(2) }}
+              </td>
+              <td class="text-right">
+                {{ col2.adjusted_gm_percent.toFixed(2) }}
+              </td>
             </tr>
           </tbody>
         </table>
@@ -256,7 +278,7 @@
                 v-for="(col2, index) in Object.values(col2)"
                 :key="Math.random(index, 200)"
               >
-                {{ col2 }}
+                {{ index > 0 ? col2.toFixed(2) : col2 }}
               </td>
             </tr>
           </tbody>
@@ -287,20 +309,19 @@
                 v-for="(col2, index) in Object.values(col2)"
                 :key="Math.random(index, 200)"
               >
-                {{ col2 }}
+                {{ index > 0 ? parseInt(col2) : col2 }}
               </td>
             </tr>
           </tbody>
         </table>
       </card>
+      <span slot="footer" class="dialog-footer"> </span>
       <span slot="footer" class="dialog-footer">
-      </span>
-      <span slot="footer" class="dialog-footer">
-        <div class="text-right ">
-          <button class="btn btn-primary " @click="showDialog = false">
+        <div class="text-right">
+          <button class="btn btn-primary" @click="showDialog = false">
             Activate
           </button>
-          <button class="btn btn-primary " @click="showDialog = false">
+          <button class="btn btn-primary" @click="showDialog = false">
             Close
           </button>
         </div>
@@ -334,7 +355,7 @@ export default {
   },
   computed: {},
   watch: {
-    showDialog: function() {
+    showDialog: function () {
       if (!this.showDialog) {
         this.$emit("dialogVisibleEvt", false);
       }
@@ -374,14 +395,15 @@ export default {
   },
 };
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 .el-dialog {
   background: #f5f6fa;
 }
-.theader{
+.theader {
   font-size: 10px !important;
 }
-table, tr td {
+table,
+tr td {
   padding: 5px 10px !important;
 }
 </style>

@@ -162,7 +162,7 @@ export default {
     },
     async handleAdjustmentClick(data) {
       this.adjustmentId = data.id;
-      console.log( this.adjustmentId)
+      console.log(this.adjustmentId);
       this.dialogVisible = true;
       // alert("Get Adjustment influenced metrics and show modal popup.");
     },

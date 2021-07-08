@@ -43,7 +43,7 @@ export const allSharedScenarios = async (req, res) => {
           select: {
             scenario_type: true,
           },
-        }
+        },
       },
       orderBy: {
         created_at: "desc",
@@ -362,32 +362,30 @@ export const checkScenarioStatus = async (req, res) => {
 // share scenarios
 export const shareScenario = async (req, res) => {
   try {
-    const scenario = await prisma.scenarios
-    .update({
+    const scenario = await prisma.scenarios.update({
       where: {
-        id: parseInt(req.params.id)
+        id: parseInt(req.params.id),
       },
       data: {
-        is_shared: true
+        is_shared: true,
       },
-    })
+    });
     res.json({
       scenario,
-      message: 'scenario shared successfully...',
+      message: "scenario shared successfully...",
     });
   } catch (error) {
     res.status(500).json({
       error: `something went wrong shared scenario api. ${error}`,
     });
   }
-}
+};
 // merge scenarios
 export const mergeScenarioWithBase = async (req, res) => {
   try {
-    const scenario = await prisma.scenarios
-    .update({
+    const scenario = await prisma.scenarios.update({
       where: {
-        id: parseInt(req.body.id)
+        id: parseInt(req.body.id),
       },
       data: {
         status: "Merge Pending",
@@ -410,21 +408,21 @@ export const mergeScenarioWithBase = async (req, res) => {
     });
     res.json({
       scenario,
-      message: ' scenario successfully merged with base...',
+      message: " scenario successfully merged with base...",
     });
   } catch (error) {
     res.status(500).json({
       error: `something went wrong with merge scenario api. ${error}`,
     });
   }
-}
+};
 
 // check merge scenario status
 export const checkMergeScenarioStatus = async (req, res) => {
   try {
     const scenario = await prisma.scenarios.findMany({
       where: {
-       status: "Merge Pending"
+        status: "Merge Pending",
       },
       orderBy: {
         created_at: "desc",
@@ -441,19 +439,19 @@ export const checkMergeScenarioStatus = async (req, res) => {
 };
 
 //  get scenario details by click
-export const getScenarioDetailsById = async (req, res) =>  {
-  try{
+export const getScenarioDetailsById = async (req, res) => {
+  try {
     const scenario = await prisma.scenarios.findUnique({
       where: {
-        id: id
-      }
+        id: parseInt(req.params.id),
+      },
     });
     res.json({
-      scenario
+      scenario,
     });
-  }catch(error) {
+  } catch (error) {
     res.json({
-      error: `something went wrong in getScenarioDetailsById ${error}.`
-    })
+      error: `something went wrong in getScenarioDetailsById ${error}.`,
+    });
   }
-}
+};

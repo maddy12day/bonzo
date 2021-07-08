@@ -187,6 +187,8 @@
       :scenarioCategorySalesComparison="scenarioCategorySalesComparison"
       :scenarioCategoryComparison="scenarioCategoryComparison"
       :previewBtnText="previewBtnText"
+      :scenarioDetails="scenarioDetails"
+      :currentScenarioStatus="currentScenarioStatus"
     />
   </div>
 </template>
@@ -219,6 +221,7 @@ export default {
       scenarioCategorySalesComparison: [],
       scenarioCategoryComparison: [],
       currentScenarioId: null,
+      currentScenarioStatus: {},
       page: 1,
       pageSize: 3,
       typeColor: ["", "info", "success", "warning", "danger"],
@@ -303,7 +306,51 @@ export default {
       this.scenarioCategoryComparison = await this.$axios.$get(
         `/get-scenario-category-comparison/${data.id}`
       );
+      const scenarioDetails = await this.$axios.$get(
+        `/get-scenario-detail-by-id/${data.id}`
+      );
+      console.log("scenarioDetails", this.scenarioDetails);
+      const obj = {
+        filter_brand_types: scenarioDetails.scenario.filter_brand_types,
+        filter_brands: scenarioDetails.scenario.filter_brands,
+        filter_categories: scenarioDetails.scenario.filter_categories,
+        filter_channels: scenarioDetails.scenario.filter_channels,
+        filter_classes: scenarioDetails.scenario.filter_classes,
+        filter_collections: scenarioDetails.scenario.filter_collections,
+        filter_level: scenarioDetails.scenario.filter_level,
+        filter_life_cycles: scenarioDetails.scenario.filter_life_cycles,
+        filter_newness: scenarioDetails.scenario.filter_newness,
+        filter_product_sources: scenarioDetails.scenario.filter_product_sources,
+        filter_programs: scenarioDetails.scenario.filter_programs,
+        filter_skus: scenarioDetails.scenario.filter_skus,
+        filter_sub_channels: scenarioDetails.scenario.filter_sub_channels,
+        filter_sub_classes: scenarioDetails.scenario.filter_sub_classes,
+        scenario_name: scenarioDetails.scenario.scenario_name,
+      };
+      this.scenarioDetails = this.emptyFieldCleaner(obj);
+      this.currentScenarioStatus = scenarioDetails.scenario;
       this.dialogVisible = true;
+    },
+    emptyFieldCleaner(reqBody) {
+      for (let key in reqBody) {
+        if (reqBody[key] == "" || reqBody[key] == undefined) {
+          delete reqBody[key];
+        }
+        if (Array.isArray(reqBody[key]) && reqBody[key].length > 1) {
+          reqBody[key] = reqBody[key].map((item) => {
+            if (item.includes("All") === false) {
+              return item.join(",");
+            }
+          });
+        } else if (Array.isArray(reqBody[key]) && reqBody[key].length == 1) {
+          reqBody[key] = reqBody[key].map((item) => {
+            if (item.includes("All") === false) {
+              return item;
+            }
+          });
+        }
+      }
+      return reqBody;
     },
     getUserName: function (id) {
       let allUserInfo = JSON.parse(window.localStorage.getItem("allUsersInfo"));
