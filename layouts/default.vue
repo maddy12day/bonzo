@@ -168,4 +168,8 @@ $scaleSize: 0.95;
 .btn {
   box-shadow: none !important;
 }
+
+.nav p {
+  font-size: 14px !important;
+}
 </style>

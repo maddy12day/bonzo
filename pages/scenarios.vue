@@ -323,7 +323,7 @@ export default {
         if (scenarioTypesJson !== {} && scenarioTypesJson.scenario) {
           if (
             scenarioTypesJson &&
-            ["Completed", "Failed", "Error", "Merged"].includes(
+            ["Completed", "Failed", "Error", "Merge Completed"].includes(
               scenarioTypesJson.scenario.status
             )
           ) {
@@ -338,8 +338,8 @@ export default {
               scenarioTypesJson.scenario.status;
           }
         }
-      }else {
-         this.disabledScenarioBtn = false;
+      } else {
+        this.disabledScenarioBtn = false;
       }
     },
   },
@@ -358,7 +358,7 @@ export default {
     callToIntervalAjaxSCom() {
       return this.callToIntervalAjax;
     },
-    sharedScenariosListCom() {  
+    sharedScenariosListCom() {
       return this.sharedScenariosList;
     },
     filtersType() {

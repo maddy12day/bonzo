@@ -163,6 +163,27 @@ export const getFilteredForecastMetrics = async (req, res) => {
 
   let duration = req.body.filterType;
   delete req.body.filterType;
+
+  let countryQuery;
+  let regularQuery; 
+
+  let regularFilter = {};
+  let countryFilter = {}
+
+  for (let item in req.body) {
+    if (item !== "filter_sub_channels" && item !== "filter_channels") {
+      regularFilter[item] = req.body[item];
+    } else {
+      countryFilter[item] = req.body[item];
+    }
+  }
+  countryFilter != null ? countryQuery = `AND ${whereQueryString(countryFilter, "dfbwm")}` : countryQuery = ''
+  regularFilter != null ? regularQuery = `AND ${whereQueryString(regularFilter, "dp")}` : regularQuery = ''
+  
+  if (regularQuery.length == 4) {
+    regularQuery = '';
+  }
+
   try {
     let transaction_db = "morphe_staging";
 
@@ -177,11 +198,12 @@ export const getFilteredForecastMetrics = async (req, res) => {
                 limit 1 ),
                 iskus AS (
                 select
-                  idp.SKU as sku
+                  dp.SKU as sku
                 from
-                  ${transaction_db}.dim_products idp
+                  ${transaction_db}.dim_products dp
                 where
-                  ${whereQueryString(req.body, "idp").replace(/dp/g, "idp")} ),
+                  dp.id > 0
+                 ${regularQuery}),
                 comp_units_revs AS (
                 SELECT
                   ${duration}(dfbwm2.weekend)+1 AS cur_date,
@@ -247,6 +269,7 @@ export const getFilteredForecastMetrics = async (req, res) => {
                   ${transaction_db}.demand_forecast_base_weekly_metrics dfbwm
                 WHERE
                   YEAR(dfbwm.weekend)=(YEAR(CURRENT_DATE()))
+                  ${countryQuery}
                   AND dfbwm.demand_forecast_run_log_id = (
                   select
                     id
@@ -259,6 +282,7 @@ export const getFilteredForecastMetrics = async (req, res) => {
                     iskus)
                 GROUP BY
                   ${duration}(dfbwm.weekend);`;
+    
     
     const filteredForecastData = await prisma.$queryRaw(query);
     let masterMetricData = await getMasterMetricData();
@@ -289,13 +313,13 @@ const typlanQueryGeneratorByDurations = (duration, whereQueryString, transaction
 
   const query = `
               SELECT
-                ${duration}(pwurbcbs.${groubyCol}end_date)-${dateOffset} AS date,
                 ROUND(SUM(pwurbcbs.units), 0) AS total_units,
                 ROUND(SUM(pwurbcbs.revenue), 0) AS total_revenue
               FROM
                 ${transaction_db}.${tableName} pwurbcbs
               WHERE
                 pwurbcbs.channel <> 'Wholesale'
+                AND pwurbcbs.plan_year = YEAR(CURRENT_DATE())
                 AND pwurbcbs.sku in (
                 select
                   SKU
@@ -304,7 +328,7 @@ const typlanQueryGeneratorByDurations = (duration, whereQueryString, transaction
                 where
                   ${whereQueryStr})
               GROUP BY
-                ${duration}(pwurbcbs.${groubyCol}end_date)`;
+                pwurbcbs.plan_year`;
   return query;
 };
 
@@ -337,6 +361,9 @@ const thisYearSaleYearlyQuarterly = (duration, whereQueryString, numofYear, tran
                   ${duration}(fseisbw.weekend)
                 ORDER BY
                   ${duration}(fseisbw.weekend);`;
+  
+
+  console.log("Query----", query);
   return query;
 };
 
@@ -384,6 +411,10 @@ export const getFilteredYearlyStatsData = async (req, res) => {
   // Planned Sales Yearly
   const filteredPlannedWhereQuery = whereQueryString(filter, "pwurbcbs");
   const filteredPlannedDataQuery = typlanQueryGeneratorByDurations("YEAR", filteredPlannedWhereQuery, "morphe_staging");
+
+
+  console.log("filteredPlannedDataQuery,,", filteredPlannedDataQuery);
+
 
   // This Year Sale Yearly
   const filteredThisYearSaleWhereQuery = whereQueryString(filter);

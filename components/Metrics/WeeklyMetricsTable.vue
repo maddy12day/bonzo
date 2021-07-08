@@ -618,8 +618,7 @@ export default {
   },
   computed: {},
   methods: {},
-  mounted() {
-  },
+  mounted() {},
 };
 </script>
 <style></style>

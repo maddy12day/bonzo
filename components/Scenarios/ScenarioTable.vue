@@ -20,7 +20,9 @@
               <a
                 tabindex="0"
                 @click="handleScenarioClick(scope.row)"
-                v-if="['Completed', 'Merged'].includes(scope.row.status)"
+                v-if="
+                  ['Completed', 'Merge Completed'].includes(scope.row.status)
+                "
               >
                 {{ scope.row.scenario_name }}</a
               >
@@ -251,7 +253,7 @@ export default {
         `/merge-scenario-with-base`,
         {
           demand_planner_user_id: this.$auth.user.user_id,
-          id: this.currentScenarioId
+          id: this.currentScenarioId,
         }
       );
       if (mergeScenario) {
@@ -303,13 +305,13 @@ export default {
       );
       this.dialogVisible = true;
     },
-    getUserName: function(id) {
+    getUserName: function (id) {
       let allUserInfo = JSON.parse(window.localStorage.getItem("allUsersInfo"));
       let userName = allUserInfo.users.filter((user) => (user.id = id))[0]
         .first_name;
       return userName;
     },
-    addUserToScenarioTableData: function(scenarioTableData, type) {
+    addUserToScenarioTableData: function (scenarioTableData, type) {
       if ((type = "sharedScenarios")) {
         this.scenarioTableDataForTable = scenarioTableData.map((v) => ({
           ...v,
@@ -328,8 +330,12 @@ export default {
         return "success-row";
       } else if (row.status === "Failed" || row.status === "Error") {
         return "warning-row";
-      } else if (row.status === "Merged") {
-        return "processing-row";
+      } else if (row.status === "Merge Pending") {
+        return "merge-pending-row";
+      } else if (row.status === "Merge Processing") {
+        return "merge-processing-row";
+      } else if (row.status === "Merge Completed") {
+        return "merge-completed-row";
       }
       return "other-row";
     },
@@ -356,8 +362,15 @@ export default {
     color: #1d8cf8 !important;
   }
 }
-.el-table .merged-row {
-  background: #e3eeff;
+
+.el-table .merge-pending-row {
+  background: rgb(253, 235, 208);
+}
+.el-table .merge-processing-row {
+  background: rgb(232, 218, 239);
+}
+.el-table .merge-completed-row {
+  background: rgb(213, 245, 227);
 }
 .el-table .warning-row {
   background: rgb(255, 244, 243);
