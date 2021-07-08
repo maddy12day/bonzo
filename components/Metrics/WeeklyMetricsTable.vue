@@ -11,6 +11,7 @@
             sortable
             label="Metrics Name"
             property="metrics_master.title"
+            fixed
           >
           </el-table-column>
 
@@ -621,4 +622,5 @@ export default {
   mounted() {},
 };
 </script>
-<style></style>
+<style>
+</style>

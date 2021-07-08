@@ -11,6 +11,7 @@
             sortable
             label="Metrics Name"
             property="Metrics Name"
+            fixed
           >
           </el-table-column>
           <el-table-column

@@ -11,6 +11,7 @@
             sortable
             label="Metrics Name"
             property="metrics_master.title"
+            fixed
           >
           </el-table-column>
 
@@ -38,13 +39,13 @@
                 type="number"
                 v-if="
                   weekNo() < 1 &&
-                    !isDisble &&
-                    [
-                      'Sales',
-                      'Sales Build',
-                      'Units Sales',
-                      'Units Sales Build',
-                    ].includes(scope.row.metrics_master.title)
+                  !isDisble &&
+                  [
+                    'Sales',
+                    'Sales Build',
+                    'Units Sales',
+                    'Units Sales Build',
+                  ].includes(scope.row.metrics_master.title)
                 "
                 v-model="scope.row.w01"
                 :disabled="isDisble"
@@ -67,13 +68,13 @@
                 type="number"
                 v-if="
                   weekNo() < 2 &&
-                    !isDisble &&
-                    [
-                      'Sales',
-                      'Sales Build',
-                      'Units Sales',
-                      'Units Sales Build',
-                    ].includes(scope.row.metrics_master.title)
+                  !isDisble &&
+                  [
+                    'Sales',
+                    'Sales Build',
+                    'Units Sales',
+                    'Units Sales Build',
+                  ].includes(scope.row.metrics_master.title)
                 "
                 v-model="scope.row.w02"
                 :disabled="isDisble"
@@ -96,13 +97,13 @@
                 type="number"
                 v-if="
                   weekNo() < 3 &&
-                    !isDisble &&
-                    [
-                      'Sales',
-                      'Sales Build',
-                      'Units Sales',
-                      'Units Sales Build',
-                    ].includes(scope.row.metrics_master.title)
+                  !isDisble &&
+                  [
+                    'Sales',
+                    'Sales Build',
+                    'Units Sales',
+                    'Units Sales Build',
+                  ].includes(scope.row.metrics_master.title)
                 "
                 v-model="scope.row.w03"
                 :disabled="isDisble"
@@ -125,13 +126,13 @@
                 type="number"
                 v-if="
                   weekNo() < 4 &&
-                    !isDisble &&
-                    [
-                      'Sales',
-                      'Sales Build',
-                      'Units Sales',
-                      'Units Sales Build',
-                    ].includes(scope.row.metrics_master.title)
+                  !isDisble &&
+                  [
+                    'Sales',
+                    'Sales Build',
+                    'Units Sales',
+                    'Units Sales Build',
+                  ].includes(scope.row.metrics_master.title)
                 "
                 v-model="scope.row.w04"
                 :disabled="isDisble"
@@ -154,13 +155,13 @@
                 type="number"
                 v-if="
                   weekNo() < 5 &&
-                    !isDisble &&
-                    [
-                      'Sales',
-                      'Sales Build',
-                      'Units Sales',
-                      'Units Sales Build',
-                    ].includes(scope.row.metrics_master.title)
+                  !isDisble &&
+                  [
+                    'Sales',
+                    'Sales Build',
+                    'Units Sales',
+                    'Units Sales Build',
+                  ].includes(scope.row.metrics_master.title)
                 "
                 v-model="scope.row.w05"
                 :disabled="isDisble"
@@ -183,13 +184,13 @@
                 type="number"
                 v-if="
                   weekNo() < 6 &&
-                    !isDisble &&
-                    [
-                      'Sales',
-                      'Sales Build',
-                      'Units Sales',
-                      'Units Sales Build',
-                    ].includes(scope.row.metrics_master.title)
+                  !isDisble &&
+                  [
+                    'Sales',
+                    'Sales Build',
+                    'Units Sales',
+                    'Units Sales Build',
+                  ].includes(scope.row.metrics_master.title)
                 "
                 v-model="scope.row.w06"
                 :disabled="isDisble"
@@ -212,13 +213,13 @@
                 type="number"
                 v-if="
                   weekNo() < 7 &&
-                    !isDisble &&
-                    [
-                      'Sales',
-                      'Sales Build',
-                      'Units Sales',
-                      'Units Sales Build',
-                    ].includes(scope.row.metrics_master.title)
+                  !isDisble &&
+                  [
+                    'Sales',
+                    'Sales Build',
+                    'Units Sales',
+                    'Units Sales Build',
+                  ].includes(scope.row.metrics_master.title)
                 "
                 v-model="scope.row.w07"
                 :disabled="isDisble"
@@ -241,13 +242,13 @@
                 type="number"
                 v-if="
                   weekNo() < 8 &&
-                    !isDisble &&
-                    [
-                      'Sales',
-                      'Sales Build',
-                      'Units Sales',
-                      'Units Sales Build',
-                    ].includes(scope.row.metrics_master.title)
+                  !isDisble &&
+                  [
+                    'Sales',
+                    'Sales Build',
+                    'Units Sales',
+                    'Units Sales Build',
+                  ].includes(scope.row.metrics_master.title)
                 "
                 v-model="scope.row.w08"
                 :disabled="isDisble"
@@ -270,13 +271,13 @@
                 type="number"
                 v-if="
                   weekNo() < 9 &&
-                    !isDisble &&
-                    [
-                      'Sales',
-                      'Sales Build',
-                      'Units Sales',
-                      'Units Sales Build',
-                    ].includes(scope.row.metrics_master.title)
+                  !isDisble &&
+                  [
+                    'Sales',
+                    'Sales Build',
+                    'Units Sales',
+                    'Units Sales Build',
+                  ].includes(scope.row.metrics_master.title)
                 "
                 v-model="scope.row.w09"
                 :disabled="isDisble"
@@ -298,13 +299,13 @@
                 type="number"
                 v-if="
                   weekNo() < 10 &&
-                    !isDisble &&
-                    [
-                      'Sales',
-                      'Sales Build',
-                      'Units Sales',
-                      'Units Sales Build',
-                    ].includes(scope.row.metrics_master.title)
+                  !isDisble &&
+                  [
+                    'Sales',
+                    'Sales Build',
+                    'Units Sales',
+                    'Units Sales Build',
+                  ].includes(scope.row.metrics_master.title)
                 "
                 v-model="scope.row.w10"
                 :disabled="isDisble"
@@ -327,13 +328,13 @@
                 type="number"
                 v-if="
                   weekNo() < 11 &&
-                    !isDisble &&
-                    [
-                      'Sales',
-                      'Sales Build',
-                      'Units Sales',
-                      'Units Sales Build',
-                    ].includes(scope.row.metrics_master.title)
+                  !isDisble &&
+                  [
+                    'Sales',
+                    'Sales Build',
+                    'Units Sales',
+                    'Units Sales Build',
+                  ].includes(scope.row.metrics_master.title)
                 "
                 v-model="scope.row.w11"
                 :disabled="isDisble"
@@ -356,13 +357,13 @@
                 type="number"
                 v-if="
                   weekNo() < 12 &&
-                    !isDisble &&
-                    [
-                      'Sales',
-                      'Sales Build',
-                      'Units Sales',
-                      'Units Sales Build',
-                    ].includes(scope.row.metrics_master.title)
+                  !isDisble &&
+                  [
+                    'Sales',
+                    'Sales Build',
+                    'Units Sales',
+                    'Units Sales Build',
+                  ].includes(scope.row.metrics_master.title)
                 "
                 v-model="scope.row.w12"
                 :disabled="isDisble"
@@ -385,13 +386,13 @@
                 type="number"
                 v-if="
                   weekNo() < 13 &&
-                    !isDisble &&
-                    [
-                      'Sales',
-                      'Sales Build',
-                      'Units Sales',
-                      'Units Sales Build',
-                    ].includes(scope.row.metrics_master.title)
+                  !isDisble &&
+                  [
+                    'Sales',
+                    'Sales Build',
+                    'Units Sales',
+                    'Units Sales Build',
+                  ].includes(scope.row.metrics_master.title)
                 "
                 v-model="scope.row.w13"
                 :disabled="isDisble"
@@ -414,13 +415,13 @@
                 type="number"
                 v-if="
                   weekNo() < 14 &&
-                    !isDisble &&
-                    [
-                      'Sales',
-                      'Sales Build',
-                      'Units Sales',
-                      'Units Sales Build',
-                    ].includes(scope.row.metrics_master.title)
+                  !isDisble &&
+                  [
+                    'Sales',
+                    'Sales Build',
+                    'Units Sales',
+                    'Units Sales Build',
+                  ].includes(scope.row.metrics_master.title)
                 "
                 v-model="scope.row.w14"
                 :disabled="isDisble"
@@ -443,13 +444,13 @@
                 type="number"
                 v-if="
                   weekNo() < 15 &&
-                    !isDisble &&
-                    [
-                      'Sales',
-                      'Sales Build',
-                      'Units Sales',
-                      'Units Sales Build',
-                    ].includes(scope.row.metrics_master.title)
+                  !isDisble &&
+                  [
+                    'Sales',
+                    'Sales Build',
+                    'Units Sales',
+                    'Units Sales Build',
+                  ].includes(scope.row.metrics_master.title)
                 "
                 v-model="scope.row.w15"
                 :disabled="isDisble"
@@ -472,13 +473,13 @@
                 type="number"
                 v-if="
                   weekNo() < 16 &&
-                    !isDisble &&
-                    [
-                      'Sales',
-                      'Sales Build',
-                      'Units Sales',
-                      'Units Sales Build',
-                    ].includes(scope.row.metrics_master.title)
+                  !isDisble &&
+                  [
+                    'Sales',
+                    'Sales Build',
+                    'Units Sales',
+                    'Units Sales Build',
+                  ].includes(scope.row.metrics_master.title)
                 "
                 v-model="scope.row.w16"
                 :disabled="isDisble"
@@ -501,13 +502,13 @@
                 type="number"
                 v-if="
                   weekNo() < 17 &&
-                    !isDisble &&
-                    [
-                      'Sales',
-                      'Sales Build',
-                      'Units Sales',
-                      'Units Sales Build',
-                    ].includes(scope.row.metrics_master.title)
+                  !isDisble &&
+                  [
+                    'Sales',
+                    'Sales Build',
+                    'Units Sales',
+                    'Units Sales Build',
+                  ].includes(scope.row.metrics_master.title)
                 "
                 v-model="scope.row.w17"
                 :disabled="isDisble"
@@ -530,13 +531,13 @@
                 type="number"
                 v-if="
                   weekNo() < 18 &&
-                    !isDisble &&
-                    [
-                      'Sales',
-                      'Sales Build',
-                      'Units Sales',
-                      'Units Sales Build',
-                    ].includes(scope.row.metrics_master.title)
+                  !isDisble &&
+                  [
+                    'Sales',
+                    'Sales Build',
+                    'Units Sales',
+                    'Units Sales Build',
+                  ].includes(scope.row.metrics_master.title)
                 "
                 v-model="scope.row.w18"
                 :disabled="isDisble"
@@ -559,13 +560,13 @@
                 type="number"
                 v-if="
                   weekNo() < 19 &&
-                    !isDisble &&
-                    [
-                      'Sales',
-                      'Sales Build',
-                      'Units Sales',
-                      'Units Sales Build',
-                    ].includes(scope.row.metrics_master.title)
+                  !isDisble &&
+                  [
+                    'Sales',
+                    'Sales Build',
+                    'Units Sales',
+                    'Units Sales Build',
+                  ].includes(scope.row.metrics_master.title)
                 "
                 v-model="scope.row.w19"
                 :disabled="isDisble"
@@ -588,13 +589,13 @@
                 type="number"
                 v-if="
                   weekNo() < 20 &&
-                    !isDisble &&
-                    [
-                      'Sales',
-                      'Sales Build',
-                      'Units Sales',
-                      'Units Sales Build',
-                    ].includes(scope.row.metrics_master.title)
+                  !isDisble &&
+                  [
+                    'Sales',
+                    'Sales Build',
+                    'Units Sales',
+                    'Units Sales Build',
+                  ].includes(scope.row.metrics_master.title)
                 "
                 v-model="scope.row.w20"
                 :disabled="isDisble"
@@ -617,13 +618,13 @@
                 type="number"
                 v-if="
                   weekNo() < 21 &&
-                    !isDisble &&
-                    [
-                      'Sales',
-                      'Sales Build',
-                      'Units Sales',
-                      'Units Sales Build',
-                    ].includes(scope.row.metrics_master.title)
+                  !isDisble &&
+                  [
+                    'Sales',
+                    'Sales Build',
+                    'Units Sales',
+                    'Units Sales Build',
+                  ].includes(scope.row.metrics_master.title)
                 "
                 v-model="scope.row.w21"
                 :disabled="isDisble"
@@ -646,13 +647,13 @@
                 type="number"
                 v-if="
                   weekNo() < 22 &&
-                    !isDisble &&
-                    [
-                      'Sales',
-                      'Sales Build',
-                      'Units Sales',
-                      'Units Sales Build',
-                    ].includes(scope.row.metrics_master.title)
+                  !isDisble &&
+                  [
+                    'Sales',
+                    'Sales Build',
+                    'Units Sales',
+                    'Units Sales Build',
+                  ].includes(scope.row.metrics_master.title)
                 "
                 v-model="scope.row.w22"
                 :disabled="isDisble"
@@ -675,13 +676,13 @@
                 type="number"
                 v-if="
                   weekNo() < 23 &&
-                    !isDisble &&
-                    [
-                      'Sales',
-                      'Sales Build',
-                      'Units Sales',
-                      'Units Sales Build',
-                    ].includes(scope.row.metrics_master.title)
+                  !isDisble &&
+                  [
+                    'Sales',
+                    'Sales Build',
+                    'Units Sales',
+                    'Units Sales Build',
+                  ].includes(scope.row.metrics_master.title)
                 "
                 v-model="scope.row.w23"
                 :disabled="isDisble"
@@ -704,13 +705,13 @@
                 type="number"
                 v-if="
                   weekNo() < 24 &&
-                    !isDisble &&
-                    [
-                      'Sales',
-                      'Sales Build',
-                      'Units Sales',
-                      'Units Sales Build',
-                    ].includes(scope.row.metrics_master.title)
+                  !isDisble &&
+                  [
+                    'Sales',
+                    'Sales Build',
+                    'Units Sales',
+                    'Units Sales Build',
+                  ].includes(scope.row.metrics_master.title)
                 "
                 v-model="scope.row.w24"
                 :disabled="isDisble"
@@ -733,13 +734,13 @@
                 type="number"
                 v-if="
                   weekNo() < 25 &&
-                    !isDisble &&
-                    [
-                      'Sales',
-                      'Sales Build',
-                      'Units Sales',
-                      'Units Sales Build',
-                    ].includes(scope.row.metrics_master.title)
+                  !isDisble &&
+                  [
+                    'Sales',
+                    'Sales Build',
+                    'Units Sales',
+                    'Units Sales Build',
+                  ].includes(scope.row.metrics_master.title)
                 "
                 v-model="scope.row.w25"
                 :disabled="isDisble"
@@ -762,13 +763,13 @@
                 type="number"
                 v-if="
                   weekNo() < 26 &&
-                    !isDisble &&
-                    [
-                      'Sales',
-                      'Sales Build',
-                      'Units Sales',
-                      'Units Sales Build',
-                    ].includes(scope.row.metrics_master.title)
+                  !isDisble &&
+                  [
+                    'Sales',
+                    'Sales Build',
+                    'Units Sales',
+                    'Units Sales Build',
+                  ].includes(scope.row.metrics_master.title)
                 "
                 v-model="scope.row.w26"
                 :disabled="isDisble"
@@ -791,13 +792,13 @@
                 type="number"
                 v-if="
                   weekNo() < 27 &&
-                    !isDisble &&
-                    [
-                      'Sales',
-                      'Sales Build',
-                      'Units Sales',
-                      'Units Sales Build',
-                    ].includes(scope.row.metrics_master.title)
+                  !isDisble &&
+                  [
+                    'Sales',
+                    'Sales Build',
+                    'Units Sales',
+                    'Units Sales Build',
+                  ].includes(scope.row.metrics_master.title)
                 "
                 v-model="scope.row.w27"
                 :disabled="isDisble"
@@ -820,13 +821,13 @@
                 type="number"
                 v-if="
                   weekNo() < 28 &&
-                    !isDisble &&
-                    [
-                      'Sales',
-                      'Sales Build',
-                      'Units Sales',
-                      'Units Sales Build',
-                    ].includes(scope.row.metrics_master.title)
+                  !isDisble &&
+                  [
+                    'Sales',
+                    'Sales Build',
+                    'Units Sales',
+                    'Units Sales Build',
+                  ].includes(scope.row.metrics_master.title)
                 "
                 v-model="scope.row.w28"
                 :disabled="isDisble"
@@ -849,13 +850,13 @@
                 type="number"
                 v-if="
                   weekNo() < 29 &&
-                    !isDisble &&
-                    [
-                      'Sales',
-                      'Sales Build',
-                      'Units Sales',
-                      'Units Sales Build',
-                    ].includes(scope.row.metrics_master.title)
+                  !isDisble &&
+                  [
+                    'Sales',
+                    'Sales Build',
+                    'Units Sales',
+                    'Units Sales Build',
+                  ].includes(scope.row.metrics_master.title)
                 "
                 v-model="scope.row.w29"
                 :disabled="isDisble"
@@ -878,13 +879,13 @@
                 type="number"
                 v-if="
                   weekNo() < 30 &&
-                    !isDisble &&
-                    [
-                      'Sales',
-                      'Sales Build',
-                      'Units Sales',
-                      'Units Sales Build',
-                    ].includes(scope.row.metrics_master.title)
+                  !isDisble &&
+                  [
+                    'Sales',
+                    'Sales Build',
+                    'Units Sales',
+                    'Units Sales Build',
+                  ].includes(scope.row.metrics_master.title)
                 "
                 v-model="scope.row.w30"
                 :disabled="isDisble"
@@ -907,13 +908,13 @@
                 type="number"
                 v-if="
                   weekNo() < 31 &&
-                    !isDisble &&
-                    [
-                      'Sales',
-                      'Sales Build',
-                      'Units Sales',
-                      'Units Sales Build',
-                    ].includes(scope.row.metrics_master.title)
+                  !isDisble &&
+                  [
+                    'Sales',
+                    'Sales Build',
+                    'Units Sales',
+                    'Units Sales Build',
+                  ].includes(scope.row.metrics_master.title)
                 "
                 v-model="scope.row.w31"
                 :disabled="isDisble"
@@ -935,13 +936,13 @@
               <el-input
                 v-if="
                   !isDisble &&
-                    weekNo() < 32 &&
-                    [
-                      'Sales',
-                      'Sales Build',
-                      'Units Sales',
-                      'Units Sales Build',
-                    ].includes(scope.row.metrics_master.title)
+                  weekNo() < 32 &&
+                  [
+                    'Sales',
+                    'Sales Build',
+                    'Units Sales',
+                    'Units Sales Build',
+                  ].includes(scope.row.metrics_master.title)
                 "
                 v-model="scope.row.w32"
                 :disabled="isDisble"
@@ -964,13 +965,13 @@
                 type="number"
                 v-if="
                   weekNo() < 33 &&
-                    !isDisble &&
-                    [
-                      'Sales',
-                      'Sales Build',
-                      'Units Sales',
-                      'Units Sales Build',
-                    ].includes(scope.row.metrics_master.title)
+                  !isDisble &&
+                  [
+                    'Sales',
+                    'Sales Build',
+                    'Units Sales',
+                    'Units Sales Build',
+                  ].includes(scope.row.metrics_master.title)
                 "
                 v-model="scope.row.w33"
                 :disabled="isDisble"
@@ -993,13 +994,13 @@
                 type="number"
                 v-if="
                   weekNo() < 34 &&
-                    !isDisble &&
-                    [
-                      'Sales',
-                      'Sales Build',
-                      'Units Sales',
-                      'Units Sales Build',
-                    ].includes(scope.row.metrics_master.title)
+                  !isDisble &&
+                  [
+                    'Sales',
+                    'Sales Build',
+                    'Units Sales',
+                    'Units Sales Build',
+                  ].includes(scope.row.metrics_master.title)
                 "
                 v-model="scope.row.w34"
                 :disabled="isDisble"
@@ -1022,13 +1023,13 @@
                 type="number"
                 v-if="
                   weekNo() < 35 &&
-                    !isDisble &&
-                    [
-                      'Sales',
-                      'Sales Build',
-                      'Units Sales',
-                      'Units Sales Build',
-                    ].includes(scope.row.metrics_master.title)
+                  !isDisble &&
+                  [
+                    'Sales',
+                    'Sales Build',
+                    'Units Sales',
+                    'Units Sales Build',
+                  ].includes(scope.row.metrics_master.title)
                 "
                 v-model="scope.row.w35"
                 :disabled="isDisble"
@@ -1051,13 +1052,13 @@
                 type="number"
                 v-if="
                   weekNo() < 36 &&
-                    !isDisble &&
-                    [
-                      'Sales',
-                      'Sales Build',
-                      'Units Sales',
-                      'Units Sales Build',
-                    ].includes(scope.row.metrics_master.title)
+                  !isDisble &&
+                  [
+                    'Sales',
+                    'Sales Build',
+                    'Units Sales',
+                    'Units Sales Build',
+                  ].includes(scope.row.metrics_master.title)
                 "
                 v-model="scope.row.w36"
                 :disabled="isDisble"
@@ -1080,13 +1081,13 @@
                 type="number"
                 v-if="
                   weekNo() < 37 &&
-                    !isDisble &&
-                    [
-                      'Sales',
-                      'Sales Build',
-                      'Units Sales',
-                      'Units Sales Build',
-                    ].includes(scope.row.metrics_master.title)
+                  !isDisble &&
+                  [
+                    'Sales',
+                    'Sales Build',
+                    'Units Sales',
+                    'Units Sales Build',
+                  ].includes(scope.row.metrics_master.title)
                 "
                 v-model="scope.row.w37"
                 :disabled="isDisble"
@@ -1109,13 +1110,13 @@
                 type="number"
                 v-if="
                   weekNo() < 38 &&
-                    !isDisble &&
-                    [
-                      'Sales',
-                      'Sales Build',
-                      'Units Sales',
-                      'Units Sales Build',
-                    ].includes(scope.row.metrics_master.title)
+                  !isDisble &&
+                  [
+                    'Sales',
+                    'Sales Build',
+                    'Units Sales',
+                    'Units Sales Build',
+                  ].includes(scope.row.metrics_master.title)
                 "
                 v-model="scope.row.w38"
                 :disabled="isDisble"
@@ -1138,13 +1139,13 @@
                 type="number"
                 v-if="
                   weekNo() < 39 &&
-                    !isDisble &&
-                    [
-                      'Sales',
-                      'Sales Build',
-                      'Units Sales',
-                      'Units Sales Build',
-                    ].includes(scope.row.metrics_master.title)
+                  !isDisble &&
+                  [
+                    'Sales',
+                    'Sales Build',
+                    'Units Sales',
+                    'Units Sales Build',
+                  ].includes(scope.row.metrics_master.title)
                 "
                 v-model="scope.row.w39"
                 :disabled="isDisble"
@@ -1167,13 +1168,13 @@
                 type="number"
                 v-if="
                   weekNo() < 40 &&
-                    !isDisble &&
-                    [
-                      'Sales',
-                      'Sales Build',
-                      'Units Sales',
-                      'Units Sales Build',
-                    ].includes(scope.row.metrics_master.title)
+                  !isDisble &&
+                  [
+                    'Sales',
+                    'Sales Build',
+                    'Units Sales',
+                    'Units Sales Build',
+                  ].includes(scope.row.metrics_master.title)
                 "
                 v-model="scope.row.w40"
                 :disabled="isDisble"
@@ -1196,13 +1197,13 @@
                 type="number"
                 v-if="
                   weekNo() < 41 &&
-                    !isDisble &&
-                    [
-                      'Sales',
-                      'Sales Build',
-                      'Units Sales',
-                      'Units Sales Build',
-                    ].includes(scope.row.metrics_master.title)
+                  !isDisble &&
+                  [
+                    'Sales',
+                    'Sales Build',
+                    'Units Sales',
+                    'Units Sales Build',
+                  ].includes(scope.row.metrics_master.title)
                 "
                 v-model="scope.row.w41"
                 :disabled="isDisble"
@@ -1225,13 +1226,13 @@
                 type="number"
                 v-if="
                   weekNo() < 42 &&
-                    !isDisble &&
-                    [
-                      'Sales',
-                      'Sales Build',
-                      'Units Sales',
-                      'Units Sales Build',
-                    ].includes(scope.row.metrics_master.title)
+                  !isDisble &&
+                  [
+                    'Sales',
+                    'Sales Build',
+                    'Units Sales',
+                    'Units Sales Build',
+                  ].includes(scope.row.metrics_master.title)
                 "
                 v-model="scope.row.w42"
                 :disabled="isDisble"
@@ -1254,13 +1255,13 @@
                 type="number"
                 v-if="
                   weekNo() < 43 &&
-                    !isDisble &&
-                    [
-                      'Sales',
-                      'Sales Build',
-                      'Units Sales',
-                      'Units Sales Build',
-                    ].includes(scope.row.metrics_master.title)
+                  !isDisble &&
+                  [
+                    'Sales',
+                    'Sales Build',
+                    'Units Sales',
+                    'Units Sales Build',
+                  ].includes(scope.row.metrics_master.title)
                 "
                 v-model="scope.row.w43"
                 :disabled="isDisble"
@@ -1283,13 +1284,13 @@
                 type="number"
                 v-if="
                   weekNo() < 44 &&
-                    !isDisble &&
-                    [
-                      'Sales',
-                      'Sales Build',
-                      'Units Sales',
-                      'Units Sales Build',
-                    ].includes(scope.row.metrics_master.title)
+                  !isDisble &&
+                  [
+                    'Sales',
+                    'Sales Build',
+                    'Units Sales',
+                    'Units Sales Build',
+                  ].includes(scope.row.metrics_master.title)
                 "
                 v-model="scope.row.w44"
                 :disabled="isDisble"
@@ -1312,13 +1313,13 @@
                 type="number"
                 v-if="
                   weekNo() < 45 &&
-                    !isDisble &&
-                    [
-                      'Sales',
-                      'Sales Build',
-                      'Units Sales',
-                      'Units Sales Build',
-                    ].includes(scope.row.metrics_master.title)
+                  !isDisble &&
+                  [
+                    'Sales',
+                    'Sales Build',
+                    'Units Sales',
+                    'Units Sales Build',
+                  ].includes(scope.row.metrics_master.title)
                 "
                 v-model="scope.row.w45"
                 :disabled="isDisble"
@@ -1341,13 +1342,13 @@
                 type="number"
                 v-if="
                   weekNo() < 46 &&
-                    !isDisble &&
-                    [
-                      'Sales',
-                      'Sales Build',
-                      'Units Sales',
-                      'Units Sales Build',
-                    ].includes(scope.row.metrics_master.title)
+                  !isDisble &&
+                  [
+                    'Sales',
+                    'Sales Build',
+                    'Units Sales',
+                    'Units Sales Build',
+                  ].includes(scope.row.metrics_master.title)
                 "
                 v-model="scope.row.w46"
                 :disabled="isDisble"
@@ -1370,13 +1371,13 @@
                 type="number"
                 v-if="
                   weekNo() < 47 &&
-                    !isDisble &&
-                    [
-                      'Sales',
-                      'Sales Build',
-                      'Units Sales',
-                      'Units Sales Build',
-                    ].includes(scope.row.metrics_master.title)
+                  !isDisble &&
+                  [
+                    'Sales',
+                    'Sales Build',
+                    'Units Sales',
+                    'Units Sales Build',
+                  ].includes(scope.row.metrics_master.title)
                 "
                 v-model="scope.row.w47"
                 :disabled="isDisble"
@@ -1399,13 +1400,13 @@
                 type="number"
                 v-if="
                   weekNo() < 48 &&
-                    !isDisble &&
-                    [
-                      'Sales',
-                      'Sales Build',
-                      'Units Sales',
-                      'Units Sales Build',
-                    ].includes(scope.row.metrics_master.title)
+                  !isDisble &&
+                  [
+                    'Sales',
+                    'Sales Build',
+                    'Units Sales',
+                    'Units Sales Build',
+                  ].includes(scope.row.metrics_master.title)
                 "
                 v-model="scope.row.w48"
                 :disabled="isDisble"
@@ -1428,13 +1429,13 @@
                 type="number"
                 v-if="
                   weekNo() < 49 &&
-                    !isDisble &&
-                    [
-                      'Sales',
-                      'Sales Build',
-                      'Units Sales',
-                      'Units Sales Build',
-                    ].includes(scope.row.metrics_master.title)
+                  !isDisble &&
+                  [
+                    'Sales',
+                    'Sales Build',
+                    'Units Sales',
+                    'Units Sales Build',
+                  ].includes(scope.row.metrics_master.title)
                 "
                 v-model="scope.row.w49"
                 :disabled="isDisble"
@@ -1457,13 +1458,13 @@
                 type="number"
                 v-if="
                   weekNo() < 50 &&
-                    !isDisble &&
-                    [
-                      'Sales',
-                      'Sales Build',
-                      'Units Sales',
-                      'Units Sales Build',
-                    ].includes(scope.row.metrics_master.title)
+                  !isDisble &&
+                  [
+                    'Sales',
+                    'Sales Build',
+                    'Units Sales',
+                    'Units Sales Build',
+                  ].includes(scope.row.metrics_master.title)
                 "
                 v-model="scope.row.w50"
                 :disabled="isDisble"
@@ -1486,13 +1487,13 @@
                 type="number"
                 v-if="
                   weekNo() < 51 &&
-                    !isDisble &&
-                    [
-                      'Sales',
-                      'Sales Build',
-                      'Units Sales',
-                      'Units Sales Build',
-                    ].includes(scope.row.metrics_master.title)
+                  !isDisble &&
+                  [
+                    'Sales',
+                    'Sales Build',
+                    'Units Sales',
+                    'Units Sales Build',
+                  ].includes(scope.row.metrics_master.title)
                 "
                 v-model="scope.row.w51"
                 :disabled="isDisble"
@@ -1515,13 +1516,13 @@
                 type="number"
                 v-if="
                   weekNo() < 52 &&
-                    !isDisble &&
-                    [
-                      'Sales',
-                      'Sales Build',
-                      'Units Sales',
-                      'Units Sales Build',
-                    ].includes(scope.row.metrics_master.title)
+                  !isDisble &&
+                  [
+                    'Sales',
+                    'Sales Build',
+                    'Units Sales',
+                    'Units Sales Build',
+                  ].includes(scope.row.metrics_master.title)
                 "
                 v-model="scope.row.w52"
                 :disabled="isDisble"
@@ -1586,8 +1587,7 @@ export default {
       }
     },
   },
-  mounted() {
-  },
+  mounted() {},
 };
 </script>
 <style></style>
