@@ -178,7 +178,7 @@ export const getAdjustmentCategoryComparison = async (req, res) => {
 //API: Adjustment Category Total Sales Comparison
 export const getAdjustmentCategorySalesComparison = async (req, res) => {
   try {
-    const result = await prisma.$queryRaw(`SELECT * from morphe_staging.adjustment_influenced_leveled_aggregates WHERE adjustment_id = ${req.params.id};`);
+    const result = await prisma.$queryRaw(`SELECT * from morphe_staging.adjustment_influenced_leveled_aggregates WHERE adjustment_id = ${req.params.id} AND level = "CATEGORY";`);
     res.status(200).json({
       result,
     });

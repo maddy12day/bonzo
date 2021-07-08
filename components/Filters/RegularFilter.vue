@@ -1718,12 +1718,12 @@ export default {
 
     this.skuOptions = optionGenerator(res.response.regular.sku, "All SKUs");
 
-    // const allRegularFilterJSON = await this.$axios.$get(
-    //   "/regular-filter-dropdown-cache",
-    //   {
-    //     progress: true,
-    //   }
-    // );
+     const allRegularFilterJSON = await this.$axios.$get(
+       "/regular-filter-dropdown-cache",
+       {
+         progress: true,
+       }
+     );
     this.filterApiData = {}; //allRegularFilterJSON.response;
   },
 };

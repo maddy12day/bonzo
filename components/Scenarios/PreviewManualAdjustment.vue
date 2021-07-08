@@ -4,7 +4,8 @@
       <span slot="title"
         ><i class="el-icon-info"></i>Manual AdjustmentTable Preview</span
       >
-
+      <!--   </div>
+      </div> -->
       <card
         card-body-classes="table-full-width"
         v-if="
@@ -57,7 +58,7 @@
             align="right"
           >
             <template slot-scope="scope">
-              {{ scope.row.planned_gm_percent | toTwoDigitsFloat }}
+              {{ scope.row.planned_gm_percent? scope.row.planned_gm_percen.toFixed(2): 0 | toTwoDigitsFloat }}
             </template>
           </el-table-column>
           <el-table-column
@@ -68,7 +69,7 @@
             align="right"
           >
             <template slot-scope="scope">
-              {{ scope.row.forecasted_gm_percent | toTwoDigitsFloat }}
+              {{ scope.row.forecasted_gm_percent? scope.row.forecasted_gm_percent.toFixed(2): 0 | toTwoDigitsFloat }}
             </template>
           </el-table-column>
           <el-table-column
@@ -79,12 +80,11 @@
             align="right"
           >
             <template slot-scope="scope">
-              {{ scope.row.adjusted_gm_percent | toTwoDigitsFloat }}
+              {{ scope.row.adjusted_gm_percent ?  scope.row.adjusted_gm_percent.toFixed(2): 0 | toTwoDigitsFloat }}
             </template>
           </el-table-column>
         </el-table>
       </card>
-
       <card
         card-body-classes="table-full-width"
         v-if="
@@ -95,96 +95,181 @@
         <h4 slot="header" class="card-title text-bold font-weight-bold">
           Sales Summary Units
         </h4>
-        {{ adjustmentSalesSummary.result }}
-        [[[[]]]]
-        <el-table>
-          <div v-for="(column, index) in adjustmentSalesSummary.result">
-            {{ column }} ===
-            <el-table-column
-              v-bind="column"
-              :label="column.id"
-              :prop="column.prop"
-              :key="index"
-            >
-              <template slot-scope="scope">
-                <template v-if="!column.render">
-                  <template v-if="column.formatter">
-                    <span v-html="column.formatter(scope.row, column)" />
-                  </template>
-                  <template v-else>
-                    <span>{{ scope.row[column.prop] }}</span>
-                  </template>
-                </template>
-                <template v-else>
-                  <render-dom
-                    :column="column"
-                    :row="scope.row"
-                    :render="column.render"
-                    :index="index"
-                  />
-                </template>
-              </template>
-            </el-table-column>
-          </div>
+        <el-table :data="adjustmentSalesSummary.result">
+          <el-table-column
+            min-width="150"
+            sortable
+            label="Planned Sales TY"
+            property="planned_revenue"
+            align="right"
+          >
+            <template slot-scope="scope">
+              {{ scope.row.planned_units | toLocaleStr }}
+            </template>
+          </el-table-column>
+          <el-table-column
+            min-width="150"
+            sortable
+            label="Forecast Sales TY"
+            property="forecasted_revenue"
+            align="right"
+          >
+            <template slot-scope="scope">
+              {{ scope.row.forecasted_units | toLocaleStr }}
+            </template>
+          </el-table-column>
+          <el-table-column
+            min-width="150"
+            sortable
+            label="Adjusted Sales TY"
+            property="adjusted_revenue"
+            align="right"
+          >
+            <template slot-scope="scope">
+              {{ scope.row.adjusted_units | toLocaleStr }}
+            </template>
+          </el-table-column>
+          <el-table-column
+            min-width="150"
+            sortable
+            label="Planned  Sales GM"
+            property="planned_gm_percent"
+            align="right"
+          >
+            <template slot-scope="scope">
+              {{ scope.row.planned_gm_percent? scope.row.planned_gm_percent.toFixed(2):0 | toTwoDigitsFloat }}
+            </template>
+          </el-table-column>
+          <el-table-column
+            min-width="150"
+            sortable
+            label="Forecast Sales GM"
+            property="forecasted_gm_percent"
+            align="right"
+          >
+            <template slot-scope="scope">
+              {{ scope.row.forecasted_gm_percent?scope.row.forecasted_gm_percent.toFixed(2): 0 | toTwoDigitsFloat }}
+            </template>
+          </el-table-column>
+          <el-table-column
+            min-width="150"
+            sortable
+            label="Adjusted Sales GM"
+            property="adjusted_gm_percent"
+            align="right"
+          >
+            <template slot-scope="scope">
+              {{ scope.row.adjusted_gm_percent? scope.row.adjusted_gm_percent.toFixed(2):0 | toTwoDigitsFloat }}
+            </template>
+          </el-table-column>
         </el-table>
       </card>
-      <!-- 
-      <card
-        card-body-classes="table-full-width"
-        v-if="
-          adjustmentUnitSalesComparison.parsedData &&
-            adjustmentUnitSalesComparison.parsedData.Units.length > 0
-        "
-      >
-        <h4 slot="header" class="card-title text-bold font-weight-bold">
-          Units Comparision
-        </h4>
-        <el-table :data="adjustmentUnitSalesComparison.parsedData.Units">
-          <el-table-column
-            min-width="180"
-            sortable
-            label="Comparision"
-            property="Comparision"
-          >
-          </el-table-column>
-           <template
-            v-for="(column, index) in adjustmentUnitSalesComparison.parsedData
-              .Units"
-          >
-            <el-table-column
-              v-bind="column"
-              :label="column.label"
-              :prop="column.prop"
-              :key="index"
+      <card v-if="adjustmentUnitSalesCategoryComparison.parsedData">
+        <h4 class="font-weight-bold">Category Summery Comparision</h4>
+        <table class="table table-bordered bg-white overflow-auto">
+          <thead v-if="adjustmentUnitSalesCategoryComparison.parsedData">
+            <tr>
+              <th>Category</th>
+              <th>Planned Units</th>
+              <th>Forecast Units</th>
+              <th>Adjusted Units</th>
+              <th>Planned Sale</th>
+              <th>Forecast Sale</th>
+              <th>Adjusted Sale</th>
+              <th>planned Sale(%)</th>
+              <th>Forecast Sale(%)</th>
+              <th>Adjusted Sale(%)</th>
+              <th>Planned GM(%)</th>
+              <th>Forecast GM(%)</th>
+              <th>Ajusted GM(%)</th>
+            </tr>
+          </thead>
+          <tbody v-if="categorySummery.result">
+            <tr
+              v-for="(col2, index) in categorySummery.result"
+              :key="Math.random(index, 100)"
             >
-            </el-table-column>
-          </template> 
-        </el-table>
-      </card> -->
-
-      <!-- <template v-for="(column, index) in columns">
-      <el-table-column
-        v-bind="column"
-        :label="column.label"
-        :prop="column.prop"
-        :key="index"
-        :show-overflow-tooltip="options.showOverflowTooltip"
-      >
-        <template slot-scope="scope">
-          <template v-if="!column.render">
-            <template v-if="column.formatter">
-              <span v-html="column.formatter(scope.row, column)" />
-            </template>
-            <template v-else>
-              <span>{{ scope.row[column.prop] }}</span>
-            </template>
-          </template>
-          <template v-else>
-            <render-dom :column="column" :row="scope.row" :render="column.render" :index="index" />
-          </template>
-        </template>
-      </el-table-column>
-    </template> -->
+              <td>{{ col2.level_value  }}</td>
+              <td>{{ col2.planned_units | toLocaleStr }}</td>
+              <td>{{ col2.forecasted_units | toLocaleStr }}</td>
+              <td>{{ col2.adjusted_units | toLocaleStr }}</td>
+              <td>{{ col2.planned_revenue | toLocaleStr }}</td>
+              <td>{{ col2.forecasted_revenue | toLocaleStr }}</td>
+              <td>{{ col2.adjusted_revenue | toLocaleStr}}</td>
+              <td>{{ col2.planned_revenue_percent.toFixed(2) }}</td>
+              <td>{{ col2.forecasted_revenue_percent.toFixed(2) }}</td>
+              <td>{{ col2.adjusted_revenue_percent.toFixed(2) }}</td>
+              <td>{{ col2.planned_gm_percent.toFixed(2) }}</td>
+              <td>{{ col2.forecasted_gm_percent.toFixed(2) }}</td>
+              <td>{{ col2.adjusted_gm_percent.toFixed(2) }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </card>
+      <card v-if="adjustmentUnitSalesCategoryComparison.parsedData">
+        <h4 class="font-weight-bold">Category Revenue Comparision</h4>
+        <table class="bg-danger table table-bordered bg-white overflow-auto">
+          <thead v-if="adjustmentUnitSalesCategoryComparison.parsedData">
+            <tr>
+              <th
+                v-for="(col, index2) in Object.keys(
+                  this.adjustmentUnitSalesCategoryComparison.parsedData
+                    .Revenue[0]
+                )"
+                :key="Math.random(index2, 300)"
+              >
+                {{ col }}
+              </th>
+            </tr>
+          </thead>
+          <tbody v-if="adjustmentUnitSalesCategoryComparison.parsedData">
+            <tr
+              v-for="(col2, index) in adjustmentUnitSalesCategoryComparison
+                .parsedData.Revenue"
+              :key="Math.random(index, 100)"
+            >
+              <td
+                v-for="(col2, index) in Object.values(col2)"
+                :key="Math.random(index, 200)"
+              >
+                {{ col2 }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </card>
+      <card v-if="adjustmentUnitSalesCategoryComparison.parsedData">
+        <h4 class="font-weight-bold">Category Units Comparision</h4>
+        <table class="bg-danger table table-bordered bg-white overflow-auto">
+          <thead>
+            <tr>
+              <th
+                v-for="(col, index2) in Object.keys(
+                  this.adjustmentUnitSalesCategoryComparison.parsedData
+                    .Units[0]
+                )"
+                :key="Math.random(index2, 300)"
+              >
+                {{ col }}
+              </th>
+            </tr>
+          </thead>
+          <tbody v-if="adjustmentUnitSalesCategoryComparison.parsedData">
+            <tr
+              v-for="(col2, index) in adjustmentUnitSalesCategoryComparison
+                .parsedData.Units"
+              :key="Math.random(index, 100)"
+            >
+              <td
+                v-for="(col2, index) in Object.values(col2)"
+                :key="Math.random(index, 200)"
+              >
+                {{ col2 }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </card>
 
       <span slot="footer" class="dialog-footer">
         <div class="text-right ">
@@ -207,7 +292,7 @@ export default {
     [TableColumn.name]: TableColumn,
     [Dialog.name]: Dialog,
   },
-  props: ["dialogVisible"],
+  props: ["dialogVisible", "adjustmentId"],
   data() {
     return {
       showDialog: false,
@@ -215,39 +300,50 @@ export default {
       adjustmentUnitSalesComparison: {},
       adjustmentCategorySalesComparison: {},
       adjustmentCategoryComparison: {},
+      adjustmentUnitSalesCategoryComparison: {},
+      categoriesCol: [],
+      categorySummery: [],
     };
   },
   computed: {},
   watch: {
     showDialog: function() {
       if (!this.showDialog) {
-        this.$emit("dialogVisible", false);
+        this.$emit("dialogVisibleEvt", false);
       }
     },
   },
   methods: {
-    weekNO(weekend) {
-      moment;
-    },
     async getAdjustmentSalesSummary() {
       this.adjustmentSalesSummary = await this.$axios.$get(
-        `/get-adjustment-sales-summary/1`
+        `/get-adjustment-sales-summary/${this.adjustmentId}`
       );
-      console.log("scenarioSalesSummary---", this.adjustmentSalesSummary);
     },
     async getAdjustmentUnitSalesComparison() {
       this.adjustmentUnitSalesComparison = await this.$axios.$get(
-        `/get-adjustment-unit-sales-comparison/1`
+        `/get-adjustment-unit-sales-comparison/${this.adjustmentId}`
+      );
+    },
+    async getAdjustmentUnitSalesCategoryComparison() {
+      this.adjustmentUnitSalesCategoryComparison = await this.$axios.$get(
+        `/get-adjustment-category-comparison/${this.adjustmentId}`
+      );
+    },
+    async getCategorySummery() {
+      this.categorySummery = await this.$axios.$get(
+        `/get-adjustment-category-sales-comparison/${this.adjustmentId}`
       );
     },
   },
   created() {
     console.log("inisde");
-    this.showDialog = true;
+    this.showDialog = this.dialogVisible;
   },
   mounted() {
     this.getAdjustmentSalesSummary();
     this.getAdjustmentUnitSalesComparison();
+    this.getAdjustmentUnitSalesCategoryComparison();
+    this.getCategorySummery();
   },
 };
 </script>

@@ -114,6 +114,8 @@
     <PreviewManualAdjustment
       v-if="dialogVisible"
       :dialogVisible="dialogVisible"
+      @dialogVisibleEvt="handleDialogue"
+      :adjustmentId="adjustmentId"
     />
   </div>
 </template>
@@ -135,6 +137,7 @@ export default {
       page: 1,
       pageSize: 2,
       dialogVisible: false,
+      adjustmentId: null
     };
   },
   computed: {
@@ -151,10 +154,15 @@ export default {
     },
   },
   methods: {
+    handleDialogue() {
+      this.dialogVisible = false;
+    },
     setPage(val) {
       this.page = val;
     },
     async handleAdjustmentClick(data) {
+      this.adjustmentId = data.id;
+      console.log( this.adjustmentId)
       this.dialogVisible = true;
       // alert("Get Adjustment influenced metrics and show modal popup.");
     },
