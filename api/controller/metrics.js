@@ -85,9 +85,17 @@ export const getBaseMonthlyMetrics = async (req, res) => {
 
 export const getBaseYearlyQarterlyForecast = async (req, res) => {
   try {
+    const demandForecastRunLog = await prisma.demand_forecast_run_log.findMany({
+      where: {
+        is_base_forecast: true,
+      },
+      select: {
+        id: true,
+      },
+    });
     const forecastedYearlyQuarterlyForecast = await prisma.forecasted_weekly_metrics.findMany({
       where: {
-        demand_forecast_run_log_id: 1,
+        demand_forecast_run_log_id: demandForecastRunLog[0].id,
         metrics_name: {
           in: ["retail_sales", "units_sales"],
         },

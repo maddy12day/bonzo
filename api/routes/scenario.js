@@ -13,6 +13,8 @@ import {
   mergeScenarioWithBase,
   checkMergeScenarioStatus,
   getScenarioDetailsById,
+  activeMergedScenarioAsBase,
+  unshareScenario,
 } from "../controller/scenario";
 import { getAllUsers } from "../controller/user";
 
@@ -37,8 +39,10 @@ router.get(
 router.get("/get-scenario-sales-summary/:id", getScenarioSalesSummary);
 router.get("/get-scenario-status/:id", checkScenarioStatus);
 router.get('/share-scenario/:id', shareScenario);
+router.get('/unshare-scenario/:id', unshareScenario);
 router.post('/merge-scenario-with-base', mergeScenarioWithBase);
 router.get('/merge-scenario-status', checkMergeScenarioStatus)
 router.get('/get-scenario-detail-by-id/:id', getScenarioDetailsById)
+router.get('/activate-is-part-of-base/:id', activeMergedScenarioAsBase)
 
 export default router;

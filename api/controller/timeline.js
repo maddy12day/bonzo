@@ -22,7 +22,7 @@ export const getGenensisNodeDetails = async (req, res) => {
         from
             morphe_staging.demand_forecast_run_log dfrl
         where
-          dfrl.is_base_forecast = true`);
+          dfrl.id = 1`);
     res.status(200).json({
       genensis,
     });
@@ -55,7 +55,7 @@ export const getMergeScenarioTimeLineNodes = async (req, res) => {
                                                   u.last_name,
                                                   st.scenario_type
                                                   from morphe_staging.scenarios s, morphe_staging.users u, morphe_staging.scenario_types st
-                                                  where status = 'Merged'  
+                                                  where is_part_of_base = true  
                                                   and s.demand_planner_user_id = u.id
                                                   and st.id = s.scenario_type_id 
                                                   order by s.merged_with_base_at;`);

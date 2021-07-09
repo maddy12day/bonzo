@@ -225,7 +225,7 @@ export default {
   },
   methods: {
     notifyVue(verticalAlign, horizontalAlign) {
-      let color = 4;
+      let color = 2;
       this.$notify({
         message:
           "Scenario submitted to model. Please check 'Your Scenarios' for updates in sometime.",

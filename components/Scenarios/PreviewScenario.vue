@@ -13,7 +13,11 @@
                 v-for="(value, index) in Object.keys(scenarioDetails)"
                 :key="Math.random(index, 100)"
               >
-                {{ value && value.includes('filter_')? value.replace(/filter_/g, "").replace(/_/g, " "): value }}
+                {{
+                  value && value.includes("filter_")
+                    ? value.replace(/filter_/g, "").replace(/_/g, " ")
+                    : value
+                }}
               </th>
             </tr>
           </thead>
@@ -92,7 +96,7 @@
             <template slot-scope="scope">
               {{
                 scope.row.planned_gm_percent
-                  ? (scope.row.planned_gm_percent).toFixed(2)
+                  ? scope.row.planned_gm_percent.toFixed(2)
                   : 0 | toTwoDigitsFloat
               }}
             </template>
@@ -107,7 +111,7 @@
             <template slot-scope="scope">
               {{
                 scope.row.forecasted_gm_percent
-                  ? (scope.row.forecasted_gm_percent).toFixed(2)
+                  ? scope.row.forecasted_gm_percent.toFixed(2)
                   : 0 | toTwoDigitsFloat
               }}
             </template>
@@ -122,7 +126,7 @@
             <template slot-scope="scope">
               {{
                 scope.row.adjusted_gm_percent
-                  ? (scope.row.adjusted_gm_percent).toFixed(2)
+                  ? scope.row.adjusted_gm_percent.toFixed(2)
                   : 0 | toTwoDigitsFloat
               }}
             </template>
@@ -180,7 +184,7 @@
             ><template slot-scope="scope">
               {{
                 scope.row.planned_gm_percent
-                  ?( scope.row.planned_gm_percent).toFixed(2)
+                  ? scope.row.planned_gm_percent.toFixed(2)
                   : 0 | toTwoDigitsFloat
               }}
             </template>
@@ -194,7 +198,7 @@
             ><template slot-scope="scope">
               {{
                 scope.row.forecasted_gm_percent
-                  ? (scope.row.forecasted_gm_percent).toFixed(2)
+                  ? scope.row.forecasted_gm_percent.toFixed(2)
                   : 0 | toTwoDigitsFloat
               }}
             </template>
@@ -209,7 +213,7 @@
             <template slot-scope="scope">
               {{
                 scope.row.adjusted_gm_percent
-                  ? (scope.row.adjusted_gm_percent).toFixed(2)
+                  ? scope.row.adjusted_gm_percent.toFixed(2)
                   : 0 | toTwoDigitsFloat
               }}
             </template>
@@ -376,7 +380,7 @@
             <template slot-scope="scope">
               {{
                 scope.row.planned_revenue_percent
-                  ? (scope.row.planned_revenue_percent).toFixed(2)
+                  ? scope.row.planned_revenue_percent.toFixed(2)
                   : 0 | toTwoDigitsFloat
               }}
             </template>
@@ -391,7 +395,7 @@
             <template slot-scope="scope">
               {{
                 scope.row.forecasted_revenue_percent
-                  ?( scope.row.forecasted_revenue_percent).toFixed(2)
+                  ? scope.row.forecasted_revenue_percent.toFixed(2)
                   : 0 | toTwoDigitsFloat
               }}
             </template>
@@ -406,7 +410,7 @@
             <template slot-scope="scope">
               {{
                 scope.row.adjusted_revenue_percent
-                  ? (scope.row.adjusted_revenue_percent).toFixed(2)
+                  ? scope.row.adjusted_revenue_percent.toFixed(2)
                   : 0 | toTwoDigitsFloat
               }}
             </template>
@@ -421,7 +425,7 @@
             <template slot-scope="scope">
               {{
                 scope.row.planned_gm_percent
-                  ? (scope.row.planned_gm_percent).toFixed(2)
+                  ? scope.row.planned_gm_percent.toFixed(2)
                   : 0 | toTwoDigitsFloat
               }}
             </template>
@@ -436,7 +440,7 @@
             <template slot-scope="scope">
               {{
                 scope.row.forecasted_gm_percent
-                  ? (scope.row.forecasted_gm_percent).toFixed(2)
+                  ? scope.row.forecasted_gm_percent.toFixed(2)
                   : 0 | toTwoDigitsFloat
               }}
             </template>
@@ -451,7 +455,7 @@
             <template slot-scope="scope">
               {{
                 scope.row.adjusted_gm_percent
-                  ? (scope.row.adjusted_gm_percent).toFixed(2)
+                  ? scope.row.adjusted_gm_percent.toFixed(2)
                   : 0 | toTwoDigitsFloat
               }}
             </template>
@@ -629,7 +633,7 @@
           </button>
           <button
             class="btn btn-primary"
-            @click="shareScenario"
+            @click="unshareScenario"
             v-if="
               currentScenarioStatus.is_shared &&
                 currentScenarioStatus.status == 'Completed' &&
@@ -649,6 +653,18 @@
             "
           >
             Merge Scenario
+          </button>
+          <button
+            class="btn btn-primary"
+            @click="activateMergedScenario"
+            v-if="
+              currentScenarioStatus.is_shared &&
+                currentScenarioStatus.status == 'Merge Completed' &&
+                previewBtnText == 'Merge Scenario' &&
+                !scenarioDetails.is_part_of_base
+            "
+          >
+            Activate as New Base
           </button>
           <!-- <button
             class="btn btn-primary"
@@ -693,9 +709,40 @@ export default {
   data() {
     return {
       showDialog: false,
+      typeColor: ["", "info", "success", "warning", "danger"],
     };
   },
   methods: {
+    notifyVue(verticalAlign, horizontalAlign, message) {
+      let color = 2;
+      this.$notify({
+        message: message,
+        timeout: 12000,
+        icon: "tim-icons icon-bell-55",
+        horizontalAlign: horizontalAlign,
+        verticalAlign: verticalAlign,
+        type: this.typeColor[color],
+      });
+    },
+    async activateMergedScenario() {
+      //activate-is-part-of-base
+      this.activateIsPartOfBase = await this.$axios.$get(
+        `/activate-is-part-of-base/${this.scenarioDetails.id}`
+      );
+      this.showDialog = false;
+      this.notifyVue(
+        "top",
+        "right",
+        "Submitted scenario to model for merging with base. Check Scenario table for updates."
+      );
+      setTimeout(() => {
+        location.reload();
+      }, 2000);
+    },
+    unshareScenario() {
+      this.$emit("unshareScenarioEvt");
+      this.showDialog = false;
+    },
     shareScenario() {
       this.$emit("shareScenarioEvt");
       this.showDialog = false;
