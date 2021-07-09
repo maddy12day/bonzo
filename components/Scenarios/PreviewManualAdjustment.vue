@@ -10,7 +10,7 @@
         card-body-classes="table-full-width"
         v-if="
           adjustmentSalesSummary.result &&
-          adjustmentSalesSummary.result.length > 0
+            adjustmentSalesSummary.result.length > 0
         "
       >
         <h4 slot="header" class="card-title text-bold font-weight-bold">
@@ -25,7 +25,11 @@
             align="right"
           >
             <template slot-scope="scope">
-              {{ scope.row.planned_revenue | toLocaleStr }}
+              {{
+                scope.row.planned_revenue
+                  ? scope.row.planned_revenue.toFixed(2)
+                  : 0 | toLocaleStr
+              }}
             </template>
           </el-table-column>
           <el-table-column
@@ -36,7 +40,11 @@
             align="right"
           >
             <template slot-scope="scope">
-              {{ scope.row.forecasted_revenue | toLocaleStr }}
+              {{
+                scope.row.forecasted_revenue
+                  ? scope.row.forecasted_revenue.toFixed(2)
+                  : 0 | toLocaleStr
+              }}
             </template>
           </el-table-column>
           <el-table-column
@@ -47,7 +55,11 @@
             align="right"
           >
             <template slot-scope="scope">
-              {{ scope.row.adjusted_revenue | toLocaleStr }}
+              {{
+                scope.row.adjusted_revenue
+                  ? scope.row.adjusted_revenue.toFixed(2)
+                  : 0 | toLocaleStr
+              }}
             </template>
           </el-table-column>
           <el-table-column
@@ -60,7 +72,7 @@
             <template slot-scope="scope">
               {{
                 scope.row.planned_gm_percent
-                  ? scope.row.planned_gm_percen.toFixed(2)
+                  ? scope.row.planned_gm_percen.toFixed(2) * 100
                   : 0 | toTwoDigitsFloat
               }}
             </template>
@@ -75,7 +87,7 @@
             <template slot-scope="scope">
               {{
                 scope.row.forecasted_gm_percent
-                  ? scope.row.forecasted_gm_percent.toFixed(2)
+                  ? scope.row.forecasted_gm_percent.toFixed(2) * 100
                   : 0 | toTwoDigitsFloat
               }}
             </template>
@@ -90,7 +102,7 @@
             <template slot-scope="scope">
               {{
                 scope.row.adjusted_gm_percent
-                  ? scope.row.adjusted_gm_percent.toFixed(2)
+                  ? scope.row.adjusted_gm_percent.toFixed(2) * 100
                   : 0 | toTwoDigitsFloat
               }}
             </template>
@@ -101,7 +113,7 @@
         card-body-classes="table-full-width"
         v-if="
           adjustmentSalesSummary.result &&
-          adjustmentSalesSummary.result.length > 0
+            adjustmentSalesSummary.result.length > 0
         "
       >
         <h4 slot="header" class="card-title text-bold font-weight-bold">
@@ -116,7 +128,11 @@
             align="right"
           >
             <template slot-scope="scope">
-              {{ scope.row.planned_units | toLocaleStr }}
+              {{
+                scope.row.planned_units
+                  ? parseInt(scope.row.planned_units)
+                  : 0 | toLocaleStr
+              }}
             </template>
           </el-table-column>
           <el-table-column
@@ -127,7 +143,11 @@
             align="right"
           >
             <template slot-scope="scope">
-              {{ scope.row.forecasted_units | toLocaleStr }}
+              {{
+                scope.row.forecasted_units
+                  ? parseInt(scope.row.forecasted_units)
+                  : 0 | toLocaleStr
+              }}
             </template>
           </el-table-column>
           <el-table-column
@@ -138,7 +158,11 @@
             align="right"
           >
             <template slot-scope="scope">
-              {{ scope.row.adjusted_units | toLocaleStr }}
+              {{
+                scope.row.adjusted_units
+                  ? parseInt(scope.row.adjusted_units)
+                  : 0 | toLocaleStr
+              }}
             </template>
           </el-table-column>
           <el-table-column
@@ -151,7 +175,7 @@
             <template slot-scope="scope">
               {{
                 scope.row.planned_gm_percent
-                  ? scope.row.planned_gm_percent.toFixed(2)
+                  ? scope.row.planned_gm_percent.toFixed(2) * 100
                   : 0 | toTwoDigitsFloat
               }}
             </template>
@@ -166,7 +190,7 @@
             <template slot-scope="scope">
               {{
                 scope.row.forecasted_gm_percent
-                  ? scope.row.forecasted_gm_percent.toFixed(2)
+                  ? scope.row.forecasted_gm_percent.toFixed(2) * 100
                   : 0 | toTwoDigitsFloat
               }}
             </template>
@@ -181,7 +205,7 @@
             <template slot-scope="scope">
               {{
                 scope.row.adjusted_gm_percent
-                  ? scope.row.adjusted_gm_percent.toFixed(2)
+                  ? scope.row.adjusted_gm_percent.toFixed(2) * 100
                   : 0 | toTwoDigitsFloat
               }}
             </template>
@@ -219,34 +243,74 @@
                 {{ col2.forecasted_units | toLocaleStr }}
               </td>
               <td class="text-right">
-                {{ col2.adjusted_units | toLocaleStr }}
+                {{
+                  col2.adjusted_units
+                    ? parseInt(col2.adjusted_units)
+                    : 0 | toLocaleStr
+                }}
               </td>
               <td class="text-right">
-                {{ col2.planned_revenue | toLocaleStr }}
+                {{
+                  col2.planned_revenue
+                    ? parseInt(col2.planned_revenue)
+                    : 0 | toLocaleStr
+                }}
               </td>
               <td class="text-right">
-                {{ col2.forecasted_revenue | toLocaleStr }}
+                {{
+                  col2.forecasted_revenue
+                    ? parseInt(col2.forecasted_revenue)
+                    : 0 | toLocaleStr
+                }}
               </td>
               <td class="text-right">
-                {{ col2.adjusted_revenue | toLocaleStr }}
+                {{
+                  col2.adjusted_revenue
+                    ? parseInt(col2.adjusted_revenue)
+                    : 0 | toLocaleStr
+                }}
               </td>
               <td class="text-right">
-                {{ col2.planned_revenue_percent.toFixed(2) }}
+                {{
+                  col2.planned_revenue_percent
+                    ? col2.planned_revenue_percent.toFixed(2) * 100
+                    : 0
+                }}
               </td>
               <td class="text-right">
-                {{ col2.forecasted_revenue_percent.toFixed(2) }}
+                {{
+                  col2.forecasted_revenue_percent
+                    ? col2.forecasted_revenue_percent.toFixed(2) * 100
+                    : 0
+                }}
               </td>
               <td class="text-right">
-                {{ col2.adjusted_revenue_percent.toFixed(2) }}
+                {{
+                  col2.adjusted_revenue_percent
+                    ? col2.adjusted_revenue_percent.toFixed(2) * 100
+                    : 0
+                }}
               </td>
               <td class="text-right">
-                {{ col2.planned_gm_percent.toFixed(2) }}
+                {{
+                  col2.planned_gm_percent
+                    ? col2.planned_gm_percent.toFixed(2) * 100
+                    : 0
+                }}
               </td>
               <td class="text-right">
-                {{ col2.forecasted_gm_percent.toFixed(2) }}
+                {{
+                  col2.forecasted_gm_percent
+                    ? col2.forecasted_gm_percent.toFixed(2) * 100
+                    : 0
+                }}
               </td>
               <td class="text-right">
-                {{ col2.adjusted_gm_percent.toFixed(2) }}
+                {{
+                  col2.adjusted_gm_percent
+                    ? col2.adjusted_gm_percent.toFixed(2) * 100
+                    : 0
+                }}
               </td>
             </tr>
           </tbody>
@@ -254,7 +318,10 @@
       </card>
       <card v-if="adjustmentUnitSalesCategoryComparison.parsedData">
         <h4 class="font-weight-bold">Category Revenue Comparision</h4>
-        <table class="bg-danger table table-bordered bg-white overflow-auto">
+        <table
+          class="bg-danger table table-bordered bg-white overflow-scroll"
+          style="overflow-x: scroll"
+        >
           <thead v-if="adjustmentUnitSalesCategoryComparison.parsedData">
             <tr>
               <th
@@ -286,7 +353,10 @@
       </card>
       <card v-if="adjustmentUnitSalesCategoryComparison.parsedData">
         <h4 class="font-weight-bold">Category Units Comparision</h4>
-        <table class="bg-danger table table-bordered bg-white overflow-auto">
+        <table
+          class="bg-danger table table-bordered bg-white overflow-scroll"
+          style="overflow-x: scroll"
+        >
           <thead>
             <tr>
               <th
@@ -355,7 +425,7 @@ export default {
   },
   computed: {},
   watch: {
-    showDialog: function () {
+    showDialog: function() {
       if (!this.showDialog) {
         this.$emit("dialogVisibleEvt", false);
       }

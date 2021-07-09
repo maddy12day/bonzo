@@ -35,6 +35,7 @@
           @getCollectionValus="getCollectionValues"
           @getSkusValues="getSkusValues"
           @getCategories="getCategoryValues"
+          :showChannelError="showChannelErrorCom"
         />
 
         <ProgramFilters
@@ -53,6 +54,7 @@
           @getSubClass="getSubClassValues"
           @getCollection="getCollectionValues"
           @getSkusValues="getSkusValues"
+          :showChannelError="showChannelErrorCom"
         />
         <div class="row mt-3">
           <div class="col-md-3 text-left">
@@ -61,6 +63,7 @@
               :Options="scenarioTypes"
               :multiple="false"
               @customEvent="getScenarioType"
+              :class="{showScenarioTypeError: ''}"
             />
           </div>
           <div class="col-md-2 text-left mt-1">
@@ -90,6 +93,7 @@
               placeholder="amount"
               class="mt-2"
               v-model="amountValue"
+              :maxlength="2"
             >
             </base-input>
           </div>
@@ -166,6 +170,15 @@ export default {
       callToIntervalAjax: true,
       disabledScenarioBtn: false,
       showScenarioTable: false,
+
+      //validation vars
+      showChannelError: false,
+      showScenarioTypeError: false,
+      showStartDateError: false,
+      showEndDateError: false,
+      showAmountError: false,
+      showScenarioNameError: false,
+
       type: ["", "info", "success", "warning", "danger"],
       notifications: {
         topCenter: false,
@@ -214,6 +227,9 @@ export default {
     },
     getChannelValues(values) {
       this.channelValues = values;
+     ( this.channelValues.find(item => item.includes("All")) || this.channelValues.length > 1 || this.channelValues.length == 0)
+        ? (this.showChannelError = true)
+        : this.showChannelError = false;
     },
     getPrograms(values) {
       this.programValues = values;
@@ -245,6 +261,17 @@ export default {
       this.activeFilterType = type;
     },
     async createScenario() {
+      // validations
+      this.showScenarioTypeError = this.scenarioTypeValue? false: true;
+      this.showScenarioNameError = this.scenarioNameValue? false: true;
+      this.showEndDateError = this.startDateValue? false: true;
+      this.showEndDateError = this.endDateValue? false: true;
+      this.showAmountError = this.amountValue? false: true; 
+      if(!this.showScenarioTypeError || 
+         !this.showScenarioNameError || 
+         !this.showStartDateError ||
+         !this.showEndDateError ||
+         !this.showAmountError ) {
       const createScenarioModel = {
         scenario_name: this.scenarioNameValue,
         demand_planner_user_id: this.$auth.user.user_id,
@@ -284,6 +311,7 @@ export default {
       this.disabledScenarioBtn = true;
       this.callToIntervalAjax = true;
       this.notifyVue("top", "right");
+      }
     },
 
     async getScenarioTypes() {
@@ -352,6 +380,9 @@ export default {
     }, 10000);
   },
   computed: {
+    showChannelErrorCom() {
+      return this.showChannelError;
+    },
     disbledCom() {
       return this.disabledScenarioBtn;
     },

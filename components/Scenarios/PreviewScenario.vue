@@ -6,8 +6,8 @@
       </h3>
       <card>
         Scenario Details
-        <table class="table table-bordered">
-          <thead>
+        <table class="table table-bordered" style="word-break: break-word;">
+          <thead style="word-wrap: break-word;">
             <tr class="scenario-details-header">
               <th
                 v-for="(value, index) in Object.keys(scenarioDetails)"
@@ -45,7 +45,11 @@
             align="right"
           >
             <template slot-scope="scope">
-              {{ scope.row.planned_revenue | toLocaleStr }}
+              {{
+                scope.row.planned_revenue
+                  ? scope.row.planned_revenue.toFixed(2)
+                  : 0 | toLocaleStr
+              }}
             </template>
           </el-table-column>
           <el-table-column
@@ -56,7 +60,11 @@
             align="right"
           >
             <template slot-scope="scope">
-              {{ scope.row.forecasted_revenue | toLocaleStr }}
+              {{
+                scope.row.forecasted_revenue
+                  ? scope.row.forecasted_revenue.toFixed(2)
+                  : 0 | toLocaleStr
+              }}
             </template>
           </el-table-column>
           <el-table-column
@@ -67,7 +75,11 @@
             align="right"
           >
             <template slot-scope="scope">
-              {{ scope.row.adjusted_revenue | toLocaleStr }}
+              {{
+                scope.row.adjusted_revenue
+                  ? scope.row.adjusted_revenue.toFixed(2)
+                  : 0 | toLocaleStr
+              }}
             </template>
           </el-table-column>
           <el-table-column
@@ -78,7 +90,11 @@
             align="right"
           >
             <template slot-scope="scope">
-              {{ scope.row.planned_gm_percent | toTwoDigitsFloat }}
+              {{
+                scope.row.planned_gm_percent
+                  ? scope.row.planned_gm_percent.toFixed(2) * 100
+                  : 0 | toTwoDigitsFloat
+              }}
             </template>
           </el-table-column>
           <el-table-column
@@ -89,7 +105,11 @@
             align="right"
           >
             <template slot-scope="scope">
-              {{ scope.row.forecasted_gm_percent | toTwoDigitsFloat }}
+              {{
+                scope.row.forecasted_gm_percent
+                  ? scope.row.forecasted_gm_percent.toFixed(2) * 100
+                  : 0 | toTwoDigitsFloat
+              }}
             </template>
           </el-table-column>
           <el-table-column
@@ -100,7 +120,11 @@
             align="right"
           >
             <template slot-scope="scope">
-              {{ scope.row.adjusted_gm_percent | toTwoDigitsFloat }}
+              {{
+                scope.row.adjusted_gm_percent
+                  ? scope.row.adjusted_gm_percent.toFixed(2) * 100
+                  : 0 | toTwoDigitsFloat
+              }}
             </template>
           </el-table-column>
         </el-table>
@@ -122,7 +146,7 @@
             align="right"
           >
             <template slot-scope="scope">
-              {{ scope.row.planned_units | toLocaleStr }}
+              {{ parseInt(scope.row.planned_units) | toLocaleStr }}
             </template>
           </el-table-column>
           <el-table-column
@@ -133,7 +157,7 @@
             align="right"
           >
             <template slot-scope="scope">
-              {{ scope.row.forecasted_units | toLocaleStr }}
+              {{ parseInt(scope.row.forecasted_units) | toLocaleStr }}
             </template>
           </el-table-column>
           <el-table-column
@@ -144,7 +168,7 @@
             align="right"
           >
             <template slot-scope="scope">
-              {{ scope.row.adjusted_units | toLocaleStr }}
+              {{ parseInt(scope.row.adjusted_units) | toLocaleStr }}
             </template>
           </el-table-column>
           <el-table-column
@@ -154,7 +178,11 @@
             property="planned_gm_percent"
             align="right"
             ><template slot-scope="scope">
-              {{ scope.row.planned_gm_percent | toTwoDigitsFloat }}
+              {{
+                scope.row.planned_gm_percent
+                  ? scope.row.planned_gm_percent.toFixed(2) * 100
+                  : 0 | toTwoDigitsFloat
+              }}
             </template>
           </el-table-column>
           <el-table-column
@@ -164,7 +192,11 @@
             property="forecasted_gm_percent"
             align="right"
             ><template slot-scope="scope">
-              {{ scope.row.forecasted_gm_percent | toTwoDigitsFloat }}
+              {{
+                scope.row.forecasted_gm_percent
+                  ? scope.row.forecasted_gm_percent.toFixed(2) * 100
+                  : 0 | toTwoDigitsFloat
+              }}
             </template>
           </el-table-column>
           <el-table-column
@@ -175,13 +207,17 @@
             align="right"
           >
             <template slot-scope="scope">
-              {{ scope.row.adjusted_gm_percent | toTwoDigitsFloat }}
+              {{
+                scope.row.adjusted_gm_percent
+                  ? scope.row.adjusted_gm_percent.toFixed(2) * 100
+                  : 0 | toTwoDigitsFloat
+              }}
             </template>
           </el-table-column>
         </el-table>
       </card>
 
-      <card
+      <!--    <card
         card-body-classes="table-full-width"
         v-if="
           scenarioUnitSalesComparison.parsedData &&
@@ -222,8 +258,8 @@
             </template>
           </el-table-column>
         </el-table>
-      </card>
-
+      </card> -->
+      <!-- 
       <card
         card-body-classes="table-full-width"
         v-if="
@@ -265,13 +301,13 @@
             </template>
           </el-table-column>
         </el-table>
-      </card>
+      </card> -->
 
       <card
         card-body-classes="table-full-width"
         v-if="
           scenarioCategorySalesComparison.result &&
-          scenarioCategorySalesComparison.result.length > 0
+            scenarioCategorySalesComparison.result.length > 0
         "
       >
         <h4 slot="header" class="card-title text-bold font-weight-bold">
@@ -293,7 +329,11 @@
             align="right"
           >
             <template slot-scope="scope">
-              {{ scope.row.planned_revenue | toLocaleStr }}
+              {{
+                scope.row.planned_revenue
+                  ? scope.row.planned_revenue.toFixed(2)
+                  : 0 | toLocaleStr
+              }}
             </template>
           </el-table-column>
           <el-table-column
@@ -304,7 +344,11 @@
             align="right"
           >
             <template slot-scope="scope">
-              {{ scope.row.forecasted_revenue | toLocaleStr }}
+              {{
+                scope.row.forecasted_revenue
+                  ? scope.row.forecasted_revenue.toFixed(2)
+                  : 0 | toLocaleStr
+              }}
             </template>
           </el-table-column>
           <el-table-column
@@ -315,7 +359,11 @@
             align="right"
           >
             <template slot-scope="scope">
-              {{ scope.row.adjusted_revenue | toLocaleStr }}
+              {{
+                scope.row.adjusted_revenue
+                  ? scope.row.adjusted_revenue.toFixed(2)
+                  : 0 | toLocaleStr
+              }}
             </template>
           </el-table-column>
           <el-table-column
@@ -326,7 +374,11 @@
             align="right"
           >
             <template slot-scope="scope">
-              {{ scope.row.planned_revenue_percent | toTwoDigitsFloat }}
+              {{
+                scope.row.planned_revenue_percent
+                  ? scope.row.planned_revenue_percent.toFixed(2) * 100
+                  : 0 | toTwoDigitsFloat
+              }}
             </template>
           </el-table-column>
           <el-table-column
@@ -337,7 +389,11 @@
             align="right"
           >
             <template slot-scope="scope">
-              {{ scope.row.forecasted_revenue_percent | toTwoDigitsFloat }}
+              {{
+                scope.row.forecasted_revenue_percent
+                  ? scope.row.forecasted_revenue_percent.toFixed(2) * 100
+                  : 0 | toTwoDigitsFloat
+              }}
             </template>
           </el-table-column>
           <el-table-column
@@ -348,7 +404,11 @@
             align="right"
           >
             <template slot-scope="scope">
-              {{ scope.row.adjusted_revenue_percent | toTwoDigitsFloat }}
+              {{
+                scope.row.adjusted_revenue_percent
+                  ? scope.row.adjusted_revenue_percent.toFixed(2) * 100
+                  : 0 | toTwoDigitsFloat
+              }}
             </template>
           </el-table-column>
           <el-table-column
@@ -359,7 +419,11 @@
             align="right"
           >
             <template slot-scope="scope">
-              {{ scope.row.planned_gm_percent | toTwoDigitsFloat }}
+              {{
+                scope.row.planned_gm_percent
+                  ? scope.row.planned_gm_percent.toFixed(2) * 100
+                  : 0 | toTwoDigitsFloat
+              }}
             </template>
           </el-table-column>
           <el-table-column
@@ -370,7 +434,11 @@
             align="right"
           >
             <template slot-scope="scope">
-              {{ scope.row.forecasted_gm_percent | toTwoDigitsFloat }}
+              {{
+                scope.row.forecasted_gm_percent
+                  ? scope.row.forecasted_gm_percent.toFixed(2) * 100
+                  : 0 | toTwoDigitsFloat
+              }}
             </template>
           </el-table-column>
           <el-table-column
@@ -381,7 +449,11 @@
             align="right"
           >
             <template slot-scope="scope">
-              {{ scope.row.adjusted_gm_percent | toTwoDigitsFloat }}
+              {{
+                scope.row.adjusted_gm_percent
+                  ? scope.row.adjusted_gm_percent.toFixed(2) * 100
+                  : 0 | toTwoDigitsFloat
+              }}
             </template>
           </el-table-column>
         </el-table>
@@ -391,13 +463,45 @@
         card-body-classes="table-full-width"
         v-if="
           scenarioUnitSalesComparison.parsedData &&
-          scenarioUnitSalesComparison.parsedData.Units.length > 0
+            scenarioUnitSalesComparison.parsedData.Units.length > 0
         "
       >
         <h4 slot="header" class="card-title text-bold font-weight-bold">
           Category Units Comparision
         </h4>
-        <el-table
+        <table
+          class="bg-danger table table-bordered bg-white overflow-scroll"
+          style="overflow-x: scroll"
+        >
+          <thead>
+            <tr>
+              <th
+                v-for="(col, index2) in Object.keys(
+                  this.scenarioUnitSalesComparison.parsedData.Units[0]
+                )"
+                :key="Math.random(index2, 300)"
+              >
+                {{ col }}
+              </th>
+            </tr>
+          </thead>
+          <tbody v-if="scenarioUnitSalesComparison.parsedData">
+            <tr
+              v-for="(col2, index) in scenarioUnitSalesComparison.parsedData
+                .Units"
+              :key="Math.random(index, 100)"
+            >
+              <td
+                v-for="(col2, index) in Object.values(col2)"
+                :key="Math.random(index, 200)"
+              >
+                {{ index > 0 ? parseInt(col2) : col2 }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!--   <el-table
           v-if="scenarioUnitSalesComparison.parsedData"
           :data="scenarioUnitSalesComparison.parsedData.Units"
         >
@@ -430,7 +534,7 @@
               {{ scope.row["W-2"] | toLocaleStr }}
             </template></el-table-column
           >
-        </el-table>
+        </el-table> -->
       </card>
 
       <!-- 7 -->
@@ -438,13 +542,44 @@
         card-body-classes="table-full-width"
         v-if="
           scenarioUnitSalesComparison.parsedData &&
-          scenarioUnitSalesComparison.parsedData.Revenue.length > 0
+            scenarioUnitSalesComparison.parsedData.Revenue.length > 0
         "
       >
         <h4 slot="header" class="card-title text-bold font-weight-bold">
           Category Sales Comparision
         </h4>
-        <el-table
+        <table
+          class="bg-danger table table-bordered bg-white overflow-auto"
+          style="overflow-x: scroll"
+        >
+          <thead v-if="scenarioUnitSalesComparison.parsedData">
+            <tr>
+              <th
+                v-for="(col, index2) in Object.keys(
+                  this.scenarioUnitSalesComparison.parsedData.Revenue[0]
+                )"
+                :key="Math.random(index2, 300)"
+              >
+                {{ col }}
+              </th>
+            </tr>
+          </thead>
+          <tbody v-if="scenarioUnitSalesComparison.parsedData">
+            <tr
+              v-for="(col2, index) in scenarioUnitSalesComparison.parsedData
+                .Revenue"
+              :key="Math.random(index, 100)"
+            >
+              <td
+                v-for="(col2, index) in Object.values(col2)"
+                :key="Math.random(index, 200)"
+              >
+                {{ index > 0 ? col2.toFixed(2) : col2 }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <!--  <el-table
           v-if="scenarioUnitSalesComparison.parsedData"
           :data="scenarioUnitSalesComparison.parsedData.Revenue"
         >
@@ -477,7 +612,7 @@
               {{ scope.row["W-2"] | toLocaleStr }}
             </template></el-table-column
           >
-        </el-table>
+        </el-table> -->
       </card>
 
       <span slot="footer" class="dialog-footer">
@@ -487,7 +622,7 @@
             @click="shareScenario"
             v-if="
               !currentScenarioStatus.is_shared &&
-              currentScenarioStatus.status == 'Completed'
+                currentScenarioStatus.status == 'Completed'
             "
           >
             Share Scenario
@@ -497,8 +632,8 @@
             @click="shareScenario"
             v-if="
               currentScenarioStatus.is_shared &&
-              currentScenarioStatus.status == 'Completed' &&
-              previewBtnText == 'Share Scenario'
+                currentScenarioStatus.status == 'Completed' &&
+                previewBtnText == 'Share Scenario'
             "
           >
             Unshare Scenario
@@ -509,13 +644,13 @@
             @click="shareScenario"
             v-if="
               currentScenarioStatus.is_shared &&
-              currentScenarioStatus.status == 'Completed' &&
-              previewBtnText == 'Merge Scenario'
+                currentScenarioStatus.status == 'Completed' &&
+                previewBtnText == 'Merge Scenario'
             "
           >
             Merge Scenario
           </button>
-          <button
+          <!-- <button
             class="btn btn-primary"
             @click="shareScenario"
             v-if="
@@ -526,7 +661,7 @@
             "
           >
             Unmerge Scenario
-          </button>
+          </button> -->
           <button class="btn btn-primary" @click="showDialog = false">
             Close
           </button>
@@ -568,7 +703,7 @@ export default {
   },
   computed: {},
   watch: {
-    showDialog: function () {
+    showDialog: function() {
       if (!this.showDialog) {
         this.$emit("dialogVisible", false);
       }
