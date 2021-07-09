@@ -1,9 +1,19 @@
 import { PrismaClient } from "@prisma/client";
-import { parseCategorySaleComparision, parseCategoryUnitComparision } from "../controller/scenario";
+import { getAllUsers } from "../controller/user";
 // import moment from "moment";
 
 
 const prisma = new PrismaClient();
+
+const getUserName = (id, allUsers) => {
+  let userName
+  if (allUsers.length > 0) {
+    userName = allUsers.filter((user) => (user.id = id))[0].first_name;
+  } else {
+    userName = '';
+  }
+  return userName;
+}
 
 // get Base Adjustments
 export const getBaseAdjustments = async (req, res) => {
@@ -16,8 +26,14 @@ export const getBaseAdjustments = async (req, res) => {
         created_at: "desc",
       },
     });
+    let allUsers = await getAllUsers();
+    let adjustmentsResponse = adjustments.map((v) => ({
+          ...v,
+          adjustedBy: getUserName(v.adjusted_by_user_id,allUsers),
+    }));
+
     res.status(200).json({
-      adjustments,
+      adjustmentsResponse,
     });
   } catch (error) {
     res.status(500).json({

@@ -116,7 +116,7 @@
       "
       class="mt-4"
       tableHeading="Base Model Adjustments"
-      :adjustmentTableData="baseAdjustmentsListCom.adjustments"
+      :adjustmentTableData="baseAdjustmentsListCom.adjustmentsResponse"
     />
 
     <!-- Base Metrics / Filtered Metrics (Jubin) -->

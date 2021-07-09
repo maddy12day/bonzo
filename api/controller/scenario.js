@@ -1,7 +1,18 @@
 import { PrismaClient } from "@prisma/client";
 import moment from "moment";
+import { getAllUsers } from "../controller/user";
 
 const prisma = new PrismaClient();
+
+const getUserName = (id, allUsers) => {
+  let userName
+  if (allUsers.length > 0) {
+    userName = allUsers.filter((user) => (user.id = id))[0].first_name;
+  } else {
+    userName = '';
+  }
+  return userName;
+}
 
 // get user secenarios
 export const getUserScenarios = async (req, res) => {
@@ -34,7 +45,7 @@ export const getUserScenarios = async (req, res) => {
 // all shared scenarios
 export const allSharedScenarios = async (req, res) => {
   try {
-    const scenarios = await prisma.scenarios.findMany({
+    let scenarios = await prisma.scenarios.findMany({
       where: {
         is_shared: true,
       },
@@ -49,6 +60,13 @@ export const allSharedScenarios = async (req, res) => {
         created_at: "desc",
       },
     });
+    let allUsers = await getAllUsers();
+    scenarios = scenarios.map((v) => ({
+          ...v,
+          sharedBy: getUserName(v.demand_planner_user_id,allUsers),
+    }));
+
+
     res.status(200).json({
       scenarios,
     });

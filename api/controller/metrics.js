@@ -12,7 +12,7 @@ export const getBaseWeeklyMetrics = async (req, res) => {
         id: true,
       },
     });
-    const forecastedWeeklyMetrics = await prisma.forecasted_weekly_metrics.findMany({
+    let forecastedWeeklyMetrics = await prisma.forecasted_weekly_metrics.findMany({
       where: {
         demand_forecast_run_log_id: demandForecastRunLog[0].id,
       },
@@ -24,6 +24,10 @@ export const getBaseWeeklyMetrics = async (req, res) => {
         },
       },
     });
+    
+    forecastedWeeklyMetrics = forecastedWeeklyMetrics.filter(obj => (obj.metrics_name !== 'aps' && obj.metrics_name !== 'inventory_dc_units' && obj.metrics_name !== 'inventory_dc_cost'));
+    
+
     const baseWeeklyMetrics = JSON.stringify(
       forecastedWeeklyMetrics,
       (key, value) => (typeof value === "bigint" ? value.toString() : value) // return everything else unchanged
