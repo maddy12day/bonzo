@@ -90,6 +90,7 @@
               placeholder="amount"
               class="mt-2"
               v-model="amountValue"
+              maxlength="10"
             >
             </base-input>
           </div>

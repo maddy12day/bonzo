@@ -6,8 +6,8 @@
       </h3>
       <card>
         Scenario Details
-        <table class="table table-bordered">
-          <thead>
+        <table class="table table-bordered" style="word-break: break-word;">
+          <thead style="word-wrap: break-word;"> 
             <tr class="scenario-details-header">
               <th
                 v-for="(value, index) in Object.keys(scenarioDetails)"
@@ -45,7 +45,7 @@
             align="right"
           >
             <template slot-scope="scope">
-              {{ scope.row.planned_revenue | toLocaleStr }}
+              {{ scope.row.planned_revenue? scope.row.planned_revenue.toFixed(2):0 | toLocaleStr }}
             </template>
           </el-table-column>
           <el-table-column
@@ -56,7 +56,7 @@
             align="right"
           >
             <template slot-scope="scope">
-              {{ scope.row.forecasted_revenue | toLocaleStr }}
+              {{ scope.row.forecasted_revenue? scope.row.forecasted_revenue.toFixed(2):0 | toLocaleStr }}
             </template>
           </el-table-column>
           <el-table-column
@@ -67,7 +67,7 @@
             align="right"
           >
             <template slot-scope="scope">
-              {{ scope.row.adjusted_revenue | toLocaleStr }}
+              {{ scope.row.adjusted_revenue? scope.row.adjusted_revenue.toFixed(2):0 | toLocaleStr }}
             </template>
           </el-table-column>
           <el-table-column
@@ -78,7 +78,7 @@
             align="right"
           >
             <template slot-scope="scope">
-              {{ scope.row.planned_gm_percent | toTwoDigitsFloat }}
+              {{ scope.row.planned_gm_percent ? scope.row.planned_gm_percent.toFixed(2) * 100 : 0| toTwoDigitsFloat }}
             </template>
           </el-table-column>
           <el-table-column
@@ -89,7 +89,7 @@
             align="right"
           >
             <template slot-scope="scope">
-              {{ scope.row.forecasted_gm_percent | toTwoDigitsFloat }}
+              {{ scope.row.forecasted_gm_percent ? scope.row.forecasted_gm_percent.toFixed(2) * 100: 0 | toTwoDigitsFloat }}
             </template>
           </el-table-column>
           <el-table-column
@@ -100,7 +100,7 @@
             align="right"
           >
             <template slot-scope="scope">
-              {{ scope.row.adjusted_gm_percent | toTwoDigitsFloat }}
+              {{ scope.row.adjusted_gm_percent? scope.row.adjusted_gm_percent.toFixed(2)* 100 :0| toTwoDigitsFloat }}
             </template>
           </el-table-column>
         </el-table>
@@ -122,7 +122,7 @@
             align="right"
           >
             <template slot-scope="scope">
-              {{ scope.row.planned_units | toLocaleStr }}
+              {{ parseInt(scope.row.planned_units) | toLocaleStr }}
             </template>
           </el-table-column>
           <el-table-column
@@ -133,7 +133,7 @@
             align="right"
           >
             <template slot-scope="scope">
-              {{ scope.row.forecasted_units | toLocaleStr }}
+              {{ parseInt(scope.row.forecasted_units) | toLocaleStr }}
             </template>
           </el-table-column>
           <el-table-column
@@ -144,7 +144,7 @@
             align="right"
           >
             <template slot-scope="scope">
-              {{ scope.row.adjusted_units | toLocaleStr }}
+              {{ parseInt(scope.row.adjusted_units) | toLocaleStr }}
             </template>
           </el-table-column>
           <el-table-column
@@ -154,7 +154,7 @@
             property="planned_gm_percent"
             align="right"
             ><template slot-scope="scope">
-              {{ scope.row.planned_gm_percent | toTwoDigitsFloat }}
+              {{ scope.row.planned_gm_percent ? scope.row.planned_gm_percent.toFixed(2)  * 100: 0 | toTwoDigitsFloat }}
             </template>
           </el-table-column>
           <el-table-column
@@ -164,7 +164,7 @@
             property="forecasted_gm_percent"
             align="right"
             ><template slot-scope="scope">
-              {{ scope.row.forecasted_gm_percent | toTwoDigitsFloat }}
+              {{  scope.row.forecasted_gm_percent? scope.row.forecasted_gm_percent.toFixed(2) * 100:0 | toTwoDigitsFloat }}
             </template>
           </el-table-column>
           <el-table-column
@@ -175,7 +175,7 @@
             align="right"
           >
             <template slot-scope="scope">
-              {{ scope.row.adjusted_gm_percent | toTwoDigitsFloat }}
+              {{ scope.row.adjusted_gm_percent? scope.row.adjusted_gm_percent.toFixed(2) * 100:0 | toTwoDigitsFloat }}
             </template>
           </el-table-column>
         </el-table>
@@ -293,7 +293,7 @@
             align="right"
           >
             <template slot-scope="scope">
-              {{ scope.row.planned_revenue | toLocaleStr }}
+              {{ scope.row.planned_revenue? scope.row.planned_revenue.toFixed(2):0  | toLocaleStr }}
             </template>
           </el-table-column>
           <el-table-column
@@ -304,7 +304,7 @@
             align="right"
           >
             <template slot-scope="scope">
-              {{ scope.row.forecasted_revenue | toLocaleStr }}
+              {{ scope.row.forecasted_revenue? scope.row.forecasted_revenue.toFixed(2):0  | toLocaleStr }}
             </template>
           </el-table-column>
           <el-table-column
@@ -315,7 +315,7 @@
             align="right"
           >
             <template slot-scope="scope">
-              {{ scope.row.adjusted_revenue | toLocaleStr }}
+              {{ scope.row.adjusted_revenue? scope.row.adjusted_revenue.toFixed(2):0  | toLocaleStr }}
             </template>
           </el-table-column>
           <el-table-column
@@ -326,7 +326,7 @@
             align="right"
           >
             <template slot-scope="scope">
-              {{ scope.row.planned_revenue_percent | toTwoDigitsFloat }}
+              {{ scope.row.planned_revenue_percent? scope.row.planned_revenue_percent.toFixed(2)  * 100: 0 | toTwoDigitsFloat }}
             </template>
           </el-table-column>
           <el-table-column
@@ -337,7 +337,7 @@
             align="right"
           >
             <template slot-scope="scope">
-              {{ scope.row.forecasted_revenue_percent | toTwoDigitsFloat }}
+              {{ scope.row.forecasted_revenue_percent? scope.row.forecasted_revenue_percent.toFixed(2)  * 100:0 | toTwoDigitsFloat }}
             </template>
           </el-table-column>
           <el-table-column
@@ -348,7 +348,7 @@
             align="right"
           >
             <template slot-scope="scope">
-              {{ scope.row.adjusted_revenue_percent | toTwoDigitsFloat }}
+              {{ scope.row.adjusted_revenue_percent? scope.row.adjusted_revenue_percent.toFixed(2)  * 100: 0 | toTwoDigitsFloat }}
             </template>
           </el-table-column>
           <el-table-column
@@ -359,7 +359,7 @@
             align="right"
           >
             <template slot-scope="scope">
-              {{ scope.row.planned_gm_percent | toTwoDigitsFloat }}
+              {{ scope.row.planned_gm_percent ? scope.row.planned_gm_percent.toFixed(2)  * 100: 0 | toTwoDigitsFloat }}
             </template>
           </el-table-column>
           <el-table-column
@@ -370,7 +370,7 @@
             align="right"
           >
             <template slot-scope="scope">
-              {{ scope.row.forecasted_gm_percent | toTwoDigitsFloat }}
+              {{ scope.row.forecasted_gm_percent? scope.row.forecasted_gm_percent.toFixed(2) * 100:0 | toTwoDigitsFloat }}
             </template>
           </el-table-column>
           <el-table-column
@@ -381,7 +381,7 @@
             align="right"
           >
             <template slot-scope="scope">
-              {{ scope.row.adjusted_gm_percent | toTwoDigitsFloat }}
+              {{ scope.row.adjusted_gm_percent? scope.row.adjusted_gm_percent.toFixed(2)  * 100:0 | toTwoDigitsFloat }}
             </template>
           </el-table-column>
         </el-table>
@@ -515,7 +515,7 @@
           >
             Merge Scenario
           </button>
-          <button
+          <!-- <button
             class="btn btn-primary"
             @click="shareScenario"
             v-if="
@@ -526,7 +526,7 @@
             "
           >
             Unmerge Scenario
-          </button>
+          </button> -->
           <button class="btn btn-primary" @click="showDialog = false">
             Close
           </button>
