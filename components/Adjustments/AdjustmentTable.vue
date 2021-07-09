@@ -48,7 +48,7 @@
             min-width="130"
             sortable
             label="Adjusted By"
-            property="adjusted_by_user_id"
+            property="adjustedBy"
           >
           </el-table-column>
           <el-table-column
@@ -137,7 +137,7 @@ export default {
       page: 1,
       pageSize: 2,
       dialogVisible: false,
-      adjustmentId: null
+      adjustmentId: null,
     };
   },
   computed: {

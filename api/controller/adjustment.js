@@ -1,9 +1,18 @@
 import { PrismaClient } from "@prisma/client";
+import { getAllUsers } from "../controller/user";
 import { parseCategorySaleComparision, parseCategoryUnitComparision } from "../controller/scenario";
-// import moment from "moment";
-
 
 const prisma = new PrismaClient();
+
+const getUserName = (id, allUsers) => {
+  let userName
+  if (allUsers.length > 0) {
+    userName = allUsers.filter((user) => (user.id == id))[0].first_name;
+  } else {
+    userName = '';
+  }
+  return userName;
+}
 
 // get Base Adjustments
 export const getBaseAdjustments = async (req, res) => {
@@ -16,8 +25,14 @@ export const getBaseAdjustments = async (req, res) => {
         created_at: "desc",
       },
     });
+    let allUsers = await getAllUsers();
+    let adjustmentsResponse = adjustments.map((v) => ({
+          ...v,
+          adjustedBy: getUserName(v.adjusted_by_user_id,allUsers),
+    }));
+
     res.status(200).json({
-      adjustments,
+      adjustmentsResponse,
     });
   } catch (error) {
     res.status(500).json({
@@ -249,13 +264,10 @@ export const getAdjustmentUnitSalesComparison = async (req, res) => {
   try {
     let result = await prisma.$queryRaw(`SELECT * FROM morphe_staging.adjustment_influenced_metrics WHERE adjustment_id = ${req.params.id};`);
     let parsedData = {};
-    // let weekendDates = await getWeekendDate();
-    // console.log(moment(new Date("2021-11-26T00:00:00.000Z")).week(),"weekendDates--");
-    
-    // parsedData["Units"] = parseCategoryUnitComparision(result);
-    // parsedData["Revenue"] = parseCategorySaleComparision(result);
+    parsedData["Units"] = parseCategoryUnitComparision(result);
+    parsedData["Revenue"] = parseCategorySaleComparision(result);
     res.status(200).json({
-      parsedData,result
+      parsedData
     });
   } catch (error) {
     res.status(500).json({
