@@ -82,8 +82,10 @@
             getSelectProgramChannels(event), updateGlobalFilterData(event)
           )
         "
+        :class="showChannelError? 'border border-danger rounded': ''"
         ref="channels"
       />
+      <p v-if="showChannelError" class="text-left text-danger small">Please select single channel</p>
     </div>
     <div class="col-md-3 mt-2">
       <CustomMultiSelect
@@ -181,7 +183,7 @@
 import CustomMultiSelect from "./MultiSelect.vue";
 export default {
   name: "ProgramFilters",
-  props: ["showAplyFilterBtn"],
+  props: ["showAplyFilterBtn", "showChannelError"],
   components: {
     CustomMultiSelect,
   },
@@ -225,6 +227,10 @@ export default {
     };
   },
   computed: {
+    showChannelErrorCom() {
+      console.log(this.showChannelError)
+      return this.showChannelError;
+    },
     applyCtaDisabled() {
       return this.$store.state.appliedRegularFilter.length > 0 &&
         !this.$store.state.isDataLoading
@@ -2730,8 +2736,8 @@ export default {
       this.$emit("getSkusValues", this.skuValues);
     },
   },
-
   async mounted() {
+    
      const allRegularFilterJSON = await this.$axios.$get(
        "/program-filter-dropdown-cache",
        {
