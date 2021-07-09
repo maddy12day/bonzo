@@ -63,8 +63,13 @@
               :Options="scenarioTypes"
               :multiple="false"
               @customEvent="getScenarioType"
-              :class="{showScenarioTypeError: ''}"
+              :class="
+                showScenarioTypeError ? 'border border-danger rounded' : ''
+              "
             />
+            <p class="text-danger small " v-if="showScenarioTypeError">
+              select a valid scenario type
+            </p>
           </div>
           <div class="col-md-2 text-left mt-1">
             <Label class="mb-0 mt-0">Start Date</Label>
@@ -73,8 +78,13 @@
               placeholder="start date"
               class="mt-2"
               v-model="startDateValue"
+              :class="showStartDateError ? 'border border-danger rounded' : ''"
+              @change="getStartDate"
             >
             </base-input>
+            <p class="text-danger small " v-if="showStartDateError">
+              please enter a start date
+            </p>
           </div>
           <div class="col-md-2 text-left pl-0 mt-1">
             <Label class="mb-0 mt-0">End Date</Label>
@@ -83,8 +93,13 @@
               placeholder="start date"
               class="mt-2"
               v-model="endDateValue"
+              :class="showEndDateError ? 'border border-danger rounded' : ''"
+              @change="getEndDate"
             >
             </base-input>
+            <p class="text-danger small " v-if="showEndDateError">
+              please enter a end date
+            </p>
           </div>
           <div class="col-md-2 text-left pl-0 mt-1">
             <Label class="mb-0 mt-0">Amount</Label>
@@ -94,8 +109,13 @@
               class="mt-2"
               v-model="amountValue"
               :maxlength="2"
+              @input="getAmount"
+              :class="showAmountError ? 'border border-danger rounded' : ''"
             >
             </base-input>
+            <p v-if="showAmountError" class="text-danger small">
+              Please enter a correct amount
+            </p>
           </div>
         </div>
         <div class="row">
@@ -106,8 +126,15 @@
               placeholder="Scenario Name"
               class="mt-1"
               v-model="scenarioNameValue"
+              :class="
+                showScenarioNameError ? 'border border-danger rounded' : ''
+              "
+              @input="getScenarioName"
             >
             </base-input>
+            <p v-if="showScenarioNameError" class="text-danger small">
+              Please enter a Scenario Name
+            </p>
           </div>
           <div class="col-md-3 mt-4 text-left">
             <button
@@ -227,9 +254,11 @@ export default {
     },
     getChannelValues(values) {
       this.channelValues = values;
-     ( this.channelValues.find(item => item.includes("All")) || this.channelValues.length > 1 || this.channelValues.length == 0)
+      this.channelValues.find((item) => item.includes("All")) ||
+      this.channelValues.length > 1 ||
+      this.channelValues.length == 0
         ? (this.showChannelError = true)
-        : this.showChannelError = false;
+        : (this.showChannelError = false);
     },
     getPrograms(values) {
       this.programValues = values;
@@ -254,6 +283,19 @@ export default {
     },
     getScenarioType(values) {
       this.scenarioTypeValue = values.value;
+      this.showScenarioTypeError = this.scenarioTypeValue ? false : true;
+    },
+    getScenarioName(evt) {
+      this.showScenarioNameError = this.scenarioNameValue ? false : true;
+    },
+    getStartDate(evt) {
+      this.showStartDateError = this.startDateValue ? false : true;
+    },
+    getEndDate(evt) {
+       this.showEndDateError= this.endDateValue ? false : true;
+    },
+    getAmount(evt) {
+      this.showAmountError = this.amountValue ? false : true;
     },
 
     // -- end ---
@@ -262,55 +304,66 @@ export default {
     },
     async createScenario() {
       // validations
-      this.showScenarioTypeError = this.scenarioTypeValue? false: true;
-      this.showScenarioNameError = this.scenarioNameValue? false: true;
-      this.showEndDateError = this.startDateValue? false: true;
-      this.showEndDateError = this.endDateValue? false: true;
-      this.showAmountError = this.amountValue? false: true; 
-      if(!this.showScenarioTypeError || 
-         !this.showScenarioNameError || 
-         !this.showStartDateError ||
-         !this.showEndDateError ||
-         !this.showAmountError ) {
-      const createScenarioModel = {
-        scenario_name: this.scenarioNameValue,
-        demand_planner_user_id: this.$auth.user.user_id,
-        scenario_types: this.scenarioTypeValue,
-        amount: parseFloat(this.amountValue),
-        is_dollar: false,
-        start_date: new Date(this.startDateValue),
-        end_date: new Date(this.endDateValue),
-        filter_level: this.activeFilterType,
-        filter_product_sources: this.productSourceValues,
-        filter_brand_types: this.brandTypeValues,
-        filter_life_cycles: this.lifeCycleValues,
-        filter_newness: this.newNessValues,
-        filter_brands: this.brandValues,
-        filter_channels: this.channelValues,
-        filter_sub_channels: this.subChannelsValues,
-        filter_collections: this.collectionValues,
-        filter_skus: this.skuValues,
-        filter_programs: this.programValues,
-        filter_categories: this.categoriesValues,
-        filter_classes: this.classesValues,
-        filter_sub_classes: this.subClassesValues,
-        is_active: true,
-        status: "Pending",
-        is_shared: false,
-        is_part_of_base: false,
-      };
-      const finalModel = emptyFieldCleaner(createScenarioModel);
-      const createScenarioJson = await this.$axios.$post(
-        `/create-scenario`,
-        finalModel
-      );
-      this.sharedScenariosList.scenarios.unshift(
-        createScenarioJson.scenarioRes
-      );
-      this.showScenarioTable = true;
-      this.disabledScenarioBtn = true;
-      this.callToIntervalAjax = true;
-      this.notifyVue("top", "right");
+      this.showScenarioTypeError = this.scenarioTypeValue ? false : true;
+      this.showScenarioNameError = this.scenarioNameValue ? false : true;
+      this.showEndDateError = this.startDateValue ? false : true;
+      this.showStartDateError = this.endDateValue ? false : true;
+      this.channelValues.find((item) => item.includes("All")) ||
+      this.channelValues.length > 1 ||
+      this.channelValues.length == 0
+        ? (this.showChannelError = true)
+        : (this.showChannelError = false);
+      this.showAmountError = this.amountValue ? false : true;
+      if (
+        this.showScenarioTypeError ||
+        this.showScenarioNameError ||
+        this.showStartDateError ||
+        this.showEndDateError ||
+        this.showChannelErrorCom ||
+        this.showChannelError ||
+        this.showAmountError
+      ) {
+        console.log("invalid form ........");
+      } else {
+        const createScenarioModel = {
+          scenario_name: this.scenarioNameValue,
+          demand_planner_user_id: this.$auth.user.user_id,
+          scenario_types: this.scenarioTypeValue,
+          amount: parseFloat(this.amountValue),
+          is_dollar: false,
+          start_date: new Date(this.startDateValue),
+          end_date: new Date(this.endDateValue),
+          filter_level: this.activeFilterType,
+          filter_product_sources: this.productSourceValues,
+          filter_brand_types: this.brandTypeValues,
+          filter_life_cycles: this.lifeCycleValues,
+          filter_newness: this.newNessValues,
+          filter_brands: this.brandValues,
+          filter_channels: this.channelValues,
+          filter_sub_channels: this.subChannelsValues,
+          filter_collections: this.collectionValues,
+          filter_skus: this.skuValues,
+          filter_programs: this.programValues,
+          filter_categories: this.categoriesValues,
+          filter_classes: this.classesValues,
+          filter_sub_classes: this.subClassesValues,
+          is_active: true,
+          status: "Pending",
+          is_shared: false,
+          is_part_of_base: false,
+        };
+        const finalModel = emptyFieldCleaner(createScenarioModel);
+        const createScenarioJson = await this.$axios.$post(
+          `/create-scenario`,
+          finalModel
+        );
+        this.sharedScenariosList.scenarios.unshift(
+          createScenarioJson.scenarioRes
+        );
+        this.showScenarioTable = true;
+        this.disabledScenarioBtn = true;
+        this.callToIntervalAjax = true;
+        this.notifyVue("top", "right");
       }
     },
 

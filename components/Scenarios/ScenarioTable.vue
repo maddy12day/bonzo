@@ -163,6 +163,22 @@
             label="Sub Classes"
             property="filter_sub_classes"
           ></el-table-column>
+
+          <el-table-column min-width="150" sortable label="Start Date">
+            <template slot-scope="scope">
+              <p>{{ formatDate(scope.row.start_date) }}</p>
+            </template>
+          </el-table-column>
+
+          <el-table-column
+            min-width="150"
+            sortable
+            label="End Date"
+          >
+            <template slot-scope="scope">
+              <p>{{ formatDate(scope.row.end_date) }}</p>
+            </template>
+          </el-table-column>
         </el-table>
         <el-pagination
           small
@@ -195,6 +211,7 @@
 <script>
 import { Table, TableColumn, Dialog } from "element-ui";
 import PreviewScenario from "./PreviewScenario.vue";
+import moment from "moment";
 
 export default {
   name: "dashboard",
@@ -239,6 +256,9 @@ export default {
     },
   },
   methods: {
+    formatDate(date) {
+      return moment(date).format("YYYY-MM-DD");
+    },
     notifyVue(verticalAlign, horizontalAlign, message) {
       let color = 4;
       this.$notify({
@@ -327,7 +347,12 @@ export default {
         filter_sub_classes: scenarioDetails.scenario.filter_sub_classes,
         scenario_name: scenarioDetails.scenario.scenario_name,
       };
-      this.scenarioDetails = this.emptyFieldCleaner(obj);
+      this.scenarioDetails = {
+        ...this.emptyFieldCleaner(obj),
+        amount: scenarioDetails.scenario.amount,
+        startDate: moment(scenarioDetails.scenario.start_date).format('YYYY-MM-DD'), 
+        endDate: moment(scenarioDetails.scenario.end_date).format('YYYY-MM-DD') 
+      };
       this.currentScenarioStatus = scenarioDetails.scenario;
       this.dialogVisible = true;
     },

@@ -13,7 +13,7 @@
                 v-for="(value, index) in Object.keys(scenarioDetails)"
                 :key="Math.random(index, 100)"
               >
-                {{ value.replace(/filter_/g, "").replace(/_/g, " ") }}
+                {{ value && value.includes('filter_')? value.replace(/filter_/g, "").replace(/_/g, " "): value }}
               </th>
             </tr>
           </thead>
@@ -92,7 +92,7 @@
             <template slot-scope="scope">
               {{
                 scope.row.planned_gm_percent
-                  ? scope.row.planned_gm_percent.toFixed(2) * 100
+                  ? (scope.row.planned_gm_percent.toFixed(2) * 100).toFixed(2)
                   : 0 | toTwoDigitsFloat
               }}
             </template>
@@ -107,7 +107,7 @@
             <template slot-scope="scope">
               {{
                 scope.row.forecasted_gm_percent
-                  ? scope.row.forecasted_gm_percent.toFixed(2) * 100
+                  ? (scope.row.forecasted_gm_percent.toFixed(2) * 100).toFixed(2)
                   : 0 | toTwoDigitsFloat
               }}
             </template>
@@ -122,7 +122,7 @@
             <template slot-scope="scope">
               {{
                 scope.row.adjusted_gm_percent
-                  ? scope.row.adjusted_gm_percent.toFixed(2) * 100
+                  ? (scope.row.adjusted_gm_percent.toFixed(2) * 100).toFixed(2)
                   : 0 | toTwoDigitsFloat
               }}
             </template>
@@ -180,7 +180,7 @@
             ><template slot-scope="scope">
               {{
                 scope.row.planned_gm_percent
-                  ? scope.row.planned_gm_percent.toFixed(2) * 100
+                  ?( scope.row.planned_gm_percent.toFixed(2) * 100).toFixed(2)
                   : 0 | toTwoDigitsFloat
               }}
             </template>
@@ -194,7 +194,7 @@
             ><template slot-scope="scope">
               {{
                 scope.row.forecasted_gm_percent
-                  ? scope.row.forecasted_gm_percent.toFixed(2) * 100
+                  ? (scope.row.forecasted_gm_percent.toFixed(2) * 100).toFixed(2)
                   : 0 | toTwoDigitsFloat
               }}
             </template>
@@ -209,7 +209,7 @@
             <template slot-scope="scope">
               {{
                 scope.row.adjusted_gm_percent
-                  ? scope.row.adjusted_gm_percent.toFixed(2) * 100
+                  ? (scope.row.adjusted_gm_percent.toFixed(2) * 100).toFixed(2)
                   : 0 | toTwoDigitsFloat
               }}
             </template>
@@ -376,7 +376,7 @@
             <template slot-scope="scope">
               {{
                 scope.row.planned_revenue_percent
-                  ? scope.row.planned_revenue_percent.toFixed(2) * 100
+                  ? (scope.row.planned_revenue_percent.toFixed(2) * 100).toFixed(2)
                   : 0 | toTwoDigitsFloat
               }}
             </template>
@@ -391,7 +391,7 @@
             <template slot-scope="scope">
               {{
                 scope.row.forecasted_revenue_percent
-                  ? scope.row.forecasted_revenue_percent.toFixed(2) * 100
+                  ?( scope.row.forecasted_revenue_percent.toFixed(2) * 100).toFixed(2)
                   : 0 | toTwoDigitsFloat
               }}
             </template>
@@ -406,7 +406,7 @@
             <template slot-scope="scope">
               {{
                 scope.row.adjusted_revenue_percent
-                  ? scope.row.adjusted_revenue_percent.toFixed(2) * 100
+                  ? (scope.row.adjusted_revenue_percent.toFixed(2) * 100).toFixed(2)
                   : 0 | toTwoDigitsFloat
               }}
             </template>
@@ -421,7 +421,7 @@
             <template slot-scope="scope">
               {{
                 scope.row.planned_gm_percent
-                  ? scope.row.planned_gm_percent.toFixed(2) * 100
+                  ? (scope.row.planned_gm_percent.toFixed(2) * 100).toFixed(2)
                   : 0 | toTwoDigitsFloat
               }}
             </template>
@@ -436,7 +436,7 @@
             <template slot-scope="scope">
               {{
                 scope.row.forecasted_gm_percent
-                  ? scope.row.forecasted_gm_percent.toFixed(2) * 100
+                  ? (scope.row.forecasted_gm_percent.toFixed(2) * 100).toFixed(2)
                   : 0 | toTwoDigitsFloat
               }}
             </template>
@@ -451,7 +451,7 @@
             <template slot-scope="scope">
               {{
                 scope.row.adjusted_gm_percent
-                  ? scope.row.adjusted_gm_percent.toFixed(2) * 100
+                  ? (scope.row.adjusted_gm_percent.toFixed(2) * 100).toFixed(2)
                   : 0 | toTwoDigitsFloat
               }}
             </template>

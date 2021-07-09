@@ -65,11 +65,13 @@
         placeholder="Channel"
         SelectedMessValue="Channels"
         :multiple="true"
+         :class="showChannelError? 'border border-danger rounded': ''"
         @customEvent="
           (event) => (getBrandByChannel(event), updateGlobalFilterData(event))
         "
         ref="channels"
       />
+      <p v-if="showChannelError" class="text-left text-danger small">Please select single channel</p>
     </div>
     <div class="col-md-3 mt-2">
       <CustomMultiSelect
@@ -150,7 +152,7 @@
 import CustomMultiSelect from "./MultiSelect.vue";
 export default {
   name: "RegularFilter",
-  props: ["showAplyFilterBtn"],
+  props: ["showAplyFilterBtn", "showChannelError"],
   components: {
     CustomMultiSelect,
   },
