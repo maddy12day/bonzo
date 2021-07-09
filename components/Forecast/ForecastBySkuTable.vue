@@ -4,9 +4,23 @@
       {{ tableHeading }}
     </h4>
     <el-table :data="topTenSkusData.parsedWeeklyData">
-      <el-table-column min-width="150" sortable label="SKU" property="sku">
+      <el-table-column
+        min-width="150"
+        sortable
+        label="SKU"
+        property="sku"
+        class-name="metrics-fix-header"
+        fixed
+      >
       </el-table-column>
-      <el-table-column min-width="250" sortable label="Title" property="title">
+      <el-table-column
+        min-width="250"
+        sortable
+        label="Title"
+        property="title"
+        class-name="metrics-fix-header"
+        fixed
+      >
       </el-table-column>
       <el-table-column min-width="150" label="w1" align="right">
         <template slot-scope="scope">
