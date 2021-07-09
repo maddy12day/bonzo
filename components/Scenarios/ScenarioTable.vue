@@ -205,6 +205,7 @@
       :previewBtnText="previewBtnText"
       :scenarioDetails="scenarioDetails"
       :currentScenarioStatus="currentScenarioStatus"
+      @unshareScenarioEvt="unshareScenario"
     />
   </div>
 </template>
@@ -260,7 +261,7 @@ export default {
       return moment(date).format("YYYY-MM-DD");
     },
     notifyVue(verticalAlign, horizontalAlign, message) {
-      let color = 4;
+      let color = 2;
       this.$notify({
         message: message,
         timeout: 12000,
@@ -306,6 +307,21 @@ export default {
         }
       }
     },
+     async unshareScenario() {
+      //share-scenario
+        const scenario = await this.$axios.$get(
+          `/unshare-scenario/${this.currentScenarioId}`
+        );
+
+        if (scenario) {
+          this.notifyVue(
+            "top",
+            "right",
+            "Scenario unshared successfully."
+          );
+        }
+    },
+    
     setPage(val) {
       this.page = val;
     },
@@ -351,7 +367,9 @@ export default {
         ...this.emptyFieldCleaner(obj),
         amount: scenarioDetails.scenario.amount,
         startDate: moment(scenarioDetails.scenario.start_date).format('YYYY-MM-DD'), 
-        endDate: moment(scenarioDetails.scenario.end_date).format('YYYY-MM-DD') 
+        endDate: moment(scenarioDetails.scenario.end_date).format('YYYY-MM-DD'), 
+        id: scenarioDetails.scenario.id,
+        is_part_of_base: scenarioDetails.scenario.is_part_of_base
       };
       this.currentScenarioStatus = scenarioDetails.scenario;
       this.dialogVisible = true;

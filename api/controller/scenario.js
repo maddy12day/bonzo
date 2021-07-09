@@ -398,6 +398,27 @@ export const shareScenario = async (req, res) => {
     });
   }
 };
+// share scenarios
+export const unshareScenario = async (req, res) => {
+  try {
+    const scenario = await prisma.scenarios.update({
+      where: {
+        id: parseInt(req.params.id),
+      },
+      data: {
+        is_shared: false,
+      },
+    });
+    res.json({
+      scenario,
+      message: "scenario unshared successfully...",
+    });
+  } catch (error) {
+    res.status(500).json({
+      error: `something went wrong unshared scenario api. ${error}`,
+    });
+  }
+};
 // merge scenarios
 export const mergeScenarioWithBase = async (req, res) => {
   try {
@@ -473,3 +494,29 @@ export const getScenarioDetailsById = async (req, res) => {
     });
   }
 };
+
+export const activeMergedScenarioAsBase = async(req, res) => {
+  try {
+    const isPartOfBase = await prisma.scenarios.update({
+      where: {
+        id: parseInt(req.params.id),
+      },
+      data: {
+        is_part_of_base: true,
+      },
+    });
+    console.log("before run log ")
+    const whereIsbaseForecstFalse = await prisma.$queryRaw(`update morphe_staging.demand_forecast_run_log set is_base_forecast=false where is_base_forecast= true`);
+    console.log("before whereIsbaseForecstTrue")
+    const whereIsbaseForecstTrue = await prisma.$queryRaw(`update morphe_staging.demand_forecast_run_log set is_base_forecast=true where scenario_id=${parseInt(req.params.id)} AND forecast_type='Merge' AND status='Merge Completed'`);;
+    console.log("after whereIsbaseForecstTrue")
+
+    res.json({
+      isPartOfBase,
+    });
+  } catch (error) {
+    res.json({
+      error: `something went activeMergedScenarioAsBase  ${error}.`,
+    });
+  }
+}
