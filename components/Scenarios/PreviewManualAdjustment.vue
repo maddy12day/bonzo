@@ -65,14 +65,14 @@
           <el-table-column
             min-width="150"
             sortable
-            label="Planned  Sales GM"
+            label="Planned  Sales GM(%)"
             property="planned_gm_percent"
             align="right"
           >
             <template slot-scope="scope">
               {{
                 scope.row.planned_gm_percent
-                  ? (scope.row.planned_gm_percen.toFixed(2) * 100).toFixed(2)
+                  ? (scope.row.planned_gm_percen).toFixed(2)
                   : 0 | toTwoDigitsFloat
               }}
             </template>
@@ -80,14 +80,14 @@
           <el-table-column
             min-width="150"
             sortable
-            label="Forecast Sales GM"
+            label="Forecast Sales GM(%)"
             property="forecasted_gm_percent"
             align="right"
           >
             <template slot-scope="scope">
               {{
                 scope.row.forecasted_gm_percent
-                  ? (scope.row.forecasted_gm_percent.toFixed(2) * 100).toFixed(2)
+                  ? (scope.row.forecasted_gm_percent).toFixed(2)
                   : 0 | toTwoDigitsFloat
               }}
             </template>
@@ -95,14 +95,14 @@
           <el-table-column
             min-width="150"
             sortable
-            label="Adjusted Sales GM"
+            label="Adjusted Sales GM(%)"
             property="adjusted_gm_percent"
             align="right"
           >
             <template slot-scope="scope">
               {{
                 scope.row.adjusted_gm_percent
-                  ? (scope.row.adjusted_gm_percent.toFixed(2) * 100).toFixed(2)
+                  ? (scope.row.adjusted_gm_percent).toFixed(2)
                   : 0 | toTwoDigitsFloat
               }}
             </template>
@@ -168,14 +168,14 @@
           <el-table-column
             min-width="150"
             sortable
-            label="Planned  Sales GM"
+            label="Planned  Sales GM(%)"
             property="planned_gm_percent"
             align="right"
           >
             <template slot-scope="scope">
               {{
                 scope.row.planned_gm_percent
-                  ? (scope.row.planned_gm_percent.toFixed(2) * 100).toFixed(2)
+                  ? (scope.row.planned_gm_percent).toFixed(2)
                   : 0 | toTwoDigitsFloat
               }}
             </template>
@@ -183,14 +183,14 @@
           <el-table-column
             min-width="150"
             sortable
-            label="Forecast Sales GM"
+            label="Forecast Sales GM(%)"
             property="forecasted_gm_percent"
             align="right"
           >
             <template slot-scope="scope">
               {{
                 scope.row.forecasted_gm_percent
-                  ?( scope.row.forecasted_gm_percent.toFixed(2) * 100).toFixed(2)
+                  ?( scope.row.forecasted_gm_percent).toFixed(2)
                   : 0 | toTwoDigitsFloat
               }}
             </template>
@@ -198,14 +198,14 @@
           <el-table-column
             min-width="150"
             sortable
-            label="Adjusted Sales GM"
+            label="Adjusted Sales GM(%)"
             property="adjusted_gm_percent"
             align="right"
           >
             <template slot-scope="scope">
               {{
                 scope.row.adjusted_gm_percent
-                  ? (scope.row.adjusted_gm_percent.toFixed(2) * 100).toFixed(2)
+                  ? (scope.row.adjusted_gm_percent).toFixed(2)
                   : 0 | toTwoDigitsFloat
               }}
             </template>
@@ -273,42 +273,42 @@
               <td class="text-right">
                 {{
                   col2.planned_revenue_percent
-                    ? (col2.planned_revenue_percent.toFixed(2) * 100).toFixed(2)
+                    ? (col2.planned_revenue_percent).toFixed(2)
                     : 0
                 }}
               </td>
               <td class="text-right">
                 {{
                   col2.forecasted_revenue_percent
-                    ? (col2.forecasted_revenue_percent.toFixed(2) * 100).toFixed(2)
+                    ? (col2.forecasted_revenue_percent).toFixed(2)
                     : 0
                 }}
               </td>
               <td class="text-right">
                 {{
                   col2.adjusted_revenue_percent
-                    ? (col2.adjusted_revenue_percent.toFixed(2) * 100).toFixed(2)
+                    ? (col2.adjusted_revenue_percent).toFixed(2)
                     : 0
                 }}
               </td>
               <td class="text-right">
                 {{
                   col2.planned_gm_percent
-                    ? (col2.planned_gm_percent.toFixed(2) * 100).toFixed(2)
+                    ? (col2.planned_gm_percent).toFixed(2)
                     : 0
                 }}
               </td>
               <td class="text-right">
                 {{
                   col2.forecasted_gm_percent
-                    ? (col2.forecasted_gm_percent.toFixed(2) * 100).toFixed(2)
+                    ? (col2.forecasted_gm_percent).toFixed(2)
                     : 0
                 }}
               </td>
               <td class="text-right">
                 {{
                   col2.adjusted_gm_percent
-                    ? (col2.adjusted_gm_percent.toFixed(2) * 100).toFixed(2)
+                    ? (col2.adjusted_gm_percent).toFixed(2)
                     : 0
                 }}
               </td>
