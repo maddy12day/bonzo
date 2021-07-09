@@ -7,7 +7,7 @@ const prisma = new PrismaClient();
 const getUserName = (id, allUsers) => {
   let userName
   if (allUsers.length > 0) {
-    userName = allUsers.filter((user) => (user.id = id))[0].first_name;
+    userName = allUsers.filter((user) => (user.id == id))[0].first_name;
   } else {
     userName = '';
   }
