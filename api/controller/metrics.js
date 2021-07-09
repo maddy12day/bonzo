@@ -1,4 +1,5 @@
 import { PrismaClient } from "@prisma/client";
+import { getMasterMetricData } from "./forecast"
 
 const prisma = new PrismaClient();
 
@@ -52,7 +53,7 @@ export const getBaseMonthlyMetrics = async (req, res) => {
         id: true,
       },
     });
-    const forecastedMonthlyMetrics = await prisma.forecasted_monthly_metrics.findMany({
+    let forecastedMonthlyMetrics = await prisma.forecasted_monthly_metrics.findMany({
       where: {
         demand_forecast_run_log_id: demandForecastRunLog[0].id,
       },
@@ -64,6 +65,9 @@ export const getBaseMonthlyMetrics = async (req, res) => {
         },
       },
     });
+
+    forecastedMonthlyMetrics = forecastedMonthlyMetrics.filter(obj => (obj.metrics_name !== 'aps' && obj.metrics_name !== 'inventory_dc_units' && obj.metrics_name !== 'inventory_dc_cost'));
+
     const baseMonthlyMetrics = JSON.stringify(
       forecastedMonthlyMetrics,
       (key, value) => (typeof value === "bigint" ? value.toString() : value) // return everything else unchanged
