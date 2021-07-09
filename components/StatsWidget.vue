@@ -39,7 +39,7 @@
           }`"
           class="border border-info"
         />
-         <p>*Plan does not contain all the skus</p>
+        <p>*Plan does not contain all the skus</p>
       </div>
       <div class="col-md-4 mt-1">
         <YearlyQuarterlyCard
@@ -53,10 +53,10 @@
         <YearlyQuarterlyCard
           title="Forecast"
           :units="`${
-            forecastYQData[1] ? forecastYQData[1].yearly_aggregate : ''
+            forecastYQData[0] ? forecastYQData[0].yearly_aggregate : ''
           }`"
           :revenue="`${
-            forecastYQData[0] ? forecastYQData[0].yearly_aggregate : ''
+            forecastYQData[1] ? forecastYQData[1].yearly_aggregate : ''
           }`"
           class="border border-warning"
         />
@@ -74,7 +74,7 @@
           }`"
           class="border border-info"
         />
-         <p>*Plan does not contain all the skus</p>
+        <p>*Plan does not contain all the skus</p>
       </div>
       <div class="col-md-4 mt-1">
         <YearlyQuarterlyCard
@@ -91,9 +91,9 @@
       <div class="col-md-4 mt-1">
         <YearlyQuarterlyCard
           title="Forecast"
-          :units="`${forecastYQData[1] ? forecastYQData[1].q1_aggregate : ''}`"
+          :units="`${forecastYQData[0] ? forecastYQData[0].q1_aggregate : ''}`"
           :revenue="`${
-            forecastYQData[0] ? forecastYQData[0].q1_aggregate : ''
+            forecastYQData[1] ? forecastYQData[1].q1_aggregate : ''
           }`"
           class="border border-warning"
         />
@@ -111,7 +111,7 @@
           }`"
           class="border border-info"
         />
-         <p>*Plan does not contain all the skus</p>
+        <p>*Plan does not contain all the skus</p>
       </div>
       <div class="col-md-4 mt-1">
         <YearlyQuarterlyCard
@@ -128,9 +128,9 @@
       <div class="col-md-4 mt-1">
         <YearlyQuarterlyCard
           title="Forecast"
-          :units="`${forecastYQData[1] ? forecastYQData[1].q2_aggregate : ''}`"
+          :units="`${forecastYQData[0] ? forecastYQData[0].q2_aggregate : ''}`"
           :revenue="`${
-            forecastYQData[0] ? forecastYQData[0].q2_aggregate : ''
+            forecastYQData[1] ? forecastYQData[1].q2_aggregate : ''
           }`"
           class="border border-warning"
         />
@@ -148,7 +148,7 @@
           }`"
           class="border border-info"
         />
-         <p>*Plan does not contain all the skus</p>
+        <p>*Plan does not contain all the skus</p>
       </div>
       <div class="col-md-4 mt-1">
         <YearlyQuarterlyCard
@@ -165,8 +165,8 @@
       <div class="col-md-4 mt-1">
         <YearlyQuarterlyCard
           title="Forecast"
-          :units="`${forecastYQData[1] ? forecastYQData[1].q3_aggregate : ''}`"
-          :revenue="`${forecastYQData ? forecastYQData[0].q3_aggregate : ''}`"
+          :units="`${forecastYQData[0] ? forecastYQData[0].q3_aggregate : ''}`"
+          :revenue="`${forecastYQData ? forecastYQData[1].q3_aggregate : ''}`"
           class="border border-warning"
         />
       </div>
@@ -183,7 +183,7 @@
           }`"
           class="border border-info"
         />
-         <p>*Plan does not contain all the skus</p>
+        <p>*Plan does not contain all the skus</p>
       </div>
       <div class="col-md-4 mt-1">
         <YearlyQuarterlyCard
@@ -200,9 +200,9 @@
       <div class="col-md-4 mt-1">
         <YearlyQuarterlyCard
           title="Forecast"
-          :units="`${forecastYQData[1] ? forecastYQData[1].q4_aggregate : ''}`"
+          :units="`${forecastYQData[0] ? forecastYQData[0].q4_aggregate : ''}`"
           :revenue="`${
-            forecastYQData[0] ? forecastYQData[0].q4_aggregate : ''
+            forecastYQData[1] ? forecastYQData[1].q4_aggregate : ''
           }`"
           class="border border-warning"
         />
