@@ -86,7 +86,7 @@ export const userInfo = async (req, res) => {
   }
 };
 
-export const getAllUsers = async (req, res) => {
+export const getAllUsers = async () => {
   try {
     const users = await prisma.users.findMany({
       select: {
@@ -95,13 +95,8 @@ export const getAllUsers = async (req, res) => {
         id: true,
       },
     });
-    res.status(200).json({
-      users,
-    });
+    return users;
   } catch (error) {
-    res.status(500).json({
-      message: "something went wrong in shared scenario list api",
-      error: `${error}`,
-    });
+    return [];
   }
 };

@@ -131,6 +131,7 @@
         class="btn btn-sm btn-primary btn-block applyFilterBtn"
         style="line-height: 28px"
         @click="appliedFilterHandler"
+        :disabled="!applyCtaDisabled"
       >
         Apply Filter
       </button>

@@ -126,7 +126,7 @@ export const getFilteredForecastData = async (req, res) => {
   }
 };
 
-const getMasterMetricData = async () => {
+export const getMasterMetricData = async () => {
   try {
     const masterMetricData = await prisma.metrics_master.findMany({
       select: {
