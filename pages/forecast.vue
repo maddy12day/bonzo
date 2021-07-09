@@ -551,7 +551,8 @@ export default {
           }
         );
         if (adjustmentsJson) {
-          if (
+          if(adjustmentsJson.adjustment) {
+            if (
             adjustmentsJson &&
             ["Completed", "Failed", "Error"].includes(
               adjustmentsJson.adjustment.status
@@ -566,6 +567,7 @@ export default {
             this.callToIntervalAjax = true;
             this.baseAdjustmentsList.adjustments[0].status =
               adjustmentsJson.adjustment.status;
+          }
           }
         }
       }

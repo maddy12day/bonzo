@@ -72,7 +72,7 @@
             <template slot-scope="scope">
               {{
                 scope.row.planned_gm_percent
-                  ? scope.row.planned_gm_percen.toFixed(2) * 100
+                  ? (scope.row.planned_gm_percen.toFixed(2) * 100).toFixed(2)
                   : 0 | toTwoDigitsFloat
               }}
             </template>
@@ -87,7 +87,7 @@
             <template slot-scope="scope">
               {{
                 scope.row.forecasted_gm_percent
-                  ? scope.row.forecasted_gm_percent.toFixed(2) * 100
+                  ? (scope.row.forecasted_gm_percent.toFixed(2) * 100).toFixed(2)
                   : 0 | toTwoDigitsFloat
               }}
             </template>
@@ -102,7 +102,7 @@
             <template slot-scope="scope">
               {{
                 scope.row.adjusted_gm_percent
-                  ? scope.row.adjusted_gm_percent.toFixed(2) * 100
+                  ? (scope.row.adjusted_gm_percent.toFixed(2) * 100).toFixed(2)
                   : 0 | toTwoDigitsFloat
               }}
             </template>
@@ -175,7 +175,7 @@
             <template slot-scope="scope">
               {{
                 scope.row.planned_gm_percent
-                  ? scope.row.planned_gm_percent.toFixed(2) * 100
+                  ? (scope.row.planned_gm_percent.toFixed(2) * 100).toFixed(2)
                   : 0 | toTwoDigitsFloat
               }}
             </template>
@@ -190,7 +190,7 @@
             <template slot-scope="scope">
               {{
                 scope.row.forecasted_gm_percent
-                  ? scope.row.forecasted_gm_percent.toFixed(2) * 100
+                  ?( scope.row.forecasted_gm_percent.toFixed(2) * 100).toFixed(2)
                   : 0 | toTwoDigitsFloat
               }}
             </template>
@@ -205,7 +205,7 @@
             <template slot-scope="scope">
               {{
                 scope.row.adjusted_gm_percent
-                  ? scope.row.adjusted_gm_percent.toFixed(2) * 100
+                  ? (scope.row.adjusted_gm_percent.toFixed(2) * 100).toFixed(2)
                   : 0 | toTwoDigitsFloat
               }}
             </template>
@@ -273,42 +273,42 @@
               <td class="text-right">
                 {{
                   col2.planned_revenue_percent
-                    ? col2.planned_revenue_percent.toFixed(2) * 100
+                    ? (col2.planned_revenue_percent.toFixed(2) * 100).toFixed(2)
                     : 0
                 }}
               </td>
               <td class="text-right">
                 {{
                   col2.forecasted_revenue_percent
-                    ? col2.forecasted_revenue_percent.toFixed(2) * 100
+                    ? (col2.forecasted_revenue_percent.toFixed(2) * 100).toFixed(2)
                     : 0
                 }}
               </td>
               <td class="text-right">
                 {{
                   col2.adjusted_revenue_percent
-                    ? col2.adjusted_revenue_percent.toFixed(2) * 100
+                    ? (col2.adjusted_revenue_percent.toFixed(2) * 100).toFixed(2)
                     : 0
                 }}
               </td>
               <td class="text-right">
                 {{
                   col2.planned_gm_percent
-                    ? col2.planned_gm_percent.toFixed(2) * 100
+                    ? (col2.planned_gm_percent.toFixed(2) * 100).toFixed(2)
                     : 0
                 }}
               </td>
               <td class="text-right">
                 {{
                   col2.forecasted_gm_percent
-                    ? col2.forecasted_gm_percent.toFixed(2) * 100
+                    ? (col2.forecasted_gm_percent.toFixed(2) * 100).toFixed(2)
                     : 0
                 }}
               </td>
               <td class="text-right">
                 {{
                   col2.adjusted_gm_percent
-                    ? col2.adjusted_gm_percent.toFixed(2) * 100
+                    ? (col2.adjusted_gm_percent.toFixed(2) * 100).toFixed(2)
                     : 0
                 }}
               </td>

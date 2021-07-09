@@ -193,7 +193,5 @@ export default {
 .custom-background-metrics-title {
   background: white !important;
 }
-.el-table_1_column_1   {
-background-color: white !important;
-}
+
 </style>
