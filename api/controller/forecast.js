@@ -210,9 +210,13 @@ export const getFilteredForecastMetrics = async (req, res) => {
 
   let countryQuery;
   let regularQuery;
+    let countryQuery1;
+
 
   let regularFilter = {};
   let countryFilter = {};
+    let countryFilter1 = {};
+
 
   for (let item in req.body) {
     if (item !== "filter_sub_channels" && item !== "filter_channels") {
@@ -223,12 +227,18 @@ export const getFilteredForecastMetrics = async (req, res) => {
   }
   countryFilter != null ? (countryQuery = `AND ${whereQueryString(countryFilter, "dfbwm")}`) : (countryQuery = "");
   regularFilter != null ? (regularQuery = `AND ${whereQueryString(regularFilter, "dp")}`) : (regularQuery = "");
+  countryFilter1 != null ? (countryQuery1 = `AND ${whereQueryString(countryFilter, "dfbwm2")}`) : (countryQuery1 = "");
+  console.log("countryFilter1---", countryFilter1);
 
   if (regularQuery.length == 4) {
     regularQuery = "";
   }
   if (countryQuery.length == 4) {
     countryQuery = "";
+  }
+
+   if (countryQuery1.length == 4) {
+    countryQuery1 = "";
   }
 
   try {
@@ -250,6 +260,7 @@ export const getFilteredForecastMetrics = async (req, res) => {
                   ${transaction_db}.dim_products dp
                 where
                   dp.id > 0
+
                  ${regularQuery}),
                 comp_units_revs AS (
                 SELECT
@@ -264,6 +275,7 @@ export const getFilteredForecastMetrics = async (req, res) => {
                     id
                   from
                     current_base_forecast_run_log_id)
+                    ${countryQuery1}
                   AND dfbwm2.sku IN (
                   select
                     sku
@@ -325,6 +337,8 @@ export const getFilteredForecastMetrics = async (req, res) => {
                     iskus)
                 GROUP BY
                   ${duration}(dfbwm.weekend);`;
+    
+    console.log("query----", query);
 
     const filteredForecastData = await prisma.$queryRaw(query);
     let masterMetricData = await getMasterMetricData();
