@@ -94,4 +94,4 @@ sw.*
 nohup.out
 
 cache-scripts/config.py
-
+**/__pycache__/*
