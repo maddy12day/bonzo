@@ -10,6 +10,7 @@
     label="name"
     track-by="name"
     @input="getDropdownValue"
+    select-label=""
   >
     <template slot="selection" slot-scope="{ values, isOpen }"
       ><span class="multiselect__single" v-if="values.length &amp;&amp; !isOpen"
