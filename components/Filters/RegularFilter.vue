@@ -65,13 +65,15 @@
         placeholder="Channel"
         SelectedMessValue="Channels"
         :multiple="true"
-         :class="showChannelError? 'border border-danger rounded': ''"
+        :class="showChannelError ? 'border border-danger rounded' : ''"
         @customEvent="
           (event) => (getBrandByChannel(event), updateGlobalFilterData(event))
         "
         ref="channels"
       />
-      <p v-if="showChannelError" class="text-left text-danger small">Please select single channel</p>
+      <p v-if="showChannelError" class="text-left text-danger small">
+        Please select single channel
+      </p>
     </div>
     <div class="col-md-3 mt-2">
       <CustomMultiSelect
@@ -135,7 +137,7 @@
         @click="appliedFilterHandler"
         :disabled="!applyCtaDisabled"
       >
-        Apply Filter
+        Apply Filters
       </button>
       <!-- <button
         class="btn btn-sm btn-dark btn-block applyFilterBtn"
