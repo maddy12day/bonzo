@@ -170,11 +170,7 @@
             </template>
           </el-table-column>
 
-          <el-table-column
-            min-width="150"
-            sortable
-            label="End Date"
-          >
+          <el-table-column min-width="150" sortable label="End Date">
             <template slot-scope="scope">
               <p>{{ formatDate(scope.row.end_date) }}</p>
             </template>
@@ -307,21 +303,17 @@ export default {
         }
       }
     },
-     async unshareScenario() {
+    async unshareScenario() {
       //share-scenario
-        const scenario = await this.$axios.$get(
-          `/unshare-scenario/${this.currentScenarioId}`
-        );
+      const scenario = await this.$axios.$get(
+        `/unshare-scenario/${this.currentScenarioId}`
+      );
 
-        if (scenario) {
-          this.notifyVue(
-            "top",
-            "right",
-            "Scenario unshared successfully."
-          );
-        }
+      if (scenario) {
+        this.notifyVue("top", "right", "Scenario unshared successfully.");
+      }
     },
-    
+
     setPage(val) {
       this.page = val;
     },
@@ -366,10 +358,12 @@ export default {
       this.scenarioDetails = {
         ...this.emptyFieldCleaner(obj),
         amount: scenarioDetails.scenario.amount,
-        startDate: moment(scenarioDetails.scenario.start_date).format('YYYY-MM-DD'), 
-        endDate: moment(scenarioDetails.scenario.end_date).format('YYYY-MM-DD'), 
+        startDate: moment(scenarioDetails.scenario.start_date).format(
+          "YYYY-MM-DD"
+        ),
+        endDate: moment(scenarioDetails.scenario.end_date).format("YYYY-MM-DD"),
         id: scenarioDetails.scenario.id,
-        is_part_of_base: scenarioDetails.scenario.is_part_of_base
+        is_part_of_base: scenarioDetails.scenario.is_part_of_base,
       };
       this.currentScenarioStatus = scenarioDetails.scenario;
       this.dialogVisible = true;
@@ -395,13 +389,13 @@ export default {
       }
       return reqBody;
     },
-    getUserName: function(id) {
+    getUserName: function (id) {
       let allUserInfo = JSON.parse(window.localStorage.getItem("allUsersInfo"));
       let userName = allUserInfo.users.filter((user) => (user.id = id))[0]
         .first_name;
       return userName;
     },
-    addUserToScenarioTableData: function(scenarioTableData, type) {
+    addUserToScenarioTableData: function (scenarioTableData, type) {
       if ((type = "sharedScenarios")) {
         this.scenarioTableDataForTable = scenarioTableData.map((v) => ({
           ...v,
