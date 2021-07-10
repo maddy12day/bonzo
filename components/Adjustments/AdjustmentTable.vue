@@ -8,7 +8,6 @@
         <el-table :data="pagedTableData" :row-class-name="tableRowClassName">
           <el-table-column
             min-width="120"
-            sortable
             label="Created At"
             property="created_at"
           >
@@ -28,14 +27,12 @@
 
           <el-table-column
             min-width="115"
-            sortable
             label="Status"
             property="status"
           ></el-table-column>
 
           <el-table-column
             min-width="115"
-            sortable
             label="Is Active?"
             property="is_active"
           >
@@ -46,17 +43,14 @@
 
           <el-table-column
             min-width="130"
-            sortable
             label="Adjusted By"
             property="adjustedBy"
           >
           </el-table-column>
           <el-table-column
             min-width="150"
-            sortable
             label="Adjustment On"
             property="adjusted_metrics_name"
-            class-name="text-capitalize"
           >
             <template slot-scope="scope">
               {{ scope.row.adjusted_metrics_name.replace(/_/g, " ") }}
@@ -65,7 +59,6 @@
 
           <el-table-column
             min-width="150"
-            sortable
             label="Adjusted Date"
             property="adjusted_metrics_cell_date"
           >
@@ -76,7 +69,6 @@
 
           <el-table-column
             min-width="150"
-            sortable
             label="Original Value"
             property="before_adjustment_value"
             align="right"
@@ -88,7 +80,6 @@
 
           <el-table-column
             min-width="150"
-            sortable
             label="Adjusted Value"
             property="new_adjusted_value"
             align="right"

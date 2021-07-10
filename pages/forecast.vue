@@ -26,8 +26,8 @@
           class="btn-custom-div"
           v-if="
             !isFilteredPageDataLoading &&
-              showRegularResetFilter &&
-              activeFilterType == 'Regular'
+            showRegularResetFilter &&
+            activeFilterType == 'Regular'
           "
           @click="resetFilter"
         >
@@ -39,8 +39,8 @@
           class="btn-custom-div"
           v-if="
             !isFilteredPageDataLoading &&
-              showProgramResetFilter &&
-              activeFilterType == 'Program'
+            showProgramResetFilter &&
+            activeFilterType == 'Program'
           "
           @click="resetFilter"
         >
@@ -110,10 +110,7 @@
 
     <!-- Adjustments Table -->
     <AdjustmentTable
-      v-if="
-        !isFilteredForecast &&
-          [...baseAdjustmentsListCom.adjustments].length > 0
-      "
+      v-if="[...baseAdjustmentsListCom.adjustmentsResponse].length > 0"
       class="mt-4"
       tableHeading="Base Model Adjustments"
       :adjustmentTableData="baseAdjustmentsListCom.adjustmentsResponse"
@@ -163,11 +160,9 @@
       />
       <div class="col-md-12 text-right">
         <button
-          :class="
-            `btn btn-primary btn-sm text-left ${
-              disbledCom || showManualAdj ? 'disabled' : ''
-            }`
-          "
+          :class="`btn btn-primary btn-sm text-left ${
+            disbledCom || showManualAdj ? 'disabled' : ''
+          }`"
           @click="switchToManualAdj"
           :disabled="disbledCom || showManualAdj"
           v-if="!changeMABtnText && activeTab == 'Weekly'"
@@ -175,9 +170,9 @@
           Manual Adjustment
         </button>
         <button
-          :class="
-            `btn btn-primary btn-sm text-left ${disbledCom ? 'disabled' : ''}`
-          "
+          :class="`btn btn-primary btn-sm text-left ${
+            disbledCom ? 'disabled' : ''
+          }`"
           @click="createManualAdjustment"
           v-if="changeMABtnText"
           :disabled="disbledCom"
@@ -551,23 +546,23 @@ export default {
           }
         );
         if (adjustmentsJson) {
-          if(adjustmentsJson.adjustment) {
+          if (adjustmentsJson.adjustment) {
             if (
-            adjustmentsJson &&
-            ["Completed", "Failed", "Error"].includes(
-              adjustmentsJson.adjustment.status
-            )
-          ) {
-            this.callToIntervalAjax = false;
-            this.disbleAdjustment = false;
-            this.baseAdjustmentsList.adjustments[0].status =
-              adjustmentsJson.adjustment.status;
-          } else {
-            this.disbleAdjustment = true;
-            this.callToIntervalAjax = true;
-            this.baseAdjustmentsList.adjustments[0].status =
-              adjustmentsJson.adjustment.status;
-          }
+              adjustmentsJson &&
+              ["Completed", "Failed", "Error"].includes(
+                adjustmentsJson.adjustment.status
+              )
+            ) {
+              this.callToIntervalAjax = false;
+              this.disbleAdjustment = false;
+              this.baseAdjustmentsList.adjustments[0].status =
+                adjustmentsJson.adjustment.status;
+            } else {
+              this.disbleAdjustment = true;
+              this.callToIntervalAjax = true;
+              this.baseAdjustmentsList.adjustments[0].status =
+                adjustmentsJson.adjustment.status;
+            }
           }
         }
       }
