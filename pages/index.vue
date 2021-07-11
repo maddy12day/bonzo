@@ -15,6 +15,7 @@
     </el-collapse>
 
     <StatsWidget />
+    <ChartWidget />
 
     <ScenarioTable
       v-if="
@@ -66,6 +67,7 @@
 
 <script>
 import StatsWidget from "../components/StatsWidget.vue";
+import ChartWidget from "../components/ChartWidget.vue";
 import ScenarioTable from "../components/Scenarios/ScenarioTable.vue";
 import WeeklyMetricsTable from "../components/Metrics/WeeklyMetricsTable.vue";
 import MonthlyMetricsTable from "../components/Metrics/MonthlyMetricsTable.vue";
@@ -86,6 +88,7 @@ export default {
   },
   components: {
     StatsWidget,
+    ChartWidget,
     ScenarioTable,
     WeeklyMetricsTable,
     MonthlyMetricsTable,
