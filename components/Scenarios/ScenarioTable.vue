@@ -337,8 +337,8 @@ export default {
       const scenarioDetails = await this.$axios.$get(
         `/get-scenario-detail-by-id/${data.id}`
       );
-      console.log("scenarioDetails", this.scenarioDetails);
-      const obj = {
+      console.log("scenarioDetails", scenarioDetails);
+    /*   const obj = {
         filter_brand_types: scenarioDetails.scenario.filter_brand_types,
         filter_brands: scenarioDetails.scenario.filter_brands,
         filter_categories: scenarioDetails.scenario.filter_categories,
@@ -364,7 +364,8 @@ export default {
         endDate: moment(scenarioDetails.scenario.end_date).format("YYYY-MM-DD"),
         id: scenarioDetails.scenario.id,
         is_part_of_base: scenarioDetails.scenario.is_part_of_base,
-      };
+      }; */
+      this.scenarioDetails = scenarioDetails.scenario;
       this.currentScenarioStatus = scenarioDetails.scenario;
       this.dialogVisible = true;
     },

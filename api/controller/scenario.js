@@ -139,7 +139,7 @@ export const createScenario = async (req, res) => {
 
 // Function Used to Parse the data into El Table Friendly Format
 export const parseCategoryUnitComparision = (results) => {
-  const fields = ["Planned Units", "Adjusted Units", "Forecast Units"];
+  const fields = ["Planned Units",  "Forecast Units", "Adjusted Units"];
   let parsedData = [];
   for (let field of fields) {
     let index = 0;
@@ -152,16 +152,16 @@ export const parseCategoryUnitComparision = (results) => {
         newObject[`W-${currWeek}`] = result.planned_units;
         parsedData.push(newObject);
       }
-    } else if (field == "Adjusted Units") {
-      for (let result of results) {
+    } else if (field == "Forecast Units") {
+       for (let result of results) {
         let currWeek = moment(new Date(result.weekend)).week();
-        newObject[`W-${currWeek}`] = result.adjusted_units;
+        newObject[`W-${currWeek}`] = result.forecasted_units;
         parsedData.push(newObject);
       }
     } else {
       for (let result of results) {
         let currWeek = moment(new Date(result.weekend)).week();
-        newObject[`W-${currWeek}`] = result.forecasted_units;
+        newObject[`W-${currWeek}`] = result.adjusted_units;
         parsedData.push(newObject);
       }
     }
@@ -176,7 +176,7 @@ export const parseCategoryUnitComparision = (results) => {
 
 // Function Used to Parse the data into El Table Friendly Format
 export const parseCategorySaleComparision = (results) => {
-  const fields = ["Planned Revenue", "Adjusted Revenue", "Forecast Revenue"];
+  const fields = ["Planned Revenue", "Forecast Revenue", "Adjusted Revenue"];
   let parsedData = [];
   for (let field of fields) {
     let index = 0;
@@ -189,16 +189,16 @@ export const parseCategorySaleComparision = (results) => {
         newObject[`W-${currWeek}`] = result.planned_revenue;
         parsedData.push(newObject);
       }
-    } else if (field == "Adjusted Revenue") {
+    } else if (field == "Forecast Revenue") {
+      for (let result of results) {
+        let currWeek = moment(new Date(result.weekend)).week();
+       newObject[`W-${currWeek}`] = result.forecasted_revenue;
+       parsedData.push(newObject);
+     }
+    } else {
       for (let result of results) {
         let currWeek = moment(new Date(result.weekend)).week();
         newObject[`W-${currWeek}`] = result.adjusted_revenue;
-        parsedData.push(newObject);
-      }
-    } else {
-      for (let result of results) {
-         let currWeek = moment(new Date(result.weekend)).week();
-        newObject[`W-${currWeek}`] = result.forecasted_revenue;
         parsedData.push(newObject);
       }
     }
@@ -213,7 +213,7 @@ export const parseCategorySaleComparision = (results) => {
 
 // Function Used to Parse the data into El Table Friendly Format
 const parseUnitSaleComparision = (results) => {
-  const fields = ["Planned Units", "Adjusted Units", "Forecast Units"];
+  const fields = ["Planned Units", "Forecast Units", "Adjusted Units"];
   let parsedData = [];
   for (let field of fields) {
     const newObject = {};
@@ -225,16 +225,17 @@ const parseUnitSaleComparision = (results) => {
         newObject[`W-${currWeek}`] = result.planned_units;
         parsedData.push(newObject);
       }
-    } else if (field == "Adjusted Units") {
-      for (let result of results) {
-        let currWeek = moment(new Date(result.weekend)).week();
-        newObject[`W-${currWeek}`] = result.adjusted_units;
-        parsedData.push(newObject);
-      }
-    } else {
+    } else if (field == "Forecast Units") {
       for (let result of results) {
         let currWeek = moment(new Date(result.weekend)).week();
         newObject[`W-${currWeek}`] = result.forecasted_units;
+        parsedData.push(newObject);
+      }
+
+    } else {  
+    for (let result of results) {
+        let currWeek = moment(new Date(result.weekend)).week();
+        newObject[`W-${currWeek}`] = result.adjusted_units;
         parsedData.push(newObject);
       }
     }
@@ -249,7 +250,7 @@ const parseUnitSaleComparision = (results) => {
 
 // Function Used to Parse the data into El Table Friendly Format
 const parseUnitRevenueComparision = (results) => {
-  const fields = ["Planned Revenue", "Adjusted Revenue", "Forecast Revenue"];
+  const fields = ["Planned Revenue", "Forecast Revenue", "Adjusted Revenue"];
   let parsedData = [];
   for (let field of fields) {
     const newObject = {};
@@ -261,16 +262,16 @@ const parseUnitRevenueComparision = (results) => {
         newObject[`W-${currWeek}`] = result.planned_revenue;
         parsedData.push(newObject);
       }
-    } else if (field == "Adjusted Revenue") {
+    } else if (field == "Forecast Revenue") {
+      for (let result of results) {
+        let currWeek = moment(new Date(result.weekend)).week();
+       newObject[`W-${currWeek}`] = result.forecasted_revenue;
+       parsedData.push(newObject);
+     }
+    } else {
       for (let result of results) {
         let currWeek = moment(new Date(result.weekend)).week();
         newObject[`W-${currWeek}`] = result.adjusted_revenue;
-        parsedData.push(newObject);
-      }
-    } else {
-      for (let result of results) {
-         let currWeek = moment(new Date(result.weekend)).week();
-        newObject[`W-${currWeek}`] = result.forecasted_revenue;
         parsedData.push(newObject);
       }
     }
@@ -485,8 +486,16 @@ export const getScenarioDetailsById = async (req, res) => {
         id: parseInt(req.params.id),
       },
     });
+    const scenarioTypes = await prisma.scenario_types.findUnique({
+      where: {
+        id: scenario.scenario_type_id
+      }
+    });
     res.json({
-      scenario,
+      scenario: {
+        ...scenario,
+        ...scenarioTypes
+      },
     });
   } catch (error) {
     res.json({
