@@ -23,6 +23,7 @@ const weeklyCommonTableDataMapping = (data) => {
 // function for returning the where condition query parameters
 const whereQueryString = (obj, alias = "fseisbw") => {
   let str2 = "";
+  let newnessFlag = false;
   Object.entries(obj).map((item) => {
     if (item[0] == "filter_brands") {
       str2 += `dp.brand IN (${item[1].map((str) => `'${str.trim()}'`).join(",")}) AND `;
@@ -35,10 +36,16 @@ const whereQueryString = (obj, alias = "fseisbw") => {
       str2 += `dp.life_cycle IN (${item[1].map((str) => `'${str.trim()}'`).join(",")}) AND `;
     } else if (item[0] == "filter_newness") {
       item[1].map((str) => {
-        if (str == "New") {
-          return (str2 += `YEAR(dp.launch_date) >= YEAR(CURRENT_DATE()) AND `);
-        } else {
-          return (str2 += " YEAR(dp.launch_date) <= YEAR(CURRENT_DATE()) AND ");
+        if (item[1].length > 1 && !newnessFlag) {
+          newnessFlag = true;
+          return (str2 += `(YEAR(dp.launch_date) <= YEAR(CURRENT_DATE())
+                  OR YEAR(dp.launch_date) > YEAR(CURRENT_DATE())) AND `);
+        } else if (item[1].length == 1) {
+          if (str == "New") {
+            return (str2 += `YEAR(dp.launch_date) >= YEAR(CURRENT_DATE()) AND `);
+          } else {
+            return (str2 += " YEAR(dp.launch_date) < YEAR(CURRENT_DATE()) AND ");
+          }
         }
       });
     } else if (item[0] == "filter_sub_channels") {
