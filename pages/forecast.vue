@@ -514,8 +514,7 @@ export default {
         new_adjusted_value: parseFloat(this.adustments.new_value),
         status: "Pending",
       });
-     this.baseAdjustmentsList.adjustments = this.baseAdjustmentsList.adjustments?this.baseAdjustmentsList.adjustments: []
-       this.baseAdjustmentsList.adjustments.unshift(res.manualAjustment);
+      this.baseAdjustmentsList.adjustmentsResponse.unshift(res.manualAjustment);
       this.baseMetricsList = JSON.parse(
         localStorage.getItem("adjustmentTableData")
       );
@@ -560,9 +559,9 @@ export default {
               this.disbleAdjustment = false;
               if (
                 this.baseAdjustmentsList &&
-                this.baseAdjustmentsList.adjustments[0]
+                this.baseAdjustmentsList.adjustmentsResponse[0]
               ) {
-                this.baseAdjustmentsList.adjustments[0].status =
+                this.baseAdjustmentsList.adjustmentsResponse[0].status =
                   adjustmentsJson.adjustment.status;
               }
             } else {
@@ -570,9 +569,9 @@ export default {
               this.callToIntervalAjax = true;
               if (
                 this.baseAdjustmentsList &&
-                this.baseAdjustmentsList.adjustments[0]
+                this.baseAdjustmentsList.adjustmentsResponse[0]
               ) {
-                this.baseAdjustmentsList.adjustments[0].status =
+                this.baseAdjustmentsList.adjustmentsResponse[0].status =
                   adjustmentsJson.adjustment.status;
               }
             }
@@ -627,14 +626,13 @@ export default {
           key.replace("filter_", "").replace("_", " ") + ": " + value.join(", ")
         );
       }
-      this.filteredStatsComponentKey += 1;
       // await this.getFilteredForecastData(requestedFilterOption);
       this.getFilteredTopSkus();
       await this.getFilteredWeeklyMetrics(requestedFilterOption);
       this.isFilteredPageDataLoading = false;
       this.$store.commit("toggleCTAState");
       this.$store.commit("toggleProgramFilterCTAState");
-      // this.filteredStatsComponentKey += 1;
+      this.filteredStatsComponentKey += 1;
     },
     notifyVue(verticalAlign, horizontalAlign, message, type) {
       this.$notify({
