@@ -627,13 +627,14 @@ export default {
           key.replace("filter_", "").replace("_", " ") + ": " + value.join(", ")
         );
       }
+      this.filteredStatsComponentKey += 1;
       // await this.getFilteredForecastData(requestedFilterOption);
       this.getFilteredTopSkus();
       await this.getFilteredWeeklyMetrics(requestedFilterOption);
       this.isFilteredPageDataLoading = false;
       this.$store.commit("toggleCTAState");
       this.$store.commit("toggleProgramFilterCTAState");
-      this.filteredStatsComponentKey += 1;
+      // this.filteredStatsComponentKey += 1;
     },
     notifyVue(verticalAlign, horizontalAlign, message, type) {
       this.$notify({
