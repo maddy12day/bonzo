@@ -389,6 +389,9 @@ export default {
           progress: true,
         }
       );
+      if(!this.sharedScenariosList || !this.sharedScenariosList .scenario) {
+        this.sharedScenariosList .scenario = [];
+      }
       this.showScenarioTable = true;
     },
 

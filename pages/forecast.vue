@@ -26,8 +26,8 @@
           class="btn-custom-div"
           v-if="
             !isFilteredPageDataLoading &&
-            showRegularResetFilter &&
-            activeFilterType == 'Regular'
+              showRegularResetFilter &&
+              activeFilterType == 'Regular'
           "
           @click="resetFilter"
         >
@@ -39,8 +39,8 @@
           class="btn-custom-div"
           v-if="
             !isFilteredPageDataLoading &&
-            showProgramResetFilter &&
-            activeFilterType == 'Program'
+              showProgramResetFilter &&
+              activeFilterType == 'Program'
           "
           @click="resetFilter"
         >
@@ -160,9 +160,11 @@
       />
       <div class="col-md-12 text-right">
         <button
-          :class="`btn btn-primary btn-sm text-left ${
-            disbledCom || showManualAdj ? 'disabled' : ''
-          }`"
+          :class="
+            `btn btn-primary btn-sm text-left ${
+              disbledCom || showManualAdj ? 'disabled' : ''
+            }`
+          "
           @click="switchToManualAdj"
           :disabled="disbledCom || showManualAdj"
           v-if="!changeMABtnText && activeTab == 'Weekly'"
@@ -170,9 +172,9 @@
           Manual Adjustment
         </button>
         <button
-          :class="`btn btn-primary btn-sm text-left ${
-            disbledCom ? 'disabled' : ''
-          }`"
+          :class="
+            `btn btn-primary btn-sm text-left ${disbledCom ? 'disabled' : ''}`
+          "
           @click="createManualAdjustment"
           v-if="changeMABtnText"
           :disabled="disbledCom"
@@ -512,7 +514,8 @@ export default {
         new_adjusted_value: parseFloat(this.adustments.new_value),
         status: "Pending",
       });
-      this.baseAdjustmentsList.adjustments.unshift(res.manualAjustment);
+     this.baseAdjustmentsList.adjustments = this.baseAdjustmentsList.adjustments?this.baseAdjustmentsList.adjustments: []
+       this.baseAdjustmentsList.adjustments.unshift(res.manualAjustment);
       this.baseMetricsList = JSON.parse(
         localStorage.getItem("adjustmentTableData")
       );
@@ -555,13 +558,23 @@ export default {
             ) {
               this.callToIntervalAjax = false;
               this.disbleAdjustment = false;
-              this.baseAdjustmentsList.adjustments[0].status =
-                adjustmentsJson.adjustment.status;
+              if (
+                this.baseAdjustmentsList &&
+                this.baseAdjustmentsList.adjustments[0]
+              ) {
+                this.baseAdjustmentsList.adjustments[0].status =
+                  adjustmentsJson.adjustment.status;
+              }
             } else {
               this.disbleAdjustment = true;
               this.callToIntervalAjax = true;
-              this.baseAdjustmentsList.adjustments[0].status =
-                adjustmentsJson.adjustment.status;
+              if (
+                this.baseAdjustmentsList &&
+                this.baseAdjustmentsList.adjustments[0]
+              ) {
+                this.baseAdjustmentsList.adjustments[0].status =
+                  adjustmentsJson.adjustment.status;
+              }
             }
           }
         }
@@ -639,6 +652,7 @@ export default {
           progress: true,
         }
       );
+      this.baseAdjustmentsList.adjustments = this.baseAdjustmentsList.adjustments? this.baseAdjustmentsList.adjustments: [];
     },
     forceRerender() {
       this.regularFiltersComponentKey += 1;
