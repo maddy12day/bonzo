@@ -221,7 +221,7 @@ export default {
     getProductSource(value) {
       const optionGenerator = (data, keyName) => {
         return [
-          { name: keyName },
+        /*   { name: keyName }, */
           ...[...new Set(data)].map((item) => {
             return { name: item };
           }),
@@ -299,7 +299,7 @@ export default {
     getBrandType(value) {
       const optionGenerator = (data, keyName) => {
         return [
-          { name: keyName },
+        /*   { name: keyName }, */
           ...[...new Set(data)].map((item) => {
             return { name: item };
           }),
@@ -482,7 +482,7 @@ export default {
     getLifeCycle(value) {
       const optionGenerator = (data, keyName) => {
         return [
-          { name: keyName },
+        /*   { name: keyName }, */
           ...[...new Set(data)].map((item) => {
             return { name: item };
           }),
@@ -658,7 +658,7 @@ export default {
     getNewness(value) {
       const optionGenerator = (data, keyName) => {
         return [
-          { name: keyName },
+        /*   { name: keyName }, */
           ...[...new Set(data)].map((item) => {
             return { name: item };
           }),
@@ -839,7 +839,7 @@ export default {
       this.brandValues = value.map((item) => item.name);
       const optionGenerator = (data, keyName) => {
         return [
-          { name: keyName },
+        /*   { name: keyName }, */
           ...[...new Set(data)].map((item) => {
             return { name: item };
           }),
@@ -1012,7 +1012,7 @@ export default {
       this.channelValues = value.map((item) => item.name);
       const optionGenerator = (data, keyName) => {
         return [
-          { name: keyName },
+        /*   { name: keyName }, */
           ...[...new Set(data)].map((item) => {
             return { name: item };
           }),
@@ -1179,7 +1179,7 @@ export default {
     getSelectedSubChannel(value) {
       const optionGenerator = (data, keyName) => {
         return [
-          { name: keyName },
+        /*   { name: keyName }, */
           ...[...new Set(data)].map((item) => {
             return { name: item };
           }),
@@ -1351,7 +1351,7 @@ export default {
       );
       const optionGenerator = (data, keyName) => {
         return [
-          { name: keyName },
+        /*   { name: keyName }, */
           ...[...new Set(data)].map((item) => {
             return { name: item };
           }),
@@ -1510,7 +1510,7 @@ export default {
     getSelectedCollections(value) {
       const optionGenerator = (data, keyName) => {
         return [
-          { name: keyName },
+        /*   { name: keyName }, */
           ...[...new Set(data)].map((item) => {
             return { name: item };
           }),
@@ -1678,7 +1678,7 @@ export default {
     });
     const optionGenerator = (data, keyName) => {
       return [
-        { name: keyName },
+      /*   { name: keyName }, */
         ...[...new Set(Object.values(data))].map((item) => {
           return { name: item };
         }),
