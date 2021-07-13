@@ -527,7 +527,6 @@ model scenario_types {
 
 model scenarios {
   id                     Int       @id @default(autoincrement())
-  users                  users @relation(fields: [demand_planner_user_id], references:[id])
   demand_planner_user_id Int
   scenario_name          String    @db.VarChar(50)
   amount                 Float?    @db.Float
@@ -570,5 +569,4 @@ model users {
   user_role_id Int
   created_at   DateTime? @default(now()) @db.Timestamp(0)
   updated_at   DateTime? @default(now()) @db.Timestamp(0)
-  scenarios        scenarios[]
 }
