@@ -4,34 +4,168 @@
       <h3 slot="title" class="mb-0">
         <i class="el-icon-info"></i>&nbsp;Scenario Preview
       </h3>
-      <card>
+      <card class="overflow-auto">
         Scenario Details
         <table class="table table-bordered" style="word-break: break-word;">
           <thead style="word-wrap: break-word;">
             <tr class="scenario-details-header">
-              <th
-                v-for="(value, index) in Object.keys(scenarioDetails)"
-                :key="Math.random(index, 100)"
-              >
-                {{
-                  value && value.includes("filter_")
-                    ? value.replace(/filter_/g, "").replace(/_/g, " ")
-                    : value
-                }}
+              <th v-if="scenarioDetails.scenario_name">Name</th>
+              <th v-if="scenarioDetails.status">Status</th>
+              <th v-if="scenarioDetails.scenario_type">Type</th>
+              <th v-if="scenarioDetails.amount">Amount</th>
+              <th v-if="scenarioDetails.start_date">Start Date</th>
+              <th v-if="scenarioDetails.end_date">End Date</th>
+              <th v-if="scenarioDetails.filter_level">Filter Level</th>
+              <th v-if="scenarioDetails.filter_product_sources">
+                Product Sources
               </th>
+              <th v-if="scenarioDetails.filter_brand_types">Brand Types</th>
+              <th v-if="scenarioDetails.filter_life_cycles">Life Cycles</th>
+              <th v-if="scenarioDetails.filter_newness">Newness</th>
+              <th v-if="scenarioDetails.filter_brands">Brand</th>
+              <th v-if="scenarioDetails.filter_channels">Channels</th>
+              <th v-if="scenarioDetails.filter_sub_channels">Sub Channels</th>
+              <th v-if="scenarioDetails.filter_collections">Collections</th>
+              <th v-if="scenarioDetails.filter_programs">Programs</th>
+              <th v-if="scenarioDetails.filter_categories">Categories</th>
+              <th v-if="scenarioDetails.filter_classes">Classes</th>
+              <th v-if="scenarioDetails.filter_sub_classes">Sub Classes</th>
+              <th v-if="scenarioDetails.filter_skus">Skus</th>
+              <th v-if="scenarioDetails.created_at">created at</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td
-                v-for="(value, index) in scenarioDetails"
-                :key="Math.random(index, 100)"
-              >
-                {{ value }}
+              <td v-if="scenarioDetails.scenario_name">
+                {{ scenarioDetails.scenario_name }}
+              </td>
+              <td v-if="scenarioDetails.status">
+                {{ scenarioDetails.status }}
+              </td>
+              <td v-if="scenarioDetails.scenario_type">
+                {{ scenarioDetails.scenario_type }}
+              </td>
+              <td v-if="scenarioDetails.amount">
+                {{ scenarioDetails.amount }}
+              </td>
+              <td v-if="scenarioDetails.start_date">
+                {{ formatDate(scenarioDetails.start_date) }}
+              </td>
+              <td v-if="scenarioDetails.end_date">
+                {{ formatDate(scenarioDetails.end_date) }}
+              </td>
+              <td v-if="scenarioDetails.filter_level">
+                {{ scenarioDetails.filter_level }}
+              </td>
+              <td v-if="scenarioDetails.filter_product_sources">
+                {{ scenarioDetails.filter_product_sources }}
+              </td>
+              <td v-if="scenarioDetails.filter_brand_types">
+                {{ scenarioDetails.filter_brand_types }}
+              </td>
+              <td v-if="scenarioDetails.filter_life_cycles">
+                {{ scenarioDetails.filter_life_cycles }}
+              </td>
+              <td v-if="scenarioDetails.filter_newness">
+                {{ scenarioDetails.filter_newness }}
+              </td>
+              <td v-if="scenarioDetails.filter_brands">
+                {{ scenarioDetails.filter_brands }}
+              </td>
+              <td v-if="scenarioDetails.filter_channels">
+                {{ scenarioDetails.filter_channels }}
+              </td>
+              <td v-if="scenarioDetails.filter_sub_channels">
+                {{ scenarioDetails.filter_sub_channels }}
+              </td>
+              <td v-if="scenarioDetails.filter_collections">
+                {{ scenarioDetails.filter_collections }}
+              </td>
+              <td v-if="scenarioDetails.filter_programs">
+                {{ scenarioDetails.filter_programs }}
+              </td>
+              <td v-if="scenarioDetails.filter_categories">
+                {{ scenarioDetails.filter_categories }}
+              </td>
+              <td v-if="scenarioDetails.filter_classes">
+                {{ scenarioDetails.filter_classes }}
+              </td>
+              <td v-if="scenarioDetails.filter_sub_classes">
+                {{ scenarioDetails.filter_sub_classes }}
+              </td>
+              <td v-if="scenarioDetails.filter_skus">
+                {{ scenarioDetails.filter_skus }}
+              </td>
+              <td v-if="scenarioDetails.created_at">
+                {{ formatDate(scenarioDetails.created_at) }}
               </td>
             </tr>
           </tbody>
         </table>
+        <span slot="footer" class="dialog-footer">
+          <div class="text-right">
+            <button
+              class="btn btn-primary"
+              @click="shareScenario"
+              v-if="
+                !currentScenarioStatus.is_shared &&
+                  currentScenarioStatus.status == 'Completed'
+              "
+            >
+              Share Scenario
+            </button>
+            <button
+              class="btn btn-primary"
+              @click="unshareScenario"
+              v-if="
+                currentScenarioStatus.is_shared &&
+                  currentScenarioStatus.status == 'Completed' &&
+                  previewBtnText == 'Share Scenario'
+              "
+            >
+              Unshare Scenario
+            </button>
+
+            <button
+              class="btn btn-primary"
+              @click="shareScenario"
+              v-if="
+                currentScenarioStatus.is_shared &&
+                  currentScenarioStatus.status == 'Completed' &&
+                  previewBtnText == 'Merge Scenario'
+              "
+            >
+              Merge Scenario
+            </button>
+            <button
+              class="btn btn-primary"
+              @click="activateMergedScenario"
+              v-if="
+                currentScenarioStatus.is_shared &&
+                  currentScenarioStatus.status == 'Merge Completed' &&
+                  previewBtnText == 'Merge Scenario' &&
+                  !scenarioDetails.is_part_of_base
+              "
+            >
+              Activate as New Base
+            </button>
+            <!-- <button
+            class="btn btn-primary"
+            @click="shareScenario"
+            v-if="
+              currentScenarioStatus.status == 'Merge Completed' &&
+              currentScenarioStatus.status !== 'Completed' &&
+              previewBtnText == 'Merge Scenario' &&
+              currentScenarioStatus.is_shared
+            "
+          >
+            Unmerge Scenario
+          </button> -->
+            <!-- <button class="btn btn-primary" @click="showDialog = false">
+            Close
+          </button> -->
+          </div>
+        </span>
       </card>
       <card
         card-body-classes="table-full-width"
@@ -44,7 +178,7 @@
           <el-table-column
             min-width="150"
             sortable
-            label="Planned Sales TY"
+            label="Planned TY"
             property="planned_revenue"
             align="right"
           >
@@ -59,7 +193,7 @@
           <el-table-column
             min-width="150"
             sortable
-            label="Forecast Sales TY"
+            label="Forecast TY"
             property="forecasted_revenue"
             align="right"
           >
@@ -74,7 +208,7 @@
           <el-table-column
             min-width="150"
             sortable
-            label="Adjusted Sales TY"
+            label="Adjusted TY"
             property="adjusted_revenue"
             align="right"
           >
@@ -89,7 +223,7 @@
           <el-table-column
             min-width="150"
             sortable
-            label="Planned  Sales GM(%)"
+            label="Planned GM(%)"
             property="planned_gm_percent"
             align="right"
           >
@@ -104,7 +238,7 @@
           <el-table-column
             min-width="150"
             sortable
-            label="Forecast Sales GM(%)"
+            label="Forecast GM(%)"
             property="forecasted_gm_percent"
             align="right"
           >
@@ -119,7 +253,7 @@
           <el-table-column
             min-width="150"
             sortable
-            label="Adjusted Sales GM(%)"
+            label="Adjusted GM(%)"
             property="adjusted_gm_percent"
             align="right"
           >
@@ -145,7 +279,7 @@
           <el-table-column
             min-width="150"
             sortable
-            label="Planned Sales TY"
+            label="Planned TY"
             property="planned_units"
             align="right"
           >
@@ -156,7 +290,7 @@
           <el-table-column
             min-width="150"
             sortable
-            label="Forecast Sales TY"
+            label="Forecast TY"
             property="forecasted_units"
             align="right"
           >
@@ -167,7 +301,7 @@
           <el-table-column
             min-width="150"
             sortable
-            label="Adjusted Sales TY"
+            label="Adjusted TY"
             property="adjusted_units"
             align="right"
           >
@@ -178,7 +312,7 @@
           <el-table-column
             min-width="150"
             sortable
-            label="Planned  Sales GM(%)"
+            label="Planned GM(%)"
             property="planned_gm_percent"
             align="right"
             ><template slot-scope="scope">
@@ -192,7 +326,7 @@
           <el-table-column
             min-width="150"
             sortable
-            label="Forecast Sales GM(%)"
+            label="Forecast GM(%)"
             property="forecasted_gm_percent"
             align="right"
             ><template slot-scope="scope">
@@ -206,7 +340,7 @@
           <el-table-column
             min-width="150"
             sortable
-            label="Adjusted Sales GM(%)"
+            label="Adjusted GM(%)"
             property="adjusted_gm_percent"
             align="right"
           >
@@ -328,7 +462,7 @@
           <el-table-column
             min-width="180"
             sortable
-            label="Planned Sales"
+            label="Planned"
             property="planned_revenue"
             align="right"
           >
@@ -343,7 +477,7 @@
           <el-table-column
             min-width="180"
             sortable
-            label="Forecast Sales"
+            label="Forecast"
             property="forecasted_revenue"
             align="right"
           >
@@ -358,7 +492,7 @@
           <el-table-column
             min-width="180"
             sortable
-            label="Adjusted Sales"
+            label="Adjusted"
             property="adjusted_revenue"
             align="right"
           >
@@ -373,7 +507,7 @@
           <el-table-column
             min-width="180"
             sortable
-            label="Planned Sales(%)"
+            label="Planned(%)"
             property="planned_revenue_percent"
             align="right"
           >
@@ -388,7 +522,7 @@
           <el-table-column
             min-width="190"
             sortable
-            label="Forecast Sales(%)"
+            label="Forecast(%)"
             property="forecasted_revenue_percent"
             align="right"
           >
@@ -403,7 +537,7 @@
           <el-table-column
             min-width="190"
             sortable
-            label="Adjusted Sales(%)"
+            label="Adjusted(%)"
             property="adjusted_revenue_percent"
             align="right"
           >
@@ -618,76 +752,12 @@
           >
         </el-table> -->
       </card>
-
-      <span slot="footer" class="dialog-footer">
-        <div class="text-right">
-          <button
-            class="btn btn-primary"
-            @click="shareScenario"
-            v-if="
-              !currentScenarioStatus.is_shared &&
-                currentScenarioStatus.status == 'Completed'
-            "
-          >
-            Share Scenario
-          </button>
-          <button
-            class="btn btn-primary"
-            @click="unshareScenario"
-            v-if="
-              currentScenarioStatus.is_shared &&
-                currentScenarioStatus.status == 'Completed' &&
-                previewBtnText == 'Share Scenario'
-            "
-          >
-            Unshare Scenario
-          </button>
-
-          <button
-            class="btn btn-primary"
-            @click="shareScenario"
-            v-if="
-              currentScenarioStatus.is_shared &&
-                currentScenarioStatus.status == 'Completed' &&
-                previewBtnText == 'Merge Scenario'
-            "
-          >
-            Merge Scenario
-          </button>
-          <button
-            class="btn btn-primary"
-            @click="activateMergedScenario"
-            v-if="
-              currentScenarioStatus.is_shared &&
-                currentScenarioStatus.status == 'Merge Completed' &&
-                previewBtnText == 'Merge Scenario' &&
-                !scenarioDetails.is_part_of_base
-            "
-          >
-            Activate as New Base
-          </button>
-          <!-- <button
-            class="btn btn-primary"
-            @click="shareScenario"
-            v-if="
-              currentScenarioStatus.status == 'Merge Completed' &&
-              currentScenarioStatus.status !== 'Completed' &&
-              previewBtnText == 'Merge Scenario' &&
-              currentScenarioStatus.is_shared
-            "
-          >
-            Unmerge Scenario
-          </button> -->
-          <button class="btn btn-primary" @click="showDialog = false">
-            Close
-          </button>
-        </div>
-      </span>
     </el-dialog>
   </div>
 </template>
 <script>
 import { Table, TableColumn, Dialog } from "element-ui";
+import moment from 'moment'
 
 export default {
   name: "dashboard",
@@ -704,6 +774,7 @@ export default {
     "dialogVisible",
     "previewBtnText",
     "scenarioDetails",
+    "scenarioDetails",
     "currentScenarioStatus",
   ],
   data() {
@@ -712,7 +783,11 @@ export default {
       typeColor: ["", "info", "success", "warning", "danger"],
     };
   },
+
   methods: {
+      formatDate(date) {
+   return moment(date).format("MM-DD-YYYY");
+  },
     notifyVue(verticalAlign, horizontalAlign, message) {
       let color = 2;
       this.$notify({
@@ -727,7 +802,7 @@ export default {
     async activateMergedScenario() {
       //activate-is-part-of-base
       this.activateIsPartOfBase = await this.$axios.$get(
-        `/activate-is-part-of-base/${this.scenarioDetails.id}`
+        `/activate-is-part-of-base/${this.scenarioDetail.id}`
       );
       this.showDialog = false;
       this.notifyVue(

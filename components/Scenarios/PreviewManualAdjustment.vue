@@ -20,7 +20,7 @@
           <el-table-column
             min-width="150"
             sortable
-            label="Planned Sales TY"
+            label="Planned TY"
             property="planned_revenue"
             align="right"
           >
@@ -35,7 +35,7 @@
           <el-table-column
             min-width="150"
             sortable
-            label="Forecast Sales TY"
+            label="Forecast TY"
             property="forecasted_revenue"
             align="right"
           >
@@ -50,7 +50,7 @@
           <el-table-column
             min-width="150"
             sortable
-            label="Adjusted Sales TY"
+            label="Adjusted TY"
             property="adjusted_revenue"
             align="right"
           >
@@ -65,7 +65,7 @@
           <el-table-column
             min-width="150"
             sortable
-            label="Planned  Sales GM(%)"
+            label="Planned GM(%)"
             property="planned_gm_percent"
             align="right"
           >
@@ -80,7 +80,7 @@
           <el-table-column
             min-width="150"
             sortable
-            label="Forecast Sales GM(%)"
+            label="Forecast GM(%)"
             property="forecasted_gm_percent"
             align="right"
           >
@@ -95,7 +95,7 @@
           <el-table-column
             min-width="150"
             sortable
-            label="Adjusted Sales GM(%)"
+            label="Adjusted GM(%)"
             property="adjusted_gm_percent"
             align="right"
           >
@@ -123,7 +123,7 @@
           <el-table-column
             min-width="150"
             sortable
-            label="Planned Sales TY"
+            label="Planned TY"
             property="planned_revenue"
             align="right"
           >
@@ -138,7 +138,7 @@
           <el-table-column
             min-width="150"
             sortable
-            label="Forecast Sales TY"
+            label="Forecast TY"
             property="forecasted_revenue"
             align="right"
           >
@@ -153,7 +153,7 @@
           <el-table-column
             min-width="150"
             sortable
-            label="Adjusted Sales TY"
+            label="Adjusted TY"
             property="adjusted_revenue"
             align="right"
           >
@@ -168,7 +168,7 @@
           <el-table-column
             min-width="150"
             sortable
-            label="Planned  Sales GM(%)"
+            label="Planned GM(%)"
             property="planned_gm_percent"
             align="right"
           >
@@ -183,7 +183,7 @@
           <el-table-column
             min-width="150"
             sortable
-            label="Forecast Sales GM(%)"
+            label="Forecast GM(%)"
             property="forecasted_gm_percent"
             align="right"
           >
@@ -198,7 +198,7 @@
           <el-table-column
             min-width="150"
             sortable
-            label="Adjusted Sales GM(%)"
+            label="Adjusted GM(%)"
             property="adjusted_gm_percent"
             align="right"
           >
@@ -221,12 +221,12 @@
               <th class="theader">Planned Units</th>
               <th class="theader">Forecast Units</th>
               <th class="theader">Adjusted Units</th>
-              <th class="theader">Planned Sale</th>
-              <th class="theader">Forecast Sale</th>
-              <th class="theader">Adjusted Sale</th>
-              <th class="theader">planned Sale(%)</th>
-              <th class="theader">Forecast Sale(%)</th>
-              <th class="theader">Adjusted Sale(%)</th>
+              <th class="theader">Planned</th>
+              <th class="theader">Forecast</th>
+              <th class="theader">Adjusted</th>
+              <th class="theader">planned(%)</th>
+              <th class="theader">Forecast(%)</th>
+              <th class="theader">Adjusted(%)</th>
               <th class="theader">Planned GM(%)</th>
               <th class="theader">Forecast GM(%)</th>
               <th class="theader">Ajusted GM(%)</th>
@@ -391,9 +391,9 @@
           <button class="btn btn-primary" @click="showDialog = false">
             Activate
           </button>
-          <button class="btn btn-primary" @click="showDialog = false">
+       <!--    <button class="btn btn-primary" @click="showDialog = false">
             Close
-          </button>
+          </button> -->
         </div>
       </span>
     </el-dialog>
