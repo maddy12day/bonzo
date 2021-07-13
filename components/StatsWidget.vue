@@ -27,20 +27,16 @@
       <div class="col-md-4 mt-1">
         <YearlyQuarterlyCard
           title="Planned"
-          :units="
-            `${
-              yearlyPlannedData[0]
-                ? parseInt(yearlyPlannedData[0]._sum.units)
-                : ''
-            }`
-          "
-          :revenue="
-            `${
-              yearlyPlannedData[0]
-                ? parseInt(yearlyPlannedData[0]._sum.revenue)
-                : ''
-            }`
-          "
+          :units="`${
+            yearlyPlannedData[0]
+              ? parseInt(yearlyPlannedData[0]._sum.units)
+              : ''
+          }`"
+          :revenue="`${
+            yearlyPlannedData[0]
+              ? parseInt(yearlyPlannedData[0]._sum.revenue)
+              : ''
+          }`"
           class="border border-info"
         />
         <p><sub>*Plan does not contain all the skus</sub></p>
@@ -56,12 +52,12 @@
       <div class="col-md-4 mt-1">
         <YearlyQuarterlyCard
           title="Forecast"
-          :units="
-            `${forecastYQData[0] ? forecastYQData[0].yearly_aggregate : ''}`
-          "
-          :revenue="
-            `${forecastYQData[1] ? forecastYQData[1].yearly_aggregate : ''}`
-          "
+          :units="`${
+            forecastYQData[0] ? forecastYQData[0].yearly_aggregate : ''
+          }`"
+          :revenue="`${
+            forecastYQData[1] ? forecastYQData[1].yearly_aggregate : ''
+          }`"
           class="border border-warning"
         />
       </div>
@@ -70,16 +66,12 @@
       <div class="col-md-4 mt-1">
         <YearlyQuarterlyCard
           title="Planned"
-          :units="
-            `${
-              quarterlyPlannedData[0] ? quarterlyPlannedData[0].qtr_units : ''
-            }`
-          "
-          :revenue="
-            `${
-              quarterlyPlannedData[0] ? quarterlyPlannedData[0].qtr_revenue : ''
-            }`
-          "
+          :units="`${
+            quarterlyPlannedData[0] ? quarterlyPlannedData[0].qtr_units : ''
+          }`"
+          :revenue="`${
+            quarterlyPlannedData[0] ? quarterlyPlannedData[0].qtr_revenue : ''
+          }`"
           class="border border-info"
         />
         <p><sub>*Plan does not contain all the skus</sub></p>
@@ -87,12 +79,12 @@
       <div class="col-md-4 mt-1">
         <YearlyQuarterlyCard
           title="This Year"
-          :units="
-            `${quarterlySaleData[0] ? quarterlySaleData[0].qtr_units : ''}`
-          "
-          :revenue="
-            `${quarterlySaleData[0] ? quarterlySaleData[0].qtr_revenue : ''}`
-          "
+          :units="`${
+            quarterlySaleData[0] ? quarterlySaleData[0].qtr_units : ''
+          }`"
+          :revenue="`${
+            quarterlySaleData[0] ? quarterlySaleData[0].qtr_revenue : ''
+          }`"
           class="border border-danger"
         />
       </div>
@@ -100,9 +92,9 @@
         <YearlyQuarterlyCard
           title="Forecast"
           :units="`${forecastYQData[0] ? forecastYQData[0].q1_aggregate : ''}`"
-          :revenue="
-            `${forecastYQData[1] ? forecastYQData[1].q1_aggregate : ''}`
-          "
+          :revenue="`${
+            forecastYQData[1] ? forecastYQData[1].q1_aggregate : ''
+          }`"
           class="border border-warning"
         />
       </div>
@@ -111,16 +103,12 @@
       <div class="col-md-4 mt-1">
         <YearlyQuarterlyCard
           title="Planned"
-          :units="
-            `${
-              quarterlyPlannedData[1] ? quarterlyPlannedData[1].qtr_units : ''
-            }`
-          "
-          :revenue="
-            `${
-              quarterlyPlannedData[1] ? quarterlyPlannedData[1].qtr_revenue : ''
-            }`
-          "
+          :units="`${
+            quarterlyPlannedData[1] ? quarterlyPlannedData[1].qtr_units : ''
+          }`"
+          :revenue="`${
+            quarterlyPlannedData[1] ? quarterlyPlannedData[1].qtr_revenue : ''
+          }`"
           class="border border-info"
         />
         <p><sub>*Plan does not contain all the skus</sub></p>
@@ -128,12 +116,12 @@
       <div class="col-md-4 mt-1">
         <YearlyQuarterlyCard
           title="This Year"
-          :units="
-            `${quarterlySaleData[1] ? quarterlySaleData[1].qtr_units : ''}`
-          "
-          :revenue="
-            `${quarterlySaleData[1] ? quarterlySaleData[1].qtr_revenue : ''}`
-          "
+          :units="`${
+            quarterlySaleData[1] ? quarterlySaleData[1].qtr_units : ''
+          }`"
+          :revenue="`${
+            quarterlySaleData[1] ? quarterlySaleData[1].qtr_revenue : ''
+          }`"
           class="border border-danger"
         />
       </div>
@@ -141,9 +129,9 @@
         <YearlyQuarterlyCard
           title="Forecast"
           :units="`${forecastYQData[0] ? forecastYQData[0].q2_aggregate : ''}`"
-          :revenue="
-            `${forecastYQData[1] ? forecastYQData[1].q2_aggregate : ''}`
-          "
+          :revenue="`${
+            forecastYQData[1] ? forecastYQData[1].q2_aggregate : ''
+          }`"
           class="border border-warning"
         />
       </div>
@@ -152,16 +140,12 @@
       <div class="col-md-4 mt-1">
         <YearlyQuarterlyCard
           title="Planned"
-          :units="
-            `${
-              quarterlyPlannedData[2] ? quarterlyPlannedData[2].qtr_units : ''
-            }`
-          "
-          :revenue="
-            `${
-              quarterlyPlannedData[2] ? quarterlyPlannedData[2].qtr_revenue : ''
-            }`
-          "
+          :units="`${
+            quarterlyPlannedData[2] ? quarterlyPlannedData[2].qtr_units : ''
+          }`"
+          :revenue="`${
+            quarterlyPlannedData[2] ? quarterlyPlannedData[2].qtr_revenue : ''
+          }`"
           class="border border-info"
         />
         <p><sub>*Plan does not contain all the skus</sub></p>
@@ -169,12 +153,12 @@
       <div class="col-md-4 mt-1">
         <YearlyQuarterlyCard
           title="This Year"
-          :units="
-            `${quarterlySaleData[2] ? quarterlySaleData[2].qtr_units : ''}`
-          "
-          :revenue="
-            `${quarterlySaleData[2] ? quarterlySaleData[2].qtr_revenue : ''}`
-          "
+          :units="`${
+            quarterlySaleData[2] ? quarterlySaleData[2].qtr_units : ''
+          }`"
+          :revenue="`${
+            quarterlySaleData[2] ? quarterlySaleData[2].qtr_revenue : ''
+          }`"
           class="border border-danger"
         />
       </div>
@@ -191,18 +175,12 @@
       <div class="col-md-4 mt-1">
         <YearlyQuarterlyCard
           title="Planned"
-          :units="
-            `${
-              quarterlyPlannedData[3] ? quarterlyPlannedData[3].qtr_units : '-'
-            }`
-          "
-          :revenue="
-            `${
-              quarterlyPlannedData[3]
-                ? quarterlyPlannedData[3].qtr_revenue
-                : '-'
-            }`
-          "
+          :units="`${
+            quarterlyPlannedData[3] ? quarterlyPlannedData[3].qtr_units : ''
+          }`"
+          :revenue="`${
+            quarterlyPlannedData[3] ? quarterlyPlannedData[3].qtr_revenue : ''
+          }`"
           class="border border-info"
         />
         <p><sub>*Plan does not contain all the skus</sub></p>
@@ -210,12 +188,12 @@
       <div class="col-md-4 mt-1">
         <YearlyQuarterlyCard
           title="This Year"
-          :units="
-            `${quarterlySaleData[3] ? quarterlySaleData[3].qtr_units : ''}`
-          "
-          :revenue="
-            `${quarterlySaleData[3] ? quarterlySaleData[3].qtr_revenue : ''}`
-          "
+          :units="`${
+            quarterlySaleData[3] ? quarterlySaleData[3].qtr_units : ''
+          }`"
+          :revenue="`${
+            quarterlySaleData[3] ? quarterlySaleData[3].qtr_revenue : ''
+          }`"
           class="border border-danger"
         />
       </div>
@@ -223,9 +201,9 @@
         <YearlyQuarterlyCard
           title="Forecast"
           :units="`${forecastYQData[0] ? forecastYQData[0].q4_aggregate : ''}`"
-          :revenue="
-            `${forecastYQData[1] ? forecastYQData[1].q4_aggregate : ''}`
-          "
+          :revenue="`${
+            forecastYQData[1] ? forecastYQData[1].q4_aggregate : ''
+          }`"
           class="border border-warning"
         />
       </div>
@@ -272,7 +250,6 @@ export default {
         }
       );
       this.quarterlySaleData = quaterly.baseQuarterlySale;
-      console.log("this.quarterlyPlannedData====", this.quarterlySaleData);
     },
 
     async quarterlyPlanned() {
@@ -280,7 +257,6 @@ export default {
         progress: true,
       });
       this.quarterlyPlannedData = quarterly.baseQuarterlyPlanned;
-      console.log("this.quarterlyPlannedData", this.quarterlyPlannedData);
     },
 
     async yearlySale() {
@@ -326,4 +302,5 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+</style>
