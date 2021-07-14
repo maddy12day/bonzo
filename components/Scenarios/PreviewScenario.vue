@@ -774,7 +774,6 @@ export default {
     "dialogVisible",
     "previewBtnText",
     "scenarioDetails",
-    "scenarioDetails",
     "currentScenarioStatus",
   ],
   data() {
@@ -802,7 +801,7 @@ export default {
     async activateMergedScenario() {
       //activate-is-part-of-base
       this.activateIsPartOfBase = await this.$axios.$get(
-        `/activate-is-part-of-base/${this.scenarioDetail.id}`
+        `/activate-is-part-of-base/${this.scenarioDetails.id}`
       );
       this.showDialog = false;
       this.notifyVue(
