@@ -1668,7 +1668,7 @@ export default {
       document.querySelector(`.weekend-${this.weekNo()}`).focus();
     },
     weekNo() {
-      return moment(new Date()).week();
+      return moment(new Date()).week()-1;
     },
     onDataChange(e, value, index, innerIndex) {
       const oldTableData = JSON.parse(
