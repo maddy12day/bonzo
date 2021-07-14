@@ -36,6 +36,7 @@
           @getSkusValues="getSkusValues"
           @getCategories="getCategoryValues"
           :showChannelError="showChannelErrorCom"
+          :key="regularFiltersComponentKey"
         />
 
         <ProgramFilters
@@ -55,6 +56,7 @@
           @getCollection="getCollectionValues"
           @getSkusValues="getSkusValues"
           :showChannelError="showChannelErrorCom"
+          :key="programFiltersComponentKey"
         />
         <div class="row mt-3">
           <div class="col-md-3 text-left">
@@ -214,6 +216,10 @@ export default {
         height: "550px",
         overflow: "scroll",
       },
+
+      regularFiltersComponentKey: Math.random(),
+      filteredStatsComponentKey: Math.random(),
+      programFiltersComponentKey: Math.random(),
     };
   },
   components: {
@@ -224,6 +230,12 @@ export default {
     Multiselect,
   },
   methods: {
+    resetFilter() {
+      this.forceRerender();
+      this.isFilteredForecast = false;
+      this.$store.commit("updateRegularFilter", []);
+      this.allAppliedFilters = [];
+    },
     notifyVue(verticalAlign, horizontalAlign) {
       let color = 2;
       this.$notify({
@@ -292,7 +304,7 @@ export default {
       this.showStartDateError = this.startDateValue ? false : true;
     },
     getEndDate(evt) {
-       this.showEndDateError= this.endDateValue ? false : true;
+      this.showEndDateError = this.endDateValue ? false : true;
     },
     getAmount(evt) {
       this.showAmountError = this.amountValue ? false : true;
@@ -301,6 +313,12 @@ export default {
     // -- end ---
     showFilterType(type) {
       this.activeFilterType = type;
+      this.$store.commit("updateRegularFilter", []);
+    },
+    forceRerender() {
+      this.regularFiltersComponentKey += 1;
+      this.filteredStatsComponentKey += 1;
+      this.programFiltersComponentKey += 1;
     },
     async createScenario() {
       // validations
@@ -360,6 +378,12 @@ export default {
         this.sharedScenariosList.scenarios.unshift(
           createScenarioJson.scenarioRes
         );
+        this.resetFilter();
+        this.scenarioTypes = '';
+        this.scenarioNameValue = '';
+        this.startDateValue = '';
+        this.endDateValue = '';
+        this.amountValue = ''
         this.showScenarioTable = true;
         this.disabledScenarioBtn = true;
         this.callToIntervalAjax = true;
@@ -389,8 +413,8 @@ export default {
           progress: true,
         }
       );
-      if(!this.sharedScenariosList || !this.sharedScenariosList .scenario) {
-        this.sharedScenariosList .scenario = [];
+      if (!this.sharedScenariosList || !this.sharedScenariosList.scenario) {
+        this.sharedScenariosList.scenario = [];
       }
       this.showScenarioTable = true;
     },
