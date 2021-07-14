@@ -258,19 +258,19 @@ const parseUnitRevenueComparision = (results) => {
     newObject["Comparision"] = field;
     if (field == "Planned Revenue") {
       for (let result of results) {
-        let currWeek = moment(new Date(result.weekend)).week();
+        let currWeek = moment(result.weekend, "YYYY-MM-DD").week();
         newObject[`W-${currWeek}`] = result.planned_revenue;
         parsedData.push(newObject);
       }
     } else if (field == "Forecast Revenue") {
       for (let result of results) {
-        let currWeek = moment(new Date(result.weekend)).week();
+        let currWeek = moment(result.weekend, "YYYY-MM-DD").week();
        newObject[`W-${currWeek}`] = result.forecasted_revenue;
        parsedData.push(newObject);
      }
     } else {
       for (let result of results) {
-        let currWeek = moment(new Date(result.weekend)).week();
+        let currWeek = moment(result.weekend, "YYYY-MM-DD").week();
         newObject[`W-${currWeek}`] = result.adjusted_revenue;
         parsedData.push(newObject);
       }
@@ -489,6 +489,9 @@ export const getScenarioDetailsById = async (req, res) => {
     const scenarioTypes = await prisma.scenario_types.findUnique({
       where: {
         id: scenario.scenario_type_id
+      },
+      select: {
+        scenario_type: true
       }
     });
     res.json({
@@ -517,12 +520,13 @@ export const activeMergedScenarioAsBase = async(req, res) => {
     console.log("before run log ")
     const whereIsbaseForecstFalse = await prisma.$queryRaw(`update morphe_staging.demand_forecast_run_log set is_base_forecast=false where is_base_forecast= true`);
     console.log("before whereIsbaseForecstTrue")
+    console.log(`update morphe_staging.demand_forecast_run_log set is_base_forecast=true where scenario_id=${parseInt(req.params.id)} AND forecast_type='Merge' AND status='Merge Completed'`)
     const whereIsbaseForecstTrue = await prisma.$queryRaw(`update morphe_staging.demand_forecast_run_log set is_base_forecast=true where scenario_id=${parseInt(req.params.id)} AND forecast_type='Merge' AND status='Merge Completed'`);;
     console.log("after whereIsbaseForecstTrue")
 
     res.json({
       isPartOfBase,
-    });
+    });   
   } catch (error) {
     res.json({
       error: `something went activeMergedScenarioAsBase  ${error}.`,
