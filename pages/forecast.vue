@@ -514,7 +514,7 @@ export default {
         new_adjusted_value: parseFloat(this.adustments.new_value),
         status: "Pending",
       });
-      this.baseAdjustmentsList.adjustments.unshift(res.manualAjustment);
+      this.baseAdjustmentsList.adjustmentsResponse.unshift(res.manualAjustment);
       this.baseMetricsList = JSON.parse(
         localStorage.getItem("adjustmentTableData")
       );
@@ -557,13 +557,23 @@ export default {
             ) {
               this.callToIntervalAjax = false;
               this.disbleAdjustment = false;
-              this.baseAdjustmentsList.adjustments[0].status =
-                adjustmentsJson.adjustment.status;
+              if (
+                this.baseAdjustmentsList &&
+                this.baseAdjustmentsList.adjustmentsResponse[0]
+              ) {
+                this.baseAdjustmentsList.adjustmentsResponse[0].status =
+                  adjustmentsJson.adjustment.status;
+              }
             } else {
               this.disbleAdjustment = true;
               this.callToIntervalAjax = true;
-              this.baseAdjustmentsList.adjustments[0].status =
-                adjustmentsJson.adjustment.status;
+              if (
+                this.baseAdjustmentsList &&
+                this.baseAdjustmentsList.adjustmentsResponse[0]
+              ) {
+                this.baseAdjustmentsList.adjustmentsResponse[0].status =
+                  adjustmentsJson.adjustment.status;
+              }
             }
           }
         }
@@ -616,14 +626,13 @@ export default {
           key.replace("filter_", "").replace("_", " ") + ": " + value.join(", ")
         );
       }
-      this.filteredStatsComponentKey += 1;
       // await this.getFilteredForecastData(requestedFilterOption);
       this.getFilteredTopSkus();
       await this.getFilteredWeeklyMetrics(requestedFilterOption);
       this.isFilteredPageDataLoading = false;
       this.$store.commit("toggleCTAState");
       this.$store.commit("toggleProgramFilterCTAState");
-      // this.filteredStatsComponentKey += 1;
+      this.filteredStatsComponentKey += 1;
     },
     notifyVue(verticalAlign, horizontalAlign, message, type) {
       this.$notify({
@@ -642,6 +651,7 @@ export default {
           progress: true,
         }
       );
+      this.baseAdjustmentsList.adjustments = this.baseAdjustmentsList.adjustments? this.baseAdjustmentsList.adjustments: [];
     },
     forceRerender() {
       this.regularFiltersComponentKey += 1;
