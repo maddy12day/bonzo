@@ -1,10 +1,10 @@
 <template>
   <div class="row">
-    <el-dialog :visible.sync="showDialog" width="80%">
+    <el-dialog :visible.sync="showDialog" width="80%" class="scenario-dialog">
       <h3 slot="title" class="mb-0">
         <i class="el-icon-info"></i>&nbsp;Scenario Preview
       </h3>
-      <card class="overflow-auto">
+      <card class="overflow-auto scenario-details-table">
         Scenario Details
         <table class="table table-bordered" style="word-break: break-word;">
           <thead style="word-wrap: break-word;">
@@ -842,5 +842,19 @@ export default {
 }
 .scenario-details-header th {
   font-size: 10px !important;
+}
+
+.scenario-details-table {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.scenario-dialog {
+  .el-dialog {
+    height: 95%;
+    overflow-y: auto;
+    margin-top: 20px !important;
+  }
 }
 </style>
