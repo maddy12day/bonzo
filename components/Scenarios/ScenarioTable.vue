@@ -337,7 +337,7 @@ export default {
       const scenarioDetails = await this.$axios.$get(
         `/get-scenario-detail-by-id/${data.id}`
       );
-      console.log("scenarioDetails", scenarioDetails);
+      console.log("scenarioDetails", scenarioDetails, data.id);
     /*   const obj = {
         filter_brand_types: scenarioDetails.scenario.filter_brand_types,
         filter_brands: scenarioDetails.scenario.filter_brands,
