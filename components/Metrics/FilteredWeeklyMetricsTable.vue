@@ -22,6 +22,10 @@
             property="yearly_aggregate"
             align="right"
           >
+          <template slot-scope="scope">{{
+              scope.row.yearly_aggregate | toLocaleStr
+            }}
+            </template>
           </el-table-column>
           <el-table-column
             min-width="150"
