@@ -6,7 +6,8 @@
       </div>
     </div>
     <div class="card-body">
-      <h5 class="card-category">
+      <h5 class="card-category"
+      :class = "(!units && isAPIFetchComplete) ?'empty-stats-parent':''">
         Units:
         <span
           v-if="title === 'Planned'"
@@ -15,8 +16,8 @@
           <span v-if="units && isAPIFetchComplete">
             {{ units | toLocaleStr }}
           </span>
-          <span v-else-if="!units && isAPIFetchComplete">
-            -
+          <span class="empty-stats" v-else-if="!units && isAPIFetchComplete">
+           &nbsp; -
           </span>
           <span v-else-if="!isAPIFetchComplete">
             <i class="el-icon-loading"></i>
@@ -29,8 +30,8 @@
           <span v-if="units && isAPIFetchComplete">
             {{ units | toLocaleStr }}
           </span>
-          <span v-else-if="!units && isAPIFetchComplete">
-            -
+          <span class="empty-stats" v-else-if="!units && isAPIFetchComplete">
+            &nbsp; -
           </span>
           <span v-else-if="!isAPIFetchComplete">
             <i class="el-icon-loading"></i>
@@ -44,15 +45,16 @@
          <span v-if="units && isAPIFetchComplete">
             {{ units | toLocaleStr }}
           </span>
-          <span v-else-if="!units && isAPIFetchComplete">
-            -
+          <span class="empty-stats" v-else-if="!units && isAPIFetchComplete">
+            &nbsp; -
           </span>
           <span v-else-if="!isAPIFetchComplete">
             <i class="el-icon-loading"></i>
           </span>
         </span>
       </h5>
-      <h5 class="card-category">
+      <h5 class="card-category"
+      :class = "(!units && isAPIFetchComplete) ?'empty-stats-parent':''">
         Revenue:
         <span
           v-if="title === 'Planned'"
@@ -61,8 +63,8 @@
           <span v-if="revenue && isAPIFetchComplete"> 
             $ {{ revenue | toLocaleStr }} 
           </span>
-          <span v-else-if="!revenue && isAPIFetchComplete">
-            -
+          <span class="empty-stats" v-else-if="!revenue && isAPIFetchComplete">
+            &nbsp; -
           </span>
           <span v-else-if="!isAPIFetchComplete">
             <i class="el-icon-loading"></i>
@@ -75,8 +77,8 @@
           <span v-if="revenue && isAPIFetchComplete"> 
             $ {{ revenue | toLocaleStr }} 
           </span>
-          <span v-else-if="!revenue && isAPIFetchComplete">
-            -
+          <span class="empty-stats" v-else-if="!revenue && isAPIFetchComplete">
+            &nbsp; -
           </span>
           <span v-else-if="!isAPIFetchComplete">
             <i class="el-icon-loading"></i>
@@ -89,8 +91,8 @@
           <span v-if="revenue && isAPIFetchComplete"> 
             $ {{ revenue | toLocaleStr }} 
           </span>
-          <span v-else-if="!revenue && isAPIFetchComplete">
-            -
+          <span class="empty-stats" v-else-if="!revenue && isAPIFetchComplete">
+            &nbsp; -
           </span>
           <span v-else-if="!isAPIFetchComplete">
             <i class="el-icon-loading"></i>
@@ -111,3 +113,17 @@ export default {
   }
 };
 </script>
+
+<style>
+.empty-stats {
+  display: inline-block;
+  /* margin-top: 4px; */
+  line-height: 1;
+  font-size: 20px;
+}
+
+.empty-stats-parent {
+  display: flex;
+  align-items: center;
+}
+</style>
