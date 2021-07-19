@@ -1,5 +1,6 @@
 <template>
   <card card-body-classes="table-full-width">
+    <!-- {{isAPIFetchComplete}}--- -->
     <div
       class="row"
       v-if="
@@ -385,6 +386,7 @@ export default {
       }
     },
     async getFilteredQuarterlyStatsWidgetData() {
+      this.$store.commit("toggleStatsAPIResponseState",false);
       const filteredStatsWidgetData = await this.$axios.$post(
         "/get-filtered-quarterly-stats",
         this.filterQuarterlyPayload
@@ -394,8 +396,10 @@ export default {
         filteredStatsWidgetData.filteredStats.quarterlyFilteredStats;
       this.yearlyFilteredStats =
         filteredStatsWidgetData.filteredStats.yearlyFilteredStats;
+      this.$store.commit("toggleStatsAPIResponseState",true);
     },
     async getFilteredStatsWidgetData() {
+      this.$store.commit("toggleStatsAPIResponseState",false);
       const filteredStatsWidgetData = await this.$axios.$post(
         "/get-filtered-yearly-stats",
         this.filterQuarterlyPayload
@@ -405,6 +409,7 @@ export default {
         filteredStatsWidgetData.filteredStats.quarterlyFilteredStats;
       this.yearlyFilteredStats =
         filteredStatsWidgetData.filteredStats.yearlyFilteredStats;
+      this.$store.commit("toggleStatsAPIResponseState",true);
     },
   },
   async created() {

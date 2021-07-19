@@ -1034,6 +1034,7 @@ export default {
     getAppliedFilters(value) {
       this.$emit("appliedFilters");
       this.$store.commit("toggleProgramFilterCTAState");
+      this.$store.commit("toggleStatsAPIResponseState",false);
     },
     getSelectedBrands(value) {
       const optionGenerator = (data, keyName) => {

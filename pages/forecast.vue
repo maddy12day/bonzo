@@ -434,6 +434,7 @@ export default {
     showFilterType(type) {
       this.activeFilterType = type;
       this.$store.commit("updateRegularFilter", []);
+      this.resetFilterPayloadOptions();
     },
     async getFilteredWeeklyMetrics(requestedFilterOption) {
       requestedFilterOption["filterType"] = "week";
@@ -584,6 +585,7 @@ export default {
       this.isFilteredForecast = false;
       this.$store.commit("updateRegularFilter", []);
       this.allAppliedFilters = [];
+      this.resetFilterPayloadOptions();
     },
     resetFilterPayloadOptions() {
       this.productSourceValues = [];
@@ -618,7 +620,7 @@ export default {
         filter_sub_classes: this.subClassesValues,
         filter_programs: this.programValues,
       };
-      this.resetFilterPayloadOptions();
+      // this.resetFilterPayloadOptions();
       let requestedFilterOption = this.emptyFieldCleaner(this.filterPayload);
       this.allAppliedFilters = [];
       for (let [key, value] of Object.entries(this.filterPayload)) {
@@ -627,12 +629,13 @@ export default {
         );
       }
       // await this.getFilteredForecastData(requestedFilterOption);
+      this.filteredStatsComponentKey += 1;
       this.getFilteredTopSkus();
       await this.getFilteredWeeklyMetrics(requestedFilterOption);
       this.isFilteredPageDataLoading = false;
       this.$store.commit("toggleCTAState");
       this.$store.commit("toggleProgramFilterCTAState");
-      this.filteredStatsComponentKey += 1;
+      // this.filteredStatsComponentKey += 1;
     },
     notifyVue(verticalAlign, horizontalAlign, message, type) {
       this.$notify({
