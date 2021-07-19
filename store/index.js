@@ -4,6 +4,7 @@ export const state = () => ({
   programFilterCTADisabled: false,
   appliedRegularFilter: [],
   isDataLoading: false,
+  isAPIFetchComplete: false,
 });
 
 export const mutations = {
@@ -21,5 +22,8 @@ export const mutations = {
   },
   updateLoadingstate(state, payload) {
     state.isDataLoading = payload
+  },
+  toggleStatsAPIResponseState(state, payload) {
+    state.isAPIFetchComplete = payload
   }
 };

@@ -243,6 +243,7 @@ export default {
     },
 
     async quarterlySale() {
+      this.$store.commit("toggleStatsAPIResponseState",false);
       const quaterly = await this.$axios.$get(
         "/based-quarterly-sale-this-year",
         {
@@ -250,30 +251,38 @@ export default {
         }
       );
       this.quarterlySaleData = quaterly.baseQuarterlySale;
+      this.$store.commit("toggleStatsAPIResponseState",true);
     },
 
     async quarterlyPlanned() {
+      this.$store.commit("toggleStatsAPIResponseState",false);
       const quarterly = await this.$axios.$get("/based-quarterly-planned", {
         progress: true,
       });
       this.quarterlyPlannedData = quarterly.baseQuarterlyPlanned;
+      this.$store.commit("toggleStatsAPIResponseState",true);
     },
 
     async yearlySale() {
+      this.$store.commit("toggleStatsAPIResponseState",false);
       const yearly = await this.$axios.$get("/based-yearly-sale-this-year", {
         progress: true,
       });
       this.yearlySaleData = yearly.baseYearlySale;
+      this.$store.commit("toggleStatsAPIResponseState",true);
     },
 
     async yearlyPlanned() {
+      this.$store.commit("toggleStatsAPIResponseState",false);
       const yearly = await this.$axios.$get("/base-yearly-planned", {
         progress: true,
       });
       this.yearlyPlannedData = yearly.baseYearlyPlanned;
+      this.$store.commit("toggleStatsAPIResponseState",true);
     },
 
     async forecastYearlyQuarterly() {
+      this.$store.commit("toggleStatsAPIResponseState",false);
       const forecast = await this.$axios.$get(
         "/base-yearly-quarterly-forecast",
         {
@@ -281,6 +290,7 @@ export default {
         }
       );
       this.forecastYQData = JSON.parse(forecast.baseYQForecast);
+      this.$store.commit("toggleStatsAPIResponseState",true);
     },
   },
   async mounted() {

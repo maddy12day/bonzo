@@ -217,6 +217,7 @@ export default {
     appliedFilterHandler() {
       this.$emit("appliedFilters");
       this.$store.commit("toggleCTAState");
+      this.$store.commit("toggleStatsAPIResponseState",false);
     },
     getProductSource(value) {
       const optionGenerator = (data, keyName) => {
@@ -295,6 +296,16 @@ export default {
       this.categoryOptions = optionGenerator(categories, "All Categories");
       this.collectionsOptions = optionGenerator(collections, "All Collections");
       this.skuOptions = optionGenerator(skus, "All SKUs");
+
+      this.$emit("getBrandType",[]);
+      this.$emit("getLifyClycle",[]);
+      this.$emit("newNess",[]);
+      this.$emit("getChannels",[]);
+      this.$emit("getBrands",[]);
+      this.$emit("getSubChannelValues",[]);
+      this.$emit("getCollectionValus",[]);
+      this.$emit("getSkusValues",[]);
+      this.$emit("getCategories",[]);
     },
     getBrandType(value) {
       const optionGenerator = (data, keyName) => {
@@ -324,6 +335,15 @@ export default {
       this.$refs.categories.values = [];
       this.$refs.collections.values = [];
       this.$refs.skus.values = [];
+
+      this.$emit("getLifyClycle",[]);
+      this.$emit("newNess",[]);
+      this.$emit("getChannels",[]);
+      this.$emit("getBrands",[]);
+      this.$emit("getSubChannelValues",[]);
+      this.$emit("getCollectionValus",[]);
+      this.$emit("getSkusValues",[]);
+      this.$emit("getCategories",[]);
       this.$emit(
         "getBrandType",
         value.map((item) => item.name)
@@ -502,6 +522,14 @@ export default {
       this.$refs.categories.values = [];
       this.$refs.collections.values = [];
       this.$refs.skus.values = [];
+      this.$emit("newNess",[]);
+      this.$emit("getChannels",[]);
+      this.$emit("getBrands",[]);
+      this.$emit("getSubChannelValues",[]);
+      this.$emit("getCollectionValus",[]);
+      this.$emit("getSkusValues",[]);
+      this.$emit("getCategories",[]);
+
       this.$emit(
         "getLifyClycle",
         value.map((item) => item.name)
@@ -677,6 +705,13 @@ export default {
       this.$refs.categories.values = [];
       this.$refs.collections.values = [];
       this.$refs.skus.values = [];
+            
+      this.$emit("getChannels",[]);
+      this.$emit("getBrands",[]);
+      this.$emit("getSubChannelValues",[]);
+      this.$emit("getCollectionValus",[]);
+      this.$emit("getSkusValues",[]);
+      this.$emit("getCategories",[]);
       this.$emit(
         "newNess",
         value.map((item) => item.name)
@@ -856,6 +891,12 @@ export default {
       this.$refs.categories.values = [];
       this.$refs.collections.values = [];
       this.$refs.skus.values = [];
+            
+      this.$emit("getChannels",[]);
+      this.$emit("getSubChannelValues",[]);
+      this.$emit("getCollectionValus",[]);
+      this.$emit("getSkusValues",[]);
+      this.$emit("getCategories",[]);
 
       let productSources;
       let brandTypes;
@@ -1028,6 +1069,11 @@ export default {
       let collections = [];
       let skus = [];
 
+      this.$emit("getSubChannelValues",[]);
+      this.$emit("getCollectionValus",[]);
+      this.$emit("getSkusValues",[]);
+      this.$emit("getCategories",[]);
+
       let productSources;
       let brandTypes;
       let lifeCycles;
@@ -1193,6 +1239,10 @@ export default {
       this.$refs.skus.values = [];
       this.subChannelValues = value.map((item) => item.name);
 
+      this.$emit("getCollectionValus",[]);
+      this.$emit("getSkusValues",[]);
+      this.$emit("getCategories",[]);
+
       let productSources;
       let brandTypes;
       let lifeCycles;
@@ -1345,6 +1395,8 @@ export default {
       );
     },
     getSelectedCategories(value) {
+      this.$emit("getCollectionValus",[]);
+      this.$emit("getSkusValues",[]);
       this.$emit(
         "getCategories",
         value.map((item) => item.name)
@@ -1657,6 +1709,8 @@ export default {
           }
         }
       }
+      
+      this.$emit("getSkusValues",[]);
       this.skuOptions = [...new Set(skus.map((item) => item.name))].map(
         (item) => {
           return { name: item };

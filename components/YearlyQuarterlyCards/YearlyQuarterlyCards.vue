@@ -12,10 +12,13 @@
           v-if="title === 'Planned'"
           class="text-info display-4 font-weight-normal"
         >
-          <span v-if="units">
+          <span v-if="units && isAPIFetchComplete">
             {{ units | toLocaleStr }}
           </span>
-          <span v-else>
+          <span v-else-if="!units && isAPIFetchComplete">
+            -
+          </span>
+          <span v-else-if="!isAPIFetchComplete">
             <i class="el-icon-loading"></i>
           </span>
         </span>
@@ -23,10 +26,13 @@
           v-if="title === 'This Year'"
           class="text-danger display-4 font-weight-normal"
         >
-          <span v-if="units">
+          <span v-if="units && isAPIFetchComplete">
             {{ units | toLocaleStr }}
           </span>
-          <span v-else>
+          <span v-else-if="!units && isAPIFetchComplete">
+            -
+          </span>
+          <span v-else-if="!isAPIFetchComplete">
             <i class="el-icon-loading"></i>
           </span>
         </span>
@@ -35,10 +41,13 @@
           v-if="title === 'Forecast'"
           class="text-warning display-4 font-weight-normal"
         >
-          <span v-if="units">
+         <span v-if="units && isAPIFetchComplete">
             {{ units | toLocaleStr }}
           </span>
-          <span v-else>
+          <span v-else-if="!units && isAPIFetchComplete">
+            -
+          </span>
+          <span v-else-if="!isAPIFetchComplete">
             <i class="el-icon-loading"></i>
           </span>
         </span>
@@ -49,8 +58,13 @@
           v-if="title === 'Planned'"
           class="text-info display-4 font-weight-normal"
         >
-          <span v-if="revenue"> $ {{ revenue | toLocaleStr }} </span>
-          <span v-else>
+          <span v-if="revenue && isAPIFetchComplete"> 
+            $ {{ revenue | toLocaleStr }} 
+          </span>
+          <span v-else-if="!revenue && isAPIFetchComplete">
+            -
+          </span>
+          <span v-else-if="!isAPIFetchComplete">
             <i class="el-icon-loading"></i>
           </span>
         </span>
@@ -58,8 +72,13 @@
           v-if="title === 'This Year'"
           class="text-danger display-4 font-weight-normal"
         >
-          <span v-if="revenue"> $ {{ revenue | toLocaleStr }} </span>
-          <span v-else>
+          <span v-if="revenue && isAPIFetchComplete"> 
+            $ {{ revenue | toLocaleStr }} 
+          </span>
+          <span v-else-if="!revenue && isAPIFetchComplete">
+            -
+          </span>
+          <span v-else-if="!isAPIFetchComplete">
             <i class="el-icon-loading"></i>
           </span>
         </span>
@@ -67,8 +86,13 @@
           v-if="title === 'Forecast'"
           class="text-warning display-4 font-weight-normal"
         >
-          <span v-if="revenue"> $ {{ revenue | toLocaleStr }} </span>
-          <span v-else>
+          <span v-if="revenue && isAPIFetchComplete"> 
+            $ {{ revenue | toLocaleStr }} 
+          </span>
+          <span v-else-if="!revenue && isAPIFetchComplete">
+            -
+          </span>
+          <span v-else-if="!isAPIFetchComplete">
             <i class="el-icon-loading"></i>
           </span>
         </span>
@@ -80,5 +104,10 @@
 export default {
   name: "yearlyQuarterlyCard",
   props: ["title", "units", "revenue"],
+  computed: {
+    isAPIFetchComplete() {
+      return this.$store.state.isAPIFetchComplete
+    },
+  }
 };
 </script>
