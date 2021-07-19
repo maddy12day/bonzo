@@ -232,6 +232,14 @@
     <h4 class="font-weight-bold" v-if="isFilteredForecast">
       Top 10 SKUs Forecast
     </h4>
+    <download-csv
+      @click="downloadAllSkusData"
+      class="btn btn-default"
+      :data="skusJsonData"
+      name="data.csv"
+    >
+      Download CSV
+    </download-csv>
     <ForecastBySkuTable
       v-if="isFilteredForecast"
       :tableHeading="'Revenue'"
@@ -317,6 +325,7 @@ export default {
       regularFiltersComponentKey: Math.random(),
       filteredStatsComponentKey: Math.random(),
       programFiltersComponentKey: Math.random(),
+      skusJsonData: [],
     };
   },
   methods: {
@@ -451,7 +460,21 @@ export default {
         this.filterPayload
       );
       this.topTenSkusData = topTenSkusData;
+      const csvJsonData = await this.$axios.$post(
+        "/download-all-skus-data",
+        this.filterPayload
+      );
+      this.skusJsonData = csvJsonData.parsedWeeklyData/* .map(item => {
+        return {
+          sku: item.sku,
+          title: item.title,
+          units: Object.assign({}, item.data.map(skuDetail => skuDetail.units_sales))
+        }
+      }); */
+      console.log(this.skusJsonData);
     },
+    async downloadAllSkusData() {},
+
     // async getFilteredForecastData(requestedFilterOption) {
     //   requestedFilterOption["filterType"] = "week";
     //   this.filterMonthly = false;
@@ -654,7 +677,10 @@ export default {
           progress: true,
         }
       );
-      this.baseAdjustmentsList.adjustments = this.baseAdjustmentsList.adjustments? this.baseAdjustmentsList.adjustments: [];
+      this.baseAdjustmentsList.adjustments = this.baseAdjustmentsList
+        .adjustments
+        ? this.baseAdjustmentsList.adjustments
+        : [];
     },
     forceRerender() {
       this.regularFiltersComponentKey += 1;
