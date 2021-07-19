@@ -2,7 +2,7 @@
   <div class="row">
     <el-dialog :visible.sync="showDialog" width="90%">
       <span slot="title"
-        ><i class="el-icon-info"></i>Manual AdjustmentTable Preview</span
+        ><i class="el-icon-info"></i>Manual Adjustment Preview</span
       >
       <!--   </div>
       </div> -->
