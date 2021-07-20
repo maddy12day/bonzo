@@ -228,18 +228,28 @@
         tableHeading="Filtered Monthly Forecast Metrics"
       />
     </card>
+    <div class="row">
+      <div class="col-md-3">
+        <h4 class="font-weight-bold" v-if="isFilteredForecast">
+          Top 10 SKUs Forecast
+        </h4>
+      </div>
+      <div class="col-md-3">
+        <a>
+          <download-csv
+          v-if="skusJsonData.length > 0 && isFilteredForecast"
+          @click="downloadAllSkusData"
+          class="btn btn-sm"
+          style="line-height:1"
+          :data="skusJsonData"
+          name="data.csv"
+        >
+          Download CSV
+        </download-csv>
+        </a>
+      </div>
+    </div>
 
-    <h4 class="font-weight-bold" v-if="isFilteredForecast">
-      Top 10 SKUs Forecast
-    </h4>
-    <download-csv
-      @click="downloadAllSkusData"
-      class="btn btn-default"
-      :data="skusJsonData"
-      name="data.csv"
-    >
-      Download CSV
-    </download-csv>
     <ForecastBySkuTable
       v-if="isFilteredForecast"
       :tableHeading="'Revenue'"
@@ -464,7 +474,8 @@ export default {
         "/download-all-skus-data",
         this.filterPayload
       );
-      this.skusJsonData = csvJsonData.parsedWeeklyData/* .map(item => {
+      this.skusJsonData =
+        csvJsonData.parsedWeeklyData; /* .map(item => {
         return {
           sku: item.sku,
           title: item.title,

@@ -1,4 +1,5 @@
 import { PrismaClient } from "@prisma/client";
+import moment from "moment";
 
 const prisma = new PrismaClient();
 
@@ -36,35 +37,35 @@ const weeklyCommonTableDataMappingForAll = (data) => {
     const revenueObj = {
       sku: uniqueSkus[i],
       title: uniqueSkusTitle[i],
+      Forecast: ""
     };
     const revenueSales = arr.map(
-      (item, index) => (revenueObj[`week-${index + 1}`] = item.retail_sales)
+      (item, index) => (revenueObj[`${moment(item.weekend).format('YYYY-MM-DD')}`] = item.retail_sales)
     );
-    finalData.push(
-      {
-        Forecast: "Revenue",
-        ...revenueObj,
-      });
-  
+    revenueObj["Forecast"] ="Revenue"; 
+    finalData.push({
+      ...revenueObj,
+    });
+
     const unitSales = arr.map(
-      (item, index) => (revenueObj[`week-${index + 1}`] = item.units_sales)
+      (item, index) => (revenueObj[`${moment(item.weekend).format('YYYY-MM-DD')}`] = item.units_sales)
     );
-    finalData.push(
-      {
-        Forecast:"Units",
-        ...revenueObj,
-      });
-  
+    delete revenueObj.title
+    delete revenueObj.sku
+    revenueObj["Forecast"] ="Units"; 
+    finalData.push({
+      ...revenueObj
+    });
+
     const aurSales = arr.map(
-      (item, index) => (
-        revenueObj[`week-${index + 1}`] = item.aur)
-    )
-    finalData.push(
-      {
-        Forecast:"AUR",
-        ...revenueObj,
-      });
-  
+      (item, index) => (revenueObj[`${moment(item.weekend).format('YYYY-MM-DD')}`] = item.aur)
+    );
+    delete revenueObj.title
+    delete revenueObj.sku
+    revenueObj["Forecast"] ="AUR"; 
+    finalData.push({
+      ...revenueObj
+    });
   }
   console.log(finalData);
   return finalData;
