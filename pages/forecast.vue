@@ -229,7 +229,7 @@
       />
     </card>
     <div class="row">
-      <div class="col-md-3">
+      <div class="col-md-2">
         <h4 class="font-weight-bold" v-if="isFilteredForecast">
           Top 10 SKUs Forecast
         </h4>
@@ -237,12 +237,13 @@
       <div class="col-md-3">
         <a>
           <download-csv
-          v-if="skusJsonData.length > 0 && isFilteredForecast"
+          v-if="isFilteredForecast"
           @click="downloadAllSkusData"
-          class="btn btn-sm"
-          style="line-height:1"
+          class="mt-1 btn btn-sm"
+          style="line-height:1;"
           :data="skusJsonData"
           name="data.csv"
+          :disabled="isDownloadCsvDisbled"
         >
           Download CSV
         </download-csv>
@@ -336,6 +337,7 @@ export default {
       filteredStatsComponentKey: Math.random(),
       programFiltersComponentKey: Math.random(),
       skusJsonData: [],
+      isDownloadCsvDisbled:true
     };
   },
   methods: {
@@ -466,6 +468,7 @@ export default {
     },
     async getFilteredTopSkus() {
       this.skusJsonData = [];
+      this.isDownloadCsvDisbled = true;
       const topTenSkusData = await this.$axios.$post(
         `/get-filtered-forecast-data`,
         this.filterPayload
@@ -476,7 +479,8 @@ export default {
         this.filterPayload
       );
       this.skusJsonData =
-        csvJsonData.parsedWeeklyData; /* .map(item => {
+        csvJsonData.parsedWeeklyData;
+      this.isDownloadCsvDisbled = false; /* .map(item => {
         return {
           sku: item.sku,
           title: item.title,

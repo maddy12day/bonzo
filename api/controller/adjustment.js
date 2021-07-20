@@ -123,6 +123,24 @@ export const checkAdjustmentStatus = async (req, res) => {
   }
 };
 
+//adjustment by id
+export const getAdjustmentById = async (req, res) => {
+  try {
+    const adjustments = await prisma.manual_adjustments.findUnique({
+      where: {
+        id: parseInt(req.params.id)
+      },
+    });
+    res.json({
+      adjustment: adjustments,
+    });
+  } catch (error) {
+    res.status(500).json({
+      error: `something went wrong in check scenario status api. ${error}`,
+    });
+  }
+};
+
 // master metrics api
 export const getMasterMetricsData = async (req, res) => {
   try {
