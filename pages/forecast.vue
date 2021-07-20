@@ -465,6 +465,7 @@ export default {
       this.filteredForecastMetrics = filteredWeeklyforecast;
     },
     async getFilteredTopSkus() {
+      this.skusJsonData = [];
       const topTenSkusData = await this.$axios.$post(
         `/get-filtered-forecast-data`,
         this.filterPayload
