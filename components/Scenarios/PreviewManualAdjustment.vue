@@ -4,6 +4,52 @@
       <span slot="title"
         ><i class="el-icon-info"></i>Manual Adjustment Preview</span
       >
+      <div class="card p-2 overflow-auto scenario-details-table">
+        <h5 class="text-bold font-weight-bold mb-0">Adjustment Details</h5>
+        <table class="table table-bordered " style="word-break: break-word;">
+        <thead style="word-wrap: break-word;">
+          <tr class="scenario-details-header">
+            <th v-if="adjustmentDetails.adjusted_metrics_name">Ajusted Name</th>
+            <th v-if="adjustmentDetails.adjusted_metrics_cell_date">
+              Adjusted Metrics Sale Date
+            </th>
+            <th v-if="adjustmentDetails.before_adjustment_value">
+              Before Adjusted Value
+            </th>
+            <th v-if="adjustmentDetails.new_adjusted_value">
+              New Adjusted Value
+            </th>
+            <th v-if="adjustmentDetails.status">Status</th>
+            <th v-if="adjustmentDetails.created_at">created at</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td v-if="adjustmentDetails.adjusted_metrics_name">
+              {{ adjustmentDetails.adjusted_metrics_name }}
+            </td>
+            <td v-if="adjustmentDetails.adjusted_metrics_cell_date">
+              {{ formatDate(adjustmentDetails.adjusted_metrics_cell_date) }}
+            </td>
+            <td v-if="adjustmentDetails.before_adjustment_value">
+              {{ adjustmentDetails.before_adjustment_value }}
+            </td>
+             <td v-if="adjustmentDetails.new_adjusted_value">
+              {{ adjustmentDetails.new_adjusted_value }}
+            </td>
+            <td v-if="adjustmentDetails.status">
+              {{ adjustmentDetails.status }}
+            </td>
+            <td v-if="adjustmentDetails.created_at">
+              {{ formatDate(adjustmentDetails.created_at) }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <p class="text-right">  <button class="btn btn-primary" @click="showDialog = false">
+            Activate
+          </button></p>
+      </div>
       <!--   </div>
       </div> -->
       <card
@@ -72,7 +118,7 @@
             <template slot-scope="scope">
               {{
                 scope.row.planned_gm_percent
-                  ? (scope.row.planned_gm_percen).toFixed(2)
+                  ? scope.row.planned_gm_percen.toFixed(2)
                   : 0 | toTwoDigitsFloat
               }}
             </template>
@@ -87,7 +133,7 @@
             <template slot-scope="scope">
               {{
                 scope.row.forecasted_gm_percent
-                  ? (scope.row.forecasted_gm_percent).toFixed(2)
+                  ? scope.row.forecasted_gm_percent.toFixed(2)
                   : 0 | toTwoDigitsFloat
               }}
             </template>
@@ -102,7 +148,7 @@
             <template slot-scope="scope">
               {{
                 scope.row.adjusted_gm_percent
-                  ? (scope.row.adjusted_gm_percent).toFixed(2)
+                  ? scope.row.adjusted_gm_percent.toFixed(2)
                   : 0 | toTwoDigitsFloat
               }}
             </template>
@@ -175,7 +221,7 @@
             <template slot-scope="scope">
               {{
                 scope.row.planned_gm_percent
-                  ? (scope.row.planned_gm_percent).toFixed(2)
+                  ? scope.row.planned_gm_percent.toFixed(2)
                   : 0 | toTwoDigitsFloat
               }}
             </template>
@@ -190,7 +236,7 @@
             <template slot-scope="scope">
               {{
                 scope.row.forecasted_gm_percent
-                  ?( scope.row.forecasted_gm_percent).toFixed(2)
+                  ? scope.row.forecasted_gm_percent.toFixed(2)
                   : 0 | toTwoDigitsFloat
               }}
             </template>
@@ -205,7 +251,7 @@
             <template slot-scope="scope">
               {{
                 scope.row.adjusted_gm_percent
-                  ? (scope.row.adjusted_gm_percent).toFixed(2)
+                  ? scope.row.adjusted_gm_percent.toFixed(2)
                   : 0 | toTwoDigitsFloat
               }}
             </template>
@@ -273,42 +319,42 @@
               <td class="text-right">
                 {{
                   col2.planned_revenue_percent
-                    ? (col2.planned_revenue_percent).toFixed(2)
+                    ? col2.planned_revenue_percent.toFixed(2)
                     : 0
                 }}
               </td>
               <td class="text-right">
                 {{
                   col2.forecasted_revenue_percent
-                    ? (col2.forecasted_revenue_percent).toFixed(2)
+                    ? col2.forecasted_revenue_percent.toFixed(2)
                     : 0
                 }}
               </td>
               <td class="text-right">
                 {{
                   col2.adjusted_revenue_percent
-                    ? (col2.adjusted_revenue_percent).toFixed(2)
+                    ? col2.adjusted_revenue_percent.toFixed(2)
                     : 0
                 }}
               </td>
               <td class="text-right">
                 {{
                   col2.planned_gm_percent
-                    ? (col2.planned_gm_percent).toFixed(2)
+                    ? col2.planned_gm_percent.toFixed(2)
                     : 0
                 }}
               </td>
               <td class="text-right">
                 {{
                   col2.forecasted_gm_percent
-                    ? (col2.forecasted_gm_percent).toFixed(2)
+                    ? col2.forecasted_gm_percent.toFixed(2)
                     : 0
                 }}
               </td>
               <td class="text-right">
                 {{
                   col2.adjusted_gm_percent
-                    ? (col2.adjusted_gm_percent).toFixed(2)
+                    ? col2.adjusted_gm_percent.toFixed(2)
                     : 0
                 }}
               </td>
@@ -385,17 +431,11 @@
           </tbody>
         </table>
       </card>
-      <span slot="footer" class="dialog-footer"> </span>
+   <!--    <span slot="footer" class="dialog-footer"> </span>
       <span slot="footer" class="dialog-footer">
         <div class="text-right">
-          <button class="btn btn-primary" @click="showDialog = false">
-            Activate
-          </button>
-       <!--    <button class="btn btn-primary" @click="showDialog = false">
-            Close
-          </button> -->
         </div>
-      </span>
+      </span> -->
     </el-dialog>
   </div>
 </template>
@@ -410,7 +450,7 @@ export default {
     [TableColumn.name]: TableColumn,
     [Dialog.name]: Dialog,
   },
-  props: ["dialogVisible", "adjustmentId"],
+  props: ["dialogVisible", "adjustmentId", "adjustmentDetails"],
   data() {
     return {
       showDialog: false,
@@ -432,6 +472,9 @@ export default {
     },
   },
   methods: {
+      formatDate(date) {
+      return moment(date).format("MM-DD-YYYY");
+    },
     async getAdjustmentSalesSummary() {
       this.adjustmentSalesSummary = await this.$axios.$get(
         `/get-adjustment-sales-summary/${this.adjustmentId}`
@@ -475,5 +518,25 @@ export default {
 table,
 tr td {
   padding: 5px 10px !important;
+}
+.el-dialog {
+  background: #f5f6fa;
+}
+.scenario-details-header th {
+  font-size: 10px !important;
+}
+
+.scenario-details-table {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.scenario-dialog {
+  .el-dialog {
+    height: 95%;
+    overflow-y: auto;
+    margin-top: 20px !important;
+  }
 }
 </style>

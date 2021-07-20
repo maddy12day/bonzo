@@ -757,7 +757,7 @@
 </template>
 <script>
 import { Table, TableColumn, Dialog } from "element-ui";
-import moment from 'moment'
+import moment from "moment";
 
 export default {
   name: "dashboard",
@@ -784,9 +784,9 @@ export default {
   },
 
   methods: {
-      formatDate(date) {
-   return moment(date).format("MM-DD-YYYY");
-  },
+    formatDate(date) {
+      return moment(date).format("MM-DD-YYYY");
+    },
     notifyVue(verticalAlign, horizontalAlign, message) {
       let color = 2;
       this.$notify({
