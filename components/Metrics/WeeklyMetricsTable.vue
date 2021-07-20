@@ -36,7 +36,7 @@
             align="right"
           >
             <template slot-scope="scope">{{
-              scope.row.w01 | toTwoDigitsFloat
+              scope.row.w01 | toLocaleStr
             }}</template>
           </el-table-column>
           <el-table-column
