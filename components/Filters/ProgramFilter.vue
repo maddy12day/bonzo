@@ -1739,6 +1739,11 @@ export default {
       this.$refs.collections.values = [];
       this.$refs.skus.values = [];
       this.subChannelValues = value.map((item) => item.name);
+      this.$emit(
+        "getSubChannelValues",
+        value.map((item) => item.name)
+      );
+
       let productSources;
       let brandTypes;
       let lifeCycles;
