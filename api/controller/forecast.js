@@ -67,7 +67,6 @@ const weeklyCommonTableDataMappingForAll = (data) => {
       ...revenueObj
     });
   }
-  console.log(finalData);
   return finalData;
 };
 // function for returning the where condition query parameters
@@ -261,7 +260,6 @@ export const downloadAllSkusData = async (req, res) => {
                 ORDER BY
                   dfbwm.sku,
                   dfbwm.weekend;`;
-    console.log(query);
     const filteredForecastData = await prisma.$queryRaw(query);
     let parsedWeeklyData = weeklyCommonTableDataMappingForAll(
       filteredForecastData
