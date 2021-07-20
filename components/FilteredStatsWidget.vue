@@ -1,6 +1,9 @@
 <template>
   <card card-body-classes="table-full-width">
-    <!-- {{isAPIFetchComplete}}--- -->
+    <div class="applied-filter-container" v-if="allAppliedFilters.length > 0">
+      <h5 class="text-bold font-weight-bold">Applied Filters</h5>
+      <Tags :allAppliedFilters="allAppliedFilters" />
+    </div>
     <div
       class="row"
       v-if="
@@ -351,9 +354,10 @@
 <script>
 import Card from "~/components/Cards/Card.vue";
 import YearlyQuarterlyCard from "../components/YearlyQuarterlyCards/YearlyQuarterlyCards.vue";
+import Tags from "../components/Tags.vue";
 
 export default {
-  props: ["filterPayload"],
+  props: ["filterPayload","allAppliedFilters"],
   data() {
     return {
       forecastYQData: {},
@@ -371,6 +375,7 @@ export default {
   components: {
     Card,
     YearlyQuarterlyCard,
+    Tags
   },
   methods: {
     async calloutByDuration(duration) {
