@@ -228,10 +228,29 @@
         tableHeading="Filtered Monthly Forecast Metrics"
       />
     </card>
+    <div class="row">
+      <div class="col-md-2">
+        <h4 class="font-weight-bold" v-if="isFilteredForecast">
+          Top 10 SKUs Forecast
+        </h4>
+      </div>
+      <div class="col-md-3">
+        <a>
+          <download-csv
+          v-if="isFilteredForecast"
+          @click="downloadAllSkusData"
+          class="mt-1 btn btn-sm"
+          style="line-height:1;"
+          :data="skusJsonData"
+          name="data.csv"
+          :disabled="isDownloadCsvDisbled"
+        >
+          Download CSV
+        </download-csv>
+        </a>
+      </div>
+    </div>
 
-    <h4 class="font-weight-bold" v-if="isFilteredForecast">
-      Top 10 SKUs Forecast
-    </h4>
     <ForecastBySkuTable
       v-if="isFilteredForecast"
       :tableHeading="'Revenue'"
@@ -317,6 +336,8 @@ export default {
       regularFiltersComponentKey: Math.random(),
       filteredStatsComponentKey: Math.random(),
       programFiltersComponentKey: Math.random(),
+      skusJsonData: [],
+      isDownloadCsvDisbled:true
     };
   },
   methods: {
@@ -446,12 +467,30 @@ export default {
       this.filteredForecastMetrics = filteredWeeklyforecast;
     },
     async getFilteredTopSkus() {
+      this.skusJsonData = [];
+      this.isDownloadCsvDisbled = true;
       const topTenSkusData = await this.$axios.$post(
         `/get-filtered-forecast-data`,
         this.filterPayload
       );
       this.topTenSkusData = topTenSkusData;
+      const csvJsonData = await this.$axios.$post(
+        "/download-all-skus-data",
+        this.filterPayload
+      );
+      this.skusJsonData =
+        csvJsonData.parsedWeeklyData;
+      this.isDownloadCsvDisbled = false; /* .map(item => {
+        return {
+          sku: item.sku,
+          title: item.title,
+          units: Object.assign({}, item.data.map(skuDetail => skuDetail.units_sales))
+        }
+      }); */
+      console.log(this.skusJsonData);
     },
+    async downloadAllSkusData() {},
+
     // async getFilteredForecastData(requestedFilterOption) {
     //   requestedFilterOption["filterType"] = "week";
     //   this.filterMonthly = false;
@@ -654,7 +693,10 @@ export default {
           progress: true,
         }
       );
-      this.baseAdjustmentsList.adjustments = this.baseAdjustmentsList.adjustments? this.baseAdjustmentsList.adjustments: [];
+      this.baseAdjustmentsList.adjustments = this.baseAdjustmentsList
+        .adjustments
+        ? this.baseAdjustmentsList.adjustments
+        : [];
     },
     forceRerender() {
       this.regularFiltersComponentKey += 1;
