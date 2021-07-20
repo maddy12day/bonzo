@@ -705,6 +705,9 @@ export default {
     },
   },
   computed: {
+    selectedFilters() {
+      return this.$store.state.appliedRegularFilter
+    },
     baseMetricsListCom() {
       return this.baseMetricsList;
     },

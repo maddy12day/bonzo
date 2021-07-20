@@ -2,7 +2,7 @@
   <div class="row">
     <el-dialog :visible.sync="showDialog" width="90%">
       <span slot="title"
-        ><i class="el-icon-info"></i>Manual AdjustmentTable Preview</span
+        ><i class="el-icon-info"></i>Manual Adjustment Preview</span
       >
       <div class="card p-2 overflow-auto scenario-details-table">
         <h5 class="text-bold font-weight-bold mb-0">Adjustment Details</h5>
