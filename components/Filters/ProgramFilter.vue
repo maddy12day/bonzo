@@ -82,10 +82,12 @@
             getSelectProgramChannels(event), updateGlobalFilterData(event)
           )
         "
-        :class="showChannelError? 'border border-danger rounded': ''"
+        :class="showChannelError ? 'border border-danger rounded' : ''"
         ref="channels"
       />
-      <p v-if="showChannelError" class="text-left text-danger small">Please select single channel</p>
+      <p v-if="showChannelError" class="text-left text-danger small">
+        Please select single channel
+      </p>
     </div>
     <div class="col-md-3 mt-2">
       <CustomMultiSelect
@@ -228,7 +230,7 @@ export default {
   },
   computed: {
     showChannelErrorCom() {
-      console.log(this.showChannelError)
+      console.log(this.showChannelError);
       return this.showChannelError;
     },
     applyCtaDisabled() {
@@ -262,7 +264,7 @@ export default {
       const optionGenerator = (data, keyName) => {
         return [
           /* { name: keyName }, */
-          ...[...new Set(data)].map((item) => {
+          ...[...new Set(data)].sort().map((item) => {
             return { name: item };
           }),
         ];
@@ -360,7 +362,7 @@ export default {
       const optionGenerator = (data, keyName) => {
         return [
           /* { name: keyName }, */
-          ...[...new Set(data)].map((item) => {
+          ...[...new Set(data)].sort().map((item) => {
             return { name: item };
           }),
         ];
@@ -532,67 +534,74 @@ export default {
           );
         }
       }
-      this.lifeCycleOptions = [
-        ...new Set(lifeCycle.map((item) => item.name)),
-      ].map((item) => {
-        return { name: item };
-      });
-      this.newnessOptions = [...new Set(newNess.map((item) => item.name))].map(
-        (item) => {
+      this.lifeCycleOptions = [...new Set(lifeCycle.map((item) => item.name))]
+        .sort()
+        .map((item) => {
           return { name: item };
-        }
-      );
-      this.programs = [...new Set(programs.map((item) => item.name))].map(
-        (item) => {
+        });
+      this.newnessOptions = [...new Set(newNess.map((item) => item.name))]
+        .sort()
+        .map((item) => {
           return { name: item };
-        }
-      );
-      this.brandOptions = [...new Set(brands.map((item) => item.name))].map(
-        (item) => {
+        });
+      this.programs = [...new Set(programs.map((item) => item.name))]
+        .sort()
+        .map((item) => {
           return { name: item };
-        }
-      );
-      this.channelOptions = [...new Set(channels.map((item) => item.name))].map(
-        (item) => {
+        });
+      this.brandOptions = [...new Set(brands.map((item) => item.name))]
+        .sort()
+        .map((item) => {
           return { name: item };
-        }
-      );
+        });
+      this.channelOptions = [...new Set(channels.map((item) => item.name))]
+        .sort()
+        .sort()
+        .map((item) => {
+          return { name: item };
+        });
       this.programSubChannels = [
         ...new Set(subChannels.map((item) => item.name)),
-      ].map((item) => {
-        return { name: item };
-      });
-      this.categoryOptions = [
-        ...new Set(categories.map((item) => item.name)),
-      ].map((item) => {
-        return { name: item };
-      });
-      this.classesOptions = [...new Set(classes.map((item) => item.name))].map(
-        (item) => {
+      ]
+        .sort()
+        .sort()
+        .map((item) => {
           return { name: item };
-        }
-      );
-      this.subClassesOptions = [
-        ...new Set(subClasses.map((item) => item.name)),
-      ].map((item) => {
-        return { name: item };
-      });
+        });
+      this.categoryOptions = [...new Set(categories.map((item) => item.name))]
+        .sort()
+        .map((item) => {
+          return { name: item };
+        });
+      this.classesOptions = [...new Set(classes.map((item) => item.name))]
+        .sort()
+        .sort()
+        .map((item) => {
+          return { name: item };
+        });
+      this.subClassesOptions = [...new Set(subClasses.map((item) => item.name))]
+        .sort()
+        .map((item) => {
+          return { name: item };
+        });
       this.programCollectionsOptions = [
         ...new Set(collections.map((item) => item.name)),
-      ].map((item) => {
-        return { name: item };
-      });
-      this.skuOptions = [...new Set(skus.map((item) => item.name))].map(
-        (item) => {
+      ]
+        .sort()
+        .map((item) => {
           return { name: item };
-        }
-      );
+        });
+      this.skuOptions = [...new Set(skus.map((item) => item.name))].sort()
+        .sort()
+        .map((item) => {
+          return { name: item };
+        });
     },
     getLifeCycle(value) {
       const optionGenerator = (data, keyName) => {
         return [
           /* { name: keyName }, */
-          ...[...new Set(data)].map((item) => {
+          ...[...new Set(data)].sort().map((item) => {
             return { name: item };
           }),
         ];
@@ -756,62 +765,69 @@ export default {
           }
         }
       }
-      this.newnessOptions = [...new Set(newNess.map((item) => item.name))].map(
-        (item) => {
+      this.newnessOptions = [...new Set(newNess.map((item) => item.name))]
+        .sort()
+        .map((item) => {
           return { name: item };
-        }
-      );
-      this.programs = [...new Set(programs.map((item) => item.name))].map(
-        (item) => {
+        });
+      this.programs = [...new Set(programs.map((item) => item.name))]
+        .sort()
+        .map((item) => {
           return { name: item };
-        }
-      );
-      this.brandOptions = [...new Set(brands.map((item) => item.name))].map(
-        (item) => {
+        });
+      this.brandOptions = [...new Set(brands.map((item) => item.name))]
+        .sort()
+        .map((item) => {
           return { name: item };
-        }
-      );
-      this.channelOptions = [...new Set(channels.map((item) => item.name))].map(
-        (item) => {
+        });
+      this.channelOptions = [...new Set(channels.map((item) => item.name))]
+        .sort()
+        .sort()
+        .map((item) => {
           return { name: item };
-        }
-      );
+        });
       this.programSubChannels = [
         ...new Set(subChannels.map((item) => item.name)),
-      ].map((item) => {
-        return { name: item };
-      });
-      this.categoryOptions = [
-        ...new Set(categories.map((item) => item.name)),
-      ].map((item) => {
-        return { name: item };
-      });
-      this.classesOptions = [...new Set(classes.map((item) => item.name))].map(
-        (item) => {
+      ]
+        .sort()
+        .sort()
+        .map((item) => {
           return { name: item };
-        }
-      );
-      this.subClassesOptions = [
-        ...new Set(subClasses.map((item) => item.name)),
-      ].map((item) => {
-        return { name: item };
-      });
+        });
+      this.categoryOptions = [...new Set(categories.map((item) => item.name))]
+        .sort()
+        .map((item) => {
+          return { name: item };
+        });
+      this.classesOptions = [...new Set(classes.map((item) => item.name))]
+        .sort()
+        .sort()
+        .map((item) => {
+          return { name: item };
+        });
+      this.subClassesOptions = [...new Set(subClasses.map((item) => item.name))]
+        .sort()
+        .map((item) => {
+          return { name: item };
+        });
       this.programCollectionsOptions = [
         ...new Set(collections.map((item) => item.name)),
-      ].map((item) => {
-        return { name: item };
-      });
-      this.skuOptions = [...new Set(skus.map((item) => item.name))].map(
-        (item) => {
+      ]
+        .sort()
+        .map((item) => {
           return { name: item };
-        }
-      );
+        });
+      this.skuOptions = [...new Set(skus.map((item) => item.name))].sort()
+        .sort()
+        .map((item) => {
+          return { name: item };
+        });
     },
     getNewness(value) {
       const optionGenerator = (data, keyName) => {
         return [
           /* { name: keyName }, */
-          ...[...new Set(data)].map((item) => {
+          ...[...new Set(data)].sort().map((item) => {
             return { name: item };
           }),
         ];
@@ -985,47 +1001,49 @@ export default {
           }
         }
       }
-      this.programs = [...new Set(programs.map((item) => item.name))].map(
-        (item) => {
+      this.programs = [...new Set(programs.map((item) => item.name))]
+        .sort()
+        .map((item) => {
           return { name: item };
-        }
-      );
-      this.brandOptions = [...new Set(brands.map((item) => item.name))].map(
-        (item) => {
+        });
+      this.brandOptions = [...new Set(brands.map((item) => item.name))]
+        .sort()
+        .map((item) => {
           return { name: item };
-        }
-      );
-      this.channelOptions = [...new Set(channels.map((item) => item.name))].map(
-        (item) => {
+        });
+      this.channelOptions = [...new Set(channels.map((item) => item.name))]
+        .sort()
+        .map((item) => {
           return { name: item };
-        }
-      );
+        });
       this.programSubChannels = [
         ...new Set(subChannels.map((item) => item.name)),
-      ].map((item) => {
-        return { name: item };
-      });
-      this.categoryOptions = [
-        ...new Set(categories.map((item) => item.name)),
-      ].map((item) => {
-        return { name: item };
-      });
-      this.classesOptions = [...new Set(classes.map((item) => item.name))].map(
-        (item) => {
+      ]
+        .sort()
+        .map((item) => {
           return { name: item };
-        }
-      );
-      this.subClassesOptions = [
-        ...new Set(subClasses.map((item) => item.name)),
-      ].map((item) => {
-        return { name: item };
-      });
+        });
+      this.categoryOptions = [...new Set(categories.map((item) => item.name))]
+        .sort()
+        .map((item) => {
+          return { name: item };
+        });
+      this.classesOptions = [...new Set(classes.map((item) => item.name))]
+        .sort()
+        .map((item) => {
+          return { name: item };
+        });
+      this.subClassesOptions = [...new Set(subClasses.map((item) => item.name))]
+        .sort()
+        .map((item) => {
+          return { name: item };
+        });
       this.programCollectionsOptions = [
         ...new Set(collections.map((item) => item.name)),
-      ].map((item) => {
+      ].sort().map((item) => {
         return { name: item };
       });
-      this.skuOptions = [...new Set(skus.map((item) => item.name))].map(
+      this.skuOptions = [...new Set(skus.map((item) => item.name))].sort().map(
         (item) => {
           return { name: item };
         }
@@ -1034,13 +1052,13 @@ export default {
     getAppliedFilters(value) {
       this.$emit("appliedFilters");
       this.$store.commit("toggleProgramFilterCTAState");
-      this.$store.commit("toggleStatsAPIResponseState",false);
+      this.$store.commit("toggleStatsAPIResponseState", false);
     },
     getSelectedBrands(value) {
       const optionGenerator = (data, keyName) => {
         return [
           /* { name: keyName }, */
-          ...[...new Set(data)].map((item) => {
+          ...[...new Set(data)].sort().map((item) => {
             return { name: item };
           }),
         ];
@@ -1223,37 +1241,39 @@ export default {
           return { name: item };
         }
       );
-      this.channelOptions = [...new Set(channels.map((item) => item.name))].map(
-        (item) => {
+      this.channelOptions = [...new Set(channels.map((item) => item.name))]
+        .sort()
+        .map((item) => {
           return { name: item };
-        }
-      );
+        });
       this.programSubChannels = [
         ...new Set(subChannels.map((item) => item.name)),
-      ].map((item) => {
-        return { name: item };
-      });
-      this.categoryOptions = [
-        ...new Set(categories.map((item) => item.name)),
-      ].map((item) => {
-        return { name: item };
-      });
-      this.classesOptions = [...new Set(classes.map((item) => item.name))].map(
-        (item) => {
+      ]
+        .sort()
+        .map((item) => {
           return { name: item };
-        }
-      );
-      this.subClassesOptions = [
-        ...new Set(subClasses.map((item) => item.name)),
-      ].map((item) => {
-        return { name: item };
-      });
+        });
+      this.categoryOptions = [...new Set(categories.map((item) => item.name))]
+        .sort()
+        .map((item) => {
+          return { name: item };
+        });
+      this.classesOptions = [...new Set(classes.map((item) => item.name))]
+        .sort()
+        .map((item) => {
+          return { name: item };
+        });
+      this.subClassesOptions = [...new Set(subClasses.map((item) => item.name))]
+        .sort()
+        .map((item) => {
+          return { name: item };
+        });
       this.programCollectionsOptions = [
         ...new Set(collections.map((item) => item.name)),
       ].map((item) => {
         return { name: item };
       });
-      this.skuOptions = [...new Set(skus.map((item) => item.name))].map(
+      this.skuOptions = [...new Set(skus.map((item) => item.name))].sort().map(
         (item) => {
           return { name: item };
         }
@@ -1263,7 +1283,7 @@ export default {
       const optionGenerator = (data, keyName) => {
         return [
           /* { name: keyName }, */
-          ...[...new Set(data)].map((item) => {
+          ...[...new Set(data)].sort().map((item) => {
             return { name: item };
           }),
         ];
@@ -1442,37 +1462,39 @@ export default {
           }
         }
       }
-      this.channelOptions = [...new Set(channels.map((item) => item.name))].map(
-        (item) => {
+      this.channelOptions = [...new Set(channels.map((item) => item.name))]
+        .sort()
+        .map((item) => {
           return { name: item };
-        }
-      );
+        });
       this.programSubChannels = [
         ...new Set(subChannels.map((item) => item.name)),
-      ].map((item) => {
-        return { name: item };
-      });
-      this.categoryOptions = [
-        ...new Set(categories.map((item) => item.name)),
-      ].map((item) => {
-        return { name: item };
-      });
-      this.classesOptions = [...new Set(classes.map((item) => item.name))].map(
-        (item) => {
+      ]
+        .sort()
+        .map((item) => {
           return { name: item };
-        }
-      );
-      this.subClassesOptions = [
-        ...new Set(subClasses.map((item) => item.name)),
-      ].map((item) => {
-        return { name: item };
-      });
+        });
+      this.categoryOptions = [...new Set(categories.map((item) => item.name))]
+        .sort()
+        .map((item) => {
+          return { name: item };
+        });
+      this.classesOptions = [...new Set(classes.map((item) => item.name))]
+        .sort()
+        .map((item) => {
+          return { name: item };
+        });
+      this.subClassesOptions = [...new Set(subClasses.map((item) => item.name))]
+        .sort()
+        .map((item) => {
+          return { name: item };
+        });
       this.programCollectionsOptions = [
         ...new Set(collections.map((item) => item.name)),
       ].map((item) => {
         return { name: item };
       });
-      this.skuOptions = [...new Set(skus.map((item) => item.name))].map(
+      this.skuOptions = [...new Set(skus.map((item) => item.name))].sort().map(
         (item) => {
           return { name: item };
         }
@@ -1482,7 +1504,7 @@ export default {
       const optionGenerator = (data, keyName) => {
         return [
           /* { name: keyName }, */
-          ...[...new Set(data)].map((item) => {
+          ...[...new Set(data)].sort().map((item) => {
             return { name: item };
           }),
         ];
@@ -1666,30 +1688,32 @@ export default {
       }
       this.programSubChannels = [
         ...new Set(subChannels.map((item) => item.name)),
-      ].map((item) => {
-        return { name: item };
-      });
-      this.categoryOptions = [
-        ...new Set(categories.map((item) => item.name)),
-      ].map((item) => {
-        return { name: item };
-      });
-      this.classesOptions = [...new Set(classes.map((item) => item.name))].map(
-        (item) => {
+      ]
+        .sort()
+        .map((item) => {
           return { name: item };
-        }
-      );
-      this.subClassesOptions = [
-        ...new Set(subClasses.map((item) => item.name)),
-      ].map((item) => {
-        return { name: item };
-      });
+        });
+      this.categoryOptions = [...new Set(categories.map((item) => item.name))]
+        .sort()
+        .map((item) => {
+          return { name: item };
+        });
+      this.classesOptions = [...new Set(classes.map((item) => item.name))]
+        .sort()
+        .map((item) => {
+          return { name: item };
+        });
+      this.subClassesOptions = [...new Set(subClasses.map((item) => item.name))]
+        .sort()
+        .map((item) => {
+          return { name: item };
+        });
       this.programCollectionsOptions = [
         ...new Set(collections.map((item) => item.name)),
       ].map((item) => {
         return { name: item };
       });
-      this.skuOptions = [...new Set(skus.map((item) => item.name))].map(
+      this.skuOptions = [...new Set(skus.map((item) => item.name))].sort().map(
         (item) => {
           return { name: item };
         }
@@ -1699,7 +1723,7 @@ export default {
       const optionGenerator = (data, keyName) => {
         return [
           /* { name: keyName }, */
-          ...[...new Set(data)].map((item) => {
+          ...[...new Set(data)].sort().map((item) => {
             return { name: item };
           }),
         ];
@@ -1883,27 +1907,27 @@ export default {
           }
         }
       }
-      this.categoryOptions = [
-        ...new Set(categories.map((item) => item.name)),
-      ].map((item) => {
-        return { name: item };
-      });
-      this.classesOptions = [...new Set(classes.map((item) => item.name))].map(
-        (item) => {
+      this.categoryOptions = [...new Set(categories.map((item) => item.name))]
+        .sort()
+        .map((item) => {
           return { name: item };
-        }
-      );
-      this.subClassesOptions = [
-        ...new Set(subClasses.map((item) => item.name)),
-      ].map((item) => {
-        return { name: item };
-      });
+        });
+      this.classesOptions = [...new Set(classes.map((item) => item.name))]
+        .sort()
+        .map((item) => {
+          return { name: item };
+        });
+      this.subClassesOptions = [...new Set(subClasses.map((item) => item.name))]
+        .sort()
+        .map((item) => {
+          return { name: item };
+        });
       this.programCollectionsOptions = [
         ...new Set(collections.map((item) => item.name)),
       ].map((item) => {
         return { name: item };
       });
-      this.skuOptions = [...new Set(skus.map((item) => item.name))].map(
+      this.skuOptions = [...new Set(skus.map((item) => item.name))].sort().map(
         (item) => {
           return { name: item };
         }
@@ -1913,7 +1937,7 @@ export default {
       const optionGenerator = (data, keyName) => {
         return [
           /* { name: keyName }, */
-          ...[...new Set(data)].map((item) => {
+          ...[...new Set(data)].sort().map((item) => {
             return { name: item };
           }),
         ];
@@ -2100,32 +2124,35 @@ export default {
           }
         }
       }
-      this.classesOptions = [...new Set(classes.map((item) => item.name))].map(
-        (item) => {
+      this.classesOptions = [...new Set(classes.map((item) => item.name))]
+        .sort()
+        .sort()
+        .map((item) => {
           return { name: item };
-        }
-      );
-      this.subClassesOptions = [
-        ...new Set(subClasses.map((item) => item.name)),
-      ].map((item) => {
-        return { name: item };
-      });
+        });
+      this.subClassesOptions = [...new Set(subClasses.map((item) => item.name))]
+        .sort()
+        .map((item) => {
+          return { name: item };
+        });
       this.programCollectionsOptions = [
         ...new Set(collections.map((item) => item.name)),
-      ].map((item) => {
-        return { name: item };
-      });
-      this.skuOptions = [...new Set(skus.map((item) => item.name))].map(
-        (item) => {
+      ]
+        .sort()
+        .map((item) => {
           return { name: item };
-        }
-      );
+        });
+      this.skuOptions = [...new Set(skus.map((item) => item.name))].sort()
+        .sort()
+        .map((item) => {
+          return { name: item };
+        });
     },
     getCategoryClasses(value) {
       const optionGenerator = (data, keyName) => {
         return [
           /* { name: keyName }, */
-          ...[...new Set(data)].map((item) => {
+          ...[...new Set(data)].sort().map((item) => {
             return { name: item };
           }),
         ];
@@ -2308,17 +2335,17 @@ export default {
           }
         }
       }
-      this.subClassesOptions = [
-        ...new Set(subClasses.map((item) => item.name)),
-      ].map((item) => {
-        return { name: item };
-      });
+      this.subClassesOptions = [...new Set(subClasses.map((item) => item.name))]
+        .sort()
+        .map((item) => {
+          return { name: item };
+        });
       this.programCollectionsOptions = [
         ...new Set(collections.map((item) => item.name)),
       ].map((item) => {
         return { name: item };
       });
-      this.skuOptions = [...new Set(skus.map((item) => item.name))].map(
+      this.skuOptions = [...new Set(skus.map((item) => item.name))].sort().map(
         (item) => {
           return { name: item };
         }
@@ -2332,7 +2359,7 @@ export default {
       const optionGenerator = (data, keyName) => {
         return [
           /* { name: keyName }, */
-          ...[...new Set(data)].map((item) => {
+          ...[...new Set(data)].sort().map((item) => {
             return { name: item };
           }),
         ];
@@ -2528,7 +2555,7 @@ export default {
       ].map((item) => {
         return { name: item };
       });
-      this.skuOptions = [...new Set(skus.map((item) => item.name))].map(
+      this.skuOptions = [...new Set(skus.map((item) => item.name))].sort().map(
         (item) => {
           return { name: item };
         }
@@ -2538,7 +2565,7 @@ export default {
       const optionGenerator = (data, keyName) => {
         return [
           /* { name: keyName }, */
-          ...[...new Set(data)].map((item) => {
+          ...[...new Set(data)].sort().map((item) => {
             return { name: item };
           }),
         ];
@@ -2731,7 +2758,7 @@ export default {
           }
         }
       }
-      this.skuOptions = [...new Set(skus.map((item) => item.name))].map(
+      this.skuOptions = [...new Set(skus.map((item) => item.name))].sort().map(
         (item) => {
           return { name: item };
         }
@@ -2743,76 +2770,74 @@ export default {
     },
   },
   async mounted() {
-    
-     const allRegularFilterJSON = await this.$axios.$get(
-       "/program-filter-dropdown-cache",
-       {
-         progress: true,
-       }
-     );
-       this.filterApiData = allRegularFilterJSON.response;
-       const res = await this.$axios.$get("filter-all-options-dropdown-cache", {
-         progress: true,
-       });
-       const optionGenerator = (data, keyName) => {
-         return [
-/*            { name: keyName }, */
-           ...[...new Set(Object.values(data))].map((item) => {
-             return { name: item };
-           }),
-         ];
-       };
-       this.productSourceOptions = optionGenerator(
-         res.response.program.product_source,
-         "All Sources"
-       );
-       this.lifeCycleOptions = optionGenerator(
-         res.response.program.life_cycle,
-         "All Life Cycles"
-       );
-       this.brandTypeOptions = optionGenerator(
-         res.response.program.brand_type,
-         "All Brand Type"
-       );
-       this.newnessOptions = optionGenerator(
-         res.response.program.newness,
-         "All Newness"
-       );
-       this.programs = optionGenerator(
-         res.response.program.collab,
-         "All Programs"
-       );
-       this.channelOptions = optionGenerator(
-         res.response.program.channel,
-         "All Channels"
-       );
-       this.programSubChannels = optionGenerator(
-         res.response.program.sub_channel,
-         "All Sub Channels"
-       );
-       this.categoryOptions = optionGenerator(
-         res.response.program.category,
-         "All Categories"
-       );
-       this.classesOptions = optionGenerator(
-         res.response.program.class,
-         "All Classes"
-       );
-       this.subClassesOptions = optionGenerator(
-         res.response.program.sub_class,
-         "All Sub Classes"
-       );
-       this.programCollectionsOptions = optionGenerator(
-         res.response.program.collection,
-         "All Collections"
-       );
-       this.skuOptions = optionGenerator(res.response.program.sku, "All SKUs");
-       this.brandOptions = optionGenerator(
-         res.response.program.brand,
-         "All Brands"
-       );
-  }
-  
+    const allRegularFilterJSON = await this.$axios.$get(
+      "/program-filter-dropdown-cache",
+      {
+        progress: true,
+      }
+    );
+    this.filterApiData = allRegularFilterJSON.response;
+    const res = await this.$axios.$get("filter-all-options-dropdown-cache", {
+      progress: true,
+    });
+    const optionGenerator = (data, keyName) => {
+      return [
+        /*            { name: keyName }, */
+        ...[...new Set(Object.values(data))].sort().map((item) => {
+          return { name: item };
+        }),
+      ];
+    };
+    this.productSourceOptions = optionGenerator(
+      res.response.program.product_source,
+      "All Sources"
+    );
+    this.lifeCycleOptions = optionGenerator(
+      res.response.program.life_cycle,
+      "All Life Cycles"
+    );
+    this.brandTypeOptions = optionGenerator(
+      res.response.program.brand_type,
+      "All Brand Type"
+    );
+    this.newnessOptions = optionGenerator(
+      res.response.program.newness,
+      "All Newness"
+    );
+    this.programs = optionGenerator(
+      res.response.program.collab,
+      "All Programs"
+    );
+    this.channelOptions = optionGenerator(
+      res.response.program.channel,
+      "All Channels"
+    );
+    this.programSubChannels = optionGenerator(
+      res.response.program.sub_channel,
+      "All Sub Channels"
+    );
+    this.categoryOptions = optionGenerator(
+      res.response.program.category,
+      "All Categories"
+    );
+    this.classesOptions = optionGenerator(
+      res.response.program.class,
+      "All Classes"
+    );
+    this.subClassesOptions = optionGenerator(
+      res.response.program.sub_class,
+      "All Sub Classes"
+    );
+    this.programCollectionsOptions = optionGenerator(
+      res.response.program.collection,
+      "All Collections"
+    );
+    this.skuOptions = optionGenerator(res.response.program.sku, "All SKUs");
+    this.brandOptions = optionGenerator(
+      res.response.program.brand,
+      "All Brands"
+    );
+  },
 };
 </script>
 <style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
