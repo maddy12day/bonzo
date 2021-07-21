@@ -97,6 +97,8 @@
         :scenarioCategorySalesComparison="scenarioCategorySalesComparison"
         :scenarioCategoryComparison="scenarioCategoryComparison"
         :previewBtnText="'Unmerge'"
+        :scenarioDetails="scenarioDetails"
+        :currentScenarioStatus="currentScenarioStatus"
       />
     </div>
   </div>
@@ -121,6 +123,8 @@ export default {
       currentScenarioId: null,
       page: 1,
       pageSize: 3,
+      scenarioDetails: {},
+      currentScenarioStatus: {},
       typeColor: ["", "info", "success", "warning", "danger"],
     };
   },
@@ -148,6 +152,12 @@ export default {
       this.scenarioCategoryComparison = await this.$axios.$get(
         `/get-scenario-category-comparison/${data.id}`
       );
+         const scenarioDetails = await this.$axios.$get(
+        `/get-scenario-detail-by-id/${data.id}`
+      );
+      console.log("scenarioDetails", scenarioDetails, data.id);
+       this.scenarioDetails = scenarioDetails.scenario;
+      this.currentScenarioStatus = scenarioDetails.scenario;
       this.dialogVisible = true;
     },
 

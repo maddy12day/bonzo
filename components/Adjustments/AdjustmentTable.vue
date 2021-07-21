@@ -107,6 +107,7 @@
       :dialogVisible="dialogVisible"
       @dialogVisibleEvt="handleDialogue"
       :adjustmentId="adjustmentId"
+      :adjustmentDetails="adjustmentDetails"
     />
   </div>
 </template>
@@ -129,6 +130,7 @@ export default {
       pageSize: 2,
       dialogVisible: false,
       adjustmentId: null,
+      adjustmentDetails: {}
     };
   },
   computed: {
@@ -155,6 +157,14 @@ export default {
       this.adjustmentId = data.id;
       console.log(this.adjustmentId);
       this.dialogVisible = true;
+       const adjustmentData = await this.$axios.$get(
+          `/get-adjustment/${data.id}`,
+       {
+         progress: true,
+       }
+     );
+     this.adjustmentDetails = adjustmentData.adjustment;
+     console.log("dfsdfsdfdsfsdfds-------------",adjustmentData);
       // alert("Get Adjustment influenced metrics and show modal popup.");
     },
     tableRowClassName({ row }) {

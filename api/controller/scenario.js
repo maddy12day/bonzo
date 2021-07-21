@@ -139,7 +139,7 @@ export const createScenario = async (req, res) => {
 
 // Function Used to Parse the data into El Table Friendly Format
 export const parseCategoryUnitComparision = (results) => {
-  const fields = ["Planned Units", "Adjusted Units", "Forecast Units"];
+  const fields = ["Planned Units",  "Forecast Units", "Adjusted Units"];
   let parsedData = [];
   for (let field of fields) {
     let index = 0;
@@ -148,20 +148,20 @@ export const parseCategoryUnitComparision = (results) => {
     newObject["Comparision"] = field;
     if (field == "Planned Units") {
       for (let result of results) {
-        let currWeek = moment(new Date(result.weekend)).week();
+        let currWeek = moment(new Date(result.weekend)).week()-1;
         newObject[`W-${currWeek}`] = result.planned_units;
         parsedData.push(newObject);
       }
-    } else if (field == "Adjusted Units") {
-      for (let result of results) {
-        let currWeek = moment(new Date(result.weekend)).week();
-        newObject[`W-${currWeek}`] = result.adjusted_units;
+    } else if (field == "Forecast Units") {
+       for (let result of results) {
+        let currWeek = moment(new Date(result.weekend)).week()-1;
+        newObject[`W-${currWeek}`] = result.forecasted_units;
         parsedData.push(newObject);
       }
     } else {
       for (let result of results) {
-        let currWeek = moment(new Date(result.weekend)).week();
-        newObject[`W-${currWeek}`] = result.forecasted_units;
+        let currWeek = moment(new Date(result.weekend)).week()-1;
+        newObject[`W-${currWeek}`] = result.adjusted_units;
         parsedData.push(newObject);
       }
     }
@@ -176,7 +176,7 @@ export const parseCategoryUnitComparision = (results) => {
 
 // Function Used to Parse the data into El Table Friendly Format
 export const parseCategorySaleComparision = (results) => {
-  const fields = ["Planned Revenue", "Adjusted Revenue", "Forecast Revenue"];
+  const fields = ["Planned Revenue", "Forecast Revenue", "Adjusted Revenue"];
   let parsedData = [];
   for (let field of fields) {
     let index = 0;
@@ -185,20 +185,20 @@ export const parseCategorySaleComparision = (results) => {
     newObject["Comparision"] = field;
     if (field == "Planned Revenue") {
       for (let result of results) {
-        let currWeek = moment(new Date(result.weekend)).week();
+        let currWeek = moment(new Date(result.weekend)).week()-1;
         newObject[`W-${currWeek}`] = result.planned_revenue;
         parsedData.push(newObject);
       }
-    } else if (field == "Adjusted Revenue") {
+    } else if (field == "Forecast Revenue") {
       for (let result of results) {
-        let currWeek = moment(new Date(result.weekend)).week();
-        newObject[`W-${currWeek}`] = result.adjusted_revenue;
-        parsedData.push(newObject);
-      }
+        let currWeek = moment(new Date(result.weekend)).week()-1;
+       newObject[`W-${currWeek}`] = result.forecasted_revenue;
+       parsedData.push(newObject);
+     }
     } else {
       for (let result of results) {
-         let currWeek = moment(new Date(result.weekend)).week();
-        newObject[`W-${currWeek}`] = result.forecasted_revenue;
+        let currWeek = moment(new Date(result.weekend)).week()-1;
+        newObject[`W-${currWeek}`] = result.adjusted_revenue;
         parsedData.push(newObject);
       }
     }
@@ -213,7 +213,7 @@ export const parseCategorySaleComparision = (results) => {
 
 // Function Used to Parse the data into El Table Friendly Format
 const parseUnitSaleComparision = (results) => {
-  const fields = ["Planned Units", "Adjusted Units", "Forecast Units"];
+  const fields = ["Planned Units", "Forecast Units", "Adjusted Units"];
   let parsedData = [];
   for (let field of fields) {
     const newObject = {};
@@ -221,20 +221,21 @@ const parseUnitSaleComparision = (results) => {
     newObject["Comparision"] = field;
     if (field == "Planned Units") {
       for (let result of results) {
-        let currWeek = moment(new Date(result.weekend)).week();
+        let currWeek = moment(new Date(result.weekend)).week()-1;
         newObject[`W-${currWeek}`] = result.planned_units;
         parsedData.push(newObject);
       }
-    } else if (field == "Adjusted Units") {
+    } else if (field == "Forecast Units") {
       for (let result of results) {
-        let currWeek = moment(new Date(result.weekend)).week();
-        newObject[`W-${currWeek}`] = result.adjusted_units;
+        let currWeek = moment(new Date(result.weekend)).week()-1;
+        newObject[`W-${currWeek}`] = result.forecasted_units;
         parsedData.push(newObject);
       }
-    } else {
-      for (let result of results) {
-        let currWeek = moment(new Date(result.weekend)).week();
-        newObject[`W-${currWeek}`] = result.forecasted_units;
+
+    } else {  
+    for (let result of results) {
+        let currWeek = moment(new Date(result.weekend)).week()-1;
+        newObject[`W-${currWeek}`] = result.adjusted_units;
         parsedData.push(newObject);
       }
     }
@@ -249,7 +250,11 @@ const parseUnitSaleComparision = (results) => {
 
 // Function Used to Parse the data into El Table Friendly Format
 const parseUnitRevenueComparision = (results) => {
-  const fields = ["Planned Revenue", "Adjusted Revenue", "Forecast Revenue"];
+
+
+
+  
+  const fields = ["Planned Revenue", "Forecast Revenue", "Adjusted Revenue"];
   let parsedData = [];
   for (let field of fields) {
     const newObject = {};
@@ -257,20 +262,20 @@ const parseUnitRevenueComparision = (results) => {
     newObject["Comparision"] = field;
     if (field == "Planned Revenue") {
       for (let result of results) {
-        let currWeek = moment(new Date(result.weekend)).week();
+        let currWeek = moment(new Date(result.weekend)).week()-1;
         newObject[`W-${currWeek}`] = result.planned_revenue;
         parsedData.push(newObject);
       }
-    } else if (field == "Adjusted Revenue") {
+    } else if (field == "Forecast Revenue") {
       for (let result of results) {
-        let currWeek = moment(new Date(result.weekend)).week();
-        newObject[`W-${currWeek}`] = result.adjusted_revenue;
-        parsedData.push(newObject);
-      }
+        let currWeek = moment(new Date(result.weekend)).week()-1;
+       newObject[`W-${currWeek}`] = result.forecasted_revenue;
+       parsedData.push(newObject);
+     }
     } else {
       for (let result of results) {
-         let currWeek = moment(new Date(result.weekend)).week();
-        newObject[`W-${currWeek}`] = result.forecasted_revenue;
+        let currWeek = moment(new Date(result.weekend)).week()-1;
+        newObject[`W-${currWeek}`] = result.adjusted_revenue;
         parsedData.push(newObject);
       }
     }
@@ -485,8 +490,19 @@ export const getScenarioDetailsById = async (req, res) => {
         id: parseInt(req.params.id),
       },
     });
+    const scenarioTypes = await prisma.scenario_types.findUnique({
+      where: {
+        id: scenario.scenario_type_id
+      },
+      select: {
+        scenario_type: true
+      }
+    });
     res.json({
-      scenario,
+      scenario: {
+        ...scenario,
+        ...scenarioTypes
+      },
     });
   } catch (error) {
     res.json({
@@ -508,12 +524,13 @@ export const activeMergedScenarioAsBase = async(req, res) => {
     console.log("before run log ")
     const whereIsbaseForecstFalse = await prisma.$queryRaw(`update morphe_staging.demand_forecast_run_log set is_base_forecast=false where is_base_forecast= true`);
     console.log("before whereIsbaseForecstTrue")
+    console.log(`update morphe_staging.demand_forecast_run_log set is_base_forecast=true where scenario_id=${parseInt(req.params.id)} AND forecast_type='Merge' AND status='Merge Completed'`)
     const whereIsbaseForecstTrue = await prisma.$queryRaw(`update morphe_staging.demand_forecast_run_log set is_base_forecast=true where scenario_id=${parseInt(req.params.id)} AND forecast_type='Merge' AND status='Merge Completed'`);;
     console.log("after whereIsbaseForecstTrue")
 
     res.json({
       isPartOfBase,
-    });
+    });   
   } catch (error) {
     res.json({
       error: `something went activeMergedScenarioAsBase  ${error}.`,

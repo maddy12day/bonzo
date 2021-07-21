@@ -33,9 +33,9 @@
         >Welcome <b>{{ $auth.user.first_name }} {{ $auth.user.last_name }}</b
         >!&nbsp;&nbsp;</span
       >
-      <a href="/logout" title="Logout"
+      <span @click="logOut()" title="Logout" class="user-logout"
         ><i class="tim-icons icon-button-power"></i
-      ></a>
+      ></span>
     </ul>
   </base-nav>
 </template>
@@ -71,9 +71,9 @@ export default {
     };
   },
   methods: {
-    logOut() {
-      localStorage.removeItem("token");
-      this.$router.push("/");
+    async logOut() {
+      await this.$auth.logout();
+      this.$router.push("/login");
     },
     capitalizeFirstLetter(string) {
       if (!string || typeof string !== "string") {
@@ -97,7 +97,7 @@ export default {
 .top-navbar {
   top: 0px;
 }
-.logout {
+.user-logout {
   cursor: pointer;
 }
 </style>

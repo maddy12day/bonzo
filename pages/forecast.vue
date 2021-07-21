@@ -26,8 +26,8 @@
           class="btn-custom-div"
           v-if="
             !isFilteredPageDataLoading &&
-            showRegularResetFilter &&
-            activeFilterType == 'Regular'
+              showRegularResetFilter &&
+              activeFilterType == 'Regular'
           "
           @click="resetFilter"
         >
@@ -39,8 +39,8 @@
           class="btn-custom-div"
           v-if="
             !isFilteredPageDataLoading &&
-            showProgramResetFilter &&
-            activeFilterType == 'Program'
+              showProgramResetFilter &&
+              activeFilterType == 'Program'
           "
           @click="resetFilter"
         >
@@ -89,11 +89,10 @@
         ref="programFilter"
         :key="programFiltersComponentKey"
       />
-
-      <div class="applied-filter-container" v-if="allAppliedFilters.length > 0">
+      <div class="applied-filter-container" v-if="selectedFilters.length > 0">
         <br />
-        <h4 class="text-bold font-weight-bold">Applied Filters</h4>
-        <Tags :allAppliedFilters="allAppliedFilters" />
+        <h4 class="text-bold font-weight-bold">Selected Filters</h4>
+        <Tags :allAppliedFilters="selectedFilters" />
       </div>
     </card>
     <!-- Applied filters pills (Vishal) -->
@@ -160,9 +159,11 @@
       />
       <div class="col-md-12 text-right">
         <button
-          :class="`btn btn-primary btn-sm text-left ${
-            disbledCom || showManualAdj ? 'disabled' : ''
-          }`"
+          :class="
+            `btn btn-primary btn-sm text-left ${
+              disbledCom || showManualAdj ? 'disabled' : ''
+            }`
+          "
           @click="switchToManualAdj"
           :disabled="disbledCom || showManualAdj"
           v-if="!changeMABtnText && activeTab == 'Weekly'"
@@ -170,9 +171,9 @@
           Manual Adjustment
         </button>
         <button
-          :class="`btn btn-primary btn-sm text-left ${
-            disbledCom ? 'disabled' : ''
-          }`"
+          :class="
+            `btn btn-primary btn-sm text-left ${disbledCom ? 'disabled' : ''}`
+          "
           @click="createManualAdjustment"
           v-if="changeMABtnText"
           :disabled="disbledCom"
@@ -218,35 +219,59 @@
         v-if="filteredActiveTab == 'Weekly'"
         :filteredForecastMetrics="filteredForecastMetrics"
         tableHeading="Filtered Weekly Forecast Metrics"
+        :allAppliedFilters="allAppliedFilters"
       />
 
       <FilteredMonthlyMetricsTable
         v-if="filteredActiveTab == 'Monthly'"
         :filteredForecastMetrics="filteredForecastMetrics"
         tableHeading="Filtered Monthly Forecast Metrics"
+        :allAppliedFilters="allAppliedFilters"
       />
     </card>
+    <div class="row">
+      <div class="col-md-2">
+        <h4 class="font-weight-bold" v-if="isFilteredForecast">
+          Top 10 SKUs Forecast
+        </h4>
+      </div>
+      <div class="col-md-3">
+        <a>
+          <download-csv
+          v-if="isFilteredForecast"
+          @click="downloadAllSkusData"
+          class="mt-1 btn btn-sm"
+          style="line-height:1;"
+          :data="skusJsonData"
+          name="data.csv"
+          :disabled="isDownloadCsvDisbled"
+        >
+          Download CSV
+        </download-csv>
+        </a>
+      </div>
+    </div>
 
-    <h4 class="font-weight-bold" v-if="isFilteredForecast">
-      Top 10 SKUs Forecast
-    </h4>
     <ForecastBySkuTable
       v-if="isFilteredForecast"
       :tableHeading="'Revenue'"
       :forecast_attribute="'retail_sales'"
       :topTenSkusData="topTenSkusData"
+      :allAppliedFilters="allAppliedFilters"
     />
     <ForecastBySkuTable
       v-if="isFilteredForecast"
       :tableHeading="'Units Sales'"
       :forecast_attribute="'units_sales'"
       :topTenSkusData="topTenSkusData"
+      :allAppliedFilters="allAppliedFilters"
     />
     <ForecastBySkuTable
       v-if="isFilteredForecast"
       :tableHeading="'AUR'"
       :forecast_attribute="'aur'"
       :topTenSkusData="topTenSkusData"
+      :allAppliedFilters="allAppliedFilters"
     />
     <!-- </div> -->
   </div>
@@ -315,51 +340,93 @@ export default {
       regularFiltersComponentKey: Math.random(),
       filteredStatsComponentKey: Math.random(),
       programFiltersComponentKey: Math.random(),
+      selectedFilterOptions: [],
+      skusJsonData: [],
+      isDownloadCsvDisbled:true
     };
   },
   methods: {
     // filter value getter methods
     getProductSource(values) {
       this.productSourceValues = values;
+      this.getSelectedFilters();
     },
     getBrandType(values) {
       this.brandTypeValues = values;
+      this.getSelectedFilters();
     },
     getLifeCycle(values) {
       this.lifeCycleValues = values;
+      this.getSelectedFilters();
     },
     getNewness(values) {
       this.newNessValues = values;
+      this.getSelectedFilters();
     },
     getBrandValus(values) {
       this.brandValues = values;
+      this.getSelectedFilters();
     },
     getChannelValues(values) {
       this.channelValues = values;
+      this.getSelectedFilters();
     },
     getPrograms(values) {
       this.programValues = values;
+      this.getSelectedFilters();
     },
     getSubChannelValues(values) {
       this.subChannelsValues = values;
+      this.getSelectedFilters();
     },
     getCategoryValues(values) {
       this.categoriesValues = values;
+      this.getSelectedFilters();
     },
     getClassValues(values) {
       this.classesValues = values;
+      this.getSelectedFilters();
     },
     getSubClassValues(values) {
       this.subClassesValues = values;
+      this.getSelectedFilters();
     },
     getCollectionValues(values) {
       this.collectionValues = values;
+      this.getSelectedFilters();
     },
     getSkusValues(values) {
       this.skuValues = values;
+      this.getSelectedFilters();
     },
     getScenarioType(values) {
       this.scenarioTypeValue = values.id;
+      this.getSelectedFilters();
+    },
+    getSelectedFilters () {
+      let selectedFilter = {
+        filter_product_sources: this.productSourceValues,
+        filter_brand_types: this.brandTypeValues,
+        filter_life_cycles: this.lifeCycleValues,
+        filter_newness: this.newNessValues,
+        filter_brands: this.brandValues,
+        filter_channels: this.channelValues,
+        filter_sub_channels: this.subChannelsValues,
+        filter_categories: this.categoriesValues,
+        filter_collections: this.collectionValues,
+        filter_skus: this.skuValues,
+        filter_classes: this.classesValues,
+        filter_sub_classes: this.subClassesValues,
+        filter_programs: this.programValues,
+      };
+      selectedFilter = this.emptyFieldCleaner(selectedFilter);
+      this.selectedFilterOptions = []
+      for (let [key, value] of Object.entries(selectedFilter)) {
+        this.selectedFilterOptions.push(
+          key.replace("filter_", "").replace("_", " ") + ": " + value.join(", ")
+        );
+      }
+console.log("selectedFilterOptions",selectedFilter);
     },
     // manual adjustments
     discardChanges() {
@@ -432,6 +499,8 @@ export default {
     showFilterType(type) {
       this.activeFilterType = type;
       this.$store.commit("updateRegularFilter", []);
+      this.resetFilterPayloadOptions();
+      this.selectedFilterOptions = [];
     },
     async getFilteredWeeklyMetrics(requestedFilterOption) {
       requestedFilterOption["filterType"] = "week";
@@ -443,32 +512,28 @@ export default {
       this.filteredForecastMetrics = filteredWeeklyforecast;
     },
     async getFilteredTopSkus() {
+      this.skusJsonData = [];
+      this.isDownloadCsvDisbled = true;
       const topTenSkusData = await this.$axios.$post(
         `/get-filtered-forecast-data`,
         this.filterPayload
       );
       this.topTenSkusData = topTenSkusData;
+      const csvJsonData = await this.$axios.$post(
+        "/download-all-skus-data",
+        this.filterPayload
+      );
+      this.skusJsonData =
+        csvJsonData.parsedWeeklyData;
+      this.isDownloadCsvDisbled = false; /* .map(item => {
+        return {
+          sku: item.sku,
+          title: item.title,
+          units: Object.assign({}, item.data.map(skuDetail => skuDetail.units_sales))
+        }
+      }); */
+      console.log(this.skusJsonData);
     },
-    // async getFilteredForecastData(requestedFilterOption) {
-    //   requestedFilterOption["filterType"] = "week";
-    //   this.filterMonthly = false;
-    //   this.filterWeekly = true;
-    //   this.$store.commit("updateLoadingstate", true);
-    //   const [weeklyforecast, filteredForecastMetrics] = await Promise.all([
-    //     this.$axios.$post(`/get-filtered-forecast-data`, this.regularFilters),
-    //     this.$axios.$post(
-    //       `/get-filtered-forecast-metrics`,
-    //       requestedFilterOption
-    //     ),
-    //   ]);
-
-    //   this.weeklyforecast = weeklyforecast;
-    //   this.filteredForecastMetrics = filteredForecastMetrics;
-
-    //   this.$store.commit("toggleCTAState");
-    //   this.$store.commit("toggleProgramFilterCTAState");
-    //   this.$store.commit("updateLoadingstate", false);
-    // },
     emptyFieldCleaner(reqBody) {
       for (let key in reqBody) {
         if (reqBody[key] == "" || reqBody[key] == undefined) {
@@ -488,13 +553,6 @@ export default {
           });
         }
       }
-      // for (let key in reqBody) {
-
-      //   if (reqBody[key] == null || reqBody[key] == undefined) {
-      //     delete reqBody[key];
-      //     console.log("reqBody,", reqBody);
-      //   }
-      // }
       return reqBody;
     },
     // create manual adjustments
@@ -512,7 +570,7 @@ export default {
         new_adjusted_value: parseFloat(this.adustments.new_value),
         status: "Pending",
       });
-      this.baseAdjustmentsList.adjustments.unshift(res.manualAjustment);
+      this.baseAdjustmentsList.adjustmentsResponse.unshift(res.manualAjustment);
       this.baseMetricsList = JSON.parse(
         localStorage.getItem("adjustmentTableData")
       );
@@ -555,13 +613,23 @@ export default {
             ) {
               this.callToIntervalAjax = false;
               this.disbleAdjustment = false;
-              this.baseAdjustmentsList.adjustments[0].status =
-                adjustmentsJson.adjustment.status;
+              if (
+                this.baseAdjustmentsList &&
+                this.baseAdjustmentsList.adjustmentsResponse[0]
+              ) {
+                this.baseAdjustmentsList.adjustmentsResponse[0].status =
+                  adjustmentsJson.adjustment.status;
+              }
             } else {
               this.disbleAdjustment = true;
               this.callToIntervalAjax = true;
-              this.baseAdjustmentsList.adjustments[0].status =
-                adjustmentsJson.adjustment.status;
+              if (
+                this.baseAdjustmentsList &&
+                this.baseAdjustmentsList.adjustmentsResponse[0]
+              ) {
+                this.baseAdjustmentsList.adjustmentsResponse[0].status =
+                  adjustmentsJson.adjustment.status;
+              }
             }
           }
         }
@@ -572,6 +640,8 @@ export default {
       this.isFilteredForecast = false;
       this.$store.commit("updateRegularFilter", []);
       this.allAppliedFilters = [];
+      this.resetFilterPayloadOptions();
+      this.selectedFilterOptions = [];
     },
     resetFilterPayloadOptions() {
       this.productSourceValues = [];
@@ -606,7 +676,7 @@ export default {
         filter_sub_classes: this.subClassesValues,
         filter_programs: this.programValues,
       };
-      this.resetFilterPayloadOptions();
+      // this.resetFilterPayloadOptions();
       let requestedFilterOption = this.emptyFieldCleaner(this.filterPayload);
       this.allAppliedFilters = [];
       for (let [key, value] of Object.entries(this.filterPayload)) {
@@ -615,12 +685,13 @@ export default {
         );
       }
       // await this.getFilteredForecastData(requestedFilterOption);
+      this.filteredStatsComponentKey += 1;
       this.getFilteredTopSkus();
       await this.getFilteredWeeklyMetrics(requestedFilterOption);
       this.isFilteredPageDataLoading = false;
       this.$store.commit("toggleCTAState");
       this.$store.commit("toggleProgramFilterCTAState");
-      this.filteredStatsComponentKey += 1;
+      // this.filteredStatsComponentKey += 1;
     },
     notifyVue(verticalAlign, horizontalAlign, message, type) {
       this.$notify({
@@ -639,6 +710,10 @@ export default {
           progress: true,
         }
       );
+      this.baseAdjustmentsList.adjustments = this.baseAdjustmentsList
+        .adjustments
+        ? this.baseAdjustmentsList.adjustments
+        : [];
     },
     forceRerender() {
       this.regularFiltersComponentKey += 1;
@@ -647,6 +722,9 @@ export default {
     },
   },
   computed: {
+    selectedFilters() {
+      return this.selectedFilterOptions
+    },
     baseMetricsListCom() {
       return this.baseMetricsList;
     },

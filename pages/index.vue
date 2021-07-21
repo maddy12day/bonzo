@@ -20,7 +20,7 @@
     <ScenarioTable
       v-if="
         sharedScenariosList.scenarios &&
-        sharedScenariosListCom.scenarios.length > 0
+          sharedScenariosListCom.scenarios.length > 0
       "
       tableHeading="Shared Scenarios"
       :scenarioTableData="sharedScenariosListCom.scenarios"
