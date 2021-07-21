@@ -1740,7 +1740,7 @@ export default {
       this.$refs.skus.values = [];
       this.subChannelValues = value.map((item) => item.name);
       this.$emit(
-        "getSubChannelValues",
+        "getSubChannel",
         value.map((item) => item.name)
       );
 
