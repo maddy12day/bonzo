@@ -37,7 +37,7 @@
         </div>
       </div>
     </template>
-    <div class="chart-area">
+    <div class="chart-area" >
       <line-chart
         style="height: 100%"
         ref="forecastChart"
@@ -56,31 +56,6 @@ import LineChart from "@/components/Charts/LineChart";
 import * as chartConfigs from "@/components/Charts/config";
 import config from "@/config";
 
-let weeklyUnitsChartData = [
-  [
-    100, 70, 90, 70, 85, 60, 75, 60, 90, 80, 110, 100, 80, 120, 105, 110, 95,
-    105, 90, 100, 80, 95, 70, 120, 60, 80, 65, 130, 80, 105, 90, 130, 70, 115,
-    60, 130, 100, 70, 90, 70, 85, 60, 75, 60, 90, 80, 110, 100, 80, 120, 105,
-    110,
-  ],
-  [
-    60, 90, 80, 110, 100, 80, 120, 105, 110, 95, 105, 90, 100, 80, 95, 70, 120,
-    60, 80, 65, 130, 80, 105, 90, 130, 70, 115, 60, 130, 100, 70, 90, 70, 85,
-    60, 75, 60, 90, 80, 110, 100, 80, 120, 105, 110, 100, 70, 90, 70, 85, 60,
-    75,
-  ],
-  [
-    120, 60, 80, 65, 130, 80, 105, 90, 130, 70, 115, 60, 130, 100, 70, 90, 70,
-    85, 60, 75, 60, 90, 80, 110, 100, 80, 120, 105, 110, 100, 70, 90, 70, 85,
-    60, 75, 60, 90, 80, 110, 100, 80, 120, 105, 110, 95, 105, 90, 100, 80, 95,
-    70,
-  ],
-];
-let monthlyUnitsChartData = [
-  [80, 120, 105, 110, 95, 105, 90, 100, 80, 95, 170, 120],
-  [60, 80, 65, 130, 80, 105, 90, 130, 70, 115, 60, 130],
-  [100, 70, 90, 70, 85, 60, 75, 60, 90, 80, 110, 100],
-];
 let weeklyChartLabels = [
   "W01",
   "W02",
@@ -150,21 +125,6 @@ let monthlyChartLabels = [
   "DEC",
 ];
 
-let chartDatasetOptions = {
-  fill: true,
-  borderColor: config.colors.primary,
-  borderWidth: 2,
-  borderDash: [],
-  borderDashOffset: 0.0,
-  pointBackgroundColor: config.colors.primary,
-  pointBorderColor: "rgba(255,255,255,0)",
-  pointHoverBackgroundColor: config.colors.primary,
-  pointBorderWidth: 20,
-  pointHoverRadius: 4,
-  pointHoverBorderWidth: 15,
-  pointRadius: 4,
-};
-
 export default {
   name: "ChartWidget",
   components: {
@@ -173,14 +133,13 @@ export default {
   data() {
     return {
       activeIndex: 1,
+      chartWeeklylApiJsonData: [],
+      weeklyUnitsChartData: [],
+      monthlyUnitsChartData: [],
+      chartMonthlyApiJsonData: [],
       lineChart: {
         chartData: {
-          datasets: [
-            {
-              ...chartDatasetOptions,
-              data: weeklyUnitsChartData[0],
-            },
-          ],
+          datasets: [{}, {}, {}],
           labels: weeklyChartLabels,
         },
         extraOptions: chartConfigs.purpleChartOptions,
@@ -203,14 +162,133 @@ export default {
     },
   },
   methods: {
+    async baseWeeklyChart() {
+      const chartData = await this.$axios.$get("/weekly-base-forecast-chart");
+      this.chartWeeklylApiJsonData = chartData;
+      this.changeWeeklyDataByType("Units");
+    },
+    async baseMonthlyChart() {
+      const chartData = await this.$axios.$get("/monthly-base-forecast-chart");
+      this.chartMonthlyApiJsonData = chartData;
+      this.changeMonthDataByType("Units");
+    },
+    changeWeeklyDataByType(forecastType) {
+      let plannedData = [];
+      let thisYearData = [];
+      let forecastData = [];
+      switch (forecastType) {
+        case "Units":
+          plannedData = this.chartWeeklylApiJsonData.plannedData.map(
+            (item) => item.units
+          );
+          thisYearData = this.chartWeeklylApiJsonData.thisYearData.map(
+            (item) => item.units
+          );
+          forecastData = Object.values(
+            this.chartWeeklylApiJsonData.forecastData[0]
+          );
+          break;
+        case "Revenue":
+          plannedData = this.chartWeeklylApiJsonData.plannedData.map(
+            (item) => item.revenue
+          );
+          thisYearData = this.chartWeeklylApiJsonData.thisYearData.map(
+            (item) => item.revenue
+          );
+          forecastData = Object.values(
+            this.chartWeeklylApiJsonData.forecastData[1]
+          );
+          break;
+      }
+      this.weeklyUnitsChartData[0] = plannedData;
+      this.weeklyUnitsChartData[1] = thisYearData;
+      this.weeklyUnitsChartData[2] = forecastData;
+      this.initForecastChart(1);
+      console.log(this.weeklyUnitsChartData);
+    },
+    changeMonthDataByType(forecastType) {
+      let plannedData = [];
+      let thisYearData = [];
+      let forecastData = [];
+      switch (forecastType) {
+        case "Units":
+          plannedData = this.chartMonthlyApiJsonData.plannedData.map(
+            (item) => item.units
+          );
+          thisYearData = this.chartMonthlyApiJsonData.thisYearData.map(
+            (item) => item.units
+          );
+          forecastData = Object.values(
+            this.chartMonthlyApiJsonData.forecastData[0]
+          );
+          break;
+        case "Revenue":
+          plannedData = this.chartMonthlyApiJsonData.plannedData.map(
+            (item) => item.revenue
+          );
+          thisYearData = this.chartMonthlyApiJsonData.thisYearData.map(
+            (item) => item.revenue
+          );
+          forecastData = Object.values(
+            this.chartMonthlyApiJsonData.forecastData[1]
+          );
+          break;
+      }
+      this.monthlyUnitsChartData[0] = plannedData;
+      this.monthlyUnitsChartData[1] = thisYearData;
+      this.monthlyUnitsChartData[2] = forecastData;
+      this.initForecastChart(1);
+      console.log(this.weeklyUnitsChartData);
+    },
     initForecastChart(index) {
       this.activeIndex = index;
       if (index == 0) {
         let chartData = {
           datasets: [
             {
-              ...chartDatasetOptions,
-              data: monthlyUnitsChartData[0],
+              fill: false,
+              borderColor: "#1d8cf8",
+              borderWidth: 2,
+              borderDash: [],
+              borderDashOffset: 0.0,
+              pointBackgroundColor: "",
+              pointBorderColor: "",
+              pointHoverBackgroundColor: "#1d8cf8",
+              pointBorderWidth: 1,
+              pointHoverRadius: 4,
+              pointHoverBorderWidth: 15,
+              pointRadius: 1,
+              data: this.monthlyUnitsChartData[0],
+            },
+            {
+              fill: false,
+              borderColor: config.colors.primary,
+              borderWidth: 2,
+              borderDash: [],
+              borderDashOffset: 0.0,
+              pointBackgroundColor: config.colors.primary,
+              pointBorderColor: "rgba(255,255,255,0)",
+              pointHoverBackgroundColor: config.colors.primary,
+              pointBorderWidth: 1,
+              pointHoverRadius: 4,
+              pointHoverBorderWidth: 15,
+              pointRadius: 1,
+              data: this.monthlyUnitsChartData[1],
+            },
+            {
+              fill: false,
+              borderColor: "#d48d23d9",
+              borderWidth: 2,
+              borderDash: [],
+              borderDashOffset: 0.0,
+              pointBackgroundColor: "",
+              pointBorderColor: "#d48d23d9",
+              pointHoverBackgroundColor: "",
+              pointBorderWidth: 1,
+              pointHoverRadius: 4,
+              pointHoverBorderWidth: 15,
+              pointRadius: 1,
+              data: this.monthlyUnitsChartData[2],
             },
           ],
           labels: monthlyChartLabels,
@@ -222,8 +300,49 @@ export default {
         let chartData = {
           datasets: [
             {
-              ...chartDatasetOptions,
-              data: weeklyUnitsChartData[0],
+              fill: false,
+              borderColor: "#1d8cf8",
+              borderWidth: 2,
+              borderDash: [],
+              borderDashOffset: 0.0,
+              pointBackgroundColor: "",
+              pointBorderColor: "",
+              pointHoverBackgroundColor: "#1d8cf8",
+              pointBorderWidth: 1,
+              pointHoverRadius: 4,
+              pointHoverBorderWidth: 15,
+              pointRadius: 1,
+              data: this.weeklyUnitsChartData[0],
+            },
+            {
+              fill: false,
+              borderColor: config.colors.primary,
+              borderWidth: 2,
+              borderDash: [],
+              borderDashOffset: 0.0,
+              pointBackgroundColor: config.colors.primary,
+              pointBorderColor: "rgba(255,255,255,0)",
+              pointHoverBackgroundColor: config.colors.primary,
+              pointBorderWidth: 1,
+              pointHoverRadius: 4,
+              pointHoverBorderWidth: 15,
+              pointRadius: 1,
+              data: this.weeklyUnitsChartData[1],
+            },
+            {
+              fill: false,
+              borderColor: "#d48d23d9",
+              borderWidth: 2,
+              borderDash: [],
+              borderDashOffset: 0.0,
+              pointBackgroundColor: "",
+              pointBorderColor: "#d48d23d9",
+              pointHoverBackgroundColor: "",
+              pointBorderWidth: 1,
+              pointHoverRadius: 4,
+              pointHoverBorderWidth: 15,
+              pointRadius: 1,
+              data: this.weeklyUnitsChartData[2],
             },
           ],
           labels: weeklyChartLabels,
@@ -234,10 +353,10 @@ export default {
     },
   },
   mounted() {
-    this.initForecastChart(1);
+    this.baseWeeklyChart();
+    this.baseMonthlyChart();
   },
 };
 </script>
 
-<style>
-</style>
+<style></style>

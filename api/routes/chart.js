@@ -1,7 +1,9 @@
 import { Router } from "express";
-import { getWeeklyChartData } from "../controller/chart";
+import { getMonthlyChartBaseData, getWeeklyChartBaseData, getWeeklyChartData } from "../controller/chart";
 
 const router = Router();
 router.get("/weekly-chart-data", getWeeklyChartData);
+router.get('/weekly-base-forecast-chart', getWeeklyChartBaseData);
+router.get('/monthly-base-forecast-chart', getMonthlyChartBaseData)
 
 export default router;
