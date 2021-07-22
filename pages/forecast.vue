@@ -147,11 +147,13 @@
         tableHeading="Edit Forecast Metrics"
         @EvtAdjValues="getAdjustedValues"
       />
-      <WeeklyMetricsTable
-        v-if="activeTab == 'Weekly' && !showManualAdj"
-        :metricsTableData="baseMetricsListCom"
-        tableHeading="Base Weekly Forecast Metrics"
-      />
+      <client-only>
+        <WeeklyMetricsTable
+          v-if="activeTab == 'Weekly' && !showManualAdj"
+          :metricsTableData="baseMetricsListCom"
+          tableHeading="Base Weekly Forecast Metrics"
+        />
+      </client-only>
       <MonthlyMetricsTable
         v-if="activeTab == 'Monthly'"
         :metricsTableData="baseMetricsListCom"
@@ -239,7 +241,6 @@
         <a>
           <download-csv
           v-if="isFilteredForecast"
-          @click="downloadAllSkusData"
           class="mt-1 btn btn-sm"
           style="line-height:1;"
           :data="skusJsonData"

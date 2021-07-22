@@ -232,7 +232,10 @@ export const downloadAllSkusData = async (req, res) => {
                         ${whereQueryString(req.body, "idfbwm").replace(
                           /dp/g,
                           "idp"
-                        )})
+                        )}
+                        AND idp.life_cycle <> 'OBSOLETE'
+                        AND YEAR(idp.launch_date) <= YEAR(CURRENT_DATE())
+                        )
                   group by 1
                   order by 2 desc )
                 SELECT
@@ -260,6 +263,8 @@ export const downloadAllSkusData = async (req, res) => {
                 ORDER BY
                   dfbwm.sku,
                   dfbwm.weekend;`;
+
+                  console.log("query---",query);
     const filteredForecastData = await prisma.$queryRaw(query);
     let parsedWeeklyData = weeklyCommonTableDataMappingForAll(
       filteredForecastData
@@ -405,7 +410,6 @@ export const getFilteredForecastMetrics = async (req, res) => {
   countryFilter1 != null
     ? (countryQuery1 = `AND ${whereQueryString(countryFilter, "dfbwm2")}`)
     : (countryQuery1 = "");
-  console.log("countryFilter1---", countryFilter1);
 
   if (regularQuery.length == 4) {
     regularQuery = "";
@@ -523,7 +527,7 @@ export const getFilteredForecastMetrics = async (req, res) => {
       filteredForecastData
     );
     res.status(200).json({
-      parsedFilteredForecastData,
+      parsedFilteredForecastData,filteredForecastData
     });
   } catch (error) {
     res.status(500).json({

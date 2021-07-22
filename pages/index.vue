@@ -50,11 +50,13 @@
           </label>
         </div>
       </div>
-      <WeeklyMetricsTable
-        v-if="activeTab == 'Weekly'"
-        :metricsTableData="baseMetricsList"
-        tableHeading="Weekly Forecast Metrics"
-      />
+      <client-only>
+        <WeeklyMetricsTable
+          v-if="activeTab == 'Weekly'"
+          :metricsTableData="baseMetricsList"
+          tableHeading="Weekly Forecast Metrics"
+        />
+      </client-only>
       <MonthlyMetricsTable
         v-if="activeTab == 'Monthly'"
         :metricsTableData="baseMetricsList"
@@ -173,6 +175,7 @@ export default {
       );
     },
     async getWeekendDates() {
+      console.log("111111");
       const weekendDates = await this.$axios.$get("/get-weekend-dates");
       window.localStorage.setItem(
         "allUsersInfo",
@@ -183,6 +186,7 @@ export default {
         "weekendDates",
         JSON.stringify(weekendDates.weekends)
       );
+      console.log("111113331");
     },
   },
   async mounted() {
