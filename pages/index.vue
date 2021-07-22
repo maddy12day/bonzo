@@ -188,6 +188,7 @@ export default {
     },
   },
   async mounted() {
+    console.log("opopopoop00---");
     this.getTimelineDetails();
     this.showMetricsByDuration("Weekly");
     this.getAllUserData();
