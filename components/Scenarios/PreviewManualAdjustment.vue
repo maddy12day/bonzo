@@ -363,9 +363,9 @@
         </table>
       </card>
       <card v-if="adjustmentUnitSalesCategoryComparison.parsedData">
-        <h4 class="font-weight-bold">Category Revenue Comparision</h4>
+        <h4 class="font-weight-bold">Category Revenue Comparison</h4>
         <table
-          class="bg-danger table table-bordered bg-white overflow-scroll"
+          class="bg-danger table table-bordered bg-white preview-table overflow-scroll"
           style="overflow-x: scroll"
         >
           <thead v-if="adjustmentUnitSalesCategoryComparison.parsedData">
@@ -398,9 +398,9 @@
         </table>
       </card>
       <card v-if="adjustmentUnitSalesCategoryComparison.parsedData">
-        <h4 class="font-weight-bold">Category Units Comparision</h4>
+        <h4 class="font-weight-bold">Category Units Comparison</h4>
         <table
-          class="bg-danger table table-bordered bg-white overflow-scroll"
+          class="bg-danger table table-bordered bg-white preview-table overflow-scroll"
           style="overflow-x: scroll"
         >
           <thead>
@@ -508,7 +508,7 @@ export default {
   },
 };
 </script>
-<style lang="scss" scoped>
+<style lang="scss">
 .el-dialog {
   background: #f5f6fa;
 }
@@ -531,6 +531,12 @@ tr td {
   top: 0;
   z-index: 100;
 }
+
+.preview-table {
+    display: inline-table;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
 
 .scenario-dialog {
   .el-dialog {

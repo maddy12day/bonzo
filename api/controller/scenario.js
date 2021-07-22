@@ -149,19 +149,19 @@ export const parseCategoryUnitComparision = (results) => {
     if (field == "Planned Units") {
       for (let result of results) {
         let currWeek = moment(new Date(result.weekend)).week()-1;
-        newObject[`W-${currWeek}`] = result.planned_units;
+        newObject[`W-${currWeek} (${moment(result.weekend).format('YYYY-MM-DD')})`] = result.planned_units;
         parsedData.push(newObject);
       }
     } else if (field == "Forecast Units") {
        for (let result of results) {
         let currWeek = moment(new Date(result.weekend)).week()-1;
-        newObject[`W-${currWeek}`] = result.forecasted_units;
+        newObject[`W-${currWeek} (${moment(result.weekend).format('YYYY-MM-DD')})`] = result.forecasted_units;
         parsedData.push(newObject);
       }
     } else {
       for (let result of results) {
         let currWeek = moment(new Date(result.weekend)).week()-1;
-        newObject[`W-${currWeek}`] = result.adjusted_units;
+        newObject[`W-${currWeek} (${moment(result.weekend).format('YYYY-MM-DD')})`] = result.adjusted_units;
         parsedData.push(newObject);
       }
     }
@@ -186,19 +186,19 @@ export const parseCategorySaleComparision = (results) => {
     if (field == "Planned Revenue") {
       for (let result of results) {
         let currWeek = moment(new Date(result.weekend)).week()-1;
-        newObject[`W-${currWeek}`] = result.planned_revenue;
+        newObject[`W-${currWeek} (${moment(result.weekend).format('YYYY-MM-DD')})`] = result.planned_revenue;
         parsedData.push(newObject);
       }
     } else if (field == "Forecast Revenue") {
       for (let result of results) {
         let currWeek = moment(new Date(result.weekend)).week()-1;
-       newObject[`W-${currWeek}`] = result.forecasted_revenue;
+       newObject[`W-${currWeek} (${moment(result.weekend).format('YYYY-MM-DD')})`] = result.forecasted_revenue;
        parsedData.push(newObject);
      }
     } else {
       for (let result of results) {
         let currWeek = moment(new Date(result.weekend)).week()-1;
-        newObject[`W-${currWeek}`] = result.adjusted_revenue;
+        newObject[`W-${currWeek} (${moment(result.weekend).format('YYYY-MM-DD')})`] = result.adjusted_revenue;
         parsedData.push(newObject);
       }
     }
@@ -222,20 +222,20 @@ const parseUnitSaleComparision = (results) => {
     if (field == "Planned Units") {
       for (let result of results) {
         let currWeek = moment(new Date(result.weekend)).week()-1;
-        newObject[`W-${currWeek}`] = result.planned_units;
+        newObject[`W-${currWeek} (${moment(result.weekend).format('YYYY-MM-DD')})`] = result.planned_units;
         parsedData.push(newObject);
       }
     } else if (field == "Forecast Units") {
       for (let result of results) {
         let currWeek = moment(new Date(result.weekend)).week()-1;
-        newObject[`W-${currWeek}`] = result.forecasted_units;
+        newObject[`W-${currWeek} (${moment(result.weekend).format('YYYY-MM-DD')})`] = result.forecasted_units;
         parsedData.push(newObject);
       }
 
     } else {  
     for (let result of results) {
         let currWeek = moment(new Date(result.weekend)).week()-1;
-        newObject[`W-${currWeek}`] = result.adjusted_units;
+        newObject[`W-${currWeek} (${moment(result.weekend).format('YYYY-MM-DD')})`] = result.adjusted_units;
         parsedData.push(newObject);
       }
     }
@@ -250,10 +250,6 @@ const parseUnitSaleComparision = (results) => {
 
 // Function Used to Parse the data into El Table Friendly Format
 const parseUnitRevenueComparision = (results) => {
-
-
-
-  
   const fields = ["Planned Revenue", "Forecast Revenue", "Adjusted Revenue"];
   let parsedData = [];
   for (let field of fields) {
@@ -263,19 +259,19 @@ const parseUnitRevenueComparision = (results) => {
     if (field == "Planned Revenue") {
       for (let result of results) {
         let currWeek = moment(new Date(result.weekend)).week()-1;
-        newObject[`W-${currWeek}`] = result.planned_revenue;
+        newObject[`W-${currWeek} (${moment(result.weekend).format('YYYY-MM-DD')})`] = result.planned_revenue;
         parsedData.push(newObject);
       }
     } else if (field == "Forecast Revenue") {
       for (let result of results) {
         let currWeek = moment(new Date(result.weekend)).week()-1;
-       newObject[`W-${currWeek}`] = result.forecasted_revenue;
+       newObject[`W-${currWeek} (${moment(result.weekend).format('YYYY-MM-DD')})`] = result.forecasted_revenue;
        parsedData.push(newObject);
      }
     } else {
       for (let result of results) {
         let currWeek = moment(new Date(result.weekend)).week()-1;
-        newObject[`W-${currWeek}`] = result.adjusted_revenue;
+        newObject[`W-${currWeek} (${moment(result.weekend).format('YYYY-MM-DD')})`] = result.adjusted_revenue;
         parsedData.push(newObject);
       }
     }

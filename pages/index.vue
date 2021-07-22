@@ -50,11 +50,13 @@
           </label>
         </div>
       </div>
-      <WeeklyMetricsTable
-        v-if="activeTab == 'Weekly'"
-        :metricsTableData="baseMetricsList"
-        tableHeading="Weekly Forecast Metrics"
-      />
+      <client-only>
+        <WeeklyMetricsTable
+          v-if="activeTab == 'Weekly'"
+          :metricsTableData="baseMetricsList"
+          tableHeading="Weekly Forecast Metrics"
+        />
+      </client-only>
       <MonthlyMetricsTable
         v-if="activeTab == 'Monthly'"
         :metricsTableData="baseMetricsList"
