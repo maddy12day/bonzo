@@ -175,7 +175,6 @@ export default {
       );
     },
     async getWeekendDates() {
-      console.log("111111");
       const weekendDates = await this.$axios.$get("/get-weekend-dates");
       window.localStorage.setItem(
         "allUsersInfo",
@@ -186,7 +185,6 @@ export default {
         "weekendDates",
         JSON.stringify(weekendDates.weekends)
       );
-      console.log("111113331");
     },
   },
   async mounted() {
