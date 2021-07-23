@@ -232,7 +232,11 @@ export const downloadAllSkusData = async (req, res) => {
                         ${whereQueryString(req.body, "idfbwm").replace(
                           /dp/g,
                           "idp"
-                        )})
+                        )}
+                        AND idp.life_cycle <> 'OBSOLETE'
+                        AND idp.life_cycle <> 'disco'
+                        AND YEAR(idp.launch_date) <= YEAR(CURRENT_DATE())
+                        )
                   group by 1
                   order by 2 desc )
                 SELECT

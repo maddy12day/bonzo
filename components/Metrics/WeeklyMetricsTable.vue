@@ -8,7 +8,6 @@
         <el-table :data="metricsTableData">
           <el-table-column
             min-width="170"
-            sortable
             label="Metrics Name"
             property="metrics_master.title"
             class-name="metrics-fix-header"
@@ -17,8 +16,7 @@
           </el-table-column>
 
           <el-table-column
-            min-width="180"
-            sortable
+            min-width="150"
             label="Yearly"
             property="yearly_aggregate"
             align="right"
@@ -29,8 +27,7 @@
           </el-table-column>
 
           <el-table-column
-            min-width="180"
-            sortable
+            min-width="150"
             :label="`w1 ${getWeekendDates(1)}`"
             property="w01"
             align="right"
@@ -40,8 +37,7 @@
             }}</template>
           </el-table-column>
           <el-table-column
-            min-width="180"
-            sortable
+            min-width="150"
             :label="`w2 ${getWeekendDates(2)}`"
             property="w02"
             align="right"
@@ -51,8 +47,7 @@
             }}</template>
           </el-table-column>
           <el-table-column
-            min-width="180"
-            sortable
+            min-width="150"
             :label="`w3 ${getWeekendDates(3)}`"
             property="w03"
             align="right"
@@ -62,8 +57,7 @@
             }}</template>
           </el-table-column>
           <el-table-column
-            min-width="180"
-            sortable
+            min-width="150"
             :label="`w4 ${getWeekendDates(4)}`"
             property="w40"
             align="right"
@@ -73,8 +67,7 @@
             }}</template>
           </el-table-column>
           <el-table-column
-            min-width="180"
-            sortable
+            min-width="150"
             :label="`w5 ${getWeekendDates(5)}`"
             property="w05"
             align="right"
@@ -84,8 +77,7 @@
             }}</template>
           </el-table-column>
           <el-table-column
-            min-width="180"
-            sortable
+            min-width="150"
             :label="`w6 ${getWeekendDates(6)}`"
             property="w06"
             align="right"
@@ -95,8 +87,7 @@
             }}</template>
           </el-table-column>
           <el-table-column
-            min-width="180"
-            sortable
+            min-width="150"
             :label="`w7 ${getWeekendDates(7)}`"
             property="w07"
             align="right"
@@ -106,8 +97,7 @@
             }}</template>
           </el-table-column>
           <el-table-column
-            min-width="180"
-            sortable
+            min-width="150"
             :label="`w8 ${getWeekendDates(8)}`"
             property="w08"
             align="right"
@@ -117,8 +107,7 @@
             }}</template>
           </el-table-column>
           <el-table-column
-            min-width="180"
-            sortable
+            min-width="150"
             :label="`w9 ${getWeekendDates(9)}`"
             property="w09"
             align="right"
@@ -128,8 +117,7 @@
             }}</template>
           </el-table-column>
           <el-table-column
-            min-width="180"
-            sortable
+            min-width="150"
             :label="`w10 ${getWeekendDates(10)}`"
             property="w10"
             align="right"
@@ -139,8 +127,7 @@
             }}</template>
           </el-table-column>
           <el-table-column
-            min-width="180"
-            sortable
+            min-width="150"
             :label="`w11 ${getWeekendDates(11)}`"
             property="w11"
             align="right"
@@ -150,8 +137,7 @@
             }}</template>
           </el-table-column>
           <el-table-column
-            min-width="180"
-            sortable
+            min-width="150"
             :label="`w12 ${getWeekendDates(12)}`"
             property="w12"
             align="right"
@@ -161,8 +147,7 @@
             }}</template>
           </el-table-column>
           <el-table-column
-            min-width="180"
-            sortable
+            min-width="150"
             :label="`w13 ${getWeekendDates(13)}`"
             property="w13"
             align="right"
@@ -172,8 +157,7 @@
             }}</template>
           </el-table-column>
           <el-table-column
-            min-width="180"
-            sortable
+            min-width="150"
             :label="`w14 ${getWeekendDates(14)}`"
             property="w14"
             align="right"
@@ -183,8 +167,7 @@
             }}</template>
           </el-table-column>
           <el-table-column
-            min-width="180"
-            sortable
+            min-width="150"
             :label="`w15 ${getWeekendDates(15)}`"
             property="w15"
             align="right"
@@ -194,8 +177,7 @@
             }}</template>
           </el-table-column>
           <el-table-column
-            min-width="180"
-            sortable
+            min-width="150"
             :label="`w16 ${getWeekendDates(16)}`"
             property="w16"
             align="right"
@@ -205,8 +187,7 @@
             }}</template>
           </el-table-column>
           <el-table-column
-            min-width="180"
-            sortable
+            min-width="150"
             :label="`w17 ${getWeekendDates(17)}`"
             property="w17"
             align="right"
@@ -216,8 +197,7 @@
             }}</template>
           </el-table-column>
           <el-table-column
-            min-width="180"
-            sortable
+            min-width="150"
             :label="`w18 ${getWeekendDates(18)}`"
             property="w18"
             align="right"
@@ -227,8 +207,7 @@
             }}</template>
           </el-table-column>
           <el-table-column
-            min-width="180"
-            sortable
+            min-width="150"
             :label="`w19 ${getWeekendDates(19)}`"
             property="w19"
             align="right"
@@ -238,8 +217,7 @@
             }}</template>
           </el-table-column>
           <el-table-column
-            min-width="180"
-            sortable
+            min-width="150"
             :label="`w20 ${getWeekendDates(20)}`"
             property="w20"
             align="right"
@@ -249,8 +227,7 @@
             }}</template>
           </el-table-column>
           <el-table-column
-            min-width="180"
-            sortable
+            min-width="150"
             :label="`w21 ${getWeekendDates(21)}`"
             property="w21"
             align="right"
@@ -260,8 +237,7 @@
             }}</template>
           </el-table-column>
           <el-table-column
-            min-width="180"
-            sortable
+            min-width="150"
             :label="`w22 ${getWeekendDates(22)}`"
             property="w22"
             align="right"
@@ -271,8 +247,7 @@
             }}</template>
           </el-table-column>
           <el-table-column
-            min-width="180"
-            sortable
+            min-width="150"
             :label="`w23 ${getWeekendDates(23)}`"
             property="w23"
             align="right"
@@ -282,8 +257,7 @@
             }}</template>
           </el-table-column>
           <el-table-column
-            min-width="180"
-            sortable
+            min-width="150"
             :label="`w24 ${getWeekendDates(24)}`"
             property="w24"
             align="right"
@@ -293,8 +267,7 @@
             }}</template>
           </el-table-column>
           <el-table-column
-            min-width="180"
-            sortable
+            min-width="150"
             :label="`w25 ${getWeekendDates(25)}`"
             property="w25"
             align="right"
@@ -304,8 +277,7 @@
             }}</template>
           </el-table-column>
           <el-table-column
-            min-width="180"
-            sortable
+            min-width="150"
             :label="`w26 ${getWeekendDates(26)}`"
             property="w26"
             align="right"
@@ -315,8 +287,7 @@
             }}</template>
           </el-table-column>
           <el-table-column
-            min-width="180"
-            sortable
+            min-width="150"
             :label="`w27 ${getWeekendDates(27)}`"
             property="w27"
             align="right"
@@ -326,8 +297,7 @@
             }}</template>
           </el-table-column>
           <el-table-column
-            min-width="180"
-            sortable
+            min-width="150"
             :label="`w28 ${getWeekendDates(28)}`"
             property="w28"
             align="right"
@@ -337,8 +307,7 @@
             }}</template>
           </el-table-column>
           <el-table-column
-            min-width="180"
-            sortable
+            min-width="150"
             :label="`w29 ${getWeekendDates(29)}`"
             property="w29"
             align="right"
@@ -348,8 +317,7 @@
             }}</template>
           </el-table-column>
           <el-table-column
-            min-width="180"
-            sortable
+            min-width="150"
             :label="`w30 ${getWeekendDates(30)}`"
             property="w30"
             align="right"
@@ -359,8 +327,7 @@
             }}</template>
           </el-table-column>
           <el-table-column
-            min-width="180"
-            sortable
+            min-width="150"
             :label="`w31 ${getWeekendDates(31)}`"
             property="w31"
             align="right"
@@ -370,8 +337,7 @@
             }}</template>
           </el-table-column>
           <el-table-column
-            min-width="180"
-            sortable
+            min-width="150"
             :label="`w32 ${getWeekendDates(32)}`"
             property="w32"
             align="right"
@@ -381,8 +347,7 @@
             }}</template>
           </el-table-column>
           <el-table-column
-            min-width="180"
-            sortable
+            min-width="150"
             :label="`w33 ${getWeekendDates(33)}`"
             property="w33"
             align="right"
@@ -392,8 +357,7 @@
             }}</template>
           </el-table-column>
           <el-table-column
-            min-width="180"
-            sortable
+            min-width="150"
             :label="`w34 ${getWeekendDates(34)}`"
             property="w34"
             align="right"
@@ -403,8 +367,7 @@
             }}</template>
           </el-table-column>
           <el-table-column
-            min-width="180"
-            sortable
+            min-width="150"
             :label="`w35 ${getWeekendDates(35)}`"
             property="w35"
             align="right"
@@ -414,8 +377,7 @@
             }}</template>
           </el-table-column>
           <el-table-column
-            min-width="180"
-            sortable
+            min-width="150"
             :label="`w36 ${getWeekendDates(36)}`"
             property="w36"
             align="right"
@@ -425,8 +387,7 @@
             }}</template>
           </el-table-column>
           <el-table-column
-            min-width="180"
-            sortable
+            min-width="150"
             :label="`w37 ${getWeekendDates(37)}`"
             property="w37"
             align="right"
@@ -436,8 +397,7 @@
             }}</template>
           </el-table-column>
           <el-table-column
-            min-width="180"
-            sortable
+            min-width="150"
             :label="`w38 ${getWeekendDates(38)}`"
             property="w38"
             align="right"
@@ -447,8 +407,7 @@
             }}</template>
           </el-table-column>
           <el-table-column
-            min-width="180"
-            sortable
+            min-width="150"
             :label="`w39 ${getWeekendDates(39)}`"
             property="w39"
             align="right"
@@ -458,8 +417,7 @@
             }}</template>
           </el-table-column>
           <el-table-column
-            min-width="180"
-            sortable
+            min-width="150"
             :label="`w40 ${getWeekendDates(40)}`"
             property="w40"
             align="right"
@@ -469,8 +427,7 @@
             }}</template>
           </el-table-column>
           <el-table-column
-            min-width="180"
-            sortable
+            min-width="150"
             :label="`w41 ${getWeekendDates(41)}`"
             property="w41"
             align="right"
@@ -480,8 +437,7 @@
             }}</template>
           </el-table-column>
           <el-table-column
-            min-width="180"
-            sortable
+            min-width="150"
             :label="`w42 ${getWeekendDates(42)}`"
             property="w42"
             align="right"
@@ -491,8 +447,7 @@
             }}</template>
           </el-table-column>
           <el-table-column
-            min-width="180"
-            sortable
+            min-width="150"
             :label="`w43 ${getWeekendDates(43)}`"
             property="w43"
             align="right"
@@ -502,8 +457,7 @@
             }}</template>
           </el-table-column>
           <el-table-column
-            min-width="180"
-            sortable
+            min-width="150"
             :label="`w44 ${getWeekendDates(44)}`"
             property="w44"
             align="right"
@@ -513,8 +467,7 @@
             }}</template>
           </el-table-column>
           <el-table-column
-            min-width="180"
-            sortable
+            min-width="150"
             :label="`w45 ${getWeekendDates(45)}`"
             property="w45"
             align="right"
@@ -524,8 +477,7 @@
             }}</template>
           </el-table-column>
           <el-table-column
-            min-width="180"
-            sortable
+            min-width="150"
             :label="`w46 ${getWeekendDates(46)}`"
             property="w46"
             align="right"
@@ -535,8 +487,7 @@
             }}</template>
           </el-table-column>
           <el-table-column
-            min-width="180"
-            sortable
+            min-width="150"
             :label="`w47 ${getWeekendDates(47)}`"
             property="w47"
             align="right"
@@ -546,8 +497,7 @@
             }}</template>
           </el-table-column>
           <el-table-column
-            min-width="180"
-            sortable
+            min-width="150"
             :label="`w48 ${getWeekendDates(48)}`"
             property="w48"
             align="right"
@@ -557,8 +507,7 @@
             }}</template>
           </el-table-column>
           <el-table-column
-            min-width="180"
-            sortable
+            min-width="150"
             :label="`w49 ${getWeekendDates(49)}`"
             property="w49"
             align="right"
@@ -568,8 +517,7 @@
             }}</template>
           </el-table-column>
           <el-table-column
-            min-width="180"
-            sortable
+            min-width="150"
             :label="`w50 ${getWeekendDates(50)}`"
             property="w50"
             align="right"
@@ -579,8 +527,7 @@
             }}</template>
           </el-table-column>
           <el-table-column
-            min-width="180"
-            sortable
+            min-width="150"
             :label="`w51 ${getWeekendDates(51)}`"
             property="w51"
             align="right"
@@ -590,8 +537,7 @@
             }}</template>
           </el-table-column>
           <el-table-column
-            min-width="180"
-            sortable
+            min-width="150"
             :label="`w52 ${getWeekendDates(52)}`"
             property="w52"
             align="right"
@@ -607,6 +553,7 @@
 </template>
 <script>
 import { Table, TableColumn } from "element-ui";
+import moment from "moment";
 
 export default {
   name: "dashboard",
@@ -620,12 +567,15 @@ export default {
   },
   computed: {},
   methods: {
-    getWeekendDates (index) {
-      return JSON.parse(window.localStorage.getItem("weekendDates")) ? `(${JSON.parse(window.localStorage.getItem("weekendDates"))[index - 1]})` : '';
-    }
+    getWeekendDates(index) {
+      return JSON.parse(window.localStorage.getItem("weekendDates"))
+        ? `(${moment(
+            JSON.parse(window.localStorage.getItem("weekendDates"))[index - 1]
+          ).format("MM/DD/YYYY")})`
+        : "";
+    },
   },
   mounted() {},
 };
 </script>
-<style>
-</style>
+<style></style>

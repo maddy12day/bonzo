@@ -152,11 +152,11 @@ export const parseCategoryUnitComparision = (results) => {
     plan["Comparision"] = "Planned Units";
     forecast["Comparision"] = "Forecast Units";
     adjusted["Comparision"] = "Adjusted Units";
-    plan[`W-${currWeek} (${moment(result.weekend).format("YYYY-MM-DD")})`] =
+    plan[`W-${currWeek} (${moment(result.weekend).format("MM/DD/YYYY")})`] =
       result.planned_units;
-    forecast[`W-${currWeek} (${moment(result.weekend).format("YYYY-MM-DD")})`] =
+    forecast[`W-${currWeek} (${moment(result.weekend).format("MM/DD/YYYY")})`] =
       result.forecasted_units;
-    adjusted[`W-${currWeek} (${moment(result.weekend).format("YYYY-MM-DD")})`] =
+    adjusted[`W-${currWeek} (${moment(result.weekend).format("MM/DD/YYYY")})`] =
       result.adjusted_units;
   }
   parsedData.push({ ...plan }, { ...forecast }, { ...adjusted });
@@ -175,11 +175,11 @@ export const parseCategorySaleComparision = (results) => {
     plan["Comparision"] = "Planned Revenue";
     forecast["Comparision"] = "Forecast Revenue";
     adjusted["Comparision"] = "Adjusted Revenue";
-    plan[`W-${currWeek} (${moment(result.weekend).format("YYYY-MM-DD")})`] =
+    plan[`W-${currWeek} (${moment(result.weekend).format("MM/DD/YYYY")})`] =
       result.planned_revenue;
-    forecast[`W-${currWeek} (${moment(result.weekend).format("YYYY-MM-DD")})`] =
+    forecast[`W-${currWeek} (${moment(result.weekend).format("MM/DD/YYYY")})`] =
       result.forecasted_revenue;
-    adjusted[`W-${currWeek} (${moment(result.weekend).format("YYYY-MM-DD")})`] =
+    adjusted[`W-${currWeek} (${moment(result.weekend).format("MM/DD/YYYY")})`] =
       result.adjusted_revenue;
   }
   parsedData.push({ ...plan }, { ...forecast }, { ...adjusted });
@@ -197,19 +197,25 @@ const parseUnitSaleComparision = (results) => {
     if (field == "Planned Units") {
       for (let result of results) {
         let currWeek = moment(new Date(result.weekend)).week() - 1;
-        newObject[`W-${currWeek}`] = result.planned_units;
+        newObject[
+          `W-${currWeek} (${moment(result.weekend).format("MM/DD/YYYY")})`
+        ] = result.planned_units;
         parsedData.push(newObject);
       }
     } else if (field == "Forecast Units") {
       for (let result of results) {
         let currWeek = moment(new Date(result.weekend)).week() - 1;
-        newObject[`W-${currWeek}`] = result.forecasted_units;
+        newObject[
+          `W-${currWeek} (${moment(result.weekend).format("MM/DD/YYYY")})`
+        ] = result.forecasted_units;
         parsedData.push(newObject);
       }
     } else {
       for (let result of results) {
         let currWeek = moment(new Date(result.weekend)).week() - 1;
-        newObject[`W-${currWeek}`] = result.adjusted_units;
+        newObject[
+          `W-${currWeek} (${moment(result.weekend).format("MM/DD/YYYY")})`
+        ] = result.adjusted_units;
         parsedData.push(newObject);
       }
     }
@@ -233,19 +239,25 @@ const parseUnitRevenueComparision = (results) => {
     if (field == "Planned Revenue") {
       for (let result of results) {
         let currWeek = moment(new Date(result.weekend)).week() - 1;
-        newObject[`W-${currWeek}`] = result.planned_revenue;
+        newObject[
+          `W-${currWeek} (${moment(result.weekend).format("MM/DD/YYYY")})`
+        ] = result.planned_revenue;
         parsedData.push(newObject);
       }
     } else if (field == "Forecast Revenue") {
       for (let result of results) {
         let currWeek = moment(new Date(result.weekend)).week() - 1;
-        newObject[`W-${currWeek}`] = result.forecasted_revenue;
+        newObject[
+          `W-${currWeek} (${moment(result.weekend).format("MM/DD/YYYY")})`
+        ] = result.forecasted_revenue;
         parsedData.push(newObject);
       }
     } else {
       for (let result of results) {
         let currWeek = moment(new Date(result.weekend)).week() - 1;
-        newObject[`W-${currWeek}`] = result.adjusted_revenue;
+        newObject[
+          `W-${currWeek} (${moment(result.weekend).format("MM/DD/YYYY")})`
+        ] = result.adjusted_revenue;
         parsedData.push(newObject);
       }
     }
