@@ -227,7 +227,7 @@ model forecasted_weekly_metrics {
   metrics_name               String    @db.VarChar(50)
   channel                    String    @db.VarChar(10)
   forecast_year              String    @db.VarChar(4)
-  yearly_aggregate           Float?    @db.Float
+  yearly_aggregate           String?   @db.VarChar(20)
   q1_aggregate               Float?    @db.Float
   q2_aggregate               Float?    @db.Float
   q3_aggregate               Float?    @db.Float
