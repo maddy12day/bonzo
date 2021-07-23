@@ -289,6 +289,7 @@ export default {
           progress: true,
         }
       );
+      console.log("forecast",JSON.parse(forecast.baseYQForecast));
       this.forecastYQData = JSON.parse(forecast.baseYQForecast);
       this.$store.commit("toggleStatsAPIResponseState",true);
     },
