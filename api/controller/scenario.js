@@ -140,7 +140,6 @@ export const createScenario = async (req, res) => {
 
 // Function Used to Parse the data into El Table Friendly Format
 export const parseCategoryUnitComparision = (results) => {
-  console.log("results", results);
   const fields = ["Planned Units", "Forecast Units", "Adjusted Units"];
   let parsedData = [];
   const newObject = {};
