@@ -191,7 +191,16 @@ export const getAdjustmentSalesSummary = async (req, res) => {
 //API: Adjustment Category Unit & Sales Comparison
 export const getAdjustmentCategoryComparison = async (req, res) => {
   try {
-    const result = await prisma.$queryRaw(`SELECT * from morphe_staging.adjustment_influenced_leveled_metrics WHERE adjustment_id = ${req.params.id};`);
+    console.log("id------------------", req.params.id)
+    const result = await prisma.$queryRaw(`SELECT 
+                                          weekend, 
+                                          sum(adjusted_units) as adjusted_units,
+                                          sum(forecasted_units) as forecasted_units,
+                                          sum(planned_units) as planned_units,
+                                          sum(planned_revenue) as planned_revenue,
+                                          sum(forecasted_revenue) as forecasted_revenue,
+                                          sum(adjusted_revenue) as adjusted_revenue
+                                          from morphe_staging.adjustment_influenced_leveled_metrics WHERE adjustment_id = ${req.params.id} group by weekend, level`);
     let parsedData = {};
     parsedData["Units"] = parseCategoryUnitComparision(result);
     parsedData["Revenue"] = parseCategorySaleComparision(result);

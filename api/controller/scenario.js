@@ -142,85 +142,46 @@ export const createScenario = async (req, res) => {
 export const parseCategoryUnitComparision = (results) => {
   const fields = ["Planned Units", "Forecast Units", "Adjusted Units"];
   let parsedData = [];
-  for (let field of fields) {
-    let index = 0;
-    const newObject = {};
-
-    newObject["Comparision"] = field;
-    if (field == "Planned Units") {
-      for (let result of results) {
-        let currWeek = moment(new Date(result.weekend)).week() - 1;
-        newObject[
-          `W-${currWeek} (${moment(result.weekend).format("MM/DD/YYYY")})`
-        ] = result.planned_units;
-        parsedData.push(newObject);
-      }
-    } else if (field == "Forecast Units") {
-      for (let result of results) {
-        let currWeek = moment(new Date(result.weekend)).week() - 1;
-        newObject[
-          `W-${currWeek} (${moment(result.weekend).format("MM/DD/YYYY")})`
-        ] = result.forecasted_units;
-        parsedData.push(newObject);
-      }
-    } else {
-      for (let result of results) {
-        let currWeek = moment(new Date(result.weekend)).week() - 1;
-        newObject[
-          `W-${currWeek} (${moment(result.weekend).format("MM/DD/YYYY")})`
-        ] = result.adjusted_units;
-        parsedData.push(newObject);
-      }
-    }
+  const newObject = {};
+  const plan = {};
+  const forecast = {};
+  const adjusted = {};
+  for (let result of results) {
+    let currWeek = moment(new Date(result.weekend)).week() - 1;
+    plan["Comparision"] = "Planned Units";
+    forecast["Comparision"] = "Forecast Units";
+    adjusted["Comparision"] = "Adjusted Units";
+    plan[`W-${currWeek} (${moment(result.weekend).format("MM/DD/YYYY")})`] =
+      result.planned_units;
+    forecast[`W-${currWeek} (${moment(result.weekend).format("MM/DD/YYYY")})`] =
+      result.forecasted_units;
+    adjusted[`W-${currWeek} (${moment(result.weekend).format("MM/DD/YYYY")})`] =
+      result.adjusted_units;
   }
-  parsedData.sort((a, b) => {
-    if (a.Comparision == b.Comparision) {
-    }
-  });
-  parsedData = [...new Set(parsedData)];
+  parsedData.push({ ...plan }, { ...forecast }, { ...adjusted });
   return parsedData;
 };
 
 // Function Used to Parse the data into El Table Friendly Format
 export const parseCategorySaleComparision = (results) => {
-  const fields = ["Planned Revenue", "Forecast Revenue", "Adjusted Revenue"];
   let parsedData = [];
-  for (let field of fields) {
-    let index = 0;
-    const newObject = {};
-
-    newObject["Comparision"] = field;
-    if (field == "Planned Revenue") {
-      for (let result of results) {
-        let currWeek = moment(new Date(result.weekend)).week() - 1;
-        newObject[
-          `W-${currWeek} (${moment(result.weekend).format("MM/DD/YYYY")})`
-        ] = result.planned_revenue;
-        parsedData.push(newObject);
-      }
-    } else if (field == "Forecast Revenue") {
-      for (let result of results) {
-        let currWeek = moment(new Date(result.weekend)).week() - 1;
-        newObject[
-          `W-${currWeek} (${moment(result.weekend).format("MM/DD/YYYY")})`
-        ] = result.forecasted_revenue;
-        parsedData.push(newObject);
-      }
-    } else {
-      for (let result of results) {
-        let currWeek = moment(new Date(result.weekend)).week() - 1;
-        newObject[
-          `W-${currWeek} (${moment(result.weekend).format("MM/DD/YYYY")})`
-        ] = result.adjusted_revenue;
-        parsedData.push(newObject);
-      }
-    }
+  const newObject = {};
+  const plan = {};
+  const forecast = {};
+  const adjusted = {};
+  for (let result of results) {
+    let currWeek = moment(new Date(result.weekend)).week() - 1;
+    plan["Comparision"] = "Planned Revenue";
+    forecast["Comparision"] = "Forecast Revenue";
+    adjusted["Comparision"] = "Adjusted Revenue";
+    plan[`W-${currWeek} (${moment(result.weekend).format("MM/DD/YYYY")})`] =
+      result.planned_revenue;
+    forecast[`W-${currWeek} (${moment(result.weekend).format("MM/DD/YYYY")})`] =
+      result.forecasted_revenue;
+    adjusted[`W-${currWeek} (${moment(result.weekend).format("MM/DD/YYYY")})`] =
+      result.adjusted_revenue;
   }
-  parsedData.sort((a, b) => {
-    if (a.Comparision == b.Comparision) {
-    }
-  });
-  parsedData = [...new Set(parsedData)];
+  parsedData.push({ ...plan }, { ...forecast }, { ...adjusted });
   return parsedData;
 };
 
