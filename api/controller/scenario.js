@@ -5,14 +5,14 @@ import { getAllUsers } from "../controller/user";
 const prisma = new PrismaClient();
 
 const getUserName = (id, allUsers) => {
-  let userName
+  let userName;
   if (allUsers.length > 0) {
-    userName = allUsers.filter((user) => (user.id == id))[0].first_name;
+    userName = allUsers.filter((user) => user.id == id)[0].first_name;
   } else {
-    userName = '';
+    userName = "";
   }
   return userName;
-}
+};
 
 // get user secenarios
 export const getUserScenarios = async (req, res) => {
@@ -62,10 +62,9 @@ export const allSharedScenarios = async (req, res) => {
     });
     let allUsers = await getAllUsers();
     scenarios = scenarios.map((v) => ({
-          ...v,
-          sharedBy: getUserName(v.demand_planner_user_id,allUsers),
+      ...v,
+      sharedBy: getUserName(v.demand_planner_user_id, allUsers),
     }));
-
 
     res.status(200).json({
       scenarios,
@@ -114,16 +113,18 @@ export const createScenario = async (req, res) => {
         id: req.body.demand_planner_user_id,
       },
     });
-    const demandForecastRunlogRes = await prisma.demand_forecast_run_log.create({
-      data: {
-        is_base_forecast: false,
-        demand_planner_user_id: req.body.demand_planner_user_id,
-        scenario_id: scenarioRes.id,
-        status: "Pending",
-        forecast_type: "Scenario",
-        executed_by: `${executed_by.first_name} ${executed_by.last_name}`,
-      },
-    });
+    const demandForecastRunlogRes = await prisma.demand_forecast_run_log.create(
+      {
+        data: {
+          is_base_forecast: false,
+          demand_planner_user_id: req.body.demand_planner_user_id,
+          scenario_id: scenarioRes.id,
+          status: "Pending",
+          forecast_type: "Scenario",
+          executed_by: `${executed_by.first_name} ${executed_by.last_name}`,
+        },
+      }
+    );
     res.status(200).json({
       scenarioRes,
       status: 200,
@@ -139,7 +140,7 @@ export const createScenario = async (req, res) => {
 
 // Function Used to Parse the data into El Table Friendly Format
 export const parseCategoryUnitComparision = (results) => {
-  const fields = ["Planned Units",  "Forecast Units", "Adjusted Units"];
+  const fields = ["Planned Units", "Forecast Units", "Adjusted Units"];
   let parsedData = [];
   for (let field of fields) {
     let index = 0;
@@ -148,20 +149,26 @@ export const parseCategoryUnitComparision = (results) => {
     newObject["Comparision"] = field;
     if (field == "Planned Units") {
       for (let result of results) {
-        let currWeek = moment(new Date(result.weekend)).week()-1;
-        newObject[`W-${currWeek} (${moment(result.weekend).format('YYYY-MM-DD')})`] = result.planned_units;
+        let currWeek = moment(new Date(result.weekend)).week() - 1;
+        newObject[
+          `W-${currWeek} (${moment(result.weekend).format("MM/DD/YYYY")})`
+        ] = result.planned_units;
         parsedData.push(newObject);
       }
     } else if (field == "Forecast Units") {
-       for (let result of results) {
-        let currWeek = moment(new Date(result.weekend)).week()-1;
-        newObject[`W-${currWeek} (${moment(result.weekend).format('YYYY-MM-DD')})`] = result.forecasted_units;
+      for (let result of results) {
+        let currWeek = moment(new Date(result.weekend)).week() - 1;
+        newObject[
+          `W-${currWeek} (${moment(result.weekend).format("MM/DD/YYYY")})`
+        ] = result.forecasted_units;
         parsedData.push(newObject);
       }
     } else {
       for (let result of results) {
-        let currWeek = moment(new Date(result.weekend)).week()-1;
-        newObject[`W-${currWeek} (${moment(result.weekend).format('YYYY-MM-DD')})`] = result.adjusted_units;
+        let currWeek = moment(new Date(result.weekend)).week() - 1;
+        newObject[
+          `W-${currWeek} (${moment(result.weekend).format("MM/DD/YYYY")})`
+        ] = result.adjusted_units;
         parsedData.push(newObject);
       }
     }
@@ -185,20 +192,26 @@ export const parseCategorySaleComparision = (results) => {
     newObject["Comparision"] = field;
     if (field == "Planned Revenue") {
       for (let result of results) {
-        let currWeek = moment(new Date(result.weekend)).week()-1;
-        newObject[`W-${currWeek} (${moment(result.weekend).format('YYYY-MM-DD')})`] = result.planned_revenue;
+        let currWeek = moment(new Date(result.weekend)).week() - 1;
+        newObject[
+          `W-${currWeek} (${moment(result.weekend).format("MM/DD/YYYY")})`
+        ] = result.planned_revenue;
         parsedData.push(newObject);
       }
     } else if (field == "Forecast Revenue") {
       for (let result of results) {
-        let currWeek = moment(new Date(result.weekend)).week()-1;
-       newObject[`W-${currWeek} (${moment(result.weekend).format('YYYY-MM-DD')})`] = result.forecasted_revenue;
-       parsedData.push(newObject);
-     }
+        let currWeek = moment(new Date(result.weekend)).week() - 1;
+        newObject[
+          `W-${currWeek} (${moment(result.weekend).format("MM/DD/YYYY")})`
+        ] = result.forecasted_revenue;
+        parsedData.push(newObject);
+      }
     } else {
       for (let result of results) {
-        let currWeek = moment(new Date(result.weekend)).week()-1;
-        newObject[`W-${currWeek} (${moment(result.weekend).format('YYYY-MM-DD')})`] = result.adjusted_revenue;
+        let currWeek = moment(new Date(result.weekend)).week() - 1;
+        newObject[
+          `W-${currWeek} (${moment(result.weekend).format("MM/DD/YYYY")})`
+        ] = result.adjusted_revenue;
         parsedData.push(newObject);
       }
     }
@@ -221,21 +234,26 @@ const parseUnitSaleComparision = (results) => {
     newObject["Comparision"] = field;
     if (field == "Planned Units") {
       for (let result of results) {
-        let currWeek = moment(new Date(result.weekend)).week()-1;
-        newObject[`W-${currWeek} (${moment(result.weekend).format('YYYY-MM-DD')})`] = result.planned_units;
+        let currWeek = moment(new Date(result.weekend)).week() - 1;
+        newObject[
+          `W-${currWeek} (${moment(result.weekend).format("MM/DD/YYYY")})`
+        ] = result.planned_units;
         parsedData.push(newObject);
       }
     } else if (field == "Forecast Units") {
       for (let result of results) {
-        let currWeek = moment(new Date(result.weekend)).week()-1;
-        newObject[`W-${currWeek} (${moment(result.weekend).format('YYYY-MM-DD')})`] = result.forecasted_units;
+        let currWeek = moment(new Date(result.weekend)).week() - 1;
+        newObject[
+          `W-${currWeek} (${moment(result.weekend).format("MM/DD/YYYY")})`
+        ] = result.forecasted_units;
         parsedData.push(newObject);
       }
-
-    } else {  
-    for (let result of results) {
-        let currWeek = moment(new Date(result.weekend)).week()-1;
-        newObject[`W-${currWeek} (${moment(result.weekend).format('YYYY-MM-DD')})`] = result.adjusted_units;
+    } else {
+      for (let result of results) {
+        let currWeek = moment(new Date(result.weekend)).week() - 1;
+        newObject[
+          `W-${currWeek} (${moment(result.weekend).format("MM/DD/YYYY")})`
+        ] = result.adjusted_units;
         parsedData.push(newObject);
       }
     }
@@ -258,20 +276,26 @@ const parseUnitRevenueComparision = (results) => {
     newObject["Comparision"] = field;
     if (field == "Planned Revenue") {
       for (let result of results) {
-        let currWeek = moment(new Date(result.weekend)).week()-1;
-        newObject[`W-${currWeek} (${moment(result.weekend).format('YYYY-MM-DD')})`] = result.planned_revenue;
+        let currWeek = moment(new Date(result.weekend)).week() - 1;
+        newObject[
+          `W-${currWeek} (${moment(result.weekend).format("MM/DD/YYYY")})`
+        ] = result.planned_revenue;
         parsedData.push(newObject);
       }
     } else if (field == "Forecast Revenue") {
       for (let result of results) {
-        let currWeek = moment(new Date(result.weekend)).week()-1;
-       newObject[`W-${currWeek} (${moment(result.weekend).format('YYYY-MM-DD')})`] = result.forecasted_revenue;
-       parsedData.push(newObject);
-     }
+        let currWeek = moment(new Date(result.weekend)).week() - 1;
+        newObject[
+          `W-${currWeek} (${moment(result.weekend).format("MM/DD/YYYY")})`
+        ] = result.forecasted_revenue;
+        parsedData.push(newObject);
+      }
     } else {
       for (let result of results) {
-        let currWeek = moment(new Date(result.weekend)).week()-1;
-        newObject[`W-${currWeek} (${moment(result.weekend).format('YYYY-MM-DD')})`] = result.adjusted_revenue;
+        let currWeek = moment(new Date(result.weekend)).week() - 1;
+        newObject[
+          `W-${currWeek} (${moment(result.weekend).format("MM/DD/YYYY")})`
+        ] = result.adjusted_revenue;
         parsedData.push(newObject);
       }
     }
@@ -304,7 +328,9 @@ export const getScenarioSalesSummary = async (req, res) => {
 //API: Scenario Unit & Sales Comparison
 export const getScenarioUnitSalesComparison = async (req, res) => {
   try {
-    let result = await prisma.$queryRaw(`SELECT * FROM morphe_staging.scenario_influenced_metrics WHERE scenario_id = ${req.params.id};`);
+    let result = await prisma.$queryRaw(
+      `SELECT * FROM morphe_staging.scenario_influenced_metrics WHERE scenario_id = ${req.params.id};`
+    );
     let parsedData = {};
     parsedData["Units"] = parseUnitSaleComparision(result);
     parsedData["Revenue"] = parseUnitRevenueComparision(result);
@@ -322,7 +348,9 @@ export const getScenarioUnitSalesComparison = async (req, res) => {
 //API: Scenario Category Total Sales Comparison
 export const getScenarioCategorySalesComparison = async (req, res) => {
   try {
-    const result = await prisma.$queryRaw(`SELECT * from morphe_staging.scenario_influenced_leveled_aggregates WHERE scenario_id = ${req.params.id};`);
+    const result = await prisma.$queryRaw(
+      `SELECT * from morphe_staging.scenario_influenced_leveled_aggregates WHERE scenario_id = ${req.params.id};`
+    );
     res.status(200).json({
       result,
     });
@@ -337,7 +365,9 @@ export const getScenarioCategorySalesComparison = async (req, res) => {
 //API: Scenario Category Unit & Sales Comparison
 export const getScenarioCategoryComparison = async (req, res) => {
   try {
-    const result = await prisma.$queryRaw(`SELECT * from morphe_staging.scenario_influenced_leveled_metrics WHERE scenario_id = ${req.params.id};`);
+    const result = await prisma.$queryRaw(
+      `SELECT * from morphe_staging.scenario_influenced_leveled_metrics WHERE scenario_id = ${req.params.id};`
+    );
     let parsedData = {};
     parsedData["Units"] = parseCategoryUnitComparision(result);
     parsedData["Revenue"] = parseCategorySaleComparision(result);
@@ -436,16 +466,18 @@ export const mergeScenarioWithBase = async (req, res) => {
         id: req.body.demand_planner_user_id,
       },
     });
-    const demandForecastRunlogRes = await prisma.demand_forecast_run_log.create({
-      data: {
-        is_base_forecast: false,
-        demand_planner_user_id: req.body.demand_planner_user_id,
-        scenario_id: req.body.id,
-        status: "Merge Pending",
-        forecast_type: "Merge",
-        executed_by: `${executed_by.first_name} ${executed_by.last_name}`,
-      },
-    });
+    const demandForecastRunlogRes = await prisma.demand_forecast_run_log.create(
+      {
+        data: {
+          is_base_forecast: false,
+          demand_planner_user_id: req.body.demand_planner_user_id,
+          scenario_id: req.body.id,
+          status: "Merge Pending",
+          forecast_type: "Merge",
+          executed_by: `${executed_by.first_name} ${executed_by.last_name}`,
+        },
+      }
+    );
     res.json({
       scenario,
       message: " scenario successfully merged with base...",
@@ -488,16 +520,16 @@ export const getScenarioDetailsById = async (req, res) => {
     });
     const scenarioTypes = await prisma.scenario_types.findUnique({
       where: {
-        id: scenario.scenario_type_id
+        id: scenario.scenario_type_id,
       },
       select: {
-        scenario_type: true
-      }
+        scenario_type: true,
+      },
     });
     res.json({
       scenario: {
         ...scenario,
-        ...scenarioTypes
+        ...scenarioTypes,
       },
     });
   } catch (error) {
@@ -507,7 +539,7 @@ export const getScenarioDetailsById = async (req, res) => {
   }
 };
 
-export const activeMergedScenarioAsBase = async(req, res) => {
+export const activeMergedScenarioAsBase = async (req, res) => {
   try {
     const isPartOfBase = await prisma.scenarios.update({
       where: {
@@ -517,19 +549,29 @@ export const activeMergedScenarioAsBase = async(req, res) => {
         is_part_of_base: true,
       },
     });
-    console.log("before run log ")
-    const whereIsbaseForecstFalse = await prisma.$queryRaw(`update morphe_staging.demand_forecast_run_log set is_base_forecast=false where is_base_forecast= true`);
-    console.log("before whereIsbaseForecstTrue")
-    console.log(`update morphe_staging.demand_forecast_run_log set is_base_forecast=true where scenario_id=${parseInt(req.params.id)} AND forecast_type='Merge' AND status='Merge Completed'`)
-    const whereIsbaseForecstTrue = await prisma.$queryRaw(`update morphe_staging.demand_forecast_run_log set is_base_forecast=true where scenario_id=${parseInt(req.params.id)} AND forecast_type='Merge' AND status='Merge Completed'`);;
-    console.log("after whereIsbaseForecstTrue")
+    console.log("before run log ");
+    const whereIsbaseForecstFalse = await prisma.$queryRaw(
+      `update morphe_staging.demand_forecast_run_log set is_base_forecast=false where is_base_forecast= true`
+    );
+    console.log("before whereIsbaseForecstTrue");
+    console.log(
+      `update morphe_staging.demand_forecast_run_log set is_base_forecast=true where scenario_id=${parseInt(
+        req.params.id
+      )} AND forecast_type='Merge' AND status='Merge Completed'`
+    );
+    const whereIsbaseForecstTrue = await prisma.$queryRaw(
+      `update morphe_staging.demand_forecast_run_log set is_base_forecast=true where scenario_id=${parseInt(
+        req.params.id
+      )} AND forecast_type='Merge' AND status='Merge Completed'`
+    );
+    console.log("after whereIsbaseForecstTrue");
 
     res.json({
       isPartOfBase,
-    });   
+    });
   } catch (error) {
     res.json({
       error: `something went activeMergedScenarioAsBase  ${error}.`,
     });
   }
-}
+};

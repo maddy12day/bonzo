@@ -678,7 +678,7 @@ export default {
   },
 };
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 .el-dialog {
   background: #f5f6fa;
 }
@@ -693,15 +693,15 @@ export default {
 }
 
 .preview-table {
-    display: inline-table;
-    overflow-x: auto;
-    white-space: nowrap;
-  }
+  display: inline-table;
+  overflow-x: auto;
+  white-space: nowrap;
+}
 
-[card-body-classes="table-full-width preview-table"] .card-body{
+[card-body-classes="table-full-width preview-table"] .card-body {
   overflow-x: auto;
   width: 100%;
-} 
+}
 
 .scenario-dialog {
   .el-dialog {
@@ -709,5 +709,12 @@ export default {
     overflow-y: auto;
     margin-top: 20px !important;
   }
+}
+</style>
+
+<style>
+[card-body-classes="table-full-width preview-table"] .card-body {
+  overflow-x: auto;
+  width: 100%;
 }
 </style>
