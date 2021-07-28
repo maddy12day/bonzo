@@ -106,7 +106,8 @@
       :allAppliedFilters="allAppliedFilters"
       :key="filteredStatsComponentKey"
     />
-    <ChartWidget />
+    <ChartWidget v-if="!isFilteredForecast"/>
+    <FilteredChartWidget v-if="isFilteredForecast" :requestedFilterOption="requestedFilterOption"/>
 
     <!-- Adjustments Table -->
     <AdjustmentTable
@@ -241,7 +242,6 @@
         <a>
           <download-csv
             v-if="isFilteredForecast"
-            @click="downloadAllSkusData"
             class="mt-1 btn btn-sm"
             style="line-height:1;"
             :data="skusJsonData"
@@ -294,6 +294,7 @@ import FilteredStatsWidget from "../components/FilteredStatsWidget.vue";
 import ManualAdjustmentTable from "../components/Metrics/ManualAdjustmentTable.vue";
 import Tags from "../components/Tags.vue";
 import ChartWidget from "../components/ChartWidget.vue";
+import FilteredChartWidget from '../components/FilterChartWidget.vue';
 
 export default {
   name: "Forecast",
@@ -310,6 +311,7 @@ export default {
     FilteredWeeklyMetricsTable,
     FilteredMonthlyMetricsTable,
     FilteredStatsWidget,
+    FilteredChartWidget,
     Tags,
     ChartWidget,
   },
@@ -331,6 +333,7 @@ export default {
       changeMABtnText: false,
       disbleAdjustment: false,
       callToIntervalAjax: true,
+      requestedFilterOption: {},
       adustments: {},
       type: ["", "info", "success", "warning", "danger"],
       filteredForecastMetrics: [],
@@ -638,6 +641,7 @@ export default {
         }
       }
     },
+      
     resetFilter() {
       this.forceRerender();
       this.isFilteredForecast = false;
@@ -687,6 +691,9 @@ export default {
           key.replace("filter_", "").replace("_", " ") + ": " + value.join(", ")
         );
       }
+
+      this.requestedFilterOption = requestedFilterOption;
+      delete this.requestedFilterOption["filterType"];
       // await this.getFilteredForecastData(requestedFilterOption);
       this.filteredStatsComponentKey += 1;
       this.getFilteredTopSkus();

@@ -1,5 +1,5 @@
 <template>
-  <card type="chart">
+  <card type="chart" >
     <template slot="header">
       <div class="row">
         <div class="col-sm-6" :class="'text-left'">
@@ -69,7 +69,7 @@
     <div class="chart-area" >
       <line-chart
         style="height: 100%"
-        ref="forecastChart"
+        ref="forecastChart2"
         :chart-data="lineChart.chartData"
         :gradient-colors="lineChart.gradientColors"
         :gradient-stops="lineChart.gradientStops"
@@ -159,6 +159,7 @@ export default {
   components: {
     LineChart,
   },
+  props: ["requestedFilterOption"],
   data() {
     return {
       activeIndex: 1,
@@ -169,40 +170,42 @@ export default {
       chartMonthlyApiJsonData: [],
       lineChart: {
         chartData: {
+            scales: {
+        yAxes: [
+            {
+                ticks: {
+                    callback: function(label, index, labels) {
+                        return label/1000+'k';
+                    }
+                },
+                scaleLabel: {
+                    display: true,
+                    labelString: '1k = 1000'
+                }
+            }
+        ]
+    },
           datasets: [{
-            
           }, {
-             
           }, {
-            
           }],
           labels: weeklyChartLabels,
         },
-         options: {
-          plugins:{   
-             legend: {
-               display: true
-                     },
-                  }
-             },
         extraOptions: chartConfigs.purpleChartOptions,
-        legend: {
-          display: true
-        },
         gradientColors: config.colors.primaryGradient,
         gradientStops: [1, 0.4, 0],
         categories: [],
-         
+        
       },
     };
   },
   computed: {
     chartTypes() {
       return [
-        { name: "Units", acronym: "M", icon: "tim-icons icon-single-02" },
+        { name: "Units", acronym: "U", icon: "tim-icons icon-single-02" },
         {
           name: "Revnue",
-          acronym: "W",
+          acronym: "R",
           icon: "tim-icons icon-gift-2",
         },
       ];
@@ -220,19 +223,30 @@ export default {
   },
   methods: {
     async baseWeeklyChart() {
-      const chartData = await this.$axios.$get("/weekly-base-forecast-chart");
+        const reqBody = this.requestedFilterOption
+        delete reqBody["filterType"]
+      const chartData = await this.$axios.$post('/get-filtered-chart-data-by-duration', {
+        filters: {...reqBody},
+        duration: "week"
+      });
+      console.log("chartData",chartData)
       this.chartWeeklylApiJsonData = chartData;
       this.changeWeeklyDataByType("Units");
     },
     async baseMonthlyChart() {
-      const chartData = await this.$axios.$get("/monthly-base-forecast-chart");
+        const reqBody = this.requestedFilterOption
+        delete reqBody["filterType"]
+      const chartData = await this.$axios.$post('/get-filtered-chart-data-by-duration', {
+        filters: {...reqBody},
+        duration: "month"
+      });
       this.chartMonthlyApiJsonData = chartData;
       this.changeMonthDataByType("Units");
     },
     initForecastChartType(index) {
       this.activeIndexChart = index;
-      index == 0 && this.activeIndex == 1 ? this.changeWeeklyDataByType("Units"): this.changeWeeklyDataByType("Revenue");
-      index == 1 && this.activeIndex == 0 ? this.changeMonthDataByType("Units"): this.changeMonthDataByType("Revenue");
+      this.activeIndexChart == 1 && this.activeIndex == 1 ? this.changeWeeklyDataByType("Units"): this.changeWeeklyDataByType("Revenue");
+      this.activeIndexChart == 0 && this.activeIndex == 0 ? this.changeMonthDataByType("Units"): this.changeMonthDataByType("Revenue");
     },
     changeWeeklyDataByType(forecastType) {
       let plannedData = [];
@@ -240,25 +254,25 @@ export default {
       let forecastData = [];
       switch (forecastType) {
         case "Units":
-          plannedData = this.chartWeeklylApiJsonData.plannedData.map(
-            (item) => item.units
+          plannedData = this.chartWeeklylApiJsonData.chartData[0]?.map(
+            (item) => item.total_units
           );
-          thisYearData = this.chartWeeklylApiJsonData.thisYearData.map(
-            (item) => item.units
+          thisYearData = this.chartWeeklylApiJsonData.chartData[1]?.map(
+            (item) => item.total_units
           );
-          forecastData = Object.values(
-            this.chartWeeklylApiJsonData.forecastData[1]
+          forecastData = this.chartWeeklylApiJsonData.chartData[2]?.map(
+            (item) => item.total_units
           );
           break;
         case "Revenue":
-          plannedData = this.chartWeeklylApiJsonData.plannedData.map(
-            (item) => item.revenue
+          plannedData = this.chartWeeklylApiJsonData.chartData[0]?.map(
+            (item) => item.total_revenue
           );
-          thisYearData = this.chartWeeklylApiJsonData.thisYearData.map(
-            (item) => item.revenue
+          thisYearData = this.chartWeeklylApiJsonData.chartData[1]?.map(
+            (item) => item.total_revenue
           );
-          forecastData = Object.values(
-            this.chartWeeklylApiJsonData.forecastData[0]
+          forecastData = this.chartWeeklylApiJsonData.chartData[2]?.map(
+            (item) => item.total_revenue
           );
           break;
       }
@@ -274,25 +288,25 @@ export default {
       let forecastData = [];
       switch (forecastType) {
         case "Units":
-          plannedData = this.chartMonthlyApiJsonData.plannedData.map(
-            (item) => item.units
+          plannedData = this.chartMonthlyApiJsonData.chartData[0]?.map(
+            (item) => item.total_units
           );
-          thisYearData = this.chartMonthlyApiJsonData.thisYearData.map(
-            (item) => item.units
+          thisYearData = this.chartMonthlyApiJsonData.chartData[1]?.map(
+            (item) => item.total_units
           );
-          forecastData = Object.values(
-            this.chartMonthlyApiJsonData.forecastData[1]
+          forecastData = this.chartMonthlyApiJsonData.chartData[2]?.map(
+            (item) => item.total_units
           );
           break;
         case "Revenue":
-          plannedData = this.chartMonthlyApiJsonData.plannedData.map(
-            (item) => item.revenue
+          plannedData = this.chartMonthlyApiJsonData.chartData[0]?.map(
+            (item) => item.total_revenue
           );
-          thisYearData = this.chartMonthlyApiJsonData.thisYearData.map(
-            (item) => item.revenue
+          thisYearData = this.chartMonthlyApiJsonData.chartData[1]?.map(
+            (item) => item.total_revenue
           );
-          forecastData = Object.values(
-            this.chartMonthlyApiJsonData.forecastData[0]
+          forecastData = this.chartMonthlyApiJsonData.chartData[2]?.map(
+            (item) => item.total_revenue
           );
           break;
       }
@@ -306,7 +320,21 @@ export default {
       this.activeIndex = index;
       if (index == 0) {
         let chartData = {
-  
+          scales: {
+        yAxes: [
+            {
+                ticks: {
+                    callback: function(label, index, labels) {
+                        return label/1000+'k';
+                    }
+                },
+                scaleLabel: {
+                    display: true,
+                    labelString: '1k = 1000'
+                }
+            }
+        ]
+    },
           datasets: [
             {
               fill: false,
@@ -322,7 +350,6 @@ export default {
               pointHoverBorderWidth: 15,
               pointRadius: 1,
               data: this.monthlyUnitsChartData[0],
-             
             },
             {
               fill: false,
@@ -338,7 +365,6 @@ export default {
               pointHoverBorderWidth: 15,
               pointRadius: 1,
               data: this.monthlyUnitsChartData[1],
-            
             },
             {
               fill: false,
@@ -354,16 +380,33 @@ export default {
               pointHoverBorderWidth: 15,
               pointRadius: 1,
               data: this.monthlyUnitsChartData[2],
+              legend: {
+                  display: true
+              }
             },
           ],
           labels: monthlyChartLabels,
         };
-        this.$refs.forecastChart.updateGradients(chartData);
+        this.$refs.forecastChart2.updateGradients(chartData);
         this.lineChart.chartData = chartData;
       }
       if (index == 1) {
         let chartData = {
-          
+            scales: {
+        yAxes: [
+            {
+                ticks: {
+                    callback: function(label, index, labels) {
+                        return label/1000+'k';
+                    }
+                },
+                scaleLabel: {
+                    display: true,
+                    labelString: '1k = 1000'
+                }
+            }
+        ]
+    },
           datasets: [
             {
               fill: false,
@@ -413,15 +456,20 @@ export default {
           ],
           labels: weeklyChartLabels,
         };
-        this.$refs.forecastChart.updateGradients(chartData);
+        this.$refs.forecastChart2.updateGradients(chartData);
         this.lineChart.chartData = chartData;
       }
     },
   },
+  created() {
+      
+  },
   mounted() {
+  console.log("created...",this.requestedFilterOption);
     this.baseWeeklyChart();
     this.baseMonthlyChart();
   },
+ 
 };
 </script>
 

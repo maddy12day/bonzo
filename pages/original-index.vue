@@ -267,10 +267,15 @@ export default {
             {
               ...bigChartDatasetOptions,
               data: bigChartData[0],
+              label: "visha",
+                legend: {
+          display: true
+        },
             },
           ],
           labels: bigChartLabels,
         },
+      
         extraOptions: chartConfigs.purpleChartOptions,
         gradientColors: config.colors.primaryGradient,
         gradientStops: [1, 0.4, 0],
