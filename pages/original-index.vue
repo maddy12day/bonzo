@@ -267,10 +267,15 @@ export default {
             {
               ...bigChartDatasetOptions,
               data: bigChartData[0],
+              label: "visha",
+                legend: {
+          display: true
+        },
             },
           ],
           labels: bigChartLabels,
         },
+      
         extraOptions: chartConfigs.purpleChartOptions,
         gradientColors: config.colors.primaryGradient,
         gradientStops: [1, 0.4, 0],
@@ -296,6 +301,22 @@ export default {
               pointHoverBorderWidth: 15,
               pointRadius: 4,
               data: [80, 100, 70, 80, 120, 80],
+            },
+            {
+              label: "Data",
+              fill: true,
+              borderColor: config.colors.primary,
+              borderWidth: 2,
+              borderDash: [],
+              borderDashOffset: 0.0,
+              pointBackgroundColor: config.colors.primary,
+              pointBorderColor: "rgba(255,255,255,0)",
+              pointHoverBackgroundColor: config.colors.primary,
+              pointBorderWidth: 20,
+              pointHoverRadius: 4,
+              pointHoverBorderWidth: 15,
+              pointRadius: 4,
+              data: [180, 1100, 170, 810, 1120, 180],
             },
           ],
         },
