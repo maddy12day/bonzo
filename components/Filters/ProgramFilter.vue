@@ -281,6 +281,21 @@ export default {
       let subClasses = [];
       let collections = [];
       let skus = [];
+
+      this.$emit("getBrandType", []);
+      this.$emit("getLifyClycle", []);
+      this.$emit("newNess", []);
+      this.$emit("getBrands", []);
+      this.$emit("getPrograms", []);
+      this.$emit("getChannels", []);
+      this.$emit("getSubChannel", []);
+      this.$emit("getCategories", []);
+      this.$emit("getClass", []);
+      this.$emit("getSubClass", []);
+      this.$emit("getCollection", []);
+      this.$emit("getSkusValues", []);
+
+
       this.$refs.brandType.values = [];
       this.$refs.newness.values = [];
       this.$refs.lifeCycle.values = [];
@@ -378,6 +393,18 @@ export default {
       let subClasses = [];
       let collections = [];
       let skus = [];
+
+      this.$emit("getLifyClycle", []);
+      this.$emit("newNess", []);
+      this.$emit("getBrands", []);
+      this.$emit("getPrograms", []);
+      this.$emit("getChannels", []);
+      this.$emit("getSubChannel", []);
+      this.$emit("getCategories", []);
+      this.$emit("getClass", []);
+      this.$emit("getSubClass", []);
+      this.$emit("getCollection", []);
+      this.$emit("getSkusValues", []);
 
       this.$refs.newness.values = [];
       this.$refs.lifeCycle.values = [];
@@ -622,6 +649,17 @@ export default {
         value.map((item) => item.name)
       );
 
+      this.$emit("newNess", []);
+      this.$emit("getBrands", []);
+      this.$emit("getPrograms", []);
+      this.$emit("getChannels", []);
+      this.$emit("getSubChannel", []);
+      this.$emit("getCategories", []);
+      this.$emit("getClass", []);
+      this.$emit("getSubClass", []);
+      this.$emit("getCollection", []);
+      this.$emit("getSkusValues", []);
+
       this.lifeCycleValues = value.map((item) => item.name);
       let productSources;
       let brandTypes;
@@ -841,6 +879,17 @@ export default {
       let subClasses = [];
       let collections = [];
       let skus = [];
+
+      this.$emit("getBrands", []);
+      this.$emit("getPrograms", []);
+      this.$emit("getChannels", []);
+      this.$emit("getSubChannel", []);
+      this.$emit("getCategories", []);
+      this.$emit("getClass", []);
+      this.$emit("getSubClass", []);
+      this.$emit("getCollection", []);
+      this.$emit("getSkusValues", []);
+
       this.$refs.programs.values = [];
       this.$refs.brands.values = [];
       this.$refs.channels.values = [];
@@ -1073,6 +1122,16 @@ export default {
       let collections = [];
       let skus = [];
 
+      this.$emit("getPrograms", []);
+      this.$emit("getChannels", []);
+      this.$emit("getSubChannel", []);
+      this.$emit("getCategories", []);
+      this.$emit("getClass", []);
+      this.$emit("getSubClass", []);
+      this.$emit("getCollection", []);
+      this.$emit("getSkusValues", []);
+
+
       this.$refs.programs.values = [];
       this.$refs.channels.values = [];
       this.$refs.subChannels.values = [];
@@ -1295,6 +1354,15 @@ export default {
       let subClasses = [];
       let collections = [];
       let skus = [];
+
+      this.$emit("getChannels", []);
+      this.$emit("getSubChannel", []);
+      this.$emit("getCategories", []);
+      this.$emit("getClass", []);
+      this.$emit("getSubClass", []);
+      this.$emit("getCollection", []);
+      this.$emit("getSkusValues", []);
+
       this.$refs.channels.values = [];
       this.$refs.subChannels.values = [];
       this.$refs.classes.values = [];
@@ -1516,6 +1584,13 @@ export default {
       let collections = [];
       let skus = [];
 
+      this.$emit("getSubChannel", []);
+      this.$emit("getCategories", []);
+      this.$emit("getClass", []);
+      this.$emit("getSubClass", []);
+      this.$emit("getCollection", []);
+      this.$emit("getSkusValues", []);
+
       this.$refs.subChannels.values = [];
       this.$refs.classes.values = [];
       this.$refs.subClasses.values = [];
@@ -1733,6 +1808,13 @@ export default {
       let subClasses = [];
       let collections = [];
       let skus = [];
+
+      this.$emit("getCategories", []);
+      this.$emit("getClass", []);
+      this.$emit("getSubClass", []);
+      this.$emit("getCollection", []);
+      this.$emit("getSkusValues", []);
+
       this.$refs.classes.values = [];
       this.$refs.subClasses.values = [];
       this.$refs.categories.values = [];
@@ -1740,7 +1822,7 @@ export default {
       this.$refs.skus.values = [];
       this.subChannelValues = value.map((item) => item.name);
       this.$emit(
-        "getSubChannelValues",
+        "getSubChannel",
         value.map((item) => item.name)
       );
 
@@ -1947,6 +2029,12 @@ export default {
       let subClasses = [];
       let collections = [];
       let skus = [];
+
+      this.$emit("getClass", []);
+      this.$emit("getSubClass", []);
+      this.$emit("getCollection", []);
+      this.$emit("getSkusValues", []);
+
       this.$refs.programs.values = [];
       this.$refs.subClasses.values = [];
       this.$refs.classes.values = [];
@@ -2160,6 +2248,11 @@ export default {
       let subClasses = [];
       let collections = [];
       let skus = [];
+
+      this.$emit("getSubClass", []);
+      this.$emit("getCollection", []);
+      this.$emit("getSkusValues", []);
+
       this.$refs.subClasses.values = [];
       this.$refs.collections.values = [];
       this.$refs.skus.values = [];
@@ -2367,6 +2460,9 @@ export default {
       let collections = [];
       let skus = [];
 
+      this.$emit("getCollection", []);
+      this.$emit("getSkusValues", []);
+
       this.$refs.collections.values = [];
       this.$refs.skus.values = [];
       this.subClassValues = value.map((item) => item.name);
@@ -2572,6 +2668,7 @@ export default {
       };
 
       let skus = [];
+      this.$emit("getSkusValues", []);
       this.$refs.skus.values = [];
       this.collectionValues = value.map((item) => item.name);
 

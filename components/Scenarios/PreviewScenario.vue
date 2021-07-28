@@ -355,92 +355,6 @@
         </el-table>
       </card>
 
-      <!--    <card
-        card-body-classes="table-full-width"
-        v-if="
-          scenarioUnitSalesComparison.parsedData &&
-          scenarioUnitSalesComparison.parsedData.Units.length > 0
-        "
-      >
-        <h4 slot="header" class="card-title text-bold font-weight-bold">
-          Unit Comparision
-        </h4>
-        <el-table :data="scenarioUnitSalesComparison.parsedData.Units">
-          <el-table-column
-            min-width="180"
-            sortable
-            label="Comparision"
-            property="Comparision"
-          >
-          </el-table-column>
-          <el-table-column
-            min-width="150"
-            sortable
-            label="W1"
-            property="W-1"
-            align="right"
-          >
-            <template slot-scope="scope">
-              {{ scope.row["W-1"] | toLocaleStr }}
-            </template></el-table-column
-          >
-          <el-table-column
-            min-width="150"
-            sortable
-            label="W2"
-            property="W-2"
-            align="right"
-          >
-            <template slot-scope="scope">
-              {{ scope.row["W-2"] | toLocaleStr }}
-            </template>
-          </el-table-column>
-        </el-table>
-      </card> -->
-      <!-- 
-      <card
-        card-body-classes="table-full-width"
-        v-if="
-          scenarioUnitSalesComparison.parsedData &&
-          scenarioUnitSalesComparison.parsedData.Revenue.length > 0
-        "
-      >
-        <h4 slot="header" class="card-title text-bold font-weight-bold">
-          Sales Comparision
-        </h4>
-        <el-table :data="scenarioUnitSalesComparison.parsedData.Revenue">
-          <el-table-column
-            min-width="180"
-            sortable
-            label="Comparision"
-            property="Comparision"
-          >
-          </el-table-column>
-          <el-table-column
-            min-width="150"
-            sortable
-            label="W1"
-            property="W-1"
-            align="right"
-          >
-            <template slot-scope="scope">
-              {{ scope.row["W-1"] | toLocaleStr }}
-            </template>
-          </el-table-column>
-          <el-table-column
-            min-width="150"
-            sortable
-            label="W2"
-            property="W-2"
-            align="right"
-          >
-            <template slot-scope="scope">
-              {{ scope.row["W-2"] | toLocaleStr }}
-            </template>
-          </el-table-column>
-        </el-table>
-      </card> -->
-
       <card
         card-body-classes="table-full-width"
         v-if="
@@ -449,7 +363,7 @@
         "
       >
         <h4 slot="header" class="card-title text-bold font-weight-bold">
-          Category Total Sales Comparision
+          Category Total Sales Comparison
         </h4>
         <el-table :data="scenarioCategorySalesComparison.result">
           <el-table-column
@@ -598,17 +512,17 @@
       </card>
 
       <card
-        card-body-classes="table-full-width"
+        card-body-classes="table-full-width preview-table"
         v-if="
           scenarioUnitSalesComparison.parsedData &&
             scenarioUnitSalesComparison.parsedData.Units.length > 0
         "
       >
         <h4 slot="header" class="card-title text-bold font-weight-bold">
-          Category Units Comparision
+          Category Units Comparison
         </h4>
         <table
-          class="bg-danger table table-bordered bg-white overflow-scroll"
+          class="bg-danger table table-bordered bg-white preview-table overflow-scroll"
           style="overflow-x: scroll"
         >
           <thead>
@@ -638,56 +552,19 @@
             </tr>
           </tbody>
         </table>
-
-        <!--   <el-table
-          v-if="scenarioUnitSalesComparison.parsedData"
-          :data="scenarioUnitSalesComparison.parsedData.Units"
-        >
-          <el-table-column
-            min-width="180"
-            sortable
-            label="Comparision"
-            property="Comparision"
-          >
-          </el-table-column>
-          <el-table-column
-            min-width="150"
-            sortable
-            label="W1"
-            property="W-1"
-            align="right"
-          >
-            <template slot-scope="scope">
-              {{ scope.row["W-1"] | toLocaleStr }}
-            </template>
-          </el-table-column>
-          <el-table-column
-            min-width="150"
-            sortable
-            label="W2"
-            property="W-2"
-            align="right"
-          >
-            <template slot-scope="scope">
-              {{ scope.row["W-2"] | toLocaleStr }}
-            </template></el-table-column
-          >
-        </el-table> -->
       </card>
-
-      <!-- 7 -->
       <card
-        card-body-classes="table-full-width"
+        card-body-classes="table-full-width preview-table"
         v-if="
           scenarioUnitSalesComparison.parsedData &&
             scenarioUnitSalesComparison.parsedData.Revenue.length > 0
         "
       >
         <h4 slot="header" class="card-title text-bold font-weight-bold">
-          Category Sales Comparision
+          Category Sales Comparison
         </h4>
         <table
-          class="bg-danger table table-bordered bg-white overflow-auto"
+          class="bg-danger table table-bordered bg-white preview-table overflow-auto"
           style="overflow-x: scroll"
         >
           <thead v-if="scenarioUnitSalesComparison.parsedData">
@@ -717,40 +594,6 @@
             </tr>
           </tbody>
         </table>
-        <!--  <el-table
-          v-if="scenarioUnitSalesComparison.parsedData"
-          :data="scenarioUnitSalesComparison.parsedData.Revenue"
-        >
-          <el-table-column
-            min-width="180"
-            sortable
-            label="Comparision"
-            property="Comparision"
-          >
-          </el-table-column>
-          <el-table-column
-            min-width="150"
-            sortable
-            label="W1"
-            property="W-1"
-            align="right"
-          >
-            <template slot-scope="scope">
-              {{ scope.row["W-1"] | toLocaleStr }}
-            </template></el-table-column
-          >
-          <el-table-column
-            min-width="150"
-            sortable
-            label="W2"
-            property="W-2"
-            align="right"
-          >
-            <template slot-scope="scope">
-              {{ scope.row["W-2"] | toLocaleStr }}
-            </template></el-table-column
-          >
-        </el-table> -->
       </card>
     </el-dialog>
   </div>
@@ -835,7 +678,7 @@ export default {
   },
 };
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 .el-dialog {
   background: #f5f6fa;
 }
@@ -849,11 +692,29 @@ export default {
   z-index: 100;
 }
 
+.preview-table {
+  display: inline-table;
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+[card-body-classes="table-full-width preview-table"] .card-body {
+  overflow-x: auto;
+  width: 100%;
+}
+
 .scenario-dialog {
   .el-dialog {
     height: 95%;
     overflow-y: auto;
     margin-top: 20px !important;
   }
+}
+</style>
+
+<style>
+[card-body-classes="table-full-width preview-table"] .card-body {
+  overflow-x: auto;
+  width: 100%;
 }
 </style>

@@ -51,11 +51,13 @@
           </label>
         </div>
       </div>
-      <WeeklyMetricsTable
-        v-if="activeTab == 'Weekly'"
-        :metricsTableData="baseMetricsList"
-        tableHeading="Weekly Forecast Metrics"
-      />
+      <client-only>
+        <WeeklyMetricsTable
+          v-if="activeTab == 'Weekly'"
+          :metricsTableData="baseMetricsList"
+          tableHeading="Weekly Forecast Metrics"
+        />
+      </client-only>
       <MonthlyMetricsTable
         v-if="activeTab == 'Monthly'"
         :metricsTableData="baseMetricsList"
@@ -189,6 +191,7 @@ export default {
     },
   },
   async mounted() {
+    console.log("opopopoop00---");
     this.getTimelineDetails();
     this.showMetricsByDuration("Weekly");
     this.getAllUserData();

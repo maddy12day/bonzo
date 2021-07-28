@@ -7,48 +7,52 @@
       <div class="card p-2 overflow-auto scenario-details-table">
         <h5 class="text-bold font-weight-bold mb-0">Adjustment Details</h5>
         <table class="table table-bordered " style="word-break: break-word;">
-        <thead style="word-wrap: break-word;">
-          <tr class="scenario-details-header">
-            <th v-if="adjustmentDetails.adjusted_metrics_name">Ajusted Name</th>
-            <th v-if="adjustmentDetails.adjusted_metrics_cell_date">
-              Adjusted Metrics Sale Date
-            </th>
-            <th v-if="adjustmentDetails.before_adjustment_value">
-              Before Adjusted Value
-            </th>
-            <th v-if="adjustmentDetails.new_adjusted_value">
-              New Adjusted Value
-            </th>
-            <th v-if="adjustmentDetails.status">Status</th>
-            <th v-if="adjustmentDetails.created_at">created at</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td v-if="adjustmentDetails.adjusted_metrics_name">
-              {{ adjustmentDetails.adjusted_metrics_name }}
-            </td>
-            <td v-if="adjustmentDetails.adjusted_metrics_cell_date">
-              {{ formatDate(adjustmentDetails.adjusted_metrics_cell_date) }}
-            </td>
-            <td v-if="adjustmentDetails.before_adjustment_value">
-              {{ adjustmentDetails.before_adjustment_value }}
-            </td>
-             <td v-if="adjustmentDetails.new_adjusted_value">
-              {{ adjustmentDetails.new_adjusted_value }}
-            </td>
-            <td v-if="adjustmentDetails.status">
-              {{ adjustmentDetails.status }}
-            </td>
-            <td v-if="adjustmentDetails.created_at">
-              {{ formatDate(adjustmentDetails.created_at) }}
-            </td>
-          </tr>
-        </tbody>
-      </table>
-      <p class="text-right">  <button class="btn btn-primary" @click="showDialog = false">
+          <thead style="word-wrap: break-word;">
+            <tr class="scenario-details-header">
+              <th v-if="adjustmentDetails.adjusted_metrics_name">
+                Ajusted Name
+              </th>
+              <th v-if="adjustmentDetails.adjusted_metrics_cell_date">
+                Adjusted Metrics Sale Date
+              </th>
+              <th v-if="adjustmentDetails.before_adjustment_value">
+                Before Adjusted Value
+              </th>
+              <th v-if="adjustmentDetails.new_adjusted_value">
+                New Adjusted Value
+              </th>
+              <th v-if="adjustmentDetails.status">Status</th>
+              <th v-if="adjustmentDetails.created_at">created at</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td v-if="adjustmentDetails.adjusted_metrics_name">
+                {{ adjustmentDetails.adjusted_metrics_name }}
+              </td>
+              <td v-if="adjustmentDetails.adjusted_metrics_cell_date">
+                {{ formatDate(adjustmentDetails.adjusted_metrics_cell_date) }}
+              </td>
+              <td v-if="adjustmentDetails.before_adjustment_value">
+                {{ adjustmentDetails.before_adjustment_value }}
+              </td>
+              <td v-if="adjustmentDetails.new_adjusted_value">
+                {{ adjustmentDetails.new_adjusted_value }}
+              </td>
+              <td v-if="adjustmentDetails.status">
+                {{ adjustmentDetails.status }}
+              </td>
+              <td v-if="adjustmentDetails.created_at">
+                {{ formatDate(adjustmentDetails.created_at) }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <p class="text-right">
+          <button class="btn btn-primary" @click="showDialog = false">
             Activate
-          </button></p>
+          </button>
+        </p>
       </div>
       <!--   </div>
       </div> -->
@@ -363,9 +367,9 @@
         </table>
       </card>
       <card v-if="adjustmentUnitSalesCategoryComparison.parsedData">
-        <h4 class="font-weight-bold">Category Revenue Comparision</h4>
+        <h4 class="font-weight-bold">Category Revenue Comparison</h4>
         <table
-          class="bg-danger table table-bordered bg-white overflow-scroll"
+          class="bg-danger table table-bordered bg-white preview-table overflow-scroll"
           style="overflow-x: scroll"
         >
           <thead v-if="adjustmentUnitSalesCategoryComparison.parsedData">
@@ -398,9 +402,9 @@
         </table>
       </card>
       <card v-if="adjustmentUnitSalesCategoryComparison.parsedData">
-        <h4 class="font-weight-bold">Category Units Comparision</h4>
+        <h4 class="font-weight-bold">Category Units Comparison</h4>
         <table
-          class="bg-danger table table-bordered bg-white overflow-scroll"
+          class="bg-danger table table-bordered bg-white preview-table overflow-scroll"
           style="overflow-x: scroll"
         >
           <thead>
@@ -431,7 +435,7 @@
           </tbody>
         </table>
       </card>
-   <!--    <span slot="footer" class="dialog-footer"> </span>
+      <!--    <span slot="footer" class="dialog-footer"> </span>
       <span slot="footer" class="dialog-footer">
         <div class="text-right">
         </div>
@@ -472,7 +476,7 @@ export default {
     },
   },
   methods: {
-      formatDate(date) {
+    formatDate(date) {
       return moment(date).format("MM-DD-YYYY");
     },
     async getAdjustmentSalesSummary() {
@@ -530,6 +534,17 @@ tr td {
   position: sticky;
   top: 0;
   z-index: 100;
+}
+
+.preview-table {
+  display: inline-table;
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+[card-body-classes="table-full-width preview-table"] .card-body {
+  overflow-x: auto;
+  width: 100%;
 }
 
 .scenario-dialog {
