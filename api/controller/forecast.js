@@ -371,6 +371,10 @@ const parseFilteredForecastData = (
         }
         obj["yearly_aggregate"] = (sum / indexForAvg).toFixed(2);
       }
+
+      if (obj["Metrics Name"] == "Sell Through %") {
+        obj["yearly_aggregate"] = '--';
+      }
       if (obj["Metrics Name"] == "AUR") {
         if (obj["Metrics Name"] == "AUR") {
           obj["yearly_aggregate"] = (revenueTotal / unitsTotal).toFixed(2);
@@ -581,6 +585,48 @@ const typlanQueryGeneratorByDurations = (
   return query;
 };
 
+// Planned Query Generator
+const typlanChartQueryGeneratorByDurations = (
+  duration,
+  whereQueryString,
+  transaction_db
+) => {
+  let dateOffset;
+  let tableName;
+  let groubyCol;
+  let whereQueryStr = "";
+  duration.toLowerCase() == "week"
+    ? ((dateOffset = 1),
+      (tableName = `planned_weekly_units_revenue_by_channel_by_sku`),
+      (groubyCol = "week"))
+    : ((dateOffset = 0),
+      (tableName = `planned_weekly_units_revenue_by_channel_by_sku`),
+      (groubyCol = "month"));
+  if (whereQueryString) {
+    whereQueryStr = `${whereQueryString.replace(/country/g, "sub_channel")}`;
+  }
+
+  const query = `
+              SELECT
+                ROUND(SUM(pwurbcbs.units), 0) AS total_units,
+                ROUND(SUM(pwurbcbs.revenue), 0) AS total_revenue
+              FROM
+                ${transaction_db}.${tableName} pwurbcbs
+              WHERE
+                pwurbcbs.channel <> 'Wholesale'
+                AND pwurbcbs.plan_year = YEAR(CURRENT_DATE())
+                AND pwurbcbs.sku in (
+                select
+                  SKU
+                from
+                  ${transaction_db}.dim_products dp
+                where
+                  ${whereQueryStr})
+              GROUP BY
+                ${duration}(weekend_date)`;
+  console.log("queryqueryqueryqueryquery",query)
+  return query;
+};
 // This Year Sale Query Generator
 const thisYearSaleYearlyQuarterly = (
   duration,
@@ -758,6 +804,58 @@ export const getFilteredQuarterlyStatsData = async (req, res) => {
     };
     res.status(200).json({
       filteredStats,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Unable to Fetch Filtered Forecast Data",
+      error: `${error}`,
+    });
+  }
+};
+
+// Filtered Chart data
+export const getFilterChartData = async (req, res) => {
+  delete req.body.filterType;
+  let filter = req.body.filters;
+
+
+  // Planned Quarterly
+  const filteredQuarterlyPlannedWhereQuery = whereQueryString(
+    filter,
+    "pwurbcbs"
+  );
+  const filteredQuarterlyPlannedDataQuery = typlanChartQueryGeneratorByDurations(
+    req.body.duration,
+    filteredQuarterlyPlannedWhereQuery,
+    "morphe_staging"
+  );
+
+  // This Year Quarterly
+  const filteredQuarterlyThisYearSaleWhereQuery = whereQueryString(filter);
+  const filteredQuarterlyThisYearSaleDataQuery = thisYearSaleYearlyQuarterly(
+    req.body.duration,
+    filteredQuarterlyThisYearSaleWhereQuery,
+    0,
+    "morphe_staging"
+  );
+
+  // Forecast Quarterly
+  const filteredQuarterlyForecastWhereQuery = whereQueryString(filter);
+  const filteredQuarterlyForecastDataQuery = forecastQueryGenByDuration(
+    req.body.duration,
+    filteredQuarterlyForecastWhereQuery,
+    0,
+    "morphe_staging"
+  );
+
+  try {
+    let quarterlyFilteredStats = await Promise.allSettled([
+      prisma.$queryRaw(filteredQuarterlyPlannedDataQuery),
+      prisma.$queryRaw(filteredQuarterlyThisYearSaleDataQuery),
+      prisma.$queryRaw(filteredQuarterlyForecastDataQuery),
+    ]);
+    res.status(200).json({
+      chartData: quarterlyFilteredStats.map((item) => item.value)
     });
   } catch (error) {
     res.status(500).json({

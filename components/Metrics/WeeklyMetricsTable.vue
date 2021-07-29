@@ -71,6 +71,7 @@
             :label="`w1 ${getWeekendDates(1)}`"
             property="w01"
             align="right"
+            :class-name="checkIfPastWeek(1)"
           >
             <template slot-scope="scope">{{
               scope.row.w01 | toLocaleStr
@@ -79,6 +80,7 @@
           <el-table-column
             min-width="150"
             :label="`w2 ${getWeekendDates(2)}`"
+            :class-name="checkIfPastWeek(2)"
             property="w02"
             align="right"
           >
@@ -89,6 +91,7 @@
           <el-table-column
             min-width="150"
             :label="`w3 ${getWeekendDates(3)}`"
+            :class-name="checkIfPastWeek(3)"
             property="w03"
             align="right"
           >
@@ -99,6 +102,7 @@
           <el-table-column
             min-width="150"
             :label="`w4 ${getWeekendDates(4)}`"
+            :class-name="checkIfPastWeek(4)"
             property="w40"
             align="right"
           >
@@ -109,6 +113,7 @@
           <el-table-column
             min-width="150"
             :label="`w5 ${getWeekendDates(5)}`"
+            :class-name="checkIfPastWeek(5)"
             property="w05"
             align="right"
           >
@@ -119,6 +124,7 @@
           <el-table-column
             min-width="150"
             :label="`w6 ${getWeekendDates(6)}`"
+            :class-name="checkIfPastWeek(6)"
             property="w06"
             align="right"
           >
@@ -129,6 +135,7 @@
           <el-table-column
             min-width="150"
             :label="`w7 ${getWeekendDates(7)}`"
+            :class-name="checkIfPastWeek(7)"
             property="w07"
             align="right"
           >
@@ -139,6 +146,7 @@
           <el-table-column
             min-width="150"
             :label="`w8 ${getWeekendDates(8)}`"
+            :class-name="checkIfPastWeek(8)"
             property="w08"
             align="right"
           >
@@ -149,6 +157,7 @@
           <el-table-column
             min-width="150"
             :label="`w9 ${getWeekendDates(9)}`"
+            :class-name="checkIfPastWeek(9)"
             property="w09"
             align="right"
           >
@@ -159,6 +168,7 @@
           <el-table-column
             min-width="150"
             :label="`w10 ${getWeekendDates(10)}`"
+            :class-name="checkIfPastWeek(10)"
             property="w10"
             align="right"
           >
@@ -169,6 +179,7 @@
           <el-table-column
             min-width="150"
             :label="`w11 ${getWeekendDates(11)}`"
+            :class-name="checkIfPastWeek(11)"
             property="w11"
             align="right"
           >
@@ -179,6 +190,7 @@
           <el-table-column
             min-width="150"
             :label="`w12 ${getWeekendDates(12)}`"
+            :class-name="checkIfPastWeek(2)"
             property="w12"
             align="right"
           >
@@ -189,6 +201,7 @@
           <el-table-column
             min-width="150"
             :label="`w13 ${getWeekendDates(13)}`"
+            :class-name="checkIfPastWeek(13)"
             property="w13"
             align="right"
           >
@@ -199,6 +212,7 @@
           <el-table-column
             min-width="150"
             :label="`w14 ${getWeekendDates(14)}`"
+            :class-name="checkIfPastWeek(14)"
             property="w14"
             align="right"
           >
@@ -209,6 +223,7 @@
           <el-table-column
             min-width="150"
             :label="`w15 ${getWeekendDates(15)}`"
+            :class-name="checkIfPastWeek(15)"
             property="w15"
             align="right"
           >
@@ -219,6 +234,7 @@
           <el-table-column
             min-width="150"
             :label="`w16 ${getWeekendDates(16)}`"
+            :class-name="checkIfPastWeek(16)"
             property="w16"
             align="right"
           >
@@ -229,6 +245,7 @@
           <el-table-column
             min-width="150"
             :label="`w17 ${getWeekendDates(17)}`"
+            :class-name="checkIfPastWeek(17)"
             property="w17"
             align="right"
           >
@@ -239,6 +256,7 @@
           <el-table-column
             min-width="150"
             :label="`w18 ${getWeekendDates(18)}`"
+            :class-name="checkIfPastWeek(18)"
             property="w18"
             align="right"
           >
@@ -249,6 +267,7 @@
           <el-table-column
             min-width="150"
             :label="`w19 ${getWeekendDates(19)}`"
+            :class-name="checkIfPastWeek(19)"
             property="w19"
             align="right"
           >
@@ -259,6 +278,7 @@
           <el-table-column
             min-width="150"
             :label="`w20 ${getWeekendDates(20)}`"
+            :class-name="checkIfPastWeek(20)"
             property="w20"
             align="right"
           >
@@ -269,6 +289,7 @@
           <el-table-column
             min-width="150"
             :label="`w21 ${getWeekendDates(21)}`"
+            :class-name="checkIfPastWeek(21)"
             property="w21"
             align="right"
           >
@@ -279,6 +300,7 @@
           <el-table-column
             min-width="150"
             :label="`w22 ${getWeekendDates(22)}`"
+            :class-name="checkIfPastWeek(22)"
             property="w22"
             align="right"
           >
@@ -289,6 +311,7 @@
           <el-table-column
             min-width="150"
             :label="`w23 ${getWeekendDates(23)}`"
+            :class-name="checkIfPastWeek(23)"
             property="w23"
             align="right"
           >
@@ -299,6 +322,7 @@
           <el-table-column
             min-width="150"
             :label="`w24 ${getWeekendDates(24)}`"
+            :class-name="checkIfPastWeek(24)"
             property="w24"
             align="right"
           >
@@ -309,6 +333,7 @@
           <el-table-column
             min-width="150"
             :label="`w25 ${getWeekendDates(25)}`"
+            :class-name="checkIfPastWeek(25)"
             property="w25"
             align="right"
           >
@@ -319,6 +344,7 @@
           <el-table-column
             min-width="150"
             :label="`w26 ${getWeekendDates(26)}`"
+            :class-name="checkIfPastWeek(26)"
             property="w26"
             align="right"
           >
@@ -329,6 +355,7 @@
           <el-table-column
             min-width="150"
             :label="`w27 ${getWeekendDates(27)}`"
+            :class-name="checkIfPastWeek(27)"
             property="w27"
             align="right"
           >
@@ -339,6 +366,7 @@
           <el-table-column
             min-width="150"
             :label="`w28 ${getWeekendDates(28)}`"
+            :class-name="checkIfPastWeek(28)"
             property="w28"
             align="right"
           >
@@ -349,6 +377,7 @@
           <el-table-column
             min-width="150"
             :label="`w29 ${getWeekendDates(29)}`"
+            :class-name="checkIfPastWeek(29)"
             property="w29"
             align="right"
           >
@@ -359,6 +388,7 @@
           <el-table-column
             min-width="150"
             :label="`w30 ${getWeekendDates(30)}`"
+            :class-name="checkIfPastWeek(30)"
             property="w30"
             align="right"
           >
@@ -369,6 +399,7 @@
           <el-table-column
             min-width="150"
             :label="`w31 ${getWeekendDates(31)}`"
+            :class-name="checkIfPastWeek(31)"
             property="w31"
             align="right"
           >
@@ -379,6 +410,7 @@
           <el-table-column
             min-width="150"
             :label="`w32 ${getWeekendDates(32)}`"
+            :class-name="checkIfPastWeek(32)"
             property="w32"
             align="right"
           >
@@ -389,6 +421,7 @@
           <el-table-column
             min-width="150"
             :label="`w33 ${getWeekendDates(33)}`"
+            :class-name="checkIfPastWeek(33)"
             property="w33"
             align="right"
           >
@@ -399,6 +432,7 @@
           <el-table-column
             min-width="150"
             :label="`w34 ${getWeekendDates(34)}`"
+            :class-name="checkIfPastWeek(34)"
             property="w34"
             align="right"
           >
@@ -409,6 +443,7 @@
           <el-table-column
             min-width="150"
             :label="`w35 ${getWeekendDates(35)}`"
+            :class-name="checkIfPastWeek(35)"
             property="w35"
             align="right"
           >
@@ -419,6 +454,7 @@
           <el-table-column
             min-width="150"
             :label="`w36 ${getWeekendDates(36)}`"
+            :class-name="checkIfPastWeek(36)"
             property="w36"
             align="right"
           >
@@ -429,6 +465,7 @@
           <el-table-column
             min-width="150"
             :label="`w37 ${getWeekendDates(37)}`"
+            :class-name="checkIfPastWeek(37)"
             property="w37"
             align="right"
           >
@@ -439,6 +476,7 @@
           <el-table-column
             min-width="150"
             :label="`w38 ${getWeekendDates(38)}`"
+            :class-name="checkIfPastWeek(38)"
             property="w38"
             align="right"
           >
@@ -449,6 +487,7 @@
           <el-table-column
             min-width="150"
             :label="`w39 ${getWeekendDates(39)}`"
+            :class-name="checkIfPastWeek(39)"
             property="w39"
             align="right"
           >
@@ -459,6 +498,7 @@
           <el-table-column
             min-width="150"
             :label="`w40 ${getWeekendDates(40)}`"
+            :class-name="checkIfPastWeek(40)"
             property="w40"
             align="right"
           >
@@ -469,6 +509,7 @@
           <el-table-column
             min-width="150"
             :label="`w41 ${getWeekendDates(41)}`"
+            :class-name="checkIfPastWeek(41)"
             property="w41"
             align="right"
           >
@@ -479,6 +520,7 @@
           <el-table-column
             min-width="150"
             :label="`w42 ${getWeekendDates(42)}`"
+            :class-name="checkIfPastWeek(42)"
             property="w42"
             align="right"
           >
@@ -489,6 +531,7 @@
           <el-table-column
             min-width="150"
             :label="`w43 ${getWeekendDates(43)}`"
+            :class-name="checkIfPastWeek(43)"
             property="w43"
             align="right"
           >
@@ -499,6 +542,7 @@
           <el-table-column
             min-width="150"
             :label="`w44 ${getWeekendDates(44)}`"
+            :class-name="checkIfPastWeek(44)"
             property="w44"
             align="right"
           >
@@ -509,6 +553,7 @@
           <el-table-column
             min-width="150"
             :label="`w45 ${getWeekendDates(45)}`"
+            :class-name="checkIfPastWeek(45)"
             property="w45"
             align="right"
           >
@@ -519,6 +564,7 @@
           <el-table-column
             min-width="150"
             :label="`w46 ${getWeekendDates(46)}`"
+            :class-name="checkIfPastWeek(46)"
             property="w46"
             align="right"
           >
@@ -529,6 +575,7 @@
           <el-table-column
             min-width="150"
             :label="`w47 ${getWeekendDates(47)}`"
+            :class-name="checkIfPastWeek(47)"
             property="w47"
             align="right"
           >
@@ -539,6 +586,7 @@
           <el-table-column
             min-width="150"
             :label="`w48 ${getWeekendDates(48)}`"
+            :class-name="checkIfPastWeek(48)"
             property="w48"
             align="right"
           >
@@ -549,6 +597,7 @@
           <el-table-column
             min-width="150"
             :label="`w49 ${getWeekendDates(49)}`"
+            :class-name="checkIfPastWeek(49)"
             property="w49"
             align="right"
           >
@@ -559,6 +608,7 @@
           <el-table-column
             min-width="150"
             :label="`w50 ${getWeekendDates(50)}`"
+            :class-name="checkIfPastWeek(50)"
             property="w50"
             align="right"
           >
@@ -569,6 +619,7 @@
           <el-table-column
             min-width="150"
             :label="`w51 ${getWeekendDates(51)}`"
+            :class-name="checkIfPastWeek(51)"
             property="w51"
             align="right"
           >
@@ -579,6 +630,7 @@
           <el-table-column
             min-width="150"
             :label="`w52 ${getWeekendDates(52)}`"
+            :class-name="checkIfPastWeek(52)"
             property="w52"
             align="right"
           >
@@ -614,8 +666,19 @@ export default {
           ).format("MM/DD/YYYY")})`
         : "";
     },
+    checkIfPastWeek(index) {
+      let className = "";
+      if (moment(new Date()).week() > index) {
+        className = "disableWeek";
+      }
+      return className;
+    },
   },
   mounted() {},
 };
 </script>
-<style></style>
+<style>
+.disableWeek {
+  background: #e8e8e8;
+}
+</style>
