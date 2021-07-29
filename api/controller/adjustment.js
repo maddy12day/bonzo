@@ -191,7 +191,6 @@ export const getAdjustmentSalesSummary = async (req, res) => {
 //API: Adjustment Category Unit & Sales Comparison
 export const getAdjustmentCategoryComparison = async (req, res) => {
   try {
-    console.log("id------------------", req.params.id)
     const result = await prisma.$queryRaw(`SELECT 
                                           weekend, 
                                           sum(adjusted_units) as adjusted_units,

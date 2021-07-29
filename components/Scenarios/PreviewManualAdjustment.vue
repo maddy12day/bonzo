@@ -250,9 +250,9 @@
           </el-table-column>
         </el-table>
       </card>
-      <card v-if="adjustmentUnitSalesCategoryComparison.parsedData">
+      <card v-if="adjustmentUnitSalesCategoryComparison.parsedData" class="preview-table-div">
         <h4 class="font-weight-bold">Category Summary Comparison</h4>
-        <table class="table table-bordered bg-white overflow-auto">
+        <table class="table table-bordered bg-white overflow-auto preview-table">
           <thead v-if="adjustmentUnitSalesCategoryComparison.parsedData">
             <tr>
               <th class="theader">Category</th>
@@ -275,75 +275,75 @@
               v-for="(col2, index) in categorySummery.result"
               :key="Math.random(index, 100)"
             >
-              <td class="text-right">{{ col2.level_value }}</td>
-              <td class="text-right">{{ col2.planned_units | toLocaleStr }}</td>
-              <td class="text-right">
+              <td>{{ col2.level_value }}</td>
+              <td>{{ col2.planned_units | toLocaleStr }}</td>
+              <td>
                 {{ col2.forecasted_units | toLocaleStr }}
               </td>
-              <td class="text-right">
+              <td>
                 {{
                   col2.adjusted_units
                     ? parseInt(col2.adjusted_units)
                     : 0 | toLocaleStr
                 }}
               </td>
-              <td class="text-right">
+              <td >
                 {{
                   col2.planned_revenue
                     ? parseInt(col2.planned_revenue)
                     : 0 | toLocaleStr
                 }}
               </td>
-              <td class="text-right">
+              <td>
                 {{
                   col2.forecasted_revenue
                     ? parseInt(col2.forecasted_revenue)
                     : 0 | toLocaleStr
                 }}
               </td>
-              <td class="text-right">
+              <td>
                 {{
                   col2.adjusted_revenue
                     ? parseInt(col2.adjusted_revenue)
                     : 0 | toLocaleStr
                 }}
               </td>
-              <td class="text-right">
+              <td>
                 {{
                   col2.planned_revenue_percent
                     ? col2.planned_revenue_percent.toFixed(2)
                     : 0
                 }}
               </td>
-              <td class="text-right">
+              <td>
                 {{
                   col2.forecasted_revenue_percent
                     ? col2.forecasted_revenue_percent.toFixed(2)
                     : 0
                 }}
               </td>
-              <td class="text-right">
+              <td>
                 {{
                   col2.adjusted_revenue_percent
                     ? col2.adjusted_revenue_percent.toFixed(2)
                     : 0
                 }}
               </td>
-              <td class="text-right">
+              <td>
                 {{
                   col2.planned_gm_percent
                     ? col2.planned_gm_percent.toFixed(2)
                     : 0
                 }}
               </td>
-              <td class="text-right">
+              <td>
                 {{
                   col2.forecasted_gm_percent
                     ? col2.forecasted_gm_percent.toFixed(2)
                     : 0
                 }}
               </td>
-              <td class="text-right">
+              <td>
                 {{
                   col2.adjusted_gm_percent
                     ? col2.adjusted_gm_percent.toFixed(2)
@@ -368,6 +368,7 @@
                     .Revenue[0]
                 )"
                 :key="Math.random(index2, 300)"
+                :class="{ fixedWidth: index2 === 0 }"
               >
                 {{ col }}
               </th>
@@ -402,6 +403,7 @@
                   this.adjustmentUnitSalesCategoryComparison.parsedData.Units[0]
                 )"
                 :key="Math.random(index2, 300)"
+                :class="{ fixedWidth: index2 === 0 }"
               >
                 {{ col }}
               </th>
@@ -530,16 +532,24 @@ tr td {
   white-space: nowrap;
 }
 
-[card-body-classes="table-full-width preview-table"] .card-body {
-  overflow-x: auto;
-  width: 100%;
-}
-
 .scenario-dialog {
   .el-dialog {
     height: 95%;
     overflow-y: auto;
     margin-top: 20px !important;
   }
+}
+
+.preview-table-div {
+  overflow-x: auto;
+  width: 100%;
+
+  th,td {
+    min-width: 150px !important;
+  }
+}
+
+.fixedWidth {
+  width: 200px;
 }
 </style>

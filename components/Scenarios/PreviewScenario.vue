@@ -691,11 +691,6 @@ export default {
   white-space: nowrap;
 }
 
-[card-body-classes="table-full-width preview-table"] .card-body {
-  overflow-x: auto;
-  width: 100%;
-}
-
 .scenario-dialog {
   .el-dialog {
     height: 95%;
