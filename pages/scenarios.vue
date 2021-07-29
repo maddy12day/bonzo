@@ -384,7 +384,7 @@ export default {
         filter_sub_classes: this.subClassesValues,
         filter_programs: this.programValues,
       };
-      this.requestedFilterOption = this.emptyFieldCleaner(selectedFilter);
+      // this.requestedFilterOption = this.emptyFieldCleaner(selectedFilter);
     },
     async createScenario() {
       // validations
@@ -527,7 +527,7 @@ export default {
   },
   computed: {
     showResetFilter() {
-      return Object.keys(this.requestedFilterOption).length > 0;
+      return true //Object.keys(this.requestedFilterOption).length > 0;
     },
     showChannelErrorCom() {
       return this.showChannelError;
