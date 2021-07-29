@@ -2,11 +2,7 @@
   <card type="chart" >
     <template slot="header">
       <div class="row">
-        <div class="col-sm-6" :class="'text-left'">
-          <h5 class="card-category">Planned Vs Actuals Vs Forecast</h5>
-          <h2 class="card-title"></h2>
-        </div>
-          <div class="col-sm-3 d-flex d-sm-block">
+            <div class="col-sm-12 text-right d-flex d-sm-block">
           <div
             class="btn-group btn-group-toggle"
             :class="'float-right'"
@@ -35,7 +31,12 @@
             </label>
           </div>
         </div>
-        <div class="col-sm-3 d-flex d-sm-block">
+        <div class="col-sm-6" :class="'text-left'">
+          <h5 class="card-category">Planned Vs Actuals Vs Forecast</h5>
+          <h2 class="card-title"></h2>
+        </div>
+        
+        <div class="col-sm-6 d-flex d-sm-block text-right">
           <div
             class="btn-group btn-group-toggle"
             :class="'float-right'"
@@ -77,6 +78,13 @@
       >
       </line-chart>
     </div>
+    <div class="row mt-2">
+       <div class="col-md-4 text-right offset-md-4">
+          <span class="px-4 bg-primary" ></span><span class="ml-2 text-dark">Planned</span>
+           <span class="px-4" style="background: #6acba8;"></span><span class="ml-2 text-dark">This Year</span>
+            <span class="px-4" style="background: #e6a23cc7;"></span><span class="ml-2 text-dark">Forecast</span>
+       </div>
+      </div>
   </card>
 </template>
 
@@ -342,12 +350,12 @@ export default {
               borderWidth: 2,
               borderDash: [],
               borderDashOffset: 0.0,
-              pointBackgroundColor: "",
-              pointBorderColor: "",
+              pointBackgroundColor: "#1d8cf8",
+              pointBorderColor: "#1d8cf8",
               pointHoverBackgroundColor: "#1d8cf8",
               pointBorderWidth: 1,
               pointHoverRadius: 4,
-              pointHoverBorderWidth: 15,
+              pointHoverBorderWidth: 6,
               pointRadius: 1,
               data: this.monthlyUnitsChartData[0],
             },
@@ -362,7 +370,7 @@ export default {
               pointHoverBackgroundColor: config.colors.primary,
               pointBorderWidth: 1,
               pointHoverRadius: 4,
-              pointHoverBorderWidth: 15,
+              pointHoverBorderWidth: 6,
               pointRadius: 1,
               data: this.monthlyUnitsChartData[1],
             },
@@ -374,10 +382,10 @@ export default {
               borderDashOffset: 0.0,
               pointBackgroundColor: "",
               pointBorderColor: "#d48d23d9",
-              pointHoverBackgroundColor: "",
+              pointHoverBackgroundColor: "#d48d23d9",
               pointBorderWidth: 1,
               pointHoverRadius: 4,
-              pointHoverBorderWidth: 15,
+              pointHoverBorderWidth: 6,
               pointRadius: 1,
               data: this.monthlyUnitsChartData[2],
               legend: {
@@ -414,12 +422,12 @@ export default {
               borderWidth: 2,
               borderDash: [],
               borderDashOffset: 0.0,
-              pointBackgroundColor: "",
-              pointBorderColor: "",
+              pointBackgroundColor: "#1d8cf8",
+              pointBorderColor: "#1d8cf8",
               pointHoverBackgroundColor: "#1d8cf8",
               pointBorderWidth: 1,
               pointHoverRadius: 4,
-              pointHoverBorderWidth: 15,
+              pointHoverBorderWidth: 6,
               pointRadius: 1,
               data: this.weeklyUnitsChartData[0],
             },
@@ -434,7 +442,7 @@ export default {
               pointHoverBackgroundColor: config.colors.primary,
               pointBorderWidth: 1,
               pointHoverRadius: 4,
-              pointHoverBorderWidth: 15,
+              pointHoverBorderWidth: 6,
               pointRadius: 1,
               data: this.weeklyUnitsChartData[1],
             },
@@ -444,12 +452,12 @@ export default {
               borderWidth: 2,
               borderDash: [],
               borderDashOffset: 0.0,
-              pointBackgroundColor: "",
+              pointBackgroundColor: "#d48d23d9",
               pointBorderColor: "#d48d23d9",
-              pointHoverBackgroundColor: "",
+              pointHoverBackgroundColor: "#d48d23d9",
               pointBorderWidth: 1,
               pointHoverRadius: 4,
-              pointHoverBorderWidth: 15,
+              pointHoverBorderWidth: 6,
               pointRadius: 1,
               data: this.weeklyUnitsChartData[2],
             },
