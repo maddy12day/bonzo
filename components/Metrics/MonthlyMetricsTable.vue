@@ -31,7 +31,7 @@
           </el-table-column>
           <el-table-column
             min-width="150"
-            label="Q1 Aggregate"
+            label="Q1"
             property="q1_aggregate"
             align="right"
           >
@@ -41,7 +41,7 @@
           </el-table-column>
           <el-table-column
             min-width="150"
-            label="Q2 Aggregate"
+            label="Q2"
             property="q2_aggregate"
             align="right"
           >
@@ -51,7 +51,7 @@
           </el-table-column>
           <el-table-column
             min-width="150"
-            label="Q3 Aggregate"
+            label="Q3"
             property="q3_aggregate"
             align="right"
           >
@@ -61,7 +61,7 @@
           </el-table-column>
           <el-table-column
             min-width="150"
-            label="Q4 Aggregate"
+            label="Q4"
             property="q4_aggregate"
             align="right"
           >
