@@ -194,8 +194,11 @@ export default {
         ]
     },
           datasets: [{
+            label: "Planned"
           }, {
+            label: "This Year"
           }, {
+            label: "Forecast"
           }],
           labels: weeklyChartLabels,
         },
@@ -328,23 +331,9 @@ export default {
       this.activeIndex = index;
       if (index == 0) {
         let chartData = {
-          scales: {
-        yAxes: [
-            {
-                ticks: {
-                    callback: function(label, index, labels) {
-                        return label/1000+'k';
-                    }
-                },
-                scaleLabel: {
-                    display: true,
-                    labelString: '1k = 1000'
-                }
-            }
-        ]
-    },
           datasets: [
             {
+              label: "Planned",
               fill: false,
               borderColor: "#1d8cf8",
               borderWidth: 2,
@@ -360,6 +349,7 @@ export default {
               data: this.monthlyUnitsChartData[0],
             },
             {
+              label: "This Year",
               fill: false,
               borderColor: config.colors.primary,
               borderWidth: 2,
@@ -375,6 +365,7 @@ export default {
               data: this.monthlyUnitsChartData[1],
             },
             {
+              label: "Forecast",
               fill: false,
               borderColor: "#d48d23d9",
               borderWidth: 2,
@@ -400,23 +391,9 @@ export default {
       }
       if (index == 1) {
         let chartData = {
-            scales: {
-        yAxes: [
-            {
-                ticks: {
-                    callback: function(label, index, labels) {
-                        return label/1000+'k';
-                    }
-                },
-                scaleLabel: {
-                    display: true,
-                    labelString: '1k = 1000'
-                }
-            }
-        ]
-    },
           datasets: [
             {
+              label: "Planned",
               fill: false,
               borderColor: "#1d8cf8",
               borderWidth: 2,
@@ -432,6 +409,7 @@ export default {
               data: this.weeklyUnitsChartData[0],
             },
             {
+              label: "This Year",
               fill: false,
               borderColor: config.colors.primary,
               borderWidth: 2,
@@ -447,6 +425,7 @@ export default {
               data: this.weeklyUnitsChartData[1],
             },
             {
+              label: "Forecast",
               fill: false,
               borderColor: "#d48d23d9",
               borderWidth: 2,
