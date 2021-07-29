@@ -69,7 +69,6 @@
         <el-table :data="adjustmentSalesSummary.result">
           <el-table-column
             min-width="150"
-            sortable
             label="Planned TY"
             property="planned_revenue"
             align="right"
@@ -84,7 +83,6 @@
           </el-table-column>
           <el-table-column
             min-width="150"
-            sortable
             label="Forecast TY"
             property="forecasted_revenue"
             align="right"
@@ -99,7 +97,6 @@
           </el-table-column>
           <el-table-column
             min-width="150"
-            sortable
             label="Adjusted TY"
             property="adjusted_revenue"
             align="right"
@@ -114,7 +111,6 @@
           </el-table-column>
           <el-table-column
             min-width="150"
-            sortable
             label="Planned GM(%)"
             property="planned_gm_percent"
             align="right"
@@ -129,7 +125,6 @@
           </el-table-column>
           <el-table-column
             min-width="150"
-            sortable
             label="Forecast GM(%)"
             property="forecasted_gm_percent"
             align="right"
@@ -144,7 +139,6 @@
           </el-table-column>
           <el-table-column
             min-width="150"
-            sortable
             label="Adjusted GM(%)"
             property="adjusted_gm_percent"
             align="right"
@@ -172,7 +166,6 @@
         <el-table :data="adjustmentSalesSummary.result">
           <el-table-column
             min-width="150"
-            sortable
             label="Planned TY"
             property="planned_revenue"
             align="right"
@@ -187,7 +180,6 @@
           </el-table-column>
           <el-table-column
             min-width="150"
-            sortable
             label="Forecast TY"
             property="forecasted_revenue"
             align="right"
@@ -202,7 +194,6 @@
           </el-table-column>
           <el-table-column
             min-width="150"
-            sortable
             label="Adjusted TY"
             property="adjusted_revenue"
             align="right"
@@ -217,7 +208,6 @@
           </el-table-column>
           <el-table-column
             min-width="150"
-            sortable
             label="Planned GM(%)"
             property="planned_gm_percent"
             align="right"
@@ -232,7 +222,6 @@
           </el-table-column>
           <el-table-column
             min-width="150"
-            sortable
             label="Forecast GM(%)"
             property="forecasted_gm_percent"
             align="right"
@@ -247,7 +236,6 @@
           </el-table-column>
           <el-table-column
             min-width="150"
-            sortable
             label="Adjusted GM(%)"
             property="adjusted_gm_percent"
             align="right"

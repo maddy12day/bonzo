@@ -6,7 +6,10 @@
       </h3>
       <card class="overflow-auto scenario-details-table">
         Scenario Details
-        <table class="table table-bordered" style="word-break: break-word;">
+        <table
+          class="table table-bordered preview-table"
+          style="word-break: break-word;"
+        >
           <thead style="word-wrap: break-word;">
             <tr class="scenario-details-header">
               <th v-if="scenarioDetails.scenario_name">Name</th>
@@ -177,7 +180,6 @@
         <el-table :data="scenarioSalesSummary.result">
           <el-table-column
             min-width="150"
-            sortable
             label="Planned TY"
             property="planned_revenue"
             align="right"
@@ -192,7 +194,6 @@
           </el-table-column>
           <el-table-column
             min-width="150"
-            sortable
             label="Forecast TY"
             property="forecasted_revenue"
             align="right"
@@ -207,7 +208,6 @@
           </el-table-column>
           <el-table-column
             min-width="150"
-            sortable
             label="Adjusted TY"
             property="adjusted_revenue"
             align="right"
@@ -222,7 +222,6 @@
           </el-table-column>
           <el-table-column
             min-width="150"
-            sortable
             label="Planned GM(%)"
             property="planned_gm_percent"
             align="right"
@@ -237,7 +236,6 @@
           </el-table-column>
           <el-table-column
             min-width="150"
-            sortable
             label="Forecast GM(%)"
             property="forecasted_gm_percent"
             align="right"
@@ -252,7 +250,6 @@
           </el-table-column>
           <el-table-column
             min-width="150"
-            sortable
             label="Adjusted GM(%)"
             property="adjusted_gm_percent"
             align="right"
@@ -278,7 +275,6 @@
         <el-table :data="scenarioSalesSummary.result">
           <el-table-column
             min-width="150"
-            sortable
             label="Planned TY"
             property="planned_units"
             align="right"
@@ -289,7 +285,6 @@
           </el-table-column>
           <el-table-column
             min-width="150"
-            sortable
             label="Forecast TY"
             property="forecasted_units"
             align="right"
@@ -300,7 +295,6 @@
           </el-table-column>
           <el-table-column
             min-width="150"
-            sortable
             label="Adjusted TY"
             property="adjusted_units"
             align="right"
@@ -311,7 +305,6 @@
           </el-table-column>
           <el-table-column
             min-width="150"
-            sortable
             label="Planned GM(%)"
             property="planned_gm_percent"
             align="right"
@@ -325,7 +318,6 @@
           </el-table-column>
           <el-table-column
             min-width="150"
-            sortable
             label="Forecast GM(%)"
             property="forecasted_gm_percent"
             align="right"
@@ -339,7 +331,6 @@
           </el-table-column>
           <el-table-column
             min-width="150"
-            sortable
             label="Adjusted GM(%)"
             property="adjusted_gm_percent"
             align="right"
@@ -532,6 +523,7 @@
                   this.scenarioUnitSalesComparison.parsedData.Units[0]
                 )"
                 :key="Math.random(index2, 300)"
+                :class="{ fixedWidth: index2 === 0 }"
               >
                 {{ col }}
               </th>
@@ -574,6 +566,7 @@
                   this.scenarioUnitSalesComparison.parsedData.Revenue[0]
                 )"
                 :key="Math.random(index2, 300)"
+                :class="{ fixedWidth: index2 === 0 }"
               >
                 {{ col }}
               </th>
@@ -709,6 +702,10 @@ export default {
     overflow-y: auto;
     margin-top: 20px !important;
   }
+}
+
+.fixedWidth {
+  width: 200px;
 }
 </style>
 
