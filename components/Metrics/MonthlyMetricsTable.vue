@@ -29,7 +29,46 @@
               scope.row.yearly_aggregate | toLocaleStr
             }}</template>
           </el-table-column>
-
+          <el-table-column
+            min-width="150"
+            label="Q1"
+            property="q1_aggregate"
+            align="right"
+          >
+            <template slot-scope="scope">{{
+              scope.row.q1_aggregate | toLocaleStr
+            }}</template>
+          </el-table-column>
+          <el-table-column
+            min-width="150"
+            label="Q2"
+            property="q2_aggregate"
+            align="right"
+          >
+            <template slot-scope="scope">{{
+              scope.row.q2_aggregate | toLocaleStr
+            }}</template>
+          </el-table-column>
+          <el-table-column
+            min-width="150"
+            label="Q3"
+            property="q3_aggregate"
+            align="right"
+          >
+            <template slot-scope="scope">{{
+              scope.row.q3_aggregate | toLocaleStr
+            }}</template>
+          </el-table-column>
+          <el-table-column
+            min-width="150"
+            label="Q4"
+            property="q4_aggregate"
+            align="right"
+          >
+            <template slot-scope="scope">{{
+              scope.row.q4_aggregate | toLocaleStr
+            }}</template>
+          </el-table-column>
           <el-table-column
             min-width="150"
             sortable
