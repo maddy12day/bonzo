@@ -2,7 +2,19 @@
   <div>
     <div class="card mb-0 py-2">
       <div class="col-md-12 text-right">
-        <h4 class="text-left mt-0 mb-0">Create New Scenarios</h4>
+        <div class="scenario-reset-div">
+          <h4 class="text-left mt-0 mb-0">Create New Scenarios</h4>
+          <div class="btn-custom-div">
+            <label
+              class="btn btn-sm btn-dark btn-simple btn-custom"
+              v-if="showResetFilter"
+            >
+              <span class="d-none d-sm-block" @click="forceRerender"
+                >Reset Filters</span
+              >
+            </label>
+          </div>
+        </div>
         <div class="btn-group btn-group-toggle p-0 mb-2" data-toggle="buttons">
           <label
             v-for="(option, index) in filtersType"
@@ -209,7 +221,7 @@ export default {
       showEndDateError: false,
       showAmountError: false,
       showScenarioNameError: false,
-
+      requestedFilterOption: [],
       type: ["", "info", "success", "warning", "danger"],
       notifications: {
         topCenter: false,
@@ -220,7 +232,6 @@ export default {
       },
 
       regularFiltersComponentKey: Math.random(),
-      filteredStatsComponentKey: Math.random(),
       programFiltersComponentKey: Math.random(),
     };
   },
@@ -234,9 +245,7 @@ export default {
   methods: {
     resetFilter() {
       this.forceRerender();
-      this.isFilteredForecast = false;
       this.$store.commit("updateRegularFilter", []);
-      this.allAppliedFilters = [];
     },
     notifyVue(verticalAlign, horizontalAlign) {
       let color = 2;
@@ -253,18 +262,23 @@ export default {
     // filter value getter methods
     getProductSource(values) {
       this.productSourceValues = values;
+      this.getSelectedFilters();
     },
     getBrandType(values) {
       this.brandTypeValues = values;
+      this.getSelectedFilters();
     },
     getLifeCycle(values) {
       this.lifeCycleValues = values;
+      this.getSelectedFilters();
     },
     getNewness(values) {
       this.newNessValues = values;
+      this.getSelectedFilters();
     },
     getBrandValus(values) {
       this.getBrandValus = values;
+      this.getSelectedFilters();
     },
     getChannelValues(values) {
       this.channelValues = values;
@@ -273,27 +287,35 @@ export default {
       this.channelValues.length == 0
         ? (this.showChannelError = true)
         : (this.showChannelError = false);
+      this.getSelectedFilters();
     },
     getPrograms(values) {
       this.programValues = values;
+      this.getSelectedFilters();
     },
     getSubChannelValues(values) {
       this.subChannelsValues = values;
+      this.getSelectedFilters();
     },
     getCategoryValues(values) {
       this.categoriesValues = values;
+      this.getSelectedFilters();
     },
     getClassValues(values) {
       this.classesValues = values;
+      this.getSelectedFilters();
     },
     getSubClassValues(values) {
       this.subClassesValues = values;
+      this.getSelectedFilters();
     },
     getCollectionValues(values) {
       this.collectionValues = values;
+      this.getSelectedFilters();
     },
     getSkusValues(values) {
       this.skuValues = values;
+      this.getSelectedFilters();
     },
     getScenarioType(values) {
       this.scenarioTypeValue = values.value;
@@ -303,7 +325,7 @@ export default {
       this.showScenarioNameError = this.scenarioNameValue ? false : true;
     },
     getStartDate(evt) {
-        this.tomorrowDate = moment(this.startDateValue)
+      this.tomorrowDate = moment(this.startDateValue)
         .add(1, "days")
         .format("YYYY-MM-DD");
       this.showStartDateError = this.startDateValue ? false : true;
@@ -322,8 +344,47 @@ export default {
     },
     forceRerender() {
       this.regularFiltersComponentKey += 1;
-      this.filteredStatsComponentKey += 1;
       this.programFiltersComponentKey += 1;
+      this.requestedFilterOption = {};
+    },
+    emptyFieldCleaner(reqBody) {
+      for (let key in reqBody) {
+        if (reqBody[key] == "" || reqBody[key] == undefined) {
+          delete reqBody[key];
+        }
+        if (Array.isArray(reqBody[key]) && reqBody[key].length > 1) {
+          reqBody[key] = reqBody[key].map((item) => {
+            if (item.includes("All") === false) {
+              return item;
+            }
+          });
+        } else if (Array.isArray(reqBody[key]) && reqBody[key].length == 1) {
+          reqBody[key] = reqBody[key].map((item) => {
+            if (item.includes("All") === false) {
+              return item;
+            }
+          });
+        }
+      }
+      return reqBody;
+    },
+    getSelectedFilters() {
+      let selectedFilter = {
+        filter_product_sources: this.productSourceValues,
+        filter_brand_types: this.brandTypeValues,
+        filter_life_cycles: this.lifeCycleValues,
+        filter_newness: this.newNessValues,
+        filter_brands: this.brandValues,
+        filter_channels: this.channelValues,
+        filter_sub_channels: this.subChannelsValues,
+        filter_categories: this.categoriesValues,
+        filter_collections: this.collectionValues,
+        filter_skus: this.skuValues,
+        filter_classes: this.classesValues,
+        filter_sub_classes: this.subClassesValues,
+        filter_programs: this.programValues,
+      };
+      this.requestedFilterOption = this.emptyFieldCleaner(selectedFilter);
     },
     async createScenario() {
       // validations
@@ -384,11 +445,11 @@ export default {
           createScenarioJson.scenarioRes
         );
         this.resetFilter();
-        this.scenarioTypes = '';
-        this.scenarioNameValue = '';
-        this.startDateValue = '';
-        this.endDateValue = '';
-        this.amountValue = ''
+        this.scenarioTypes = "";
+        this.scenarioNameValue = "";
+        this.startDateValue = "";
+        this.endDateValue = "";
+        this.amountValue = "";
         this.showScenarioTable = true;
         this.disabledScenarioBtn = true;
         this.callToIntervalAjax = true;
@@ -465,6 +526,9 @@ export default {
     }, 10000);
   },
   computed: {
+    showResetFilter() {
+      return Object.keys(this.requestedFilterOption).length > 0;
+    },
     showChannelErrorCom() {
       return this.showChannelError;
     },
@@ -491,7 +555,7 @@ export default {
 };
 </script>
 
-<style css>
+<style lang="scss">
 .card .alert {
   position: relative !important;
   width: 100%;
@@ -506,5 +570,16 @@ export default {
 .createScenarioBtn {
   height: 45px;
   margin-top: 0px;
+}
+
+.scenario-reset-div {
+  display: flex;
+  margin-bottom: 10px;
+
+  .btn-custom-div {
+    position: absolute;
+    right: 0;
+    padding: 0 15px;
+  }
 }
 </style>
