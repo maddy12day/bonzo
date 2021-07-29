@@ -106,6 +106,8 @@
       :allAppliedFilters="allAppliedFilters"
       :key="filteredStatsComponentKey"
     />
+    <ChartWidget v-if="!isFilteredForecast"/>
+    <FilteredChartWidget v-if="isFilteredForecast" :requestedFilterOption="requestedFilterOption"/>
 
     <!-- Adjustments Table -->
     <AdjustmentTable
@@ -141,6 +143,7 @@
           </label>
         </div>
       </div>
+
       <ManualAdjustmentTable
         v-if="activeTab == 'Weekly' && showManualAdj"
         :metricsTableData="baseMetricsListCom"
@@ -292,6 +295,8 @@ import FilteredWeeklyMetricsTable from "../components/Metrics/FilteredWeeklyMetr
 import FilteredStatsWidget from "../components/FilteredStatsWidget.vue";
 import ManualAdjustmentTable from "../components/Metrics/ManualAdjustmentTable.vue";
 import Tags from "../components/Tags.vue";
+import ChartWidget from "../components/ChartWidget.vue";
+import FilteredChartWidget from '../components/FilterChartWidget.vue';
 
 export default {
   name: "Forecast",
@@ -308,7 +313,9 @@ export default {
     FilteredWeeklyMetricsTable,
     FilteredMonthlyMetricsTable,
     FilteredStatsWidget,
+    FilteredChartWidget,
     Tags,
+    ChartWidget,
   },
 
   data() {
@@ -328,6 +335,7 @@ export default {
       changeMABtnText: false,
       disbleAdjustment: false,
       callToIntervalAjax: true,
+      requestedFilterOption: {},
       adustments: {},
       type: ["", "info", "success", "warning", "danger"],
       filteredForecastMetrics: [],
@@ -343,7 +351,7 @@ export default {
       programFiltersComponentKey: Math.random(),
       selectedFilterOptions: [],
       skusJsonData: [],
-      isDownloadCsvDisbled:true
+      isDownloadCsvDisbled: true,
     };
   },
   methods: {
@@ -404,7 +412,7 @@ export default {
       this.scenarioTypeValue = values.id;
       this.getSelectedFilters();
     },
-    getSelectedFilters () {
+    getSelectedFilters() {
       let selectedFilter = {
         filter_product_sources: this.productSourceValues,
         filter_brand_types: this.brandTypeValues,
@@ -421,13 +429,13 @@ export default {
         filter_programs: this.programValues,
       };
       selectedFilter = this.emptyFieldCleaner(selectedFilter);
-      this.selectedFilterOptions = []
+      this.selectedFilterOptions = [];
       for (let [key, value] of Object.entries(selectedFilter)) {
         this.selectedFilterOptions.push(
           key.replace("filter_", "").replace("_", " ") + ": " + value.join(", ")
         );
       }
-console.log("selectedFilterOptions",selectedFilter);
+      console.log("selectedFilterOptions", selectedFilter);
     },
     // manual adjustments
     discardChanges() {
@@ -524,8 +532,7 @@ console.log("selectedFilterOptions",selectedFilter);
         "/download-all-skus-data",
         this.filterPayload
       );
-      this.skusJsonData =
-        csvJsonData.parsedWeeklyData;
+      this.skusJsonData = csvJsonData.parsedWeeklyData;
       this.isDownloadCsvDisbled = false; /* .map(item => {
         return {
           sku: item.sku,
@@ -636,6 +643,7 @@ console.log("selectedFilterOptions",selectedFilter);
         }
       }
     },
+      
     resetFilter() {
       this.forceRerender();
       this.isFilteredForecast = false;
@@ -685,6 +693,9 @@ console.log("selectedFilterOptions",selectedFilter);
           key.replace("filter_", "").replace("_", " ") + ": " + value.join(", ")
         );
       }
+
+      this.requestedFilterOption = requestedFilterOption;
+      delete this.requestedFilterOption["filterType"];
       // await this.getFilteredForecastData(requestedFilterOption);
       this.filteredStatsComponentKey += 1;
       this.getFilteredTopSkus();
@@ -724,7 +735,7 @@ console.log("selectedFilterOptions",selectedFilter);
   },
   computed: {
     selectedFilters() {
-      return this.selectedFilterOptions
+      return this.selectedFilterOptions;
     },
     baseMetricsListCom() {
       return this.baseMetricsList;
