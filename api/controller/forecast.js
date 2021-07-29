@@ -371,6 +371,10 @@ const parseFilteredForecastData = (
         }
         obj["yearly_aggregate"] = (sum / indexForAvg).toFixed(2);
       }
+
+      if (obj["Metrics Name"] == "Sell Through %") {
+        obj["yearly_aggregate"] = '--';
+      }
       if (obj["Metrics Name"] == "AUR") {
         if (obj["Metrics Name"] == "AUR") {
           obj["yearly_aggregate"] = (revenueTotal / unitsTotal).toFixed(2);
