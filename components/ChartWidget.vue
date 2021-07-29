@@ -80,13 +80,6 @@
       >
       </line-chart>
     </div>
-     <div class="row mt-2">
-       <div class="col-md-4 text-right offset-md-4">
-          <span class="px-4 bg-primary" ></span><span class="ml-2 text-dark">Planned</span>
-           <span class="px-4" style="background: #6acba8;"></span><span class="ml-2 text-dark">This Year</span>
-            <span class="px-4" style="background: #e6a23cc7;"></span><span class="ml-2 text-dark">Forecast</span>
-       </div>
-      </div>
   </card>
 </template>
 
@@ -180,11 +173,11 @@ export default {
       lineChart: {
         chartData: {
           datasets: [{
-            
+            label: "Planned"
           }, {
-             
+             label: "This Year"
           }, {
-            
+            label: "Forecast"
           }],
           labels: weeklyChartLabels,
         },
@@ -309,6 +302,7 @@ export default {
   
           datasets: [
             {
+              label: "Planned",
               fill: false,
               borderColor: "#1d8cf8",
               borderWidth: 2,
@@ -325,6 +319,7 @@ export default {
              
             },
             {
+               label: "This Year",
               fill: false,
               borderColor: config.colors.primary,
               borderWidth: 2,
@@ -341,6 +336,7 @@ export default {
             
             },
             {
+               label: "Forecast",
               fill: false,
               borderColor: "#d48d23d9",
               borderWidth: 2,
@@ -366,6 +362,7 @@ export default {
           
           datasets: [
             {
+               label: "Planned",
               fill: false,
               borderColor: "#1d8cf8",
               borderWidth: 2,
@@ -381,6 +378,7 @@ export default {
               data: this.weeklyUnitsChartData[0],
             },
             {
+               label: "This Year",
               fill: false,
               borderColor: config.colors.primary,
               borderWidth: 2,
@@ -396,6 +394,7 @@ export default {
               data: this.weeklyUnitsChartData[1],
             },
             {
+               label: "Forecast",
               fill: false,
               borderColor: "#d48d23d9",
               borderWidth: 2,
@@ -425,4 +424,8 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped>
+.chart-area {
+  overflow-y: scroll;
+}
+</style>
