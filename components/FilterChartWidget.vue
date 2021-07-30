@@ -43,20 +43,20 @@
             data-toggle="buttons"
           >
             <label
-              v-for="(option, index) in durations"
+              v-for="(option, index2) in durations"
               :key="option.name"
               class="btn btn-sm btn-primary btn-simple"
               :class="{
-                active: activeIndex === index,
+                active: activeIndex === index2,
               }"
-              :id="index"
+              :id="index2"
             >
               <input
                 type="radio"
-                @click="initForecastChart(index)"
+                @click="initForecastChart(index2)"
                 name="options"
                 autocomplete="off"
-                :checked="activeIndex === index"
+                :checked="activeIndex === index2"
               />
               <span class="d-none d-sm-block">{{ option.name }}</span>
               <span class="d-block d-sm-none">
@@ -244,8 +244,8 @@ export default {
       );
       console.log("chartData", chartData);
       this.chartWeeklylApiJsonData = chartData;
-      this.changeWeeklyDataByType("Units");
       this.initForecastChartType(1);
+      this.changeWeeklyDataByType("Units");
     },
     async baseMonthlyChart() {
       const reqBody = this.requestedFilterOptionCom;
@@ -261,19 +261,19 @@ export default {
       this.changeMonthDataByType("Units");
     },
     initForecastChartType(index) {
-      this.activeIndexChart = index;
+    this.activeIndexChart = index;
       this.activeIndexChart == 1 && this.activeIndex == 1
-        ? (this.changeWeeklyDataByType("Revenue"))
+        ? (this.changeWeeklyDataByType("Revenue"), this.initForecastChart(1))
         : this.changeWeeklyDataByType("Units");
 
       this.activeIndexChart == 0 && this.activeIndex == 1
-        ? (this.changeWeeklyDataByType("Units"))
+        ? (this.changeWeeklyDataByType("Units"), this.initForecastChart(1))
         : this.changeWeeklyDataByType("Revenue");
       this.activeIndexChart == 1 && this.activeIndex == 0
-        ? (this.changeMonthDataByType("Revenue"))
+        ? (this.changeMonthDataByType("Revenue"), this.initForecastChart(0))
         : this.changeMonthDataByType("Units");
       this.activeIndexChart == 0 && this.activeIndex == 0
-        ? (this.changeMonthDataByType("Units"))
+        ? (this.changeMonthDataByType("Units"), this.initForecastChart(0))
         : this.changeMonthDataByType("Revenue");
     },
     changeWeeklyDataByType(forecastType) {
@@ -282,32 +282,31 @@ export default {
       let forecastData = [];
       switch (forecastType) {
         case "Units":
-          plannedData = this.chartWeeklylApiJsonData?.chartData[0]?.map(
+          plannedData = this.chartWeeklylApiJsonData?.chartData ? this.chartWeeklylApiJsonData?.chartData[0]?.map(
             (item) => item.total_units
-          );
-          thisYearData = this.chartWeeklylApiJsonData?.chartData[1]?.map(
+          ):[];
+          thisYearData = this.chartWeeklylApiJsonData?.chartData ? this.chartWeeklylApiJsonData?.chartData[1]?.map(
             (item) => item.total_units
-          );
-          forecastData = this.chartWeeklylApiJsonData?.chartData[2]?.map(
+          ):[];
+          forecastData = this.chartWeeklylApiJsonData?.chartData ? this.chartWeeklylApiJsonData?.chartData[2]?.map(
             (item) => item.total_units
-          );
+          ):[];
           break;
         case "Revenue":
-          plannedData = this.chartWeeklylApiJsonData?.chartData[0]?.map(
+          plannedData = this.chartWeeklylApiJsonData?.chartData ? this.chartWeeklylApiJsonData?.chartData[0]?.map(
             (item) => item.total_revenue
-          );
-          thisYearData = this.chartWeeklylApiJsonData?.chartData[1]?.map(
+          ):[];
+          thisYearData = this.chartWeeklylApiJsonData?.chartData ? this.chartWeeklylApiJsonData?.chartData[1]?.map(
             (item) => item.total_revenue
-          );
-          forecastData = this.chartWeeklylApiJsonData?.chartData[2]?.map(
+          ):[];
+          forecastData = this.chartWeeklylApiJsonData?.chartData ? this.chartWeeklylApiJsonData?.chartData[2]?.map(
             (item) => item.total_revenue
-          );
+          ):[];
           break;
       }
       this.weeklyUnitsChartData[0] = plannedData;
       this.weeklyUnitsChartData[1] = thisYearData;
       this.weeklyUnitsChartData[2] = forecastData;
-      this.initForecastChart(1);
       console.log(this.weeklyUnitsChartData);
     },
     changeMonthDataByType(forecastType) {
@@ -316,35 +315,35 @@ export default {
       let forecastData = [];
       switch (forecastType) {
         case "Units":
-          plannedData = this.chartMonthlyApiJsonData?.chartData[0]?.map(
+          plannedData =this.chartMonthlyApiJsonData?.chartData? this.chartMonthlyApiJsonData?.chartData[0]?.map(
             (item) => item.total_units
-          );
-          thisYearData = this.chartMonthlyApiJsonData?.chartData[1]?.map(
+          ): [];
+          thisYearData =this.chartMonthlyApiJsonData?.chartData? this.chartMonthlyApiJsonData?.chartData[1]?.map(
             (item) => item.total_units
-          );
-          forecastData = this.chartMonthlyApiJsonData?.chartData[2]?.map(
+          ): [];
+          forecastData = this.chartMonthlyApiJsonData?.chartData? this.chartMonthlyApiJsonData?.chartData[2]?.map(
             (item) => item.total_units
-          );
+          ): [];
           break;
         case "Revenue":
-          plannedData = this.chartMonthlyApiJsonData?.chartData[0]?.map(
+          plannedData = this.chartMonthlyApiJsonData?.chartData? this.chartMonthlyApiJsonData?.chartData[0]?.map(
             (item) => item.total_revenue
-          );
-          thisYearData = this.chartMonthlyApiJsonData?.chartData[1]?.map(
+          ): [];
+          thisYearData = this.chartMonthlyApiJsonData?.chartData? this.chartMonthlyApiJsonData?.chartData[1]?.map(
             (item) => item.total_revenue
-          );
-          forecastData = this.chartMonthlyApiJsonData?.chartData[2]?.map(
+          ): [];
+          forecastData = this.chartMonthlyApiJsonData?.chartData? this.chartMonthlyApiJsonData?.chartData[2]?.map(
             (item) => item.total_revenue
-          );
+          ): [];
           break;
       }
       this.monthlyUnitsChartData[0] = plannedData;
       this.monthlyUnitsChartData[1] = thisYearData;
       this.monthlyUnitsChartData[2] = forecastData;
-      this.initForecastChart(1);
       console.log(this.weeklyUnitsChartData);
     },
     initForecastChart(index) {
+      this.activeIndex = index;
       this.activeIndexChart == 1 && this.activeIndex == 1
         ? this.changeWeeklyDataByType("Revenue")
         : this.changeWeeklyDataByType("Units");
