@@ -253,9 +253,9 @@ export default {
           thisYearData = this.chartWeeklylApiJsonData?.thisYearData?.map(
             (item) => item.units
           );
-          forecastData = Object.values(
+          forecastData = this.chartWeeklylApiJsonData?.forecastData[1]? Object.values(
             this.chartWeeklylApiJsonData?.forecastData[1]
-          );
+          ): [];
           break;
         case "Revenue":
           plannedData = this.chartWeeklylApiJsonData?.plannedData?.map(
@@ -264,9 +264,9 @@ export default {
           thisYearData = this.chartWeeklylApiJsonData?.thisYearData?.map(
             (item) => item.revenue
           );
-          forecastData = Object.values(
+          forecastData = this.chartWeeklylApiJsonData.forecastData? Object.values(
             this.chartWeeklylApiJsonData.forecastData[0]
-          );
+          ): [];
           break;
       }
       this.weeklyUnitsChartData[0] = plannedData;
