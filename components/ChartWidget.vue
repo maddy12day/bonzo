@@ -287,7 +287,7 @@ export default {
           thisYearData = this.chartMonthlyApiJsonData?.thisYearData?.map(
             (item) => item.units
           );
-          forecastData = this.chartMonthlyApiJsonData?.forecastData[1]
+          forecastData = this.chartMonthlyApiJsonData?.forecastData
             ? Object.values(this.chartMonthlyApiJsonData?.forecastData[1])
             : [];
           break;
@@ -298,9 +298,9 @@ export default {
           thisYearData = this.chartMonthlyApiJsonData?.thisYearData?.map(
             (item) => item.revenue
           );
-          forecastData = Object.values(
+          forecastData =  this.chartMonthlyApiJsonData.forecastData? Object.values(
             this.chartMonthlyApiJsonData.forecastData[0]
-          );
+          ):[];
           break;
       }
       this.monthlyUnitsChartData[0] = plannedData;
