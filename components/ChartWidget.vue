@@ -216,6 +216,7 @@ export default {
       const chartData = await this.$axios.$get("/weekly-base-forecast-chart");
       this.chartWeeklylApiJsonData = chartData;
       this.changeWeeklyDataByType("Units");
+      this.initForecastChartType(1);
     },
     async baseMonthlyChart() {
       const chartData = await this.$axios.$get("/monthly-base-forecast-chart");
@@ -224,8 +225,10 @@ export default {
     },
     initForecastChartType(index) {
       this.activeIndexChart = index;
-      index == 0 && this.activeIndex == 1 ? this.changeWeeklyDataByType("Units"): this.changeWeeklyDataByType("Revenue");
-      index == 1 && this.activeIndex == 0 ? this.changeMonthDataByType("Units"): this.changeMonthDataByType("Revenue");
+       this.activeIndexChart == 1 && this.activeIndex == 1 ? this.changeWeeklyDataByType("Revenue"): this.changeWeeklyDataByType("Units");
+       this.activeIndexChart == 0 && this.activeIndex == 1 ? this.changeWeeklyDataByType("Units"): this.changeWeeklyDataByType("Revenue");
+      this.activeIndexChart == 1 && this.activeIndex == 0 ? this.changeMonthDataByType("Revenue"): this.changeMonthDataByType("Units");
+      this.activeIndexChart == 0 && this.activeIndex == 0 ? this.changeMonthDataByType("Units"): this.changeMonthDataByType("Revenue");
     },
     changeWeeklyDataByType(forecastType) {
       let plannedData = [];
@@ -420,6 +423,7 @@ export default {
   mounted() {
     this.baseWeeklyChart();
     this.baseMonthlyChart();
+  
   },
 };
 </script>

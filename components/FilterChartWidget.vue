@@ -78,16 +78,6 @@
       >
       </line-chart>
     </div>
-    <!--  <div class="row mt-2">
-      <div class="col-md-4 text-right offset-md-4">
-        <span class="px-4 bg-primary"></span
-        ><span class="ml-2 text-dark">Planned</span>
-        <span class="px-4" style="background: #6acba8;"></span
-        ><span class="ml-2 text-dark">This Year</span>
-        <span class="px-4" style="background: #e6a23cc7;"></span
-        ><span class="ml-2 text-dark">Forecast</span>
-      </div>
-    </div> -->
   </card>
 </template>
 
@@ -255,6 +245,7 @@ export default {
       console.log("chartData", chartData);
       this.chartWeeklylApiJsonData = chartData;
       this.changeWeeklyDataByType("Units");
+      this.initForecastChartType(1);
     },
     async baseMonthlyChart() {
       const reqBody = this.requestedFilterOptionCom;
@@ -272,10 +263,19 @@ export default {
     initForecastChartType(index) {
       this.activeIndexChart = index;
       this.activeIndexChart == 1 && this.activeIndex == 1
+        ? this.changeWeeklyDataByType("Revenue")
+        : this.changeWeeklyDataByType("Units");
+
+       this.activeIndexChart == 0 && this.activeIndex == 1
         ? this.changeWeeklyDataByType("Units")
         : this.changeWeeklyDataByType("Revenue");
+
+      this.activeIndexChart == 1 && this.activeIndex == 0
+        ? this.changeMonthDataByType("Revenue")
+        : this.changeMonthDataByType("Units");
+
       this.activeIndexChart == 0 && this.activeIndex == 0
-        ? this.changeMonthDataByType("Units")
+        ? this.changeMonthDataByType("Units") 
         : this.changeMonthDataByType("Revenue");
     },
     changeWeeklyDataByType(forecastType) {
