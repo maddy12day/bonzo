@@ -89,7 +89,6 @@ export default {
                 "2021-12-19",
                 "2021-12-26",
               ];
-              console.log(tooltipItem);
               if (tooltipItem.xLabel.startsWith("W")) {
                 if (Number(tooltipItem.yLabel)  > 999 && Number(tooltipItem.yLabel)  < 1000000) {
                   return parseInt(Number(tooltipItem.yLabel)  / 1000) + "K"  + `  (date: ${weekendDates[tooltipItem.index]})`;

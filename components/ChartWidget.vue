@@ -2,27 +2,27 @@
   <card type="chart">
     <template slot="header">
       <div class="row">
-           <div class="col-sm-12 text-left d-flex d-sm-block">
+        <div class="col-sm-12 mb-2 text-left d-flex d-sm-block">
           <div
             class="btn-group btn-group-toggle"
             :class="'float-right'"
             data-toggle="buttons"
           >
             <label
-              v-for="(option, index) in chartTypes"
+              v-for="(option, index2) in chartTypes"
               :key="option.name"
               class="btn btn-sm btn-primary btn-simple"
               :class="{
-                active: activeIndexChart === index,
+                active: activeIndexChart === index2,
               }"
-              :id="index"
+              :id="index2"
             >
               <input
                 type="radio"
-                @click="initForecastChartType(index)"
+                @click="initForecastChartType(index2)"
                 name="options"
                 autocomplete="off"
-                :checked="activeIndexChart === index"
+                :checked="activeIndexChart === index2"
               />
               <span class="d-none d-sm-block">{{ option.name }}</span>
               <span class="d-block d-sm-none">
@@ -35,7 +35,7 @@
           <h5 class="card-category">Planned Vs Actuals Vs Forecast</h5>
           <h2 class="card-title"></h2>
         </div>
-       
+
         <div class="col-sm-6 d-flex d-sm-block">
           <div
             class="btn-group btn-group-toggle"
@@ -66,10 +66,8 @@
           </div>
         </div>
       </div>
-     
     </template>
-    <div class="chart-area" >
-      
+    <div class="chart-area">
       <line-chart
         style="height: 100%"
         ref="forecastChart"
@@ -172,20 +170,23 @@ export default {
       chartMonthlyApiJsonData: [],
       lineChart: {
         chartData: {
-          datasets: [{
-            label: "Planned"
-          }, {
-             label: "This Year"
-          }, {
-            label: "Forecast"
-          }],
+          datasets: [
+            {
+              label: "Planned",
+            },
+            {
+              label: "This Year",
+            },
+            {
+              label: "Forecast",
+            },
+          ],
           labels: weeklyChartLabels,
         },
         extraOptions: chartConfigs.purpleChartOptions,
         gradientColors: config.colors.primaryGradient,
         gradientStops: [1, 0.4, 0],
         categories: [],
-         
       },
     };
   },
@@ -215,20 +216,30 @@ export default {
     async baseWeeklyChart() {
       const chartData = await this.$axios.$get("/weekly-base-forecast-chart");
       this.chartWeeklylApiJsonData = chartData;
-      this.changeWeeklyDataByType("Units");
-      this.initForecastChartType(1);
+      this.changeWeeklyDataByType("Revenue");
+      this.initForecastChart(1);
     },
     async baseMonthlyChart() {
       const chartData = await this.$axios.$get("/monthly-base-forecast-chart");
       this.chartMonthlyApiJsonData = chartData;
-      this.changeMonthDataByType("Units");
+      this.changeMonthDataByType("Revenue");
     },
     initForecastChartType(index) {
+      console.log("omg", index);
       this.activeIndexChart = index;
-       this.activeIndexChart == 1 && this.activeIndex == 1 ? this.changeWeeklyDataByType("Revenue"): this.changeWeeklyDataByType("Units");
-       this.activeIndexChart == 0 && this.activeIndex == 1 ? this.changeWeeklyDataByType("Units"): this.changeWeeklyDataByType("Revenue");
-      this.activeIndexChart == 1 && this.activeIndex == 0 ? this.changeMonthDataByType("Revenue"): this.changeMonthDataByType("Units");
-      this.activeIndexChart == 0 && this.activeIndex == 0 ? this.changeMonthDataByType("Units"): this.changeMonthDataByType("Revenue");
+      this.activeIndexChart == 1 && this.activeIndex == 1
+        ? (this.changeWeeklyDataByType("Revenue"), this.initForecastChart(1))
+        : this.changeWeeklyDataByType("Units");
+
+      this.activeIndexChart == 0 && this.activeIndex == 1
+        ? (this.changeWeeklyDataByType("Units"), this.initForecastChart(1))
+        : this.changeWeeklyDataByType("Revenue");
+      this.activeIndexChart == 1 && this.activeIndex == 0
+        ? (this.changeMonthDataByType("Revenue"), this.initForecastChart(0))
+        : this.changeMonthDataByType("Units");
+      this.activeIndexChart == 0 && this.activeIndex == 0
+        ? (this.changeMonthDataByType("Units"), this.initForecastChart(0))
+        : this.changeMonthDataByType("Revenue");
     },
     changeWeeklyDataByType(forecastType) {
       let plannedData = [];
@@ -236,21 +247,21 @@ export default {
       let forecastData = [];
       switch (forecastType) {
         case "Units":
-          plannedData = this.chartWeeklylApiJsonData.plannedData.map(
+          plannedData = this.chartWeeklylApiJsonData?.plannedData?.map(
             (item) => item.units
           );
-          thisYearData = this.chartWeeklylApiJsonData.thisYearData.map(
+          thisYearData = this.chartWeeklylApiJsonData?.thisYearData?.map(
             (item) => item.units
           );
           forecastData = Object.values(
-            this.chartWeeklylApiJsonData.forecastData[1]
+            this.chartWeeklylApiJsonData?.forecastData[1]
           );
           break;
         case "Revenue":
-          plannedData = this.chartWeeklylApiJsonData.plannedData.map(
+          plannedData = this.chartWeeklylApiJsonData?.plannedData?.map(
             (item) => item.revenue
           );
-          thisYearData = this.chartWeeklylApiJsonData.thisYearData.map(
+          thisYearData = this.chartWeeklylApiJsonData?.thisYearData?.map(
             (item) => item.revenue
           );
           forecastData = Object.values(
@@ -261,7 +272,7 @@ export default {
       this.weeklyUnitsChartData[0] = plannedData;
       this.weeklyUnitsChartData[1] = thisYearData;
       this.weeklyUnitsChartData[2] = forecastData;
-      this.initForecastChart(1);
+
       console.log(this.weeklyUnitsChartData);
     },
     changeMonthDataByType(forecastType) {
@@ -270,21 +281,21 @@ export default {
       let forecastData = [];
       switch (forecastType) {
         case "Units":
-          plannedData = this.chartMonthlyApiJsonData.plannedData.map(
+          plannedData = this.chartMonthlyApiJsonData?.plannedData?.map(
             (item) => item.units
           );
-          thisYearData = this.chartMonthlyApiJsonData.thisYearData.map(
+          thisYearData = this.chartMonthlyApiJsonData?.thisYearData?.map(
             (item) => item.units
           );
-          forecastData = Object.values(
-            this.chartMonthlyApiJsonData.forecastData[1]
-          );
+          forecastData = this.chartMonthlyApiJsonData?.forecastData[1]
+            ? Object.values(this.chartMonthlyApiJsonData?.forecastData[1])
+            : [];
           break;
         case "Revenue":
-          plannedData = this.chartMonthlyApiJsonData.plannedData.map(
+          plannedData = this.chartMonthlyApiJsonData?.plannedData?.map(
             (item) => item.revenue
           );
-          thisYearData = this.chartMonthlyApiJsonData.thisYearData.map(
+          thisYearData = this.chartMonthlyApiJsonData?.thisYearData?.map(
             (item) => item.revenue
           );
           forecastData = Object.values(
@@ -295,14 +306,27 @@ export default {
       this.monthlyUnitsChartData[0] = plannedData;
       this.monthlyUnitsChartData[1] = thisYearData;
       this.monthlyUnitsChartData[2] = forecastData;
-      this.initForecastChart(1);
+
       console.log(this.weeklyUnitsChartData);
     },
     initForecastChart(index) {
       this.activeIndex = index;
-      if (index == 0) {
+      this.activeIndexChart == 1 && this.activeIndex == 1
+        ? this.changeWeeklyDataByType("Revenue")
+        : this.changeWeeklyDataByType("Units");
+
+      this.activeIndexChart == 0 && this.activeIndex == 1
+        ? this.changeWeeklyDataByType("Units")
+        : this.changeWeeklyDataByType("Revenue");
+      this.activeIndexChart == 1 && this.activeIndex == 0
+        ? this.changeMonthDataByType("Revenue")
+        : this.changeMonthDataByType("Units");
+      this.activeIndexChart == 0 && this.activeIndex == 0
+        ? this.changeMonthDataByType("Units")
+        : this.changeMonthDataByType("Revenue");
+      console.log("(this.activeIndex ", this.activeIndex);
+      if (this.activeIndex == 0) {
         let chartData = {
-  
           datasets: [
             {
               label: "Planned",
@@ -319,10 +343,9 @@ export default {
               pointHoverBorderWidth: 6,
               pointRadius: 1,
               data: this.monthlyUnitsChartData[0],
-             
             },
             {
-               label: "This Year",
+              label: "This Year",
               fill: false,
               borderColor: config.colors.primary,
               borderWidth: 2,
@@ -336,10 +359,9 @@ export default {
               pointHoverBorderWidth: 6,
               pointRadius: 1,
               data: this.monthlyUnitsChartData[1],
-            
             },
             {
-               label: "Forecast",
+              label: "Forecast",
               fill: false,
               borderColor: "#d48d23d9",
               borderWidth: 2,
@@ -360,12 +382,11 @@ export default {
         this.$refs.forecastChart.updateGradients(chartData);
         this.lineChart.chartData = chartData;
       }
-      if (index == 1) {
+      if (this.activeIndex == 1) {
         let chartData = {
-          
           datasets: [
             {
-               label: "Planned",
+              label: "Planned",
               fill: false,
               borderColor: "#1d8cf8",
               borderWidth: 2,
@@ -381,7 +402,7 @@ export default {
               data: this.weeklyUnitsChartData[0],
             },
             {
-               label: "This Year",
+              label: "This Year",
               fill: false,
               borderColor: config.colors.primary,
               borderWidth: 2,
@@ -397,7 +418,7 @@ export default {
               data: this.weeklyUnitsChartData[1],
             },
             {
-               label: "Forecast",
+              label: "Forecast",
               fill: false,
               borderColor: "#d48d23d9",
               borderWidth: 2,
@@ -423,7 +444,6 @@ export default {
   mounted() {
     this.baseWeeklyChart();
     this.baseMonthlyChart();
-  
   },
 };
 </script>
