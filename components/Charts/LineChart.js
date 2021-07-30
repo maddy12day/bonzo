@@ -90,21 +90,17 @@ export default {
                 "2021-12-26",
               ];
               if (tooltipItem.xLabel.startsWith("W")) {
-                if (Number(tooltipItem.yLabel)  > 999 && Number(tooltipItem.yLabel)  < 1000000) {
+                if (Number(tooltipItem.yLabel)  > 999) {
                   return parseInt(Number(tooltipItem.yLabel)  / 1000) + "K"  + `  (date: ${weekendDates[tooltipItem.index]})`;
                 } else if (Number(tooltipItem.yLabel)  < 999) {
                   return parseInt(Number(tooltipItem.yLabel) ) +  `  (date: ${weekendDates[tooltipItem.index]})`;
-                } else {
-                  return parseInt(Number(tooltipItem.yLabel)  / 1000000) + "M" + `  (date: ${weekendDates[tooltipItem.index]})`;
                 }
               }else {
-                if (Number(tooltipItem.yLabel)  > 999 && Number(tooltipItem.yLabel)  < 1000000) {
+                if (Number(tooltipItem.yLabel)  > 999) {
                   return parseInt(Number(tooltipItem.yLabel)  / 1000) + "K"
                 } else if (Number(tooltipItem.yLabel)  < 999) {
                   return parseInt(Number(tooltipItem.yLabel) )
-                } else {
-                  return parseInt(Number(tooltipItem.yLabel)  / 1000000) + "M" 
-                }
+                } 
               }
             },
           },
