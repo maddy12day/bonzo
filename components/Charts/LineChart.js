@@ -97,6 +97,14 @@ export default {
                 } else {
                   return parseInt(Number(tooltipItem.yLabel)  / 1000000) + "M" + `  (date: ${weekendDates[tooltipItem.index]})`;
                 }
+              }else {
+                if (Number(tooltipItem.yLabel)  > 999 && Number(tooltipItem.yLabel)  < 1000000) {
+                  return parseInt(Number(tooltipItem.yLabel)  / 1000) + "K"
+                } else if (Number(tooltipItem.yLabel)  < 999) {
+                  return parseInt(Number(tooltipItem.yLabel) )
+                } else {
+                  return parseInt(Number(tooltipItem.yLabel)  / 1000000) + "M" 
+                }
               }
             },
           },
