@@ -263,17 +263,17 @@ export default {
     initForecastChartType(index) {
       this.activeIndexChart = index;
       this.activeIndexChart == 1 && this.activeIndex == 1
-        ? (this.changeWeeklyDataByType("Revenue"), this.initForecastChart(1))
+        ? (this.changeWeeklyDataByType("Revenue"))
         : this.changeWeeklyDataByType("Units");
 
       this.activeIndexChart == 0 && this.activeIndex == 1
-        ? (this.changeWeeklyDataByType("Units"), this.initForecastChart(1))
+        ? (this.changeWeeklyDataByType("Units"))
         : this.changeWeeklyDataByType("Revenue");
       this.activeIndexChart == 1 && this.activeIndex == 0
-        ? (this.changeMonthDataByType("Revenue"), this.initForecastChart(0))
+        ? (this.changeMonthDataByType("Revenue"))
         : this.changeMonthDataByType("Units");
       this.activeIndexChart == 0 && this.activeIndex == 0
-        ? (this.changeMonthDataByType("Units"), this.initForecastChart(0))
+        ? (this.changeMonthDataByType("Units"))
         : this.changeMonthDataByType("Revenue");
     },
     changeWeeklyDataByType(forecastType) {
