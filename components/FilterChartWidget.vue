@@ -1,8 +1,8 @@
 <template>
-  <card type="chart" >
+  <card type="chart">
     <template slot="header">
       <div class="row">
-            <div class="col-sm-12 text-right d-flex d-sm-block">
+        <div class="col-sm-12 text-right d-flex d-sm-block">
           <div
             class="btn-group btn-group-toggle"
             :class="'float-right'"
@@ -35,7 +35,7 @@
           <h5 class="card-category">Planned Vs Actuals Vs Forecast</h5>
           <h2 class="card-title"></h2>
         </div>
-        
+
         <div class="col-sm-6 d-flex d-sm-block text-right">
           <div
             class="btn-group btn-group-toggle"
@@ -67,7 +67,7 @@
         </div>
       </div>
     </template>
-    <div class="chart-area" >
+    <div class="chart-area">
       <line-chart
         style="height: 100%"
         ref="forecastChart2"
@@ -78,13 +78,16 @@
       >
       </line-chart>
     </div>
-    <div class="row mt-2">
-       <div class="col-md-4 text-right offset-md-4">
-          <span class="px-4 bg-primary" ></span><span class="ml-2 text-dark">Planned</span>
-           <span class="px-4" style="background: #6acba8;"></span><span class="ml-2 text-dark">This Year</span>
-            <span class="px-4" style="background: #e6a23cc7;"></span><span class="ml-2 text-dark">Forecast</span>
-       </div>
+    <!--  <div class="row mt-2">
+      <div class="col-md-4 text-right offset-md-4">
+        <span class="px-4 bg-primary"></span
+        ><span class="ml-2 text-dark">Planned</span>
+        <span class="px-4" style="background: #6acba8;"></span
+        ><span class="ml-2 text-dark">This Year</span>
+        <span class="px-4" style="background: #e6a23cc7;"></span
+        ><span class="ml-2 text-dark">Forecast</span>
       </div>
+    </div> -->
   </card>
 </template>
 
@@ -178,39 +181,45 @@ export default {
       chartMonthlyApiJsonData: [],
       lineChart: {
         chartData: {
-            scales: {
-        yAxes: [
-            {
+          scales: {
+            yAxes: [
+              {
                 ticks: {
-                    callback: function(label, index, labels) {
-                        return label/1000+'k';
-                    }
+                  callback: function(label, index, labels) {
+                    return label / 1000 + "k";
+                  },
                 },
                 scaleLabel: {
-                    display: true,
-                    labelString: '1k = 1000'
-                }
-            }
-        ]
-    },
-          datasets: [{
-            label: "Planned"
-          }, {
-            label: "This Year"
-          }, {
-            label: "Forecast"
-          }],
+                  display: true,
+                  labelString: "1k = 1000",
+                },
+              },
+            ],
+          },
+          datasets: [
+            {
+              label: "Planned",
+            },
+            {
+              label: "This Year",
+            },
+            {
+              label: "Forecast",
+            },
+          ],
           labels: weeklyChartLabels,
         },
         extraOptions: chartConfigs.purpleChartOptions,
         gradientColors: config.colors.primaryGradient,
         gradientStops: [1, 0.4, 0],
         categories: [],
-        
       },
     };
   },
   computed: {
+    requestedFilterOptionCom() {
+      return this.requestedFilterOption;
+    },
     chartTypes() {
       return [
         { name: "Units", acronym: "U", icon: "tim-icons icon-single-02" },
@@ -234,30 +243,40 @@ export default {
   },
   methods: {
     async baseWeeklyChart() {
-        const reqBody = this.requestedFilterOption
-        delete reqBody["filterType"]
-      const chartData = await this.$axios.$post('/get-filtered-chart-data-by-duration', {
-        filters: {...reqBody},
-        duration: "week"
-      });
-      console.log("chartData",chartData)
+      const reqBody = this.requestedFilterOptionCom;
+      delete reqBody["filterType"];
+      const chartData = await this.$axios.$post(
+        "/get-filtered-chart-data-by-duration",
+        {
+          filters: { ...reqBody },
+          duration: "week",
+        }
+      );
+      console.log("chartData", chartData);
       this.chartWeeklylApiJsonData = chartData;
       this.changeWeeklyDataByType("Units");
     },
     async baseMonthlyChart() {
-        const reqBody = this.requestedFilterOption
-        delete reqBody["filterType"]
-      const chartData = await this.$axios.$post('/get-filtered-chart-data-by-duration', {
-        filters: {...reqBody},
-        duration: "month"
-      });
+      const reqBody = this.requestedFilterOptionCom;
+      delete reqBody["filterType"];
+      const chartData = await this.$axios.$post(
+        "/get-filtered-chart-data-by-duration",
+        {
+          filters: { ...reqBody },
+          duration: "month",
+        }
+      );
       this.chartMonthlyApiJsonData = chartData;
       this.changeMonthDataByType("Units");
     },
     initForecastChartType(index) {
       this.activeIndexChart = index;
-      this.activeIndexChart == 1 && this.activeIndex == 1 ? this.changeWeeklyDataByType("Units"): this.changeWeeklyDataByType("Revenue");
-      this.activeIndexChart == 0 && this.activeIndex == 0 ? this.changeMonthDataByType("Units"): this.changeMonthDataByType("Revenue");
+      this.activeIndexChart == 1 && this.activeIndex == 1
+        ? this.changeWeeklyDataByType("Units")
+        : this.changeWeeklyDataByType("Revenue");
+      this.activeIndexChart == 0 && this.activeIndex == 0
+        ? this.changeMonthDataByType("Units")
+        : this.changeMonthDataByType("Revenue");
     },
     changeWeeklyDataByType(forecastType) {
       let plannedData = [];
@@ -380,8 +399,8 @@ export default {
               pointRadius: 1,
               data: this.monthlyUnitsChartData[2],
               legend: {
-                  display: true
-              }
+                display: true,
+              },
             },
           ],
           labels: monthlyChartLabels,
@@ -448,15 +467,18 @@ export default {
       }
     },
   },
+
   created() {
-      
+    
+  },
+  getLatestFilteredData() {
+  
   },
   mounted() {
-  console.log("created...",this.requestedFilterOption);
-    this.baseWeeklyChart();
-    this.baseMonthlyChart();
+    console.log("rendered......")
+   this.baseWeeklyChart();
+     this.baseMonthlyChart();
   },
- 
 };
 </script>
 

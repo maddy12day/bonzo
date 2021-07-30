@@ -91,15 +91,13 @@ export default {
               ];
               console.log(tooltipItem);
               if (tooltipItem.xLabel.startsWith("W")) {
-                return (
-                    Number(tooltipItem.yLabel) < 1000000
-                  ? parseInt( Number(tooltipItem.yLabel) / 1000) + "K" + `  (date: ${weekendDates[tooltipItem.index]})`
-                  : parseInt( Number(tooltipItem.yLabel) / 1000000) + "M"+`  (date: ${weekendDates[tooltipItem.index]})`
-                );
-              } else {
-                return  Number(tooltipItem.yLabel) < 1000000
-                ? parseInt( Number(tooltipItem.yLabel) / 1000) + "K"
-                : parseInt( Number(tooltipItem.yLabel) / 1000000) + "M"
+                if (Number(tooltipItem.yLabel)  > 999 && Number(tooltipItem.yLabel)  < 1000000) {
+                  return parseInt(Number(tooltipItem.yLabel)  / 1000) + "K"  + `  (date: ${weekendDates[tooltipItem.index]})`;
+                } else if (Number(tooltipItem.yLabel)  < 999) {
+                  return parseInt(Number(tooltipItem.yLabel) ) +  `  (date: ${weekendDates[tooltipItem.index]})`;
+                } else {
+                  return parseInt(Number(tooltipItem.yLabel)  / 1000000) + "M" + `  (date: ${weekendDates[tooltipItem.index]})`;
+                }
               }
             },
           },
@@ -113,9 +111,13 @@ export default {
             {
               ticks: {
                 callback: function(value, index, values) {
-                  return value < 1000000
-                    ? parseInt(value / 1000) + "K"
-                    : parseInt(value / 1000000) + "M";
+                  if (value > 999 && value < 1000000) {
+                    return parseInt(value / 1000) + "K";
+                  } else if (value < 999) {
+                    return parseInt(value);
+                  } else {
+                    return parseInt(value / 1000000) + "M";
+                  }
                 },
                 beginAtZero: true,
               },

@@ -107,7 +107,7 @@
       :key="filteredStatsComponentKey"
     />
     <ChartWidget v-if="!isFilteredForecast"/>
-    <FilteredChartWidget v-if="isFilteredForecast" :requestedFilterOption="requestedFilterOption"/>
+    <FilteredChartWidget v-if="isFilteredForecast" :requestedFilterOption="requestedFilterOption" :key="filterChartComponentKey"/>
 
     <!-- Adjustments Table -->
     <AdjustmentTable
@@ -117,10 +117,6 @@
       :adjustmentTableData="baseAdjustmentsListCom.adjustmentsResponse"
     />
 
-    <!-- Base Metrics / Filtered Metrics (Jubin) -->
-    <!-- Filter: Revenue table (Jubin) -->
-    <!-- Filter: Units table (Jubin) -->
-    <!-- Filter: AUR table (Jubin) -->
     <card card-body-classes="table-full-width" v-if="!isFilteredForecast">
       <div class="col-md-12 text-right p-0">
         <div class="btn-group btn-group-toggle" data-toggle="buttons">
@@ -349,6 +345,7 @@ export default {
       regularFiltersComponentKey: Math.random(),
       filteredStatsComponentKey: Math.random(),
       programFiltersComponentKey: Math.random(),
+      filterChartComponentKey: Math.random(),
       selectedFilterOptions: [],
       skusJsonData: [],
       isDownloadCsvDisbled: true,
@@ -695,6 +692,7 @@ export default {
       }
 
       this.requestedFilterOption = requestedFilterOption;
+        this.filterChartComponentKey +=1;
       delete this.requestedFilterOption["filterType"];
       // await this.getFilteredForecastData(requestedFilterOption);
       this.filteredStatsComponentKey += 1;
@@ -731,6 +729,7 @@ export default {
       this.regularFiltersComponentKey += 1;
       this.filteredStatsComponentKey += 1;
       this.programFiltersComponentKey += 1;
+      this.filterChartComponentKey +=1;
     },
   },
   computed: {
