@@ -579,7 +579,7 @@ const typlanQueryGeneratorByDurations = (
                 where
                   ${whereQueryStr})
               GROUP BY
-                pwurbcbs.plan_year`;
+              ${duration}(pwurbcbs.weekend_date)`;
   return query;
 };
 
