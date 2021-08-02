@@ -37,34 +37,39 @@ const weeklyCommonTableDataMappingForAll = (data) => {
     const revenueObj = {
       sku: uniqueSkus[i],
       title: uniqueSkusTitle[i],
-      Forecast: ""
+      Forecast: "",
     };
     const revenueSales = arr.map(
-      (item, index) => (revenueObj[`${moment(item.weekend).format('YYYY-MM-DD')}`] = item.retail_sales)
+      (item, index) =>
+        (revenueObj[`${moment(item.weekend).format("YYYY-MM-DD")}`] =
+          item.retail_sales)
     );
-    revenueObj["Forecast"] ="Revenue"; 
+    revenueObj["Forecast"] = "Revenue";
     finalData.push({
       ...revenueObj,
     });
 
     const unitSales = arr.map(
-      (item, index) => (revenueObj[`${moment(item.weekend).format('YYYY-MM-DD')}`] = item.units_sales)
+      (item, index) =>
+        (revenueObj[`${moment(item.weekend).format("YYYY-MM-DD")}`] =
+          item.units_sales)
     );
-    delete revenueObj.title
-    delete revenueObj.sku
-    revenueObj["Forecast"] ="Units"; 
+    delete revenueObj.title;
+    delete revenueObj.sku;
+    revenueObj["Forecast"] = "Units";
     finalData.push({
-      ...revenueObj
+      ...revenueObj,
     });
 
     const aurSales = arr.map(
-      (item, index) => (revenueObj[`${moment(item.weekend).format('YYYY-MM-DD')}`] = item.aur)
+      (item, index) =>
+        (revenueObj[`${moment(item.weekend).format("YYYY-MM-DD")}`] = item.aur)
     );
-    delete revenueObj.title
-    delete revenueObj.sku
-    revenueObj["Forecast"] ="AUR"; 
+    delete revenueObj.title;
+    delete revenueObj.sku;
+    revenueObj["Forecast"] = "AUR";
     finalData.push({
-      ...revenueObj
+      ...revenueObj,
     });
   }
   return finalData;
@@ -322,45 +327,125 @@ const parseFilteredForecastData = (
   let typeIndex = type == "month" ? 12 : 52;
   let revenueTotal = 0;
   let unitsTotal = 0;
+  let quarter1UnitsTotal = 0;
+  let quarter1RevenueTotal = 0;
+  let quarter2UnitsTotal = 0;
+  let quarter2RevenueTotal = 0;
+  let quarter3UnitsTotal = 0;
+  let quarter3RevenueTotal = 0;
+  let quarter4UnitsTotal = 0;
+  let quarter4RevenueTotal = 0;
 
   for (let i = 0; i <= filteredForecastData.length; i++) {
     var obj = {};
     let sum = 0;
-
+    let quarterTotal = 0;
     let indexForAvg = 0;
+
     if (masterMetricData[i]) {
       obj["Metrics Name"] = masterMetricData[i].title;
+      obj["Metrics Slug"] = masterMetricData[i].name;
       if (
-        obj["Metrics Name"] == "Sales" ||
-        obj["Metrics Name"] == "Units Sales" ||
-        obj["Metrics Name"] == "GM$" ||
-        obj["Metrics Name"] == "Inventory INS Units" ||
-        obj["Metrics Name"] == "Inventory INS Cost" ||
-        obj["Metrics Name"] == "Inventory DC Units" ||
-        obj["Metrics Name"] == "Inventory DC Cost" ||
-        obj["Metrics Name"] == "Receipt Units" ||
-        obj["Metrics Name"] == "Receipt Cost" ||
-        obj["Metrics Name"] == "AUR"
+        obj["Metrics Slug"] == "retail_sales" ||
+        obj["Metrics Slug"] == "units_sales" ||
+        obj["Metrics Slug"] == "gm" ||
+        obj["Metrics Slug"] == "inventory_ins_units" ||
+        obj["Metrics Slug"] == "inventory_ins_cost" ||
+        obj["Metrics Slug"] == "receipt_units" ||
+        obj["Metrics Slug"] == "receipt_cost" ||
+        obj["Metrics Slug"] == "aur"
       ) {
         for (let j = 0; j < typeIndex; j++) {
           let index = j + 1;
           obj["w" + index] =
             filteredForecastData[j][`${masterMetricData[i].name}`];
           sum = sum + filteredForecastData[j][`${masterMetricData[i].name}`];
+          quarterTotal =
+            quarterTotal +
+            filteredForecastData[j][`${masterMetricData[i].name}`];
+          if (type == 'week') {
+            if (index == 13) {
+              obj["Q1"] = quarterTotal;
+              if (obj["Metrics Slug"] == "retail_sales") {
+                quarter1RevenueTotal = quarterTotal;
+              } else if (obj["Metrics Slug"] == "units_sales") {
+                quarter1UnitsTotal = quarterTotal;
+              }
+              quarterTotal = 0;
+            } else if (index == 26) {
+              obj["Q2"] = quarterTotal;
+              if (obj["Metrics Slug"] == "retail_sales") {
+                quarter2RevenueTotal = quarterTotal;
+              } else if (obj["Metrics Slug"] == "units_sales") {
+                quarter2UnitsTotal = quarterTotal;
+              }
+              quarterTotal = 0;
+            } else if (index == 39) {
+              obj["Q3"] = quarterTotal;
+              if (obj["Metrics Slug"] == "retail_sales") {
+                quarter3RevenueTotal = quarterTotal;
+              } else if (obj["Metrics Slug"] == "units_sales") {
+                quarter3UnitsTotal = quarterTotal;
+              }
+              quarterTotal = 0;
+            } else if (index == 52) {
+              obj["Q4"] = quarterTotal;
+              if (obj["Metrics Slug"] == "retail_sales") {
+                quarter4RevenueTotal = quarterTotal;
+              } else if (obj["Metrics Slug"] == "units_sales") {
+                quarter4UnitsTotal = quarterTotal;
+              }
+              quarterTotal = 0;
+            }
+          } else {
+            if (index == 3) {
+              obj["Q1"] = quarterTotal;
+              if (obj["Metrics Slug"] == "retail_sales") {
+                quarter1RevenueTotal = quarterTotal;
+              } else if (obj["Metrics Slug"] == "units_sales") {
+                quarter1UnitsTotal = quarterTotal;
+              }
+              quarterTotal = 0;
+            } else if (index == 6) {
+              obj["Q2"] = quarterTotal;
+              if (obj["Metrics Slug"] == "retail_sales") {
+                quarter2RevenueTotal = quarterTotal;
+              } else if (obj["Metrics Slug"] == "units_sales") {
+                quarter2UnitsTotal = quarterTotal;
+              }
+              quarterTotal = 0;
+            } else if (index == 9) {
+              obj["Q3"] = quarterTotal;
+              if (obj["Metrics Slug"] == "retail_sales") {
+                quarter3RevenueTotal = quarterTotal;
+              } else if (obj["Metrics Slug"] == "units_sales") {
+                quarter3UnitsTotal = quarterTotal;
+              }
+              quarterTotal = 0;
+            } else if (index == 12) {
+              obj["Q4"] = quarterTotal;
+              if (obj["Metrics Slug"] == "retail_sales") {
+                quarter4RevenueTotal = quarterTotal;
+              } else if (obj["Metrics Slug"] == "units_sales") {
+                quarter4UnitsTotal = quarterTotal;
+              }
+              quarterTotal = 0;
+            }
+          }
           indexForAvg = index;
         }
-        if (obj["Metrics Name"] == "Sales") {
+        if (obj["Metrics Slug"] == "retail_sales") {
           revenueTotal = sum;
-        } else if (obj["Metrics Name"] == "Units Sales") {
+        } else if (obj["Metrics Slug"] == "units_sales") {
           unitsTotal = sum;
         }
         obj["yearly_aggregate"] = sum;
       } else if (
-        obj["Metrics Name"] == "Sales Build" ||
-        obj["Metrics Name"] == "Units Sales Build" ||
-        obj["Metrics Name"] == "GM%" ||
-        obj["Metrics Name"] == "Sell Through %" ||
-        obj["Metrics Name"] == "WOS"
+        obj["Metrics Slug"] == "retail_sales_build" ||
+        obj["Metrics Slug"] == "units_sales_build" ||
+        obj["Metrics Slug"] == "gm_percent" ||
+        obj["Metrics Slug"] == "sell_through" ||
+        obj["Metrics Slug"] == "wos"
       ) {
         for (let j = 0; j < typeIndex; j++) {
           let index = j + 1;
@@ -368,17 +453,55 @@ const parseFilteredForecastData = (
             filteredForecastData[j][`${masterMetricData[i].name}`];
           sum = sum + filteredForecastData[j][`${masterMetricData[i].name}`];
           indexForAvg = index;
+
+          quarterTotal =
+            quarterTotal +
+            filteredForecastData[j][`${masterMetricData[i].name}`];
+            if (type == 'week') {
+              if (index == 13) {
+                obj["Q1"] = (quarterTotal / 13).toFixed(2);
+                quarterTotal = 0;
+              } else if (index == 26) {
+                obj["Q2"] = (quarterTotal / 13).toFixed(2);
+                quarterTotal = 0;
+              } else if (index == 39) {
+                obj["Q3"] = (quarterTotal / 13).toFixed(2);
+                quarterTotal = 0;
+              } else if (index == 52) {
+                obj["Q4"] = (quarterTotal / 13).toFixed(2);
+                quarterTotal = 0;
+              }
+            } else {
+              if (index == 3) {
+                obj["Q1"] = (quarterTotal / 3).toFixed(2);
+                quarterTotal = 0;
+              } else if (index == 6) {
+                obj["Q2"] = (quarterTotal / 3).toFixed(2);
+                quarterTotal = 0;
+              } else if (index == 9) {
+                obj["Q3"] = (quarterTotal / 3).toFixed(2);
+                quarterTotal = 0;
+              } else if (index == 12) {
+                obj["Q4"] = (quarterTotal / 3).toFixed(2);
+                quarterTotal = 0;
+              }
+          }
         }
         obj["yearly_aggregate"] = (sum / indexForAvg).toFixed(2);
       }
 
-      if (obj["Metrics Name"] == "Sell Through %") {
-        obj["yearly_aggregate"] = '--';
+      if (obj["Metrics Slug"] == "sell_through") {
+        obj["yearly_aggregate"] = obj["Q1"] = obj["Q2"] = obj["Q3"] = obj[
+          "Q4"
+        ] = "--";
       }
-      if (obj["Metrics Name"] == "AUR") {
-        if (obj["Metrics Name"] == "AUR") {
-          obj["yearly_aggregate"] = (revenueTotal / unitsTotal).toFixed(2);
-        }
+      if (obj["Metrics Slug"] == "aur") {
+        console.log("quarter1RevenueTotal--", quarter1RevenueTotal);
+        obj["yearly_aggregate"] = (revenueTotal / unitsTotal).toFixed(2);
+        obj["Q1"] = (quarter1RevenueTotal / quarter1UnitsTotal).toFixed(2);
+        obj["Q2"] = (quarter2RevenueTotal / quarter2UnitsTotal).toFixed(2);
+        obj["Q3"] = (quarter3RevenueTotal / quarter3UnitsTotal).toFixed(2);
+        obj["Q4"] = (quarter4RevenueTotal / quarter4UnitsTotal).toFixed(2);
       }
       parsedData.push(obj);
     }
@@ -386,50 +509,8 @@ const parseFilteredForecastData = (
   return parsedData;
 };
 
-export const getFilteredForecastMetrics = async (req, res) => {
-  let duration = req.body.filterType;
-  delete req.body.filterType;
-
-  let countryQuery;
-  let regularQuery;
-  let countryQuery1;
-
-  let regularFilter = {};
-  let countryFilter = {};
-  let countryFilter1 = {};
-
-  for (let item in req.body) {
-    if (item !== "filter_sub_channels" && item !== "filter_channels") {
-      regularFilter[item] = req.body[item];
-    } else {
-      countryFilter[item] = req.body[item];
-    }
-  }
-  countryFilter != null
-    ? (countryQuery = `AND ${whereQueryString(countryFilter, "dfbwm")}`)
-    : (countryQuery = "");
-  regularFilter != null
-    ? (regularQuery = `AND ${whereQueryString(regularFilter, "dp")}`)
-    : (regularQuery = "");
-  countryFilter1 != null
-    ? (countryQuery1 = `AND ${whereQueryString(countryFilter, "dfbwm2")}`)
-    : (countryQuery1 = "");
-
-  if (regularQuery.length == 4) {
-    regularQuery = "";
-  }
-  if (countryQuery.length == 4) {
-    countryQuery = "";
-  }
-
-  if (countryQuery1.length == 4) {
-    countryQuery1 = "";
-  }
-
-  try {
-    let transaction_db = "morphe_staging";
-
-    let query = `
+const getWeeklyFilteredForecastMetricsQuery = (transaction_db, regularQuery, countryQuery1, duration, countryQuery) => {
+  let query = `
                 WITH current_base_forecast_run_log_id AS (
                 select
                   id
@@ -523,6 +604,155 @@ export const getFilteredForecastMetrics = async (req, res) => {
                 GROUP BY
                   ${duration}(dfbwm.weekend);`;
 
+  return query;
+}
+
+const getMonthlyFilteredForecastMetricsQuery = (transaction_db, regularQuery, countryQuery1, duration, countryQuery) => {
+  let query = `WITH current_base_forecast_run_log_id AS (
+    select
+      id
+    from
+      ${transaction_db}.demand_forecast_run_log dfrl
+    where
+      is_base_forecast = true
+    limit 1 ),
+    iskus AS (
+    select
+      dp.SKU as sku
+    from
+      ${transaction_db}.dim_products dp
+    where
+      dp.id > 0
+
+     ${regularQuery}),
+    comp_units_revs AS (
+    SELECT
+      ${duration}(dfbwm2.monthend)+1 AS cur_date,
+      SUM(dfbwm2.units_sales) as cur_unit_sales,
+      SUM(dfbwm2.retail_sales) as cur_retail_sales
+    FROM
+      ${transaction_db}.demand_forecast_base_monthly_metrics dfbwm2
+    WHERE
+      dfbwm2.demand_forecast_run_log_id = (
+      select
+        id
+      from
+        current_base_forecast_run_log_id)
+        ${countryQuery1}
+      AND dfbwm2.sku IN (
+      select
+        sku
+      from
+        iskus)
+    GROUP BY
+      ${duration}(dfbwm2.monthend) ),
+    first_weekend AS (
+    SELECT
+    month(dmrw.weekend) as w01
+    FROM
+      ${transaction_db}.dim_morphe_retail_weekends dmrw
+    WHERE
+      dmrw.year = YEAR(CURRENT_DATE())
+    LIMIT 1 )
+    SELECT
+      ${duration}(dfbwm.monthend) AS date,
+      ROUND(SUM(dfbwm.retail_sales), 0) AS retail_sales,
+      ROUND(SUM(dfbwm.units_sales), 0) AS units_sales,
+      (CASE
+        WHEN (month(dfbwm.monthend) > (
+        select
+          w01
+        from
+          first_weekend)) THEN ROUND( SUM(dfbwm.units_sales) / (select cur.cur_unit_sales from comp_units_revs cur where cur.cur_date  = ${duration}(dfbwm.monthend)), 2)
+        ELSE 1
+      END) AS units_sales_build,
+      (CASE
+        WHEN (month(dfbwm.monthend)>(
+        select
+          w01
+        from
+          first_weekend)) THEN ROUND( SUM(dfbwm.retail_sales) / (select cur.cur_retail_sales from comp_units_revs cur where cur.cur_date = ${duration}(dfbwm.monthend)), 2)
+        ELSE 1
+      END) AS retail_sales_build,
+      ROUND((ROUND(SUM(dfbwm.retail_sales), 0) / ROUND(SUM(dfbwm.units_sales), 0)), 2) AS aur,
+      ROUND(SUM(dfbwm.gm), 0) AS gm,
+      ROUND(((ROUND(SUM(dfbwm.gm), 2) / ROUND(SUM(dfbwm.retail_sales), 2))* 100), 2) AS gm_percent,
+      ROUND(AVG(dfbwm.wos), 2) AS wos,
+      ROUND(((ROUND(SUM(dfbwm.units_sales), 0) / ROUND(SUM(dfbwm.receipt_units), 0))* 100), 2) AS sell_through,
+      ROUND(SUM(dfbwm.inventory_ins_units), 0) AS inventory_ins_units,
+      ROUND(SUM(dfbwm.inventory_ins_cost), 0) AS inventory_ins_cost,
+      ROUND(SUM(dfbwm.receipt_units), 0) AS receipt_units,
+      ROUND(SUM(dfbwm.receipt_cost), 0) AS receipt_cost
+    FROM
+      ${transaction_db}.demand_forecast_base_monthly_metrics dfbwm
+    WHERE
+      YEAR(dfbwm.monthend)=(YEAR(CURRENT_DATE()))
+      ${countryQuery}
+      AND dfbwm.demand_forecast_run_log_id = (
+      select
+        id
+      from
+        current_base_forecast_run_log_id)
+      AND dfbwm.sku IN (
+      select
+        sku
+      from
+        iskus)
+    GROUP BY
+      ${duration}(dfbwm.monthend);`;
+      return query;
+}
+
+export const getFilteredForecastMetrics = async (req, res) => {
+  let duration = req.body.filterType;
+  delete req.body.filterType;
+
+  let countryQuery;
+  let regularQuery;
+  let countryQuery1;
+
+  let regularFilter = {};
+  let countryFilter = {};
+  let countryFilter1 = {};
+
+  for (let item in req.body) {
+    if (item !== "filter_sub_channels" && item !== "filter_channels") {
+      regularFilter[item] = req.body[item];
+    } else {
+      countryFilter[item] = req.body[item];
+    }
+  }
+  countryFilter != null
+    ? (countryQuery = `AND ${whereQueryString(countryFilter, "dfbwm")}`)
+    : (countryQuery = "");
+  regularFilter != null
+    ? (regularQuery = `AND ${whereQueryString(regularFilter, "dp")}`)
+    : (regularQuery = "");
+  countryFilter1 != null
+    ? (countryQuery1 = `AND ${whereQueryString(countryFilter, "dfbwm2")}`)
+    : (countryQuery1 = "");
+
+  if (regularQuery.length == 4) {
+    regularQuery = "";
+  }
+  if (countryQuery.length == 4) {
+    countryQuery = "";
+  }
+
+  if (countryQuery1.length == 4) {
+    countryQuery1 = "";
+  }
+
+  try {
+    let transaction_db = "morphe_staging";
+
+    let query = '';
+    if (duration == 'month') {
+      query = getMonthlyFilteredForecastMetricsQuery(transaction_db, regularQuery, countryQuery1, duration, countryQuery);
+    } else {
+      query = getWeeklyFilteredForecastMetricsQuery(transaction_db, regularQuery, countryQuery1, duration, countryQuery);
+    }
+
     const filteredForecastData = await prisma.$queryRaw(query);
     let masterMetricData = await getMasterMetricData();
     let parsedFilteredForecastData = parseFilteredForecastData(
@@ -580,6 +810,8 @@ const typlanQueryGeneratorByDurations = (
                   ${whereQueryStr})
               GROUP BY
               ${duration}(pwurbcbs.weekend_date)`;
+
+  console.log("query--99--", query);
   return query;
 };
 
@@ -622,7 +854,7 @@ const typlanChartQueryGeneratorByDurations = (
                   ${whereQueryStr})
               GROUP BY
                 ${duration}(weekend_date)`;
-  console.log("queryqueryqueryqueryquery",query)
+  console.log("queryqueryqueryqueryquery", query);
   return query;
 };
 // This Year Sale Query Generator
@@ -816,7 +1048,6 @@ export const getFilterChartData = async (req, res) => {
   delete req.body.filterType;
   let filter = req.body.filters;
 
-
   // Planned Quarterly
   const filteredQuarterlyPlannedWhereQuery = whereQueryString(
     filter,
@@ -853,7 +1084,7 @@ export const getFilterChartData = async (req, res) => {
       prisma.$queryRaw(filteredQuarterlyForecastDataQuery),
     ]);
     res.status(200).json({
-      chartData: quarterlyFilteredStats.map((item) => item.value)
+      chartData: quarterlyFilteredStats.map((item) => item.value),
     });
   } catch (error) {
     res.status(500).json({

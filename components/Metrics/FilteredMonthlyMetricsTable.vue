@@ -32,6 +32,46 @@
           </template>
           </el-table-column>
           <el-table-column
+            min-width="185"
+            label="Q1"
+            property="Q1"
+            align="right"
+          >
+            <template slot-scope="scope"
+              >{{ scope.row.Q1 | toLocaleStr }}
+            </template>
+          </el-table-column>
+           <el-table-column
+            min-width="185"
+            label="Q2"
+            property="Q2"
+            align="right"
+          >
+            <template slot-scope="scope"
+              >{{ scope.row.Q2 | toLocaleStr }}
+            </template>
+          </el-table-column>
+           <el-table-column
+            min-width="185"
+            label="Q3"
+            property="Q3"
+            align="right"
+          >
+            <template slot-scope="scope"
+              >{{ scope.row.Q3 | toLocaleStr }}
+            </template>
+          </el-table-column>
+           <el-table-column
+            min-width="185"
+            label="Q4"
+            property="Q4"
+            align="right"
+          >
+            <template slot-scope="scope"
+              >{{ scope.row.Q4 | toLocaleStr }}
+            </template>
+          </el-table-column>
+          <el-table-column
             min-width="150"
             sortable
             label="Jan"
