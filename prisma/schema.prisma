@@ -200,10 +200,10 @@ model forecasted_monthly_metrics {
   channel                    String    @db.VarChar(10)
   forecast_year              String    @db.VarChar(4)
   yearly_aggregate           String?   @db.VarChar(20)
-  q1_aggregate               Float?    @db.Float
-  q2_aggregate               Float?    @db.Float
-  q3_aggregate               Float?    @db.Float
-  q4_aggregate               Float?    @db.Float
+  q1_aggregate               String?   @db.VarChar(20)
+  q2_aggregate               String?   @db.VarChar(20)
+  q3_aggregate               String?   @db.VarChar(20)
+  q4_aggregate               String?   @db.VarChar(20)
   jan                        Float?    @db.Float
   feb                        Float?    @db.Float
   mar                        Float?    @db.Float
@@ -228,10 +228,10 @@ model forecasted_weekly_metrics {
   channel                    String    @db.VarChar(10)
   forecast_year              String    @db.VarChar(4)
   yearly_aggregate           String?   @db.VarChar(20)
-  q1_aggregate               Float?    @db.Float
-  q2_aggregate               Float?    @db.Float
-  q3_aggregate               Float?    @db.Float
-  q4_aggregate               Float?    @db.Float
+  q1_aggregate               String?   @db.VarChar(20)
+  q2_aggregate               String?   @db.VarChar(20)
+  q3_aggregate               String?   @db.VarChar(20)
+  q4_aggregate               String?   @db.VarChar(20)
   w01                        Float?    @db.Float
   w02                        Float?    @db.Float
   w03                        Float?    @db.Float
