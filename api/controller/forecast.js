@@ -322,45 +322,92 @@ const parseFilteredForecastData = (
   let typeIndex = type == "month" ? 12 : 52;
   let revenueTotal = 0;
   let unitsTotal = 0;
+  let quarter1UnitsTotal = 0;
+  let quarter1RevenueTotal = 0;
+  let quarter2UnitsTotal = 0;
+  let quarter2RevenueTotal = 0;
+  let quarter3UnitsTotal = 0;
+  let quarter3RevenueTotal = 0;
+  let quarter4UnitsTotal = 0;
+  let quarter4RevenueTotal = 0;
 
   for (let i = 0; i <= filteredForecastData.length; i++) {
     var obj = {};
     let sum = 0;
-
+    let quarterTotal = 0;
     let indexForAvg = 0;
+
     if (masterMetricData[i]) {
       obj["Metrics Name"] = masterMetricData[i].title;
+      obj["Metrics Slug"] = masterMetricData[i].name;
       if (
-        obj["Metrics Name"] == "Sales" ||
-        obj["Metrics Name"] == "Units Sales" ||
-        obj["Metrics Name"] == "GM$" ||
-        obj["Metrics Name"] == "Inventory INS Units" ||
-        obj["Metrics Name"] == "Inventory INS Cost" ||
-        obj["Metrics Name"] == "Inventory DC Units" ||
-        obj["Metrics Name"] == "Inventory DC Cost" ||
-        obj["Metrics Name"] == "Receipt Units" ||
-        obj["Metrics Name"] == "Receipt Cost" ||
-        obj["Metrics Name"] == "AUR"
+        obj["Metrics Slug"] == "retail_sales" ||
+        obj["Metrics Slug"] == "units_sales" ||
+        obj["Metrics Slug"] == "gm" ||
+        obj["Metrics Slug"] == "inventory_ins_units" ||
+        obj["Metrics Slug"] == "inventory_ins_cost" ||
+        obj["Metrics Slug"] == "receipt_units" ||
+        obj["Metrics Slug"] == "receipt_cost" ||
+        obj["Metrics Slug"] == "aur"
       ) {
         for (let j = 0; j < typeIndex; j++) {
           let index = j + 1;
           obj["w" + index] =
             filteredForecastData[j][`${masterMetricData[i].name}`];
           sum = sum + filteredForecastData[j][`${masterMetricData[i].name}`];
+          quarterTotal = quarterTotal + filteredForecastData[j][`${masterMetricData[i].name}`];
+
+          if (index == 13) {
+            obj["Q1"] = quarterTotal;
+            if (obj["Metrics Slug"] == "retail_sales") {
+              quarter1RevenueTotal = quarterTotal;
+
+            } else if (obj["Metrics Slug"] == "units_sales") {
+              quarter1UnitsTotal = quarterTotal;
+            }
+            quarterTotal = 0;
+          } else if (index == 26) {
+            obj["Q2"] = quarterTotal;
+            if (obj["Metrics Slug"] == "retail_sales") {
+              quarter2RevenueTotal = quarterTotal;
+            } else if (obj["Metrics Slug"] == "units_sales") {
+              quarter2UnitsTotal = quarterTotal;
+            }
+            quarterTotal = 0;
+          } else if (index == 39) {
+            obj["Q3"] = quarterTotal;
+            if (obj["Metrics Slug"] == "retail_sales") {
+              quarter3RevenueTotal = quarterTotal;
+            } else if (obj["Metrics Slug"] == "units_sales") {
+              quarter3UnitsTotal = quarterTotal;
+            }
+            quarterTotal = 0;
+          } else if (index == 52) {
+            obj["Q4"] = quarterTotal;
+            if (obj["Metrics Slug"] == "retail_sales") {
+              quarter4RevenueTotal = quarterTotal;
+            } else if (obj["Metrics Slug"] == "units_sales") {
+              quarter4UnitsTotal = quarterTotal;
+            }
+            quarterTotal = 0;
+          }
           indexForAvg = index;
         }
-        if (obj["Metrics Name"] == "Sales") {
+        console.log("quarter1RevenueTotal--",quarter1RevenueTotal);
+
+        if (obj["Metrics Slug"] == "retail_sales") {
           revenueTotal = sum;
-        } else if (obj["Metrics Name"] == "Units Sales") {
+        } else if (obj["Metrics Slug"] == "units_sales") {
           unitsTotal = sum;
         }
         obj["yearly_aggregate"] = sum;
+
       } else if (
-        obj["Metrics Name"] == "Sales Build" ||
-        obj["Metrics Name"] == "Units Sales Build" ||
-        obj["Metrics Name"] == "GM%" ||
-        obj["Metrics Name"] == "Sell Through %" ||
-        obj["Metrics Name"] == "WOS"
+        obj["Metrics Slug"] == "retail_sales_build" ||
+        obj["Metrics Slug"] == "units_sales_build" ||
+        obj["Metrics Slug"] == "gm_percent" ||
+        obj["Metrics Slug"] == "sell_through" ||
+        obj["Metrics Slug"] == "wos"
       ) {
         for (let j = 0; j < typeIndex; j++) {
           let index = j + 1;
@@ -368,17 +415,35 @@ const parseFilteredForecastData = (
             filteredForecastData[j][`${masterMetricData[i].name}`];
           sum = sum + filteredForecastData[j][`${masterMetricData[i].name}`];
           indexForAvg = index;
+
+          quarterTotal = quarterTotal + filteredForecastData[j][`${masterMetricData[i].name}`];
+          if (index == 13) {
+            obj["Q1"] = (quarterTotal / 13).toFixed(2);
+            quarterTotal = 0;
+          } else if (index == 26) {
+            obj["Q2"] = (quarterTotal / 13).toFixed(2);
+            quarterTotal = 0;
+          } else if (index == 39) {
+            obj["Q3"] = (quarterTotal / 13).toFixed(2);
+            quarterTotal = 0;
+          } else if (index == 52) {
+            obj["Q4"] = (quarterTotal / 13).toFixed(2);
+            quarterTotal = 0;
+          }
         }
         obj["yearly_aggregate"] = (sum / indexForAvg).toFixed(2);
       }
 
-      if (obj["Metrics Name"] == "Sell Through %") {
-        obj["yearly_aggregate"] = '--';
+      if (obj["Metrics Slug"] == "sell_through") {
+        obj["yearly_aggregate"] = obj["Q1"] = obj["Q2"] = obj["Q3"] = obj["Q4"] ='--';
       }
-      if (obj["Metrics Name"] == "AUR") {
-        if (obj["Metrics Name"] == "AUR") {
-          obj["yearly_aggregate"] = (revenueTotal / unitsTotal).toFixed(2);
-        }
+      if (obj["Metrics Slug"] == "aur") {
+        console.log("quarter1RevenueTotal--",quarter1RevenueTotal);
+        obj["yearly_aggregate"] = (revenueTotal / unitsTotal).toFixed(2);
+        obj["Q1"] = (quarter1RevenueTotal/quarter1UnitsTotal).toFixed(2);
+        obj["Q2"] = (quarter2RevenueTotal/quarter2UnitsTotal).toFixed(2);
+        obj["Q3"] = (quarter3RevenueTotal/quarter3UnitsTotal).toFixed(2);
+        obj["Q4"] = (quarter4RevenueTotal/quarter4UnitsTotal).toFixed(2);
       }
       parsedData.push(obj);
     }
@@ -579,7 +644,9 @@ const typlanQueryGeneratorByDurations = (
                 where
                   ${whereQueryStr})
               GROUP BY
-                pwurbcbs.plan_year`;
+              ${duration}(pwurbcbs.weekend_date)`;
+
+                console.log("query--99--",query);
   return query;
 };
 
