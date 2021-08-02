@@ -37,34 +37,39 @@ const weeklyCommonTableDataMappingForAll = (data) => {
     const revenueObj = {
       sku: uniqueSkus[i],
       title: uniqueSkusTitle[i],
-      Forecast: ""
+      Forecast: "",
     };
     const revenueSales = arr.map(
-      (item, index) => (revenueObj[`${moment(item.weekend).format('YYYY-MM-DD')}`] = item.retail_sales)
+      (item, index) =>
+        (revenueObj[`${moment(item.weekend).format("YYYY-MM-DD")}`] =
+          item.retail_sales)
     );
-    revenueObj["Forecast"] ="Revenue"; 
+    revenueObj["Forecast"] = "Revenue";
     finalData.push({
       ...revenueObj,
     });
 
     const unitSales = arr.map(
-      (item, index) => (revenueObj[`${moment(item.weekend).format('YYYY-MM-DD')}`] = item.units_sales)
+      (item, index) =>
+        (revenueObj[`${moment(item.weekend).format("YYYY-MM-DD")}`] =
+          item.units_sales)
     );
-    delete revenueObj.title
-    delete revenueObj.sku
-    revenueObj["Forecast"] ="Units"; 
+    delete revenueObj.title;
+    delete revenueObj.sku;
+    revenueObj["Forecast"] = "Units";
     finalData.push({
-      ...revenueObj
+      ...revenueObj,
     });
 
     const aurSales = arr.map(
-      (item, index) => (revenueObj[`${moment(item.weekend).format('YYYY-MM-DD')}`] = item.aur)
+      (item, index) =>
+        (revenueObj[`${moment(item.weekend).format("YYYY-MM-DD")}`] = item.aur)
     );
-    delete revenueObj.title
-    delete revenueObj.sku
-    revenueObj["Forecast"] ="AUR"; 
+    delete revenueObj.title;
+    delete revenueObj.sku;
+    revenueObj["Forecast"] = "AUR";
     finalData.push({
-      ...revenueObj
+      ...revenueObj,
     });
   }
   return finalData;
@@ -355,13 +360,14 @@ const parseFilteredForecastData = (
           obj["w" + index] =
             filteredForecastData[j][`${masterMetricData[i].name}`];
           sum = sum + filteredForecastData[j][`${masterMetricData[i].name}`];
-          quarterTotal = quarterTotal + filteredForecastData[j][`${masterMetricData[i].name}`];
+          quarterTotal =
+            quarterTotal +
+            filteredForecastData[j][`${masterMetricData[i].name}`];
 
           if (index == 13) {
             obj["Q1"] = quarterTotal;
             if (obj["Metrics Slug"] == "retail_sales") {
               quarter1RevenueTotal = quarterTotal;
-
             } else if (obj["Metrics Slug"] == "units_sales") {
               quarter1UnitsTotal = quarterTotal;
             }
@@ -393,7 +399,7 @@ const parseFilteredForecastData = (
           }
           indexForAvg = index;
         }
-        console.log("quarter1RevenueTotal--",quarter1RevenueTotal);
+        console.log("quarter1RevenueTotal--", quarter1RevenueTotal);
 
         if (obj["Metrics Slug"] == "retail_sales") {
           revenueTotal = sum;
@@ -401,7 +407,6 @@ const parseFilteredForecastData = (
           unitsTotal = sum;
         }
         obj["yearly_aggregate"] = sum;
-
       } else if (
         obj["Metrics Slug"] == "retail_sales_build" ||
         obj["Metrics Slug"] == "units_sales_build" ||
@@ -416,7 +421,9 @@ const parseFilteredForecastData = (
           sum = sum + filteredForecastData[j][`${masterMetricData[i].name}`];
           indexForAvg = index;
 
-          quarterTotal = quarterTotal + filteredForecastData[j][`${masterMetricData[i].name}`];
+          quarterTotal =
+            quarterTotal +
+            filteredForecastData[j][`${masterMetricData[i].name}`];
           if (index == 13) {
             obj["Q1"] = (quarterTotal / 13).toFixed(2);
             quarterTotal = 0;
@@ -435,15 +442,17 @@ const parseFilteredForecastData = (
       }
 
       if (obj["Metrics Slug"] == "sell_through") {
-        obj["yearly_aggregate"] = obj["Q1"] = obj["Q2"] = obj["Q3"] = obj["Q4"] ='--';
+        obj["yearly_aggregate"] = obj["Q1"] = obj["Q2"] = obj["Q3"] = obj[
+          "Q4"
+        ] = "--";
       }
       if (obj["Metrics Slug"] == "aur") {
-        console.log("quarter1RevenueTotal--",quarter1RevenueTotal);
+        console.log("quarter1RevenueTotal--", quarter1RevenueTotal);
         obj["yearly_aggregate"] = (revenueTotal / unitsTotal).toFixed(2);
-        obj["Q1"] = (quarter1RevenueTotal/quarter1UnitsTotal).toFixed(2);
-        obj["Q2"] = (quarter2RevenueTotal/quarter2UnitsTotal).toFixed(2);
-        obj["Q3"] = (quarter3RevenueTotal/quarter3UnitsTotal).toFixed(2);
-        obj["Q4"] = (quarter4RevenueTotal/quarter4UnitsTotal).toFixed(2);
+        obj["Q1"] = (quarter1RevenueTotal / quarter1UnitsTotal).toFixed(2);
+        obj["Q2"] = (quarter2RevenueTotal / quarter2UnitsTotal).toFixed(2);
+        obj["Q3"] = (quarter3RevenueTotal / quarter3UnitsTotal).toFixed(2);
+        obj["Q4"] = (quarter4RevenueTotal / quarter4UnitsTotal).toFixed(2);
       }
       parsedData.push(obj);
     }
@@ -646,7 +655,7 @@ const typlanQueryGeneratorByDurations = (
               GROUP BY
               ${duration}(pwurbcbs.weekend_date)`;
 
-                console.log("query--99--",query);
+  console.log("query--99--", query);
   return query;
 };
 
@@ -689,7 +698,7 @@ const typlanChartQueryGeneratorByDurations = (
                   ${whereQueryStr})
               GROUP BY
                 ${duration}(weekend_date)`;
-  console.log("queryqueryqueryqueryquery",query)
+  console.log("queryqueryqueryqueryquery", query);
   return query;
 };
 // This Year Sale Query Generator
@@ -883,7 +892,6 @@ export const getFilterChartData = async (req, res) => {
   delete req.body.filterType;
   let filter = req.body.filters;
 
-
   // Planned Quarterly
   const filteredQuarterlyPlannedWhereQuery = whereQueryString(
     filter,
@@ -920,7 +928,7 @@ export const getFilterChartData = async (req, res) => {
       prisma.$queryRaw(filteredQuarterlyForecastDataQuery),
     ]);
     res.status(200).json({
-      chartData: quarterlyFilteredStats.map((item) => item.value)
+      chartData: quarterlyFilteredStats.map((item) => item.value),
     });
   } catch (error) {
     res.status(500).json({
