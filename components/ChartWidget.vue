@@ -253,9 +253,11 @@ export default {
           thisYearData = this.chartWeeklylApiJsonData?.thisYearData?.map(
             (item) => item.units
           );
-          forecastData = this.chartWeeklylApiJsonData?.forecastData[1]? Object.values(
-            this.chartWeeklylApiJsonData?.forecastData[1]
-          ): [];
+          forecastData =
+            this.chartWeeklylApiJsonData?.forecastData &&
+            this.chartWeeklylApiJsonData?.forecastData.length > 0
+              ? Object.values(this.chartWeeklylApiJsonData?.forecastData[1])
+              : [];
           break;
         case "Revenue":
           plannedData = this.chartWeeklylApiJsonData?.plannedData?.map(
@@ -264,9 +266,9 @@ export default {
           thisYearData = this.chartWeeklylApiJsonData?.thisYearData?.map(
             (item) => item.revenue
           );
-          forecastData = this.chartWeeklylApiJsonData.forecastData? Object.values(
-            this.chartWeeklylApiJsonData.forecastData[0]
-          ): [];
+          forecastData = this.chartWeeklylApiJsonData.forecastData
+            ? Object.values(this.chartWeeklylApiJsonData.forecastData[0])
+            : [];
           break;
       }
       this.weeklyUnitsChartData[0] = plannedData;
@@ -287,9 +289,11 @@ export default {
           thisYearData = this.chartMonthlyApiJsonData?.thisYearData?.map(
             (item) => item.units
           );
-          forecastData = this.chartMonthlyApiJsonData?.forecastData
-            ? Object.values(this.chartMonthlyApiJsonData?.forecastData[1])
-            : [];
+          forecastData =
+            this.chartMonthlyApiJsonData?.forecastData &&
+            this.chartMonthlyApiJsonData?.forecastData[1]
+              ? Object.values(this.chartMonthlyApiJsonData?.forecastData[1])
+              : [];
           break;
         case "Revenue":
           plannedData = this.chartMonthlyApiJsonData?.plannedData?.map(
@@ -298,9 +302,11 @@ export default {
           thisYearData = this.chartMonthlyApiJsonData?.thisYearData?.map(
             (item) => item.revenue
           );
-          forecastData =  this.chartMonthlyApiJsonData.forecastData? Object.values(
+          forecastData =
+            this.chartMonthlyApiJsonData.forecastData &&
             this.chartMonthlyApiJsonData.forecastData[0]
-          ):[];
+              ? Object.values(this.chartMonthlyApiJsonData.forecastData[0])
+              : [];
           break;
       }
       this.monthlyUnitsChartData[0] = plannedData;
