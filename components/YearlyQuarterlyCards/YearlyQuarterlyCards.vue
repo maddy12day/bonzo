@@ -16,7 +16,7 @@
           <span v-if="units && isAPIFetchComplete">
             {{ units | toLocaleStr }}
           </span>
-          <span class="" v-else-if="!units || units==0 && isAPIFetchComplete">
+          <span class="" v-else-if="!units || units=='0' && isAPIFetchComplete">
            &nbsp; -
           </span>
           <span v-else-if="!isAPIFetchComplete">
@@ -30,7 +30,7 @@
           <span v-if="units && isAPIFetchComplete">
             {{ units | toLocaleStr }}
           </span>
-          <span class="empty-stats" v-else-if="!units || units==0 && isAPIFetchComplete">
+          <span class="empty-stats" v-else-if="!units || units=='0' && isAPIFetchComplete">
             &nbsp; -
           </span>
           <span v-else-if="!isAPIFetchComplete">
@@ -42,10 +42,10 @@
           v-if="title === 'Forecast'"
           class="text-warning display-4 font-weight-normal"
         >
-         <span v-if="units && isAPIFetchComplete">
+         <span v-if="units && units!=='0' && isAPIFetchComplete">
             {{ units | toLocaleStr }}
           </span>
-          <span class="empty-stats" v-else-if="!units || units ==0 && isAPIFetchComplete">
+          <span class="empty-stats" v-else-if="!units || units =='0' && isAPIFetchComplete">
             &nbsp; -
           </span>
           <span v-else-if="!isAPIFetchComplete">
@@ -63,7 +63,7 @@
           <span v-if="revenue && isAPIFetchComplete"> 
             $ {{ revenue | toLocaleStr }} 
           </span>
-          <span class="empty-stats" v-else-if="!revenue || revenue == 0 && isAPIFetchComplete">
+          <span class="empty-stats" v-else-if="!revenue || revenue == '0' && isAPIFetchComplete">
             &nbsp; -
           </span>
           <span v-else-if="!isAPIFetchComplete">
@@ -77,7 +77,7 @@
           <span v-if="revenue && isAPIFetchComplete"> 
             $ {{ revenue | toLocaleStr }} 
           </span>
-          <span class="empty-stats" v-else-if="!revenue || revenue == 0 && isAPIFetchComplete">
+          <span class="empty-stats" v-else-if="!revenue || revenue == '0' && isAPIFetchComplete">
             &nbsp; -
           </span>
           <span v-else-if="!isAPIFetchComplete">
@@ -88,10 +88,10 @@
           v-if="title === 'Forecast'"
           class="text-warning display-4 font-weight-normal"
         >
-          <span v-if="revenue && isAPIFetchComplete"> 
+          <span v-if="revenue && revenue !== '0' && isAPIFetchComplete"> 
             $ {{ revenue | toLocaleStr }} 
           </span>
-          <span class="empty-stats" v-else-if="!revenue || revenue == 0 && isAPIFetchComplete">
+          <span class="empty-stats" v-else-if="!revenue || revenue == '0' && isAPIFetchComplete">
             &nbsp; -
           </span>
           <span v-else-if="!isAPIFetchComplete">
