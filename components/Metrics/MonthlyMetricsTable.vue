@@ -1,6 +1,21 @@
 <template>
   <div class="row">
     <div class="col-lg-12">
+      <div class="col-md-12 text-right p-0">
+        <br />
+        <a>
+          <download-csv
+            v-if="metricTableDataExportDataProp.length > 0"
+            class="mt-1 btn btn-sm"
+            style="line-height:1;"
+            :data="metricTableDataExportData"
+            :name="getCSVName()"
+            :disabled="metricTableDataExportDataProp.length < 0"
+          >
+            Download CSV
+          </download-csv>
+        </a>
+      </div>
       <card card-body-classes="table-full-width">
         <h4 slot="header" class="card-title text-bold font-weight-bold">
           {{ tableHeading }}
@@ -208,6 +223,7 @@
 </template>
 <script>
 import { Table, TableColumn } from "element-ui";
+import moment from "moment";
 
 export default {
   name: "dashboard",
@@ -217,13 +233,52 @@ export default {
   },
   props: ["tableHeading", "metricsTableData"],
   data() {
-    return {};
+    return {
+      metricTableDataExportData: [],
+    };
   },
-  computed: {},
+  computed: {
+    metricTableDataExportDataProp() {
+      return this.metricTableDataExportData;
+    },
+  },
+  watch: {
+    metricsTableData: function() {
+      this.createExportCSV();
+    },
+  },
   methods: {
-   classChecker({ row, column }) {
-    return "custom-background-metrics-title"
-   }
+    getCSVName() {
+      return `Monthly Metrics Table ${moment().format("MM-DD-YYYY")}.csv`;
+    },
+    createExportCSV() {
+      this.metricTableDataExportData = this.metricsTableData.map((data) => {
+        let metricTableRow = {
+          "Metrics Name": data.metrics_master.title,
+          Yearly: data.yearly_aggregate,
+          Q1: data.q1_aggregate,
+          Q2: data.q2_aggregate,
+          Q3: data.q3_aggregate,
+          Q4: data.q4_aggregate,
+          January: data.jan,
+          February: data.feb,
+          March: data.mar,
+          April: data.apr,
+          May: data.may,
+          June: data.jun,
+          July: data.jul,
+          August: data.aug,
+          September: data.sep,
+          October: data.oct,
+          November: data.nov,
+          December: data.dec,
+        };
+        return metricTableRow;
+      });
+    },
+    classChecker({ row, column }) {
+      return "custom-background-metrics-title";
+    },
   },
   mounted() {},
 };
@@ -232,5 +287,4 @@ export default {
 .custom-background-metrics-title {
   background: white !important;
 }
-
 </style>
