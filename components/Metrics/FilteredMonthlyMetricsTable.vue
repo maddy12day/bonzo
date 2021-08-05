@@ -1,11 +1,29 @@
 <template>
   <div class="row">
     <div class="col-lg-12">
+      <div class="col-md-12 text-right p-0">
+        <br />
+        <a>
+          <download-csv
+            v-if="metricTableDataExportDataProp.length > 0"
+            class="mt-1 btn btn-sm"
+            style="line-height:1;"
+            :data="metricTableDataExportData"
+            :name="getCSVName()"
+            :disabled="metricTableDataExportDataProp.length < 0"
+          >
+            Download CSV
+          </download-csv>
+        </a>
+      </div>
       <card card-body-classes="table-full-width">
         <h4 slot="header" class="card-title text-bold font-weight-bold">
           {{ tableHeading }}
         </h4>
-        <div class="applied-filter-container" v-if="allAppliedFilters.length > 0">
+        <div
+          class="applied-filter-container"
+          v-if="allAppliedFilters.length > 0"
+        >
           <h5 class="text-bold font-weight-bold">Applied Filters</h5>
           <Tags :allAppliedFilters="allAppliedFilters" />
         </div>
@@ -26,10 +44,9 @@
             property="yearly_aggregate"
             align="right"
           >
-          <template slot-scope="scope">{{
-              scope.row.yearly_aggregate | toLocaleStr
-            }}
-          </template>
+            <template slot-scope="scope"
+              >{{ scope.row.yearly_aggregate | toLocaleStr }}
+            </template>
           </el-table-column>
           <el-table-column
             min-width="185"
@@ -41,7 +58,7 @@
               >{{ scope.row.Q1 | toLocaleStr }}
             </template>
           </el-table-column>
-           <el-table-column
+          <el-table-column
             min-width="185"
             label="Q2"
             property="Q2"
@@ -51,7 +68,7 @@
               >{{ scope.row.Q2 | toLocaleStr }}
             </template>
           </el-table-column>
-           <el-table-column
+          <el-table-column
             min-width="185"
             label="Q3"
             property="Q3"
@@ -61,7 +78,7 @@
               >{{ scope.row.Q3 | toLocaleStr }}
             </template>
           </el-table-column>
-           <el-table-column
+          <el-table-column
             min-width="185"
             label="Q4"
             property="Q4"
@@ -211,15 +228,69 @@
 <script>
 import { Table, TableColumn } from "element-ui";
 import Tags from "../../components/Tags.vue";
+import moment from "moment";
 
 export default {
   name: "FilteredMonthlyMetricsTable",
   components: {
     [Table.name]: Table,
     [TableColumn.name]: TableColumn,
-    Tags
+    Tags,
   },
-  props: ["tableHeading", "filteredForecastMetrics","allAppliedFilters"],
+  props: ["tableHeading", "filteredForecastMetrics", "allAppliedFilters"],
+  data() {
+    return {
+      metricTableDataExportData: [],
+    };
+  },
+  computed: {
+    metricTableDataExportDataProp() {
+      console.log(
+        "this.metricTableDataExportData---",
+        this.metricTableDataExportData.lenght
+      );
+      return this.metricTableDataExportData;
+    },
+  },
+  watch: {
+    filteredForecastMetrics: function() {
+      this.createExportCSV();
+    },
+  },
+  methods: {
+    getCSVName() {
+      return `Filtered Monthly Metrics Table ${moment().format(
+        "MM-DD-YYYY"
+      )}.csv`;
+    },
+    createExportCSV() {
+      this.metricTableDataExportData = this.filteredForecastMetrics.parsedFilteredForecastData.map(
+        (data) => {
+          let metricTableRow = {
+            "Metrics Name": data["Metrics Name"],
+            Yearly: data.yearly_aggregate,
+            Q1: data.Q1,
+            Q2: data.Q2,
+            Q3: data.Q3,
+            Q4: data.Q4,
+            January: data.w1,
+            February: data.w2,
+            March: data.w3,
+            April: data.w4,
+            May: data.w5,
+            June: data.w6,
+            July: data.w7,
+            August: data.w8,
+            September: data.w9,
+            October: data.w10,
+            November: data.w11,
+            December: data.w12,
+          };
+          return metricTableRow;
+        }
+      );
+    },
+  },
 };
 </script>
 <style></style>

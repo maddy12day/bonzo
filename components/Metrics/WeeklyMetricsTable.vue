@@ -1,6 +1,21 @@
 <template>
   <div class="row">
     <div class="col-lg-12">
+      <div class="col-md-12 text-right p-0">
+        <br />
+        <a>
+          <download-csv
+            v-if="metricTableDataExportDataProp.length > 0"
+            class="mt-1 btn btn-sm"
+            style="line-height:1;"
+            :data="metricTableDataExportData"
+            :name="getCSVName()"
+            :disabled="metricTableDataExportDataProp.length < 0"
+          >
+            Download CSV
+          </download-csv>
+        </a>
+      </div>
       <card card-body-classes="table-full-width">
         <h4 slot="header" class="card-title text-bold font-weight-bold">
           {{ tableHeading }}
@@ -655,10 +670,25 @@ export default {
   },
   props: ["tableHeading", "metricsTableData"],
   data() {
-    return {};
+    return {
+      metricTableDataExportData: [],
+    };
   },
-  computed: {},
+  computed: {
+    metricTableDataExportDataProp() {
+      console.log("popopopop");
+      return this.metricTableDataExportData;
+    },
+  },
+  watch: {
+    metricsTableData: function() {
+      this.createExportCSV();
+    },
+  },
   methods: {
+    getCSVName() {
+      return `Weekly Metrics Table ${moment().format("MM-DD-YYYY")}.csv`;
+    },
     getWeekendDates(index) {
       return JSON.parse(window.localStorage.getItem("weekendDates"))
         ? `(${moment(
@@ -673,8 +703,76 @@ export default {
       }
       return className;
     },
+    createExportCSV() {
+      this.metricTableDataExportData = this.metricsTableData.map((data) => {
+        let metricTableRow = {
+          "Metrics Name": data.metrics_master.title,
+          Yearly: data.yearly_aggregate,
+          Q1: data.q1_aggregate,
+          Q2: data.q2_aggregate,
+          Q3: data.q3_aggregate,
+          Q4: data.q4_aggregate,
+        };
+        metricTableRow[`W1 ${this.getWeekendDates(1)}`] = data.w01;
+        metricTableRow[`W2 ${this.getWeekendDates(2)}`] = data.w02;
+        metricTableRow[`W3 ${this.getWeekendDates(3)}`] = data.w03;
+        metricTableRow[`W4 ${this.getWeekendDates(4)}`] = data.w04;
+        metricTableRow[`W5 ${this.getWeekendDates(5)}`] = data.w05;
+        metricTableRow[`W6 ${this.getWeekendDates(6)}`] = data.w06;
+        metricTableRow[`W7 ${this.getWeekendDates(7)}`] = data.w07;
+        metricTableRow[`W8 ${this.getWeekendDates(8)}`] = data.w08;
+        metricTableRow[`W9 ${this.getWeekendDates(9)}`] = data.w09;
+        metricTableRow[`W10 ${this.getWeekendDates(10)}`] = data.w10;
+        metricTableRow[`W11 ${this.getWeekendDates(11)}`] = data.w11;
+        metricTableRow[`W12 ${this.getWeekendDates(12)}`] = data.w12;
+        metricTableRow[`W13 ${this.getWeekendDates(13)}`] = data.w13;
+        metricTableRow[`W14 ${this.getWeekendDates(14)}`] = data.w14;
+        metricTableRow[`W15 ${this.getWeekendDates(15)}`] = data.w15;
+        metricTableRow[`W16 ${this.getWeekendDates(16)}`] = data.w16;
+        metricTableRow[`W17 ${this.getWeekendDates(17)}`] = data.w17;
+        metricTableRow[`W18 ${this.getWeekendDates(18)}`] = data.w18;
+        metricTableRow[`W19 ${this.getWeekendDates(19)}`] = data.w19;
+        metricTableRow[`W20 ${this.getWeekendDates(20)}`] = data.w20;
+        metricTableRow[`W21 ${this.getWeekendDates(21)}`] = data.w21;
+        metricTableRow[`W22 ${this.getWeekendDates(22)}`] = data.w22;
+        metricTableRow[`W23 ${this.getWeekendDates(23)}`] = data.w23;
+        metricTableRow[`W24 ${this.getWeekendDates(24)}`] = data.w24;
+        metricTableRow[`W25 ${this.getWeekendDates(25)}`] = data.w25;
+        metricTableRow[`W26 ${this.getWeekendDates(26)}`] = data.w26;
+        metricTableRow[`W27 ${this.getWeekendDates(27)}`] = data.w27;
+        metricTableRow[`W28 ${this.getWeekendDates(28)}`] = data.w28;
+        metricTableRow[`W29 ${this.getWeekendDates(29)}`] = data.w29;
+        metricTableRow[`W30 ${this.getWeekendDates(30)}`] = data.w30;
+        metricTableRow[`W31 ${this.getWeekendDates(31)}`] = data.w31;
+        metricTableRow[`W32 ${this.getWeekendDates(32)}`] = data.w32;
+        metricTableRow[`W33 ${this.getWeekendDates(33)}`] = data.w33;
+        metricTableRow[`W34 ${this.getWeekendDates(34)}`] = data.w34;
+        metricTableRow[`W35 ${this.getWeekendDates(35)}`] = data.w35;
+        metricTableRow[`W36 ${this.getWeekendDates(36)}`] = data.w36;
+        metricTableRow[`W37 ${this.getWeekendDates(37)}`] = data.w37;
+        metricTableRow[`W38 ${this.getWeekendDates(38)}`] = data.w38;
+        metricTableRow[`W39 ${this.getWeekendDates(39)}`] = data.w39;
+        metricTableRow[`W40 ${this.getWeekendDates(40)}`] = data.w40;
+        metricTableRow[`W41 ${this.getWeekendDates(41)}`] = data.w41;
+        metricTableRow[`W42 ${this.getWeekendDates(42)}`] = data.w42;
+        metricTableRow[`W43 ${this.getWeekendDates(43)}`] = data.w43;
+        metricTableRow[`W44 ${this.getWeekendDates(44)}`] = data.w44;
+        metricTableRow[`W45 ${this.getWeekendDates(45)}`] = data.w45;
+        metricTableRow[`W46 ${this.getWeekendDates(46)}`] = data.w46;
+        metricTableRow[`W47 ${this.getWeekendDates(47)}`] = data.w47;
+        metricTableRow[`W48 ${this.getWeekendDates(48)}`] = data.w48;
+        metricTableRow[`W49 ${this.getWeekendDates(49)}`] = data.w49;
+        metricTableRow[`W50 ${this.getWeekendDates(50)}`] = data.w50;
+        metricTableRow[`W51 ${this.getWeekendDates(51)}`] = data.w51;
+        metricTableRow[`W52 ${this.getWeekendDates(52)}`] = data.w52;
+        return metricTableRow;
+      });
+      console.log(
+        "this.metricTableDataExportData---",
+        this.metricTableDataExportData
+      );
+    },
   },
-  mounted() {},
 };
 </script>
 <style>
