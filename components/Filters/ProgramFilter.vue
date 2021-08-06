@@ -226,11 +226,23 @@ export default {
       subClassValues: [],
       collectionValues: [],
       skuValues: [],
+      programFilterGroupData: [],
+      // =====
+      productSourceGroup: [],
+      brandTypeGroup: [],
+      lifeCyclesGroup: [],
+      newnessGroup: [],
+      brandGroup: [],
+      channelGroup: [],
+      subChannelGroup: [],
+      categoryGroup: [],
+      collectionGroup: [],
+      skuGroup: [],
     };
   },
   computed: {
+  
     showChannelErrorCom() {
-      console.log(this.showChannelError);
       return this.showChannelError;
     },
     applyCtaDisabled() {
@@ -241,6 +253,41 @@ export default {
     },
   },
   methods: {
+      emptyFieldCleaner(reqBody) {
+        for (let key in reqBody) {
+      if (reqBody[key] == "" || reqBody[key] == undefined) {
+        delete reqBody[key];
+      }
+      if (Array.isArray(reqBody[key]) && reqBody[key].length > 1) {
+        reqBody[key] = reqBody[key].map((item) => {
+          if (item.includes("All") === false) {
+            return item;
+          }
+        });
+      } else if (Array.isArray(reqBody[key]) && reqBody[key].length == 1) {
+        reqBody[key] = reqBody[key].map((item) => {
+          if (item.includes("All") === false) {
+            return item;
+          }
+        });
+      }
+    }
+    return reqBody;
+    },
+    filterDrilldown(obj) {
+      return this.programFilterGroupData.filter(
+        (item) =>
+          !Object.keys(obj)
+            .map((inner) => {
+              if (obj[inner].includes(item[inner])) {
+                return true;
+              } else {
+                false;
+              }
+            })
+            .includes(undefined)
+      );
+    },
     updateGlobalFilterData() {
       let globalFilterArray = [];
       globalFilterArray = [
@@ -261,27 +308,6 @@ export default {
       this.$store.commit("updateRegularFilter", globalFilterArray);
     },
     getProductSource(value) {
-      const optionGenerator = (data, keyName) => {
-        return [
-          /* { name: keyName }, */
-          ...[...new Set(data)].sort().map((item) => {
-            return { name: item };
-          }),
-        ];
-      };
-      let brandType = [];
-      let lifeCycle = [];
-      let newNess = [];
-      let brands = [];
-      let programs = [];
-      let channels = [];
-      let subChannels = [];
-      let categories = [];
-      let classes = [];
-      let subClasses = [];
-      let collections = [];
-      let skus = [];
-
       this.$emit("getBrandType", []);
       this.$emit("getLifyClycle", []);
       this.$emit("newNess", []);
@@ -294,7 +320,6 @@ export default {
       this.$emit("getSubClass", []);
       this.$emit("getCollection", []);
       this.$emit("getSkusValues", []);
-
 
       this.$refs.brandType.values = [];
       this.$refs.newness.values = [];
@@ -313,86 +338,192 @@ export default {
         value.map((item) => item.name)
       );
       let productSources;
+      this.productSourceValues = value.map((item) => item.name);
+
+      this.productSourceGroup = this.programFilterGroupData.filter((item) =>
+        this.productSourceValues.includes(item.product_source)
+      );
       if (
         this.productSourceValues.length > 0 &&
         !this.productSourceValues.find((item) => item.includes("All"))
       ) {
-        productSources = this.productSourceValues;
-      } else {
-        productSources = this.productSourceOptions.map((item) => item.name);
-      }
-      this.productSourceValues = value.map((item) => item.name);
-      for (let psource of productSources) {
-        if (psource.indexOf("All") > -1) {
-          continue;
-        }
-        brandType.push(
-          ...this.filterApiData.programSource.brand_type[`${psource}`]
-        );
-        lifeCycle.push(
-          ...this.filterApiData.programSource.life_cycle[`${psource}`]
-        );
-        newNess.push(...this.filterApiData.programSource.newness[`${psource}`]);
-        brands.push(...this.filterApiData.programSource.brand[`${psource}`]);
-        programs.push(...this.filterApiData.programSource.collab[`${psource}`]);
-        channels.push(
-          ...this.filterApiData.programSource.channel[`${psource}`]
-        );
-        subChannels.push(
-          ...this.filterApiData.programSource.sub_channel[`${psource}`]
-        );
-        categories.push(
-          ...this.filterApiData.programSource.category[`${psource}`]
-        );
-        classes.push(...this.filterApiData.programSource.class[`${psource}`]);
-        subClasses.push(
-          ...this.filterApiData.programSource.sub_class[`${psource}`]
-        );
-        collections.push(
-          ...this.filterApiData.programSource.collection[`${psource}`]
-        );
-        skus.push(...this.filterApiData.programSource.sku[`${psource}`]);
-      }
-      this.brandTypeOptions = optionGenerator(brandType, "All Brand Types");
-      this.lifeCycleOptions = optionGenerator(lifeCycle, "All Life Cycles");
-      this.newnessOptions = optionGenerator(newNess, "All Newness");
-      this.programs = optionGenerator(programs, "All Channels");
+        productSources = value;
 
-      this.brandOptions = optionGenerator(brands, "All Brands");
-      this.channelOptions = optionGenerator(channels, "All Channels");
-      this.programSubChannels = optionGenerator(
-        subChannels,
-        "All Sub Channels"
-      );
-      this.categoryOptions = optionGenerator(categories, "All Categories");
-      this.classesOptions = optionGenerator(classes, "All Classes");
-      this.subClassesOptions = optionGenerator(subClasses, "All Sub Classes");
-      this.programCollectionsOptions = optionGenerator(
-        collections,
-        "All Collections"
-      );
-      this.skuOptions = optionGenerator(skus, "All SKUs");
+        this.brandTypeOptions = [
+          ...new Set(
+            this.programFilterGroupData
+              .filter((item) =>
+                this.productSourceValues.includes(item.product_source)
+              )
+              .map((item) => item.brand_type)
+          ),
+        ].map((item) => {
+          return {
+            name: item,
+          };
+        });
+
+        this.lifeCycleOptions = [
+          ...new Set(
+            this.programFilterGroupData
+              .filter((item) =>
+                this.productSourceValues.includes(item.product_source)
+              )
+              .map((item) => item.life_cycle)
+          ),
+        ].map((item) => {
+          return {
+            name: item,
+          };
+        });
+        this.newnessOptions = [
+          ...new Set(
+            this.programFilterGroupData
+              .filter((item) =>
+                this.productSourceValues.includes(item.product_source)
+              )
+              .map((item) => item.newness)
+          ),
+        ].map((item) => {
+          return {
+            name: item,
+          };
+        });
+        this.programs = [
+          ...new Set(
+            this.programFilterGroupData
+              .filter((item) =>
+                this.productSourceValues.includes(item.product_source)
+              )
+              .map((item) => item.brand)
+          ),
+        ].map((item) => {
+          return {
+            name: item,
+          };
+        });
+
+        this.brandOptions = [
+          ...new Set(
+            this.programFilterGroupData
+              .filter((item) =>
+                this.productSourceValues.includes(item.product_source)
+              )
+              .map((item) => item.brand)
+          ),
+        ].map((item) => {
+          return {
+            name: item,
+          };
+        });
+        this.programs = [
+          ...new Set(
+            this.programFilterGroupData
+              .filter((item) =>
+                this.productSourceValues.includes(item.product_source)
+              )
+              .map((item) => item.collab)
+          ),
+        ].map((item) => {
+          return {
+            name: item,
+          };
+        });
+        this.channelOptions = [
+          ...new Set(
+            this.programFilterGroupData
+              .filter((item) =>
+                this.productSourceValues.includes(item.product_source)
+              )
+              .map((item) => item.channel)
+          ),
+        ].map((item) => {
+          return {
+            name: item,
+          };
+        });
+        this.programSubChannels = [
+          ...new Set(
+            this.programFilterGroupData
+              .filter((item) =>
+                this.productSourceValues.includes(item.product_source)
+              )
+              .map((item) => item.sub_channel)
+          ),
+        ].map((item) => {
+          return {
+            name: item,
+          };
+        });
+        this.categoryOptions = [
+          ...new Set(
+            this.programFilterGroupData
+              .filter((item) =>
+                this.productSourceValues.includes(item.product_source)
+              )
+              .map((item) => item.category)
+          ),
+        ].map((item) => {
+          return {
+            name: item,
+          };
+        });
+        this.classesOptions = [
+          ...new Set(
+            this.programFilterGroupData
+              .filter((item) =>
+                this.productSourceValues.includes(item.product_source)
+              )
+              .map((item) => item.class)
+          ),
+        ].map((item) => {
+          return {
+            name: item,
+          };
+        });
+        this.subClassesOptions = [
+          ...new Set(
+            this.programFilterGroupData
+              .filter((item) =>
+                this.productSourceValues.includes(item.product_source)
+              )
+              .map((item) => item.sub_class)
+          ),
+        ].map((item) => {
+          return {
+            name: item,
+          };
+        });
+        this.programCollectionsOptions = [
+          ...new Set(
+            this.programFilterGroupData
+              .filter((item) =>
+                this.productSourceValues.includes(item.product_source)
+              )
+              .map((item) => item.collection)
+          ),
+        ].map((item) => {
+          return {
+            name: item,
+          };
+        });
+        this.skuOptions = [
+          ...new Set(
+            this.programFilterGroupData
+              .filter((item) =>
+                this.productSourceValues.includes(item.product_source)
+              )
+              .map((item) => item.sku)
+          ),
+        ].map((item) => {
+          return {
+            name: item,
+          };
+        });
+      }
     },
     getBrandType(value) {
-      const optionGenerator = (data, keyName) => {
-        return [
-          /* { name: keyName }, */
-          ...[...new Set(data)].sort().map((item) => {
-            return { name: item };
-          }),
-        ];
-      };
-      let lifeCycle = [];
-      let newNess = [];
-      let brands = [];
-      let programs = [];
-      let channels = [];
-      let subChannels = [];
-      let categories = [];
-      let classes = [];
-      let subClasses = [];
-      let collections = [];
-      let skus = [];
+  
 
       this.$emit("getLifyClycle", []);
       this.$emit("newNess", []);
@@ -422,228 +553,102 @@ export default {
         value.map((item) => item.name)
       );
       this.brandTypeValues = value.map((item) => item.name);
-      let productSources;
-      let brandTypes;
-      if (
-        this.productSourceValues.length > 0 &&
-        !this.productSourceValues.find((item) => item.includes("All"))
-      ) {
-        productSources = this.productSourceValues;
-      } else {
-        productSources = this.productSourceOptions.map((item) => item.name);
-      }
-      if (
-        this.brandTypeValues.length > 0 &&
-        !this.brandTypeValues.find((item) => item.includes("All"))
-      ) {
-        brandTypes = this.brandTypeValues;
-      } else {
-        brandTypes = this.brandTypeOptions.map((item) => item.name);
-      }
-      for (let psource of productSources) {
-        if (psource.indexOf("All") > -1) {
-          continue;
-        }
-        for (let brandType of brandTypes) {
-          if (brandType.indexOf("All") > -1) {
-            continue;
-          }
 
-          lifeCycle.push(
-            ...new Set(
-              optionGenerator(
-                this.filterApiData.programType.life_cycle[
-                  `('${psource}', '${brandType}')`
-                ],
-                "All Life Cycles"
-              )
-            )
-          );
-          newNess.push(
-            ...new Set(
-              optionGenerator(
-                this.filterApiData.programType.newness[
-                  `('${psource}', '${brandType}')`
-                ],
-                "All Newness"
-              )
-            )
-          );
-          brands.push(
-            ...new Set(
-              optionGenerator(
-                this.filterApiData.programType.brand[
-                  `('${psource}', '${brandType}')`
-                ],
-                "All Brands"
-              )
-            )
-          );
-          programs.push(
-            ...new Set(
-              optionGenerator(
-                this.filterApiData.programType.collab[
-                  `('${psource}', '${brandType}')`
-                ],
-                "All Programs"
-              )
-            )
-          );
-          channels.push(
-            ...new Set(
-              optionGenerator(
-                this.filterApiData.programType.channel[
-                  `('${psource}', '${brandType}')`
-                ],
-                "All Channels"
-              )
-            )
-          );
-          subChannels.push(
-            ...new Set(
-              optionGenerator(
-                this.filterApiData.programType.sub_channel[
-                  `('${psource}', '${brandType}')`
-                ],
-                "All Sub Channel"
-              )
-            )
-          );
-          categories.push(
-            ...new Set(
-              optionGenerator(
-                this.filterApiData.programType.category[
-                  `('${psource}', '${brandType}')`
-                ],
-                "All Categories"
-              )
-            )
-          );
-          classes.push(
-            ...new Set(
-              optionGenerator(
-                this.filterApiData.programType.class[
-                  `('${psource}', '${brandType}')`
-                ],
-                "All Classes"
-              )
-            )
-          );
-          subClasses.push(
-            ...new Set(
-              optionGenerator(
-                this.filterApiData.programType.sub_class[
-                  `('${psource}', '${brandType}')`
-                ],
-                "All Sub Classes"
-              )
-            )
-          );
-          collections.push(
-            ...new Set(
-              optionGenerator(
-                this.filterApiData.programType.collection[
-                  `('${psource}', '${brandType}')`
-                ],
-                "All Collections"
-              )
-            )
-          );
-          skus.push(
-            ...new Set(
-              optionGenerator(
-                this.filterApiData.programType.sku[
-                  `('${psource}', '${brandType}')`
-                ],
-                "All Skus"
-              )
-            )
-          );
+      const brandTypes = {
+        brand_type: this.brandTypeValues,
+        product_source: this.productSourceValues,
+      };
+      const cleanObject = this.emptyFieldCleaner(brandTypes);
+      const dataListGroup = this.filterDrilldown(
+        cleanObject
+      );
+      this.lifeCycleOptions = [
+        ...new Set(dataListGroup.map((item) => item.life_cycle)),
+      ].map((item) => {
+        return {
+          name: item,
+        };
+      });
+      this.newnessOptions = [
+        ...new Set(dataListGroup.map((item) => item.newness)),
+      ].map((item) => {
+        return {
+          name: item,
+        };
+      });
+      this.programs = [...new Set(dataListGroup.map((item) => item.brand))].map(
+        (item) => {
+          return {
+            name: item,
+          };
         }
-      }
-      this.lifeCycleOptions = [...new Set(lifeCycle.map((item) => item.name))]
-        .sort()
-        .map((item) => {
-          return { name: item };
-        });
-      this.newnessOptions = [...new Set(newNess.map((item) => item.name))]
-        .sort()
-        .map((item) => {
-          return { name: item };
-        });
-      this.programs = [...new Set(programs.map((item) => item.name))]
-        .sort()
-        .map((item) => {
-          return { name: item };
-        });
-      this.brandOptions = [...new Set(brands.map((item) => item.name))]
-        .sort()
-        .map((item) => {
-          return { name: item };
-        });
-      this.channelOptions = [...new Set(channels.map((item) => item.name))]
-        .sort()
-        .sort()
-        .map((item) => {
-          return { name: item };
-        });
+      );
+
+      this.brandOptions = [
+        ...new Set(dataListGroup.map((item) => item.brand)),
+      ].map((item) => {
+        return {
+          name: item,
+        };
+      });
+      this.programs = [
+        ...new Set(dataListGroup.map((item) => item.collab)),
+      ].map((item) => {
+        return {
+          name: item,
+        };
+      });
+      this.channelOptions = [
+        ...new Set(dataListGroup.map((item) => item.channel)),
+      ].map((item) => {
+        return {
+          name: item,
+        };
+      });
       this.programSubChannels = [
-        ...new Set(subChannels.map((item) => item.name)),
-      ]
-        .sort()
-        .sort()
-        .map((item) => {
-          return { name: item };
-        });
-      this.categoryOptions = [...new Set(categories.map((item) => item.name))]
-        .sort()
-        .map((item) => {
-          return { name: item };
-        });
-      this.classesOptions = [...new Set(classes.map((item) => item.name))]
-        .sort()
-        .sort()
-        .map((item) => {
-          return { name: item };
-        });
-      this.subClassesOptions = [...new Set(subClasses.map((item) => item.name))]
-        .sort()
-        .map((item) => {
-          return { name: item };
-        });
+        ...new Set(dataListGroup.map((item) => item.sub_channel)),
+      ].map((item) => {
+        return {
+          name: item,
+        };
+      });
+      this.categoryOptions = [
+        ...new Set(dataListGroup.map((item) => item.category)),
+      ].map((item) => {
+        return {
+          name: item,
+        };
+      });
+      this.classesOptions = [
+        ...new Set(dataListGroup.map((item) => item.class)),
+      ].map((item) => {
+        return {
+          name: item,
+        };
+      });
+      this.subClassesOptions = [
+        ...new Set(dataListGroup.map((item) => item.sub_class)),
+      ].map((item) => {
+        return {
+          name: item,
+        };
+      });
       this.programCollectionsOptions = [
-        ...new Set(collections.map((item) => item.name)),
-      ]
-        .sort()
-        .map((item) => {
-          return { name: item };
-        });
-      this.skuOptions = [...new Set(skus.map((item) => item.name))].sort()
-        .sort()
-        .map((item) => {
-          return { name: item };
-        });
+        ...new Set(dataListGroup.map((item) => item.collection)),
+      ].map((item) => {
+        return {
+          name: item,
+        };
+      });
+      this.skuOptions = [...new Set(dataListGroup.map((item) => item.sku))].map(
+        (item) => {
+          return {
+            name: item,
+          };
+        }
+      );
     },
     getLifeCycle(value) {
-      const optionGenerator = (data, keyName) => {
-        return [
-          /* { name: keyName }, */
-          ...[...new Set(data)].sort().map((item) => {
-            return { name: item };
-          }),
-        ];
-      };
-      let newNess = [];
-      let brands = [];
-      let programs = [];
-      let channels = [];
-      let subChannels = [];
-      let categories = [];
-      let classes = [];
-      let subClasses = [];
-      let collections = [];
-      let skus = [];
-
       this.$emit(
         "getLifyClycle",
         value.map((item) => item.name)
@@ -661,225 +666,96 @@ export default {
       this.$emit("getSkusValues", []);
 
       this.lifeCycleValues = value.map((item) => item.name);
-      let productSources;
-      let brandTypes;
-      let lifeCycles;
-      if (
-        this.productSourceValues.length > 0 &&
-        !this.productSourceValues.find((item) => item.includes("All"))
-      ) {
-        productSources = this.productSourceValues;
-      } else {
-        productSources = this.productSourceOptions.map((item) => item.name);
-      }
-      if (
-        this.brandTypeValues.length > 0 &&
-        !this.brandTypeValues.find((item) => item.includes("All"))
-      ) {
-        brandTypes = this.brandTypeValues;
-      } else {
-        brandTypes = this.brandTypeOptions.map((item) => item.name);
-      }
-      if (
-        this.lifeCycleValues.length > 0 &&
-        !this.lifeCycleValues.find((item) => item.includes("All"))
-      ) {
-        lifeCycles = this.lifeCycleValues;
-      } else {
-        lifeCycles = this.lifeCycleOptions.map((item) => item.name);
-      }
-      for (let psource of productSources) {
-        if (psource.indexOf("All") > -1) {
-          continue;
+
+      const brandTypes = {
+        brand_type: this.brandTypeValues,
+        product_source: this.productSourceValues,
+        life_cycle: this.lifeCycleValues,
+      };
+      const cleanObject = this.emptyFieldCleaner(brandTypes);
+      const dataListGroup = this.filterDrilldown(
+        cleanObject
+      );
+      this.newnessOptions = [
+        ...new Set(dataListGroup.map((item) => item.newness)),
+      ].map((item) => {
+        return {
+          name: item,
+        };
+      });
+      this.programs = [...new Set(dataListGroup.map((item) => item.brand))].map(
+        (item) => {
+          return {
+            name: item,
+          };
         }
-        for (let brandType of brandTypes) {
-          if (brandType.indexOf("All") > -1) {
-            continue;
-          }
-          for (let lifeC of lifeCycles) {
-            if (lifeC.indexOf("All") > -1) {
-              continue;
-            }
-            newNess.push(
-              ...new Set(
-                optionGenerator(
-                  this.filterApiData.programLifeCycle.newness[
-                    `('${psource}', '${brandType}', '${lifeC}')`
-                  ],
-                  "All Newness"
-                )
-              )
-            );
-            brands.push(
-              ...new Set(
-                optionGenerator(
-                  this.filterApiData.programLifeCycle.brand[
-                    `('${psource}', '${brandType}', '${lifeC}')`
-                  ],
-                  "All Brands"
-                )
-              )
-            );
-            programs.push(
-              ...new Set(
-                optionGenerator(
-                  this.filterApiData.programLifeCycle.collab[
-                    `('${psource}', '${brandType}', '${lifeC}')`
-                  ],
-                  "All Programs"
-                )
-              )
-            );
-            channels.push(
-              ...new Set(
-                optionGenerator(
-                  this.filterApiData.programLifeCycle.channel[
-                    `('${psource}', '${brandType}', '${lifeC}')`
-                  ],
-                  "All Channels"
-                )
-              )
-            );
-            subChannels.push(
-              ...new Set(
-                optionGenerator(
-                  this.filterApiData.programLifeCycle.sub_channel[
-                    `('${psource}', '${brandType}', '${lifeC}')`
-                  ],
-                  "All Sub Channel"
-                )
-              )
-            );
-            categories.push(
-              ...new Set(
-                optionGenerator(
-                  this.filterApiData.programLifeCycle.category[
-                    `('${psource}', '${brandType}', '${lifeC}')`
-                  ],
-                  "All Categories"
-                )
-              )
-            );
-            classes.push(
-              ...new Set(
-                optionGenerator(
-                  this.filterApiData.programLifeCycle.class[
-                    `('${psource}', '${brandType}', '${lifeC}')`
-                  ],
-                  "All Classes"
-                )
-              )
-            );
-            subClasses.push(
-              ...new Set(
-                optionGenerator(
-                  this.filterApiData.programLifeCycle.sub_class[
-                    `('${psource}', '${brandType}', '${lifeC}')`
-                  ],
-                  "All Sub Classes"
-                )
-              )
-            );
-            collections.push(
-              ...new Set(
-                optionGenerator(
-                  this.filterApiData.programLifeCycle.collection[
-                    `('${psource}', '${brandType}', '${lifeC}')`
-                  ],
-                  "All Collections"
-                )
-              )
-            );
-            skus.push(
-              ...new Set(
-                optionGenerator(
-                  this.filterApiData.programLifeCycle.sku[
-                    `('${psource}', '${brandType}', '${lifeC}')`
-                  ],
-                  "All Skus"
-                )
-              )
-            );
-          }
-        }
-      }
-      this.newnessOptions = [...new Set(newNess.map((item) => item.name))]
-        .sort()
-        .map((item) => {
-          return { name: item };
-        });
-      this.programs = [...new Set(programs.map((item) => item.name))]
-        .sort()
-        .map((item) => {
-          return { name: item };
-        });
-      this.brandOptions = [...new Set(brands.map((item) => item.name))]
-        .sort()
-        .map((item) => {
-          return { name: item };
-        });
-      this.channelOptions = [...new Set(channels.map((item) => item.name))]
-        .sort()
-        .sort()
-        .map((item) => {
-          return { name: item };
-        });
+      );
+
+      this.brandOptions = [
+        ...new Set(dataListGroup.map((item) => item.brand)),
+      ].map((item) => {
+        return {
+          name: item,
+        };
+      });
+      this.programs = [
+        ...new Set(dataListGroup.map((item) => item.collab)),
+      ].map((item) => {
+        return {
+          name: item,
+        };
+      });
+      this.channelOptions = [
+        ...new Set(dataListGroup.map((item) => item.channel)),
+      ].map((item) => {
+        return {
+          name: item,
+        };
+      });
       this.programSubChannels = [
-        ...new Set(subChannels.map((item) => item.name)),
-      ]
-        .sort()
-        .sort()
-        .map((item) => {
-          return { name: item };
-        });
-      this.categoryOptions = [...new Set(categories.map((item) => item.name))]
-        .sort()
-        .map((item) => {
-          return { name: item };
-        });
-      this.classesOptions = [...new Set(classes.map((item) => item.name))]
-        .sort()
-        .sort()
-        .map((item) => {
-          return { name: item };
-        });
-      this.subClassesOptions = [...new Set(subClasses.map((item) => item.name))]
-        .sort()
-        .map((item) => {
-          return { name: item };
-        });
+        ...new Set(dataListGroup.map((item) => item.sub_channel)),
+      ].map((item) => {
+        return {
+          name: item,
+        };
+      });
+      this.categoryOptions = [
+        ...new Set(dataListGroup.map((item) => item.category)),
+      ].map((item) => {
+        return {
+          name: item,
+        };
+      });
+      this.classesOptions = [
+        ...new Set(dataListGroup.map((item) => item.class)),
+      ].map((item) => {
+        return {
+          name: item,
+        };
+      });
+      this.subClassesOptions = [
+        ...new Set(dataListGroup.map((item) => item.sub_class)),
+      ].map((item) => {
+        return {
+          name: item,
+        };
+      });
       this.programCollectionsOptions = [
-        ...new Set(collections.map((item) => item.name)),
-      ]
-        .sort()
-        .map((item) => {
-          return { name: item };
-        });
-      this.skuOptions = [...new Set(skus.map((item) => item.name))].sort()
-        .sort()
-        .map((item) => {
-          return { name: item };
-        });
+        ...new Set(dataListGroup.map((item) => item.collection)),
+      ].map((item) => {
+        return {
+          name: item,
+        };
+      });
+      this.skuOptions = [...new Set(dataListGroup.map((item) => item.sku))].map(
+        (item) => {
+          return {
+            name: item,
+          };
+        }
+      );
     },
     getNewness(value) {
-      const optionGenerator = (data, keyName) => {
-        return [
-          /* { name: keyName }, */
-          ...[...new Set(data)].sort().map((item) => {
-            return { name: item };
-          }),
-        ];
-      };
-      let brands = [];
-      let programs = [];
-      let channels = [];
-      let subChannels = [];
-      let categories = [];
-      let classes = [];
-      let subClasses = [];
-      let collections = [];
-      let skus = [];
-
       this.$emit("getBrands", []);
       this.$emit("getPrograms", []);
       this.$emit("getChannels", []);
@@ -904,197 +780,86 @@ export default {
         value.map((item) => item.name)
       );
       this.newnessValues = value.map((item) => item.name);
-      let productSources;
-      let brandTypes;
-      let lifeCycles;
-      let newness;
-      if (
-        this.productSourceValues.length > 0 &&
-        !this.productSourceValues.find((item) => item.includes("All"))
-      ) {
-        productSources = this.productSourceValues;
-      } else {
-        productSources = this.productSourceOptions.map((item) => item.name);
-      }
-      if (
-        this.brandTypeValues.length > 0 &&
-        !this.brandTypeValues.find((item) => item.includes("All"))
-      ) {
-        brandTypes = this.brandTypeValues;
-      } else {
-        brandTypes = this.brandTypeOptions.map((item) => item.name);
-      }
-      if (
-        this.lifeCycleValues.length > 0 &&
-        !this.lifeCycleValues.find((item) => item.includes("All"))
-      ) {
-        lifeCycles = this.lifeCycleValues;
-      } else {
-        lifeCycles = this.lifeCycleOptions.map((item) => item.name);
-      }
-      if (
-        this.newnessValues.length > 0 &&
-        !this.newnessValues.find((item) => item.includes("All"))
-      ) {
-        newness = this.newnessValues;
-      } else {
-        newness = this.newnessOptions.map((item) => item.name);
-      }
-      for (let psource of productSources) {
-        if (psource.indexOf("All") > -1) {
-          continue;
-        }
-        for (let brandType of brandTypes) {
-          if (brandType.indexOf("All") > -1) {
-            continue;
-          }
-          for (let lifeC of lifeCycles) {
-            if (lifeC.indexOf("All") > -1) {
-              continue;
-            }
-            for (let newnss of newness) {
-              if (newnss.indexOf("All") > -1) {
-                continue;
-              }
-              brands.push(
-                ...new Set(
-                  optionGenerator(
-                    this.filterApiData.programNewness.brand[
-                      `('${psource}', '${brandType}', '${lifeC}', '${newnss}')`
-                    ],
-                    "All Brands"
-                  )
-                )
-              );
-              programs.push(
-                ...new Set(
-                  optionGenerator(
-                    this.filterApiData.programNewness.collab[
-                      `('${psource}', '${brandType}', '${lifeC}', '${newnss}')`
-                    ],
-                    "All Programs"
-                  )
-                )
-              );
-              channels.push(
-                ...new Set(
-                  optionGenerator(
-                    this.filterApiData.programNewness.channel[
-                      `('${psource}', '${brandType}', '${lifeC}', '${newnss}')`
-                    ],
-                    "All Channels"
-                  )
-                )
-              );
-              subChannels.push(
-                ...new Set(
-                  optionGenerator(
-                    this.filterApiData.programNewness.sub_channel[
-                      `('${psource}', '${brandType}', '${lifeC}', '${newnss}')`
-                    ],
-                    "All Sub Channel"
-                  )
-                )
-              );
-              categories.push(
-                ...new Set(
-                  optionGenerator(
-                    this.filterApiData.programNewness.category[
-                      `('${psource}', '${brandType}', '${lifeC}', '${newnss}')`
-                    ],
-                    "All Categories"
-                  )
-                )
-              );
-              classes.push(
-                ...new Set(
-                  optionGenerator(
-                    this.filterApiData.programNewness.class[
-                      `('${psource}', '${brandType}', '${lifeC}', '${newnss}')`
-                    ],
-                    "All Classes"
-                  )
-                )
-              );
-              subClasses.push(
-                ...new Set(
-                  optionGenerator(
-                    this.filterApiData.programNewness.sub_class[
-                      `('${psource}', '${brandType}', '${lifeC}', '${newnss}')`
-                    ],
-                    "All Sub Classes"
-                  )
-                )
-              );
-              collections.push(
-                ...new Set(
-                  optionGenerator(
-                    this.filterApiData.programNewness.collection[
-                      `('${psource}', '${brandType}', '${lifeC}', '${newnss}')`
-                    ],
-                    "All Collections"
-                  )
-                )
-              );
-              skus.push(
-                ...new Set(
-                  optionGenerator(
-                    this.filterApiData.programNewness.sku[
-                      `('${psource}', '${brandType}', '${lifeC}', '${newnss}')`
-                    ],
-                    "All Skus"
-                  )
-                )
-              );
-            }
-          }
-        }
-      }
-      this.programs = [...new Set(programs.map((item) => item.name))]
-        .sort()
-        .map((item) => {
-          return { name: item };
-        });
-      this.brandOptions = [...new Set(brands.map((item) => item.name))]
-        .sort()
-        .map((item) => {
-          return { name: item };
-        });
-      this.channelOptions = [...new Set(channels.map((item) => item.name))]
-        .sort()
-        .map((item) => {
-          return { name: item };
-        });
-      this.programSubChannels = [
-        ...new Set(subChannels.map((item) => item.name)),
-      ]
-        .sort()
-        .map((item) => {
-          return { name: item };
-        });
-      this.categoryOptions = [...new Set(categories.map((item) => item.name))]
-        .sort()
-        .map((item) => {
-          return { name: item };
-        });
-      this.classesOptions = [...new Set(classes.map((item) => item.name))]
-        .sort()
-        .map((item) => {
-          return { name: item };
-        });
-      this.subClassesOptions = [...new Set(subClasses.map((item) => item.name))]
-        .sort()
-        .map((item) => {
-          return { name: item };
-        });
-      this.programCollectionsOptions = [
-        ...new Set(collections.map((item) => item.name)),
-      ].sort().map((item) => {
-        return { name: item };
-      });
-      this.skuOptions = [...new Set(skus.map((item) => item.name))].sort().map(
+
+      const brandTypes = {
+        brand_type: this.brandTypeValues,
+        product_source: this.productSourceValues,
+        life_cycle: this.lifeCycleValues,
+        newness: this.newnessValues,
+      };
+      const cleanObject = this.emptyFieldCleaner(brandTypes);
+      const dataListGroup = this.filterDrilldown(
+        cleanObject
+      );
+      this.programs = [...new Set(dataListGroup.map((item) => item.brand))].map(
         (item) => {
-          return { name: item };
+          return {
+            name: item,
+          };
+        }
+      );
+
+      this.brandOptions = [
+        ...new Set(dataListGroup.map((item) => item.brand)),
+      ].map((item) => {
+        return {
+          name: item,
+        };
+      });
+      this.programs = [
+        ...new Set(dataListGroup.map((item) => item.collab)),
+      ].map((item) => {
+        return {
+          name: item,
+        };
+      });
+      this.channelOptions = [
+        ...new Set(dataListGroup.map((item) => item.channel)),
+      ].map((item) => {
+        return {
+          name: item,
+        };
+      });
+      this.programSubChannels = [
+        ...new Set(dataListGroup.map((item) => item.sub_channel)),
+      ].map((item) => {
+        return {
+          name: item,
+        };
+      });
+      this.categoryOptions = [
+        ...new Set(dataListGroup.map((item) => item.category)),
+      ].map((item) => {
+        return {
+          name: item,
+        };
+      });
+      this.classesOptions = [
+        ...new Set(dataListGroup.map((item) => item.class)),
+      ].map((item) => {
+        return {
+          name: item,
+        };
+      });
+      this.subClassesOptions = [
+        ...new Set(dataListGroup.map((item) => item.sub_class)),
+      ].map((item) => {
+        return {
+          name: item,
+        };
+      });
+      this.programCollectionsOptions = [
+        ...new Set(dataListGroup.map((item) => item.collection)),
+      ].map((item) => {
+        return {
+          name: item,
+        };
+      });
+      this.skuOptions = [...new Set(dataListGroup.map((item) => item.sku))].map(
+        (item) => {
+          return {
+            name: item,
+          };
         }
       );
     },
@@ -1104,14 +869,6 @@ export default {
       this.$store.commit("toggleStatsAPIResponseState", false);
     },
     getSelectedBrands(value) {
-      const optionGenerator = (data, keyName) => {
-        return [
-          /* { name: keyName }, */
-          ...[...new Set(data)].sort().map((item) => {
-            return { name: item };
-          }),
-        ];
-      };
       let brands = [];
       let programs = [];
       let channels = [];
@@ -1131,7 +888,6 @@ export default {
       this.$emit("getCollection", []);
       this.$emit("getSkusValues", []);
 
-
       this.$refs.programs.values = [];
       this.$refs.channels.values = [];
       this.$refs.subChannels.values = [];
@@ -1145,216 +901,76 @@ export default {
         "getBrands",
         value.map((item) => item.name)
       );
-      let productSources;
-      let brandTypes;
-      let lifeCycles;
-      let newness;
-      let brnds;
-      if (
-        this.productSourceValues.length > 0 &&
-        !this.productSourceValues.find((item) => item.includes("All"))
-      ) {
-        productSources = this.productSourceValues;
-      } else {
-        productSources = this.productSourceOptions.map((item) => item.name);
-      }
-      if (
-        this.brandTypeValues.length > 0 &&
-        !this.brandTypeValues.find((item) => item.includes("All"))
-      ) {
-        brandTypes = this.brandTypeValues;
-      } else {
-        brandTypes = this.brandTypeOptions.map((item) => item.name);
-      }
-      if (
-        this.lifeCycleValues.length > 0 &&
-        !this.lifeCycleValues.find((item) => item.includes("All"))
-      ) {
-        lifeCycles = this.lifeCycleValues;
-      } else {
-        lifeCycles = this.lifeCycleOptions.map((item) => item.name);
-      }
-      if (
-        this.newnessValues.length > 0 &&
-        !this.newnessValues.find((item) => item.includes("All"))
-      ) {
-        newness = this.newnessValues;
-      } else {
-        newness = this.newnessOptions.map((item) => item.name);
-      }
-      if (
-        this.brandValues.length > 0 &&
-        !this.brandValues.find((item) => item.includes("All"))
-      ) {
-        brnds = this.brandValues;
-      } else {
-        brnds = this.brandOptions.map((item) => item.name);
-      }
-      for (let psource of productSources) {
-        if (psource.indexOf("All") > -1) {
-          continue;
-        }
-        for (let brandType of brandTypes) {
-          if (brandType.indexOf("All") > -1) {
-            continue;
-          }
-          for (let lifeC of lifeCycles) {
-            if (lifeC.indexOf("All") > -1) {
-              continue;
-            }
-            for (let newnss of newness) {
-              if (newnss.indexOf("All") > -1) {
-                continue;
-              }
-              for (let brnd of brnds) {
-                if (brnd.indexOf("All") > -1) {
-                  continue;
-                }
-                programs.push(
-                  ...new Set(
-                    optionGenerator(
-                      this.filterApiData.programbrands.collab[
-                        `('${psource}', '${brandType}', '${lifeC}', '${newnss}', '${brnd}')`
-                      ],
-                      "All Programs"
-                    )
-                  )
-                );
-                channels.push(
-                  ...new Set(
-                    optionGenerator(
-                      this.filterApiData.programbrands.channel[
-                        `('${psource}', '${brandType}', '${lifeC}', '${newnss}', '${brnd}')`
-                      ],
-                      "All Channels"
-                    )
-                  )
-                );
-                subChannels.push(
-                  ...new Set(
-                    optionGenerator(
-                      this.filterApiData.programbrands.sub_channel[
-                        `('${psource}', '${brandType}', '${lifeC}', '${newnss}', '${brnd}')`
-                      ],
-                      "All Sub Channel"
-                    )
-                  )
-                );
-                categories.push(
-                  ...new Set(
-                    optionGenerator(
-                      this.filterApiData.programbrands.category[
-                        `('${psource}', '${brandType}', '${lifeC}', '${newnss}', '${brnd}')`
-                      ],
-                      "All Categories"
-                    )
-                  )
-                );
-                classes.push(
-                  ...new Set(
-                    optionGenerator(
-                      this.filterApiData.programbrands.class[
-                        `('${psource}', '${brandType}', '${lifeC}', '${newnss}', '${brnd}')`
-                      ],
-                      "All Classes"
-                    )
-                  )
-                );
-                subClasses.push(
-                  ...new Set(
-                    optionGenerator(
-                      this.filterApiData.programbrands.sub_class[
-                        `('${psource}', '${brandType}', '${lifeC}', '${newnss}', '${brnd}')`
-                      ],
-                      "All Sub Classes"
-                    )
-                  )
-                );
-                collections.push(
-                  ...new Set(
-                    optionGenerator(
-                      this.filterApiData.programbrands.collection[
-                        `('${psource}', '${brandType}', '${lifeC}', '${newnss}', '${brnd}')`
-                      ],
-                      "All Collections"
-                    )
-                  )
-                );
-                skus.push(
-                  ...new Set(
-                    optionGenerator(
-                      this.filterApiData.programbrands.sku[
-                        `('${psource}', '${brandType}', '${lifeC}', '${newnss}', '${brnd}')`
-                      ],
-                      "All Skus"
-                    )
-                  )
-                );
-              }
-            }
-          }
-        }
-      }
-      this.programs = [...new Set(programs.map((item) => item.name))].map(
-        (item) => {
-          return { name: item };
-        }
+
+      const brandTypes = {
+        brand_type: this.brandTypeValues,
+        product_source: this.productSourceValues,
+        life_cycle: this.lifeCycleValues,
+        newness: this.newnessValues,
+        brand: this.brandValues,
+      };
+      const cleanObject = this.emptyFieldCleaner(brandTypes);
+      const dataListGroup = this.filterDrilldown(
+        cleanObject
       );
-      this.channelOptions = [...new Set(channels.map((item) => item.name))]
-        .sort()
-        .map((item) => {
-          return { name: item };
-        });
-      this.programSubChannels = [
-        ...new Set(subChannels.map((item) => item.name)),
-      ]
-        .sort()
-        .map((item) => {
-          return { name: item };
-        });
-      this.categoryOptions = [...new Set(categories.map((item) => item.name))]
-        .sort()
-        .map((item) => {
-          return { name: item };
-        });
-      this.classesOptions = [...new Set(classes.map((item) => item.name))]
-        .sort()
-        .map((item) => {
-          return { name: item };
-        });
-      this.subClassesOptions = [...new Set(subClasses.map((item) => item.name))]
-        .sort()
-        .map((item) => {
-          return { name: item };
-        });
-      this.programCollectionsOptions = [
-        ...new Set(collections.map((item) => item.name)),
+      this.programs = [
+        ...new Set(dataListGroup.map((item) => item.collab)),
       ].map((item) => {
-        return { name: item };
+        return {
+          name: item,
+        };
       });
-      this.skuOptions = [...new Set(skus.map((item) => item.name))].sort().map(
+      this.channelOptions = [
+        ...new Set(dataListGroup.map((item) => item.channel)),
+      ].map((item) => {
+        return {
+          name: item,
+        };
+      });
+      this.programSubChannels = [
+        ...new Set(dataListGroup.map((item) => item.sub_channel)),
+      ].map((item) => {
+        return {
+          name: item,
+        };
+      });
+      this.categoryOptions = [
+        ...new Set(dataListGroup.map((item) => item.category)),
+      ].map((item) => {
+        return {
+          name: item,
+        };
+      });
+      this.classesOptions = [
+        ...new Set(dataListGroup.map((item) => item.class)),
+      ].map((item) => {
+        return {
+          name: item,
+        };
+      });
+      this.subClassesOptions = [
+        ...new Set(dataListGroup.map((item) => item.sub_class)),
+      ].map((item) => {
+        return {
+          name: item,
+        };
+      });
+      this.programCollectionsOptions = [
+        ...new Set(dataListGroup.map((item) => item.collection)),
+      ].map((item) => {
+        return {
+          name: item,
+        };
+      });
+      this.skuOptions = [...new Set(dataListGroup.map((item) => item.sku))].map(
         (item) => {
-          return { name: item };
+          return {
+            name: item,
+          };
         }
       );
     },
     getSelectedPrograms(value) {
-      const optionGenerator = (data, keyName) => {
-        return [
-          /* { name: keyName }, */
-          ...[...new Set(data)].sort().map((item) => {
-            return { name: item };
-          }),
-        ];
-      };
-      let channels = [];
-      let subChannels = [];
-      let categories = [];
-      let classes = [];
-      let subClasses = [];
-      let collections = [];
-      let skus = [];
-
       this.$emit("getChannels", []);
       this.$emit("getSubChannel", []);
       this.$emit("getCategories", []);
@@ -1375,208 +991,71 @@ export default {
         "getPrograms",
         value.map((item) => item.name)
       );
-      let productSources;
-      let brandTypes;
-      let lifeCycles;
-      let newness;
-      let brands;
-      let programs;
-      let brnds;
-      if (
-        this.productSourceValues.length > 0 &&
-        !this.productSourceValues.find((item) => item.includes("All"))
-      ) {
-        productSources = this.productSourceValues;
-      } else {
-        productSources = this.productSourceOptions.map((item) => item.name);
-      }
-      if (
-        this.brandTypeValues.length > 0 &&
-        !this.brandTypeValues.find((item) => item.includes("All"))
-      ) {
-        brandTypes = this.brandTypeValues;
-      } else {
-        brandTypes = this.brandTypeOptions.map((item) => item.name);
-      }
-      if (
-        this.lifeCycleValues.length > 0 &&
-        !this.lifeCycleValues.find((item) => item.includes("All"))
-      ) {
-        lifeCycles = this.lifeCycleValues;
-      } else {
-        lifeCycles = this.lifeCycleOptions.map((item) => item.name);
-      }
-      if (
-        this.newnessValues.length > 0 &&
-        !this.newnessValues.find((item) => item.includes("All"))
-      ) {
-        newness = this.newnessValues;
-      } else {
-        newness = this.newnessOptions.map((item) => item.name);
-      }
-      if (
-        this.brandValues.length > 0 &&
-        !this.brandValues.find((item) => item.includes("All"))
-      ) {
-        brnds = this.brandValues;
-      } else {
-        brnds = this.brandOptions.map((item) => item.name);
-      }
-      if (
-        this.programValues.length > 0 &&
-        !this.programValues.find((item) => item.includes("All"))
-      ) {
-        programs = this.programValues;
-      } else {
-        programs = this.programs.map((item) => item.name);
-      }
-      for (let psource of productSources) {
-        if (psource.indexOf("All") > -1) {
-          continue;
-        }
-        for (let brandType of brandTypes) {
-          if (brandType.indexOf("All") > -1) {
-            continue;
-          }
-          for (let lifeC of lifeCycles) {
-            if (lifeC.indexOf("All") > -1) {
-              continue;
-            }
-            for (let newnss of newness) {
-              if (newnss.indexOf("All") > -1) {
-                continue;
-              }
-              for (let brnd of brnds) {
-                if (brnd.indexOf("All") > -1) {
-                  continue;
-                }
-                for (let program of programs) {
-                  if (program.indexOf("All") > -1) {
-                    continue;
-                  }
-                  channels.push(
-                    ...new Set(
-                      optionGenerator(
-                        this.filterApiData.programCollabs.channel[
-                          `('${psource}', '${brandType}', '${lifeC}', '${newnss}', '${brnd}', '${program}')`
-                        ],
-                        "All Channels"
-                      )
-                    )
-                  );
-                  subChannels.push(
-                    ...new Set(
-                      optionGenerator(
-                        this.filterApiData.programCollabs.sub_channel[
-                          `('${psource}', '${brandType}', '${lifeC}', '${newnss}', '${brnd}', '${program}')`
-                        ],
-                        "All Sub Channel"
-                      )
-                    )
-                  );
-                  categories.push(
-                    ...new Set(
-                      optionGenerator(
-                        this.filterApiData.programCollabs.category[
-                          `('${psource}', '${brandType}', '${lifeC}', '${newnss}', '${brnd}', '${program}')`
-                        ],
-                        "All Categories"
-                      )
-                    )
-                  );
-                  classes.push(
-                    ...new Set(
-                      optionGenerator(
-                        this.filterApiData.programCollabs.class[
-                          `('${psource}', '${brandType}', '${lifeC}', '${newnss}', '${brnd}', '${program}')`
-                        ],
-                        "All Classes"
-                      )
-                    )
-                  );
-                  subClasses.push(
-                    ...new Set(
-                      optionGenerator(
-                        this.filterApiData.programCollabs.sub_class[
-                          `('${psource}', '${brandType}', '${lifeC}', '${newnss}', '${brnd}', '${program}')`
-                        ],
-                        "All Sub Classes"
-                      )
-                    )
-                  );
-                  collections.push(
-                    ...new Set(
-                      optionGenerator(
-                        this.filterApiData.programCollabs.collection[
-                          `('${psource}', '${brandType}', '${lifeC}', '${newnss}', '${brnd}', '${program}')`
-                        ],
-                        "All Collections"
-                      )
-                    )
-                  );
-                  skus.push(
-                    ...new Set(
-                      optionGenerator(
-                        this.filterApiData.programCollabs.sku[
-                          `('${psource}', '${brandType}', '${lifeC}', '${newnss}', '${brnd}', '${program}')`
-                        ],
-                        "All Skus"
-                      )
-                    )
-                  );
-                }
-              }
-            }
-          }
-        }
-      }
-      this.channelOptions = [...new Set(channels.map((item) => item.name))]
-        .sort()
-        .map((item) => {
-          return { name: item };
-        });
-      this.programSubChannels = [
-        ...new Set(subChannels.map((item) => item.name)),
-      ]
-        .sort()
-        .map((item) => {
-          return { name: item };
-        });
-      this.categoryOptions = [...new Set(categories.map((item) => item.name))]
-        .sort()
-        .map((item) => {
-          return { name: item };
-        });
-      this.classesOptions = [...new Set(classes.map((item) => item.name))]
-        .sort()
-        .map((item) => {
-          return { name: item };
-        });
-      this.subClassesOptions = [...new Set(subClasses.map((item) => item.name))]
-        .sort()
-        .map((item) => {
-          return { name: item };
-        });
-      this.programCollectionsOptions = [
-        ...new Set(collections.map((item) => item.name)),
+
+      const brandTypes = {
+        brand_type: this.brandTypeValues,
+        product_source: this.productSourceValues,
+        life_cycle: this.lifeCycleValues,
+        newness: this.newnessValues,
+        brand: this.brandValues,
+        program: this.programValues,
+      };
+      const cleanObject = this.emptyFieldCleaner(brandTypes);
+      const dataListGroup = this.filterDrilldown(
+        cleanObject
+      );
+      this.channelOptions = [
+        ...new Set(dataListGroup.map((item) => item.channel)),
       ].map((item) => {
-        return { name: item };
+        return {
+          name: item,
+        };
       });
-      this.skuOptions = [...new Set(skus.map((item) => item.name))].sort().map(
+      this.programSubChannels = [
+        ...new Set(dataListGroup.map((item) => item.sub_channel)),
+      ].map((item) => {
+        return {
+          name: item,
+        };
+      });
+      this.categoryOptions = [
+        ...new Set(dataListGroup.map((item) => item.category)),
+      ].map((item) => {
+        return {
+          name: item,
+        };
+      });
+      this.classesOptions = [
+        ...new Set(dataListGroup.map((item) => item.class)),
+      ].map((item) => {
+        return {
+          name: item,
+        };
+      });
+      this.subClassesOptions = [
+        ...new Set(dataListGroup.map((item) => item.sub_class)),
+      ].map((item) => {
+        return {
+          name: item,
+        };
+      });
+      this.programCollectionsOptions = [
+        ...new Set(dataListGroup.map((item) => item.collection)),
+      ].map((item) => {
+        return {
+          name: item,
+        };
+      });
+      this.skuOptions = [...new Set(dataListGroup.map((item) => item.sku))].map(
         (item) => {
-          return { name: item };
+          return {
+            name: item,
+          };
         }
       );
     },
     getSelectProgramChannels(value) {
-      const optionGenerator = (data, keyName) => {
-        return [
-          /* { name: keyName }, */
-          ...[...new Set(data)].sort().map((item) => {
-            return { name: item };
-          }),
-        ];
-      };
+      
       let subChannels = [];
       let categories = [];
       let classes = [];
@@ -1602,212 +1081,63 @@ export default {
         "getChannels",
         value.map((item) => item.name)
       );
-      let productSources;
-      let brandTypes;
-      let lifeCycles;
-      let newness;
-      let brands;
-      let programs;
-      let channels;
-      let brnds;
-      if (
-        this.productSourceValues.length > 0 &&
-        !this.productSourceValues.find((item) => item.includes("All"))
-      ) {
-        productSources = this.productSourceValues;
-      } else {
-        productSources = this.productSourceOptions.map((item) => item.name);
-      }
-      if (
-        this.brandTypeValues.length > 0 &&
-        !this.brandTypeValues.find((item) => item.includes("All"))
-      ) {
-        brandTypes = this.brandTypeValues;
-      } else {
-        brandTypes = this.brandTypeOptions.map((item) => item.name);
-      }
-      if (
-        this.lifeCycleValues.length > 0 &&
-        !this.lifeCycleValues.find((item) => item.includes("All"))
-      ) {
-        lifeCycles = this.lifeCycleValues;
-      } else {
-        lifeCycles = this.lifeCycleOptions.map((item) => item.name);
-      }
-      if (
-        this.newnessValues.length > 0 &&
-        !this.newnessValues.find((item) => item.includes("All"))
-      ) {
-        newness = this.newnessValues;
-      } else {
-        newness = this.newnessOptions.map((item) => item.name);
-      }
-      if (
-        this.brandValues.length > 0 &&
-        !this.brandValues.find((item) => item.includes("All"))
-      ) {
-        brnds = this.brandValues;
-      } else {
-        brnds = this.brandOptions.map((item) => item.name);
-      }
-      if (
-        this.programValues.length > 0 &&
-        !this.programValues.find((item) => item.includes("All"))
-      ) {
-        programs = this.programValues;
-      } else {
-        programs = this.programs.map((item) => item.name);
-      }
-      if (
-        this.channelValues.length > 0 &&
-        !this.channelValues.find((item) => item.includes("All"))
-      ) {
-        channels = this.channelValues;
-      } else {
-        channels = this.channelOptions.map((item) => item.name);
-      }
-      for (let psource of productSources) {
-        if (psource.indexOf("All") > -1) {
-          continue;
-        }
-        for (let brandType of brandTypes) {
-          if (brandType.indexOf("All") > -1) {
-            continue;
-          }
-          for (let lifeC of lifeCycles) {
-            if (lifeC.indexOf("All") > -1) {
-              continue;
-            }
-            for (let newnss of newness) {
-              if (newnss.indexOf("All") > -1) {
-                continue;
-              }
-              for (let brnd of brnds) {
-                if (brnd.indexOf("All") > -1) {
-                  continue;
-                }
-                for (let program of programs) {
-                  if (program.indexOf("All") > -1) {
-                    continue;
-                  }
-                  for (let channel of channels) {
-                    if (channel.indexOf("All") > -1) {
-                      continue;
-                    }
-                    subChannels.push(
-                      ...new Set(
-                        optionGenerator(
-                          this.filterApiData.programChannels.sub_channel[
-                            `('${psource}', '${brandType}', '${lifeC}', '${newnss}', '${brnd}', '${program}', '${channel}')`
-                          ],
-                          "All Sub Channel"
-                        )
-                      )
-                    );
-                    categories.push(
-                      ...new Set(
-                        optionGenerator(
-                          this.filterApiData.programChannels.category[
-                            `('${psource}', '${brandType}', '${lifeC}', '${newnss}', '${brnd}', '${program}', '${channel}')`
-                          ],
-                          "All Categories"
-                        )
-                      )
-                    );
-                    classes.push(
-                      ...new Set(
-                        optionGenerator(
-                          this.filterApiData.programChannels.class[
-                            `('${psource}', '${brandType}', '${lifeC}', '${newnss}', '${brnd}', '${program}', '${channel}')`
-                          ],
-                          "All Classes"
-                        )
-                      )
-                    );
-                    subClasses.push(
-                      ...new Set(
-                        optionGenerator(
-                          this.filterApiData.programChannels.sub_class[
-                            `('${psource}', '${brandType}', '${lifeC}', '${newnss}', '${brnd}', '${program}', '${channel}')`
-                          ],
-                          "All Sub Classes"
-                        )
-                      )
-                    );
-                    collections.push(
-                      ...new Set(
-                        optionGenerator(
-                          this.filterApiData.programChannels.collection[
-                            `('${psource}', '${brandType}', '${lifeC}', '${newnss}', '${brnd}', '${program}', '${channel}')`
-                          ],
-                          "All Collections"
-                        )
-                      )
-                    );
-                    skus.push(
-                      ...new Set(
-                        optionGenerator(
-                          this.filterApiData.programChannels.sku[
-                            `('${psource}', '${brandType}', '${lifeC}', '${newnss}', '${brnd}', '${program}', '${channel}')`
-                          ],
-                          "All Skus"
-                        )
-                      )
-                    );
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
+      const brandTypes = {
+        brand_type: this.brandTypeValues,
+        product_source: this.productSourceValues,
+        life_cycle: this.lifeCycleValues,
+        newness: this.newnessValues,
+        brand: this.brandValues,
+        program: this.programValues,
+        channel: this.channelValues,
+      };
+      const cleanObject = this.emptyFieldCleaner(brandTypes);
+      const dataListGroup = this.filterDrilldown(
+        cleanObject
+      );
       this.programSubChannels = [
-        ...new Set(subChannels.map((item) => item.name)),
-      ]
-        .sort()
-        .map((item) => {
-          return { name: item };
-        });
-      this.categoryOptions = [...new Set(categories.map((item) => item.name))]
-        .sort()
-        .map((item) => {
-          return { name: item };
-        });
-      this.classesOptions = [...new Set(classes.map((item) => item.name))]
-        .sort()
-        .map((item) => {
-          return { name: item };
-        });
-      this.subClassesOptions = [...new Set(subClasses.map((item) => item.name))]
-        .sort()
-        .map((item) => {
-          return { name: item };
-        });
-      this.programCollectionsOptions = [
-        ...new Set(collections.map((item) => item.name)),
+        ...new Set(dataListGroup.map((item) => item.sub_channel)),
       ].map((item) => {
-        return { name: item };
+        return {
+          name: item,
+        };
       });
-      this.skuOptions = [...new Set(skus.map((item) => item.name))].sort().map(
+      this.categoryOptions = [
+        ...new Set(dataListGroup.map((item) => item.category)),
+      ].map((item) => {
+        return {
+          name: item,
+        };
+      });
+      this.classesOptions = [
+        ...new Set(dataListGroup.map((item) => item.class)),
+      ].map((item) => {
+        return {
+          name: item,
+        };
+      });
+      this.subClassesOptions = [
+        ...new Set(dataListGroup.map((item) => item.sub_class)),
+      ].map((item) => {
+        return {
+          name: item,
+        };
+      });
+      this.programCollectionsOptions = [
+        ...new Set(dataListGroup.map((item) => item.collection)),
+      ].map((item) => {
+        return {
+          name: item,
+        };
+      });
+      this.skuOptions = [...new Set(dataListGroup.map((item) => item.sku))].map(
         (item) => {
-          return { name: item };
+          return {
+            name: item,
+          };
         }
       );
     },
     getSelectPrograChannelsSubChannels(value) {
-      const optionGenerator = (data, keyName) => {
-        return [
-          /* { name: keyName }, */
-          ...[...new Set(data)].sort().map((item) => {
-            return { name: item };
-          }),
-        ];
-      };
-      let categories = [];
-      let classes = [];
-      let subClasses = [];
-      let collections = [];
-      let skus = [];
 
       this.$emit("getCategories", []);
       this.$emit("getClass", []);
@@ -1826,209 +1156,57 @@ export default {
         value.map((item) => item.name)
       );
 
-      let productSources;
-      let brandTypes;
-      let lifeCycles;
-      let newness;
-      let brands;
-      let programs;
-      let channels;
-      let subChannels;
-      let brnds;
-      if (
-        this.productSourceValues.length > 0 &&
-        !this.productSourceValues.find((item) => item.includes("All"))
-      ) {
-        productSources = this.productSourceValues;
-      } else {
-        productSources = this.productSourceOptions.map((item) => item.name);
-      }
-      if (
-        this.brandTypeValues.length > 0 &&
-        !this.brandTypeValues.find((item) => item.includes("All"))
-      ) {
-        brandTypes = this.brandTypeValues;
-      } else {
-        brandTypes = this.brandTypeOptions.map((item) => item.name);
-      }
-      if (
-        this.lifeCycleValues.length > 0 &&
-        !this.lifeCycleValues.find((item) => item.includes("All"))
-      ) {
-        lifeCycles = this.lifeCycleValues;
-      } else {
-        lifeCycles = this.lifeCycleOptions.map((item) => item.name);
-      }
-      if (
-        this.newnessValues.length > 0 &&
-        !this.newnessValues.find((item) => item.includes("All"))
-      ) {
-        newness = this.newnessValues;
-      } else {
-        newness = this.newnessOptions.map((item) => item.name);
-      }
-      if (
-        this.brandValues.length > 0 &&
-        !this.brandValues.find((item) => item.includes("All"))
-      ) {
-        brnds = this.brandValues;
-      } else {
-        brnds = this.brandOptions.map((item) => item.name);
-      }
-      if (
-        this.programValues.length > 0 &&
-        !this.programValues.find((item) => item.includes("All"))
-      ) {
-        programs = this.programValues;
-      } else {
-        programs = this.programs.map((item) => item.name);
-      }
-      if (
-        this.channelValues.length > 0 &&
-        !this.channelValues.find((item) => item.includes("All"))
-      ) {
-        channels = this.channelValues;
-      } else {
-        channels = this.channelOptions.map((item) => item.name);
-      }
-      if (
-        this.subChannelValues.length > 0 &&
-        !this.subChannelValues.find((item) => item.includes("All"))
-      ) {
-        subChannels = this.subChannelValues;
-      } else {
-        subChannels = this.programSubChannels.map((item) => item.name);
-      }
-      for (let psource of productSources) {
-        if (psource.indexOf("All") > -1) {
-          continue;
-        }
-        for (let brandType of brandTypes) {
-          if (brandType.indexOf("All") > -1) {
-            continue;
-          }
-          for (let lifeC of lifeCycles) {
-            if (lifeC.indexOf("All") > -1) {
-              continue;
-            }
-            for (let newnss of newness) {
-              if (newnss.indexOf("All") > -1) {
-                continue;
-              }
-              for (let brnd of brnds) {
-                if (brnd.indexOf("All") > -1) {
-                  continue;
-                }
-                for (let program of programs) {
-                  if (program.indexOf("All") > -1) {
-                    continue;
-                  }
-                  for (let channel of channels) {
-                    if (channel.indexOf("All") > -1) {
-                      continue;
-                    }
-                    for (let subC of subChannels) {
-                      if (subC.indexOf("All") > -1) {
-                        continue;
-                      }
-                      categories.push(
-                        ...new Set(
-                          optionGenerator(
-                            this.filterApiData.programSubChannels.category[
-                              `('${psource}', '${brandType}', '${lifeC}', '${newnss}', '${brnd}', '${program}', '${channel}', '${subC}')`
-                            ],
-                            "All Categories"
-                          )
-                        )
-                      );
-                      classes.push(
-                        ...new Set(
-                          optionGenerator(
-                            this.filterApiData.programSubChannels.class[
-                              `('${psource}', '${brandType}', '${lifeC}', '${newnss}', '${brnd}', '${program}', '${channel}', '${subC}')`
-                            ],
-                            "All Classes"
-                          )
-                        )
-                      );
-                      subClasses.push(
-                        ...new Set(
-                          optionGenerator(
-                            this.filterApiData.programSubChannels.sub_class[
-                              `('${psource}', '${brandType}', '${lifeC}', '${newnss}', '${brnd}', '${program}', '${channel}', '${subC}')`
-                            ],
-                            "All Sub Classes"
-                          )
-                        )
-                      );
-                      collections.push(
-                        ...new Set(
-                          optionGenerator(
-                            this.filterApiData.programSubChannels.collection[
-                              `('${psource}', '${brandType}', '${lifeC}', '${newnss}', '${brnd}', '${program}', '${channel}', '${subC}')`
-                            ],
-                            "All Collections"
-                          )
-                        )
-                      );
-                      skus.push(
-                        ...new Set(
-                          optionGenerator(
-                            this.filterApiData.programSubChannels.sku[
-                              `('${psource}', '${brandType}', '${lifeC}', '${newnss}', '${brnd}', '${program}', '${channel}', '${subC}')`
-                            ],
-                            "All Skus"
-                          )
-                        )
-                      );
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-      this.categoryOptions = [...new Set(categories.map((item) => item.name))]
-        .sort()
-        .map((item) => {
-          return { name: item };
-        });
-      this.classesOptions = [...new Set(classes.map((item) => item.name))]
-        .sort()
-        .map((item) => {
-          return { name: item };
-        });
-      this.subClassesOptions = [...new Set(subClasses.map((item) => item.name))]
-        .sort()
-        .map((item) => {
-          return { name: item };
-        });
-      this.programCollectionsOptions = [
-        ...new Set(collections.map((item) => item.name)),
+      const brandTypes = {
+        brand_type: this.brandTypeValues,
+        product_source: this.productSourceValues,
+        life_cycle: this.lifeCycleValues,
+        newness: this.newnessValues,
+        brand: this.brandValues,
+        program: this.programValues,
+        channel: this.channelValues,
+        sub_channel: this.subChannelValues,
+      };
+      const cleanObject = this.emptyFieldCleaner(brandTypes);
+      const dataListGroup = this.filterDrilldown(
+        cleanObject
+      );
+      this.categoryOptions = [
+        ...new Set(dataListGroup.map((item) => item.category)),
       ].map((item) => {
-        return { name: item };
+        return {
+          name: item,
+        };
       });
-      this.skuOptions = [...new Set(skus.map((item) => item.name))].sort().map(
+      this.classesOptions = [
+        ...new Set(dataListGroup.map((item) => item.class)),
+      ].map((item) => {
+        return {
+          name: item,
+        };
+      });
+      this.subClassesOptions = [
+        ...new Set(dataListGroup.map((item) => item.sub_class)),
+      ].map((item) => {
+        return {
+          name: item,
+        };
+      });
+      this.programCollectionsOptions = [
+        ...new Set(dataListGroup.map((item) => item.collection)),
+      ].map((item) => {
+        return {
+          name: item,
+        };
+      });
+      this.skuOptions = [...new Set(dataListGroup.map((item) => item.sku))].map(
         (item) => {
-          return { name: item };
+          return {
+            name: item,
+          };
         }
       );
     },
     getSelectedCategories(value) {
-      const optionGenerator = (data, keyName) => {
-        return [
-          /* { name: keyName }, */
-          ...[...new Set(data)].sort().map((item) => {
-            return { name: item };
-          }),
-        ];
-      };
-
-      let classes = [];
-      let subClasses = [];
-      let collections = [];
-      let skus = [];
 
       this.$emit("getClass", []);
       this.$emit("getSubClass", []);
@@ -2045,210 +1223,52 @@ export default {
         "getCategories",
         value.map((item) => item.name)
       );
-      let productSources;
-      let brandTypes;
-      let lifeCycles;
-      let newness;
-      let brands;
-      let programs;
-      let channels;
-      let subChannels;
-      let categories = [];
-      let brnds;
-      if (
-        this.productSourceValues.length > 0 &&
-        !this.productSourceValues.find((item) => item.includes("All"))
-      ) {
-        productSources = this.productSourceValues;
-      } else {
-        productSources = this.productSourceOptions.map((item) => item.name);
-      }
-      if (
-        this.brandTypeValues.length > 0 &&
-        !this.brandTypeValues.find((item) => item.includes("All"))
-      ) {
-        brandTypes = this.brandTypeValues;
-      } else {
-        brandTypes = this.brandTypeOptions.map((item) => item.name);
-      }
-      if (
-        this.lifeCycleValues.length > 0 &&
-        !this.lifeCycleValues.find((item) => item.includes("All"))
-      ) {
-        lifeCycles = this.lifeCycleValues;
-      } else {
-        lifeCycles = this.lifeCycleOptions.map((item) => item.name);
-      }
-      if (
-        this.newnessValues.length > 0 &&
-        !this.newnessValues.find((item) => item.includes("All"))
-      ) {
-        newness = this.newnessValues;
-      } else {
-        newness = this.newnessOptions.map((item) => item.name);
-      }
-      if (
-        this.brandValues.length > 0 &&
-        !this.brandValues.find((item) => item.includes("All"))
-      ) {
-        brnds = this.brandValues;
-      } else {
-        brnds = this.brandOptions.map((item) => item.name);
-      }
-      if (
-        this.programValues.length > 0 &&
-        !this.programValues.find((item) => item.includes("All"))
-      ) {
-        programs = this.programValues;
-      } else {
-        programs = this.programs.map((item) => item.name);
-      }
-      if (
-        this.channelValues.length > 0 &&
-        !this.channelValues.find((item) => item.includes("All"))
-      ) {
-        channels = this.channelValues;
-      } else {
-        channels = this.channelOptions.map((item) => item.name);
-      }
-      if (
-        this.subChannelValues.length > 0 &&
-        !this.subChannelValues.find((item) => item.includes("All"))
-      ) {
-        subChannels = this.subChannelValues;
-      } else {
-        subChannels = this.programSubChannels.map((item) => item.name);
-      }
-      if (
-        this.categoriesValues.length > 0 &&
-        !this.categoriesValues.find((item) => item.includes("All"))
-      ) {
-        categories = this.categoriesValues;
-      } else {
-        categories = this.categoryOptions.map((item) => item.name);
-      }
-      for (let psource of productSources) {
-        if (psource.indexOf("All") > -1) {
-          continue;
-        }
-        for (let brandType of brandTypes) {
-          if (brandType.indexOf("All") > -1) {
-            continue;
-          }
-          for (let lifeC of lifeCycles) {
-            if (lifeC.indexOf("All") > -1) {
-              continue;
-            }
-            for (let newnss of newness) {
-              if (newnss.indexOf("All") > -1) {
-                continue;
-              }
-              for (let brnd of brnds) {
-                if (brnd.indexOf("All") > -1) {
-                  continue;
-                }
-                for (let program of programs) {
-                  if (program.indexOf("All") > -1) {
-                    continue;
-                  }
-                  for (let channel of channels) {
-                    if (channel.indexOf("All") > -1) {
-                      continue;
-                    }
-                    for (let subC of subChannels) {
-                      if (subC.indexOf("All") > -1) {
-                        continue;
-                      }
-                      for (let category of categories) {
-                        if (category.indexOf("All") > -1) {
-                          continue;
-                        }
-                        classes.push(
-                          ...new Set(
-                            optionGenerator(
-                              this.filterApiData.programCategories.class[
-                                `('${psource}', '${brandType}', '${lifeC}', '${newnss}', '${brnd}', '${program}', '${channel}', '${subC}', '${category}')`
-                              ],
-                              "All Classes"
-                            )
-                          )
-                        );
-                        subClasses.push(
-                          ...new Set(
-                            optionGenerator(
-                              this.filterApiData.programCategories.sub_class[
-                                `('${psource}', '${brandType}', '${lifeC}', '${newnss}', '${brnd}', '${program}', '${channel}', '${subC}', '${category}')`
-                              ],
-                              "All Sub Classes"
-                            )
-                          )
-                        );
-                        collections.push(
-                          ...new Set(
-                            optionGenerator(
-                              this.filterApiData.programCategories.collection[
-                                `('${psource}', '${brandType}', '${lifeC}', '${newnss}', '${brnd}', '${program}', '${channel}', '${subC}', '${category}')`
-                              ],
-                              "All Collections"
-                            )
-                          )
-                        );
-                        skus.push(
-                          ...new Set(
-                            optionGenerator(
-                              this.filterApiData.programCategories.sku[
-                                `('${psource}', '${brandType}', '${lifeC}', '${newnss}', '${brnd}', '${program}', '${channel}', '${subC}', '${category}')`
-                              ],
-                              "All Skus"
-                            )
-                          )
-                        );
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-      this.classesOptions = [...new Set(classes.map((item) => item.name))]
-        .sort()
-        .sort()
-        .map((item) => {
-          return { name: item };
-        });
-      this.subClassesOptions = [...new Set(subClasses.map((item) => item.name))]
-        .sort()
-        .map((item) => {
-          return { name: item };
-        });
+
+      const brandTypes = {
+        brand_type: this.brandTypeValues,
+        product_source: this.productSourceValues,
+        life_cycle: this.lifeCycleValues,
+        newness: this.newnessValues,
+        brand: this.brandValues,
+        program: this.programValues,
+        channel: this.channelValues,
+        sub_channel: this.subChannelValues,
+        category: this.categoriesValues,
+      };
+      const cleanObject = this.emptyFieldCleaner(brandTypes);
+      const dataListGroup = this.filterDrilldown(
+        cleanObject
+      );
+      this.classesOptions = [
+        ...new Set(dataListGroup.map((item) => item.class)),
+      ].map((item) => {
+        return {
+          name: item,
+        };
+      });
+      this.subClassesOptions = [
+        ...new Set(dataListGroup.map((item) => item.sub_class)),
+      ].map((item) => {
+        return {
+          name: item,
+        };
+      });
       this.programCollectionsOptions = [
-        ...new Set(collections.map((item) => item.name)),
-      ]
-        .sort()
-        .map((item) => {
-          return { name: item };
-        });
-      this.skuOptions = [...new Set(skus.map((item) => item.name))].sort()
-        .sort()
-        .map((item) => {
-          return { name: item };
-        });
+        ...new Set(dataListGroup.map((item) => item.collection)),
+      ].map((item) => {
+        return {
+          name: item,
+        };
+      });
+      this.skuOptions = [...new Set(dataListGroup.map((item) => item.sku))].map(
+        (item) => {
+          return {
+            name: item,
+          };
+        }
+      );
     },
     getCategoryClasses(value) {
-      const optionGenerator = (data, keyName) => {
-        return [
-          /* { name: keyName }, */
-          ...[...new Set(data)].sort().map((item) => {
-            return { name: item };
-          }),
-        ];
-      };
-      let subClasses = [];
-      let collections = [];
-      let skus = [];
-
       this.$emit("getSubClass", []);
       this.$emit("getCollection", []);
       this.$emit("getSkusValues", []);
@@ -2257,209 +1277,50 @@ export default {
       this.$refs.collections.values = [];
       this.$refs.skus.values = [];
       this.classesValues = value.map((item) => item.name);
-      let productSources;
-      let brandTypes;
-      let lifeCycles;
-      let newness;
-      let brands;
-      let programs;
-      let channels;
-      let subChannels;
-      let categories;
-      let classess = [];
-      let brnds;
-      if (
-        this.productSourceValues.length > 0 &&
-        !this.productSourceValues.find((item) => item.includes("All"))
-      ) {
-        productSources = this.productSourceValues;
-      } else {
-        productSources = this.productSourceOptions.map((item) => item.name);
-      }
-      if (
-        this.brandTypeValues.length > 0 &&
-        !this.brandTypeValues.find((item) => item.includes("All"))
-      ) {
-        brandTypes = this.brandTypeValues;
-      } else {
-        brandTypes = this.brandTypeOptions.map((item) => item.name);
-      }
-      if (
-        this.lifeCycleValues.length > 0 &&
-        !this.lifeCycleValues.find((item) => item.includes("All"))
-      ) {
-        lifeCycles = this.lifeCycleValues;
-      } else {
-        lifeCycles = this.lifeCycleOptions.map((item) => item.name);
-      }
-      if (
-        this.newnessValues.length > 0 &&
-        !this.newnessValues.find((item) => item.includes("All"))
-      ) {
-        newness = this.newnessValues;
-      } else {
-        newness = this.newnessOptions.map((item) => item.name);
-      }
-      if (
-        this.brandValues.length > 0 &&
-        !this.brandValues.find((item) => item.includes("All"))
-      ) {
-        brnds = this.brandValues;
-      } else {
-        brnds = this.brandOptions.map((item) => item.name);
-      }
-      if (
-        this.programValues.length > 0 &&
-        !this.programValues.find((item) => item.includes("All"))
-      ) {
-        programs = this.programValues;
-      } else {
-        programs = this.programs.map((item) => item.name);
-      }
-      if (
-        this.channelValues.length > 0 &&
-        !this.channelValues.find((item) => item.includes("All"))
-      ) {
-        channels = this.channelValues;
-      } else {
-        channels = this.channelOptions.map((item) => item.name);
-      }
-      if (
-        this.subChannelValues.length > 0 &&
-        !this.subChannelValues.find((item) => item.includes("All"))
-      ) {
-        subChannels = this.subChannelValues;
-      } else {
-        subChannels = this.programSubChannels.map((item) => item.name);
-      }
-      if (
-        this.categoriesValues.length > 0 &&
-        !this.categoriesValues.find((item) => item.includes("All"))
-      ) {
-        categories = this.categoriesValues;
-      } else {
-        categories = this.categoryOptions.map((item) => item.name);
-      }
-      if (
-        this.classesValues.length > 0 &&
-        !this.classesValues.find((item) => item.includes("All"))
-      ) {
-        classess = this.classesValues;
-      } else {
-        classess = this.classesOptions.map((item) => item.name);
-      }
-      for (let psource of productSources) {
-        if (psource.indexOf("All") > -1) {
-          continue;
-        }
-        for (let brandType of brandTypes) {
-          if (brandType.indexOf("All") > -1) {
-            continue;
-          }
-          for (let lifeC of lifeCycles) {
-            if (lifeC.indexOf("All") > -1) {
-              continue;
-            }
-            for (let newnss of newness) {
-              if (newnss.indexOf("All") > -1) {
-                continue;
-              }
-              for (let brnd of brnds) {
-                if (brnd.indexOf("All") > -1) {
-                  continue;
-                }
-                for (let program of programs) {
-                  if (program.indexOf("All") > -1) {
-                    continue;
-                  }
-                  for (let channel of channels) {
-                    if (channel.indexOf("All") > -1) {
-                      continue;
-                    }
-                    for (let subC of subChannels) {
-                      if (subC.indexOf("All") > -1) {
-                        continue;
-                      }
-                      for (let category of categories) {
-                        if (category.indexOf("All") > -1) {
-                          continue;
-                        }
-                        for (let classes of classess) {
-                          if (classes.indexOf("All") > -1) {
-                            continue;
-                          }
-                          subClasses.push(
-                            ...new Set(
-                              optionGenerator(
-                                this.filterApiData.programClasses.sub_class[
-                                  `('${psource}', '${brandType}', '${lifeC}', '${newnss}', '${brnd}', '${program}', '${channel}', '${subC}', '${category}', '${classes}')`
-                                ],
-                                "All Sub Classes"
-                              )
-                            )
-                          );
-                          collections.push(
-                            ...new Set(
-                              optionGenerator(
-                                this.filterApiData.programClasses.collection[
-                                  `('${psource}', '${brandType}', '${lifeC}', '${newnss}', '${brnd}', '${program}', '${channel}', '${subC}', '${category}', '${classes}')`
-                                ],
-                                "All Collections"
-                              )
-                            )
-                          );
-                          skus.push(
-                            ...new Set(
-                              optionGenerator(
-                                this.filterApiData.programClasses.sku[
-                                  `('${psource}', '${brandType}', '${lifeC}', '${newnss}', '${brnd}', '${program}', '${channel}', '${subC}', '${category}', '${classes}')`
-                                ],
-                                "All Skus"
-                              )
-                            )
-                          );
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-      this.subClassesOptions = [...new Set(subClasses.map((item) => item.name))]
-        .sort()
-        .map((item) => {
-          return { name: item };
-        });
-      this.programCollectionsOptions = [
-        ...new Set(collections.map((item) => item.name)),
-      ].map((item) => {
-        return { name: item };
-      });
-      this.skuOptions = [...new Set(skus.map((item) => item.name))].sort().map(
-        (item) => {
-          return { name: item };
-        }
-      );
       this.$emit(
         "getClass",
         value.map((item) => item.name)
       );
+
+      const brandTypes = {
+        brand_type: this.brandTypeValues,
+        product_source: this.productSourceValues,
+        life_cycle: this.lifeCycleValues,
+        newness: this.newnessValues,
+        brand: this.brandValues,
+        program: this.programValues,
+        channel: this.channelValues,
+        sub_channel: this.subChannelValues,
+        category: this.categoriesValues,
+        class: this.classesValues,
+      };
+      const cleanObject = this.emptyFieldCleaner(brandTypes);
+      const dataListGroup = this.filterDrilldown(
+        cleanObject
+      );
+      this.subClassesOptions = [
+        ...new Set(dataListGroup.map((item) => item.sub_class)),
+      ].map((item) => {
+        return {
+          name: item,
+        };
+      });
+      this.programCollectionsOptions = [
+        ...new Set(dataListGroup.map((item) => item.collection)),
+      ].map((item) => {
+        return {
+          name: item,
+        };
+      });
+      this.skuOptions = [...new Set(dataListGroup.map((item) => item.sku))].map(
+        (item) => {
+          return {
+            name: item,
+          };
+        }
+      );
     },
     classesSubClasses(value) {
-      const optionGenerator = (data, keyName) => {
-        return [
-          /* { name: keyName }, */
-          ...[...new Set(data)].sort().map((item) => {
-            return { name: item };
-          }),
-        ];
-      };
-      let collections = [];
-      let skus = [];
-
       this.$emit("getCollection", []);
       this.$emit("getSkusValues", []);
 
@@ -2470,204 +1331,39 @@ export default {
         "getSubClass",
         value.map((item) => item.name)
       );
-      let productSources;
-      let brandTypes;
-      let lifeCycles;
-      let newness;
-      let brands;
-      let programs;
-      let channels;
-      let subChannels;
-      let categories;
-      let classess;
-      let subClasses;
-      let brnds;
-      if (
-        this.productSourceValues.length > 0 &&
-        !this.productSourceValues.find((item) => item.includes("All"))
-      ) {
-        productSources = this.productSourceValues;
-      } else {
-        productSources = this.productSourceOptions.map((item) => item.name);
-      }
-      if (
-        this.brandTypeValues.length > 0 &&
-        !this.brandTypeValues.find((item) => item.includes("All"))
-      ) {
-        brandTypes = this.brandTypeValues;
-      } else {
-        brandTypes = this.brandTypeOptions.map((item) => item.name);
-      }
-      if (
-        this.lifeCycleValues.length > 0 &&
-        !this.lifeCycleValues.find((item) => item.includes("All"))
-      ) {
-        lifeCycles = this.lifeCycleValues;
-      } else {
-        lifeCycles = this.lifeCycleOptions.map((item) => item.name);
-      }
-      if (
-        this.newnessValues.length > 0 &&
-        !this.newnessValues.find((item) => item.includes("All"))
-      ) {
-        newness = this.newnessValues;
-      } else {
-        newness = this.newnessOptions.map((item) => item.name);
-      }
-      if (
-        this.brandValues.length > 0 &&
-        !this.brandValues.find((item) => item.includes("All"))
-      ) {
-        brnds = this.brandValues;
-      } else {
-        brnds = this.brandOptions.map((item) => item.name);
-      }
-      if (
-        this.programValues.length > 0 &&
-        !this.programValues.find((item) => item.includes("All"))
-      ) {
-        programs = this.programValues;
-      } else {
-        programs = this.programs.map((item) => item.name);
-      }
-      if (
-        this.channelValues.length > 0 &&
-        !this.channelValues.find((item) => item.includes("All"))
-      ) {
-        channels = this.channelValues;
-      } else {
-        channels = this.channelOptions.map((item) => item.name);
-      }
-      if (
-        this.subChannelValues.length > 0 &&
-        !this.subChannelValues.find((item) => item.includes("All"))
-      ) {
-        subChannels = this.subChannelValues;
-      } else {
-        subChannels = this.programSubChannels.map((item) => item.name);
-      }
-      if (
-        this.categoriesValues.length > 0 &&
-        !this.categoriesValues.find((item) => item.includes("All"))
-      ) {
-        categories = this.categoriesValues;
-      } else {
-        categories = this.categoryOptions.map((item) => item.name);
-      }
-      if (
-        this.classesValues.length > 0 &&
-        !this.classesValues.find((item) => item.includes("All"))
-      ) {
-        classess = this.classesValues;
-      } else {
-        classess = this.classesOptions.map((item) => item.name);
-      }
-      if (
-        this.subClassValues.length > 0 &&
-        !this.subClassValues.find((item) => item.includes("All"))
-      ) {
-        subClasses = this.subClassValues;
-      } else {
-        subClasses = this.subClassesOptions.map((item) => item.name);
-      }
-      for (let psource of productSources) {
-        if (psource.indexOf("All") > -1) {
-          continue;
-        }
-        for (let brandType of brandTypes) {
-          if (brandType.indexOf("All") > -1) {
-            continue;
-          }
-          for (let lifeC of lifeCycles) {
-            if (lifeC.indexOf("All") > -1) {
-              continue;
-            }
-            for (let newnss of newness) {
-              if (newnss.indexOf("All") > -1) {
-                continue;
-              }
-              for (let brnd of brnds) {
-                if (brnd.indexOf("All") > -1) {
-                  continue;
-                }
-                for (let program of programs) {
-                  if (program.indexOf("All") > -1) {
-                    continue;
-                  }
-                  for (let channel of channels) {
-                    if (channel.indexOf("All") > -1) {
-                      continue;
-                    }
-                    for (let subC of subChannels) {
-                      if (subC.indexOf("All") > -1) {
-                        continue;
-                      }
-                      for (let category of categories) {
-                        if (category.indexOf("All") > -1) {
-                          continue;
-                        }
-                        for (let classes of classess) {
-                          if (classes.indexOf("All") > -1) {
-                            continue;
-                          }
-                          for (let subCls of subClasses) {
-                            if (subCls.indexOf("All") > -1) {
-                              continue;
-                            }
-                            collections.push(
-                              ...new Set(
-                                optionGenerator(
-                                  this.filterApiData.programSubClasses
-                                    .collection[
-                                    `('${psource}', '${brandType}', '${lifeC}', '${newnss}', '${brnd}', '${program}', '${channel}', '${subC}', '${category}', '${classes}', '${subCls}')`
-                                  ],
-                                  "All Collections"
-                                )
-                              )
-                            );
-                            skus.push(
-                              ...new Set(
-                                optionGenerator(
-                                  this.filterApiData.programSubClasses.sku[
-                                    `('${psource}', '${brandType}', '${lifeC}', '${newnss}', '${brnd}', '${program}', '${channel}', '${subC}', '${category}', '${classes}', '${subCls}')`
-                                  ],
-                                  "All Skus"
-                                )
-                              )
-                            );
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
+      const brandTypes = {
+        brand_type: this.brandTypeValues,
+        product_source: this.productSourceValues,
+        life_cycle: this.lifeCycleValues,
+        newness: this.newnessValues,
+        brand: this.brandValues,
+        program: this.programValues,
+        channel: this.channelValues,
+        sub_channel: this.subChannelValues,
+        category: this.categoriesValues,
+        class: this.classesValues,
+        sub_class: this.subClassValues,
+      };
+      const cleanObject = this.emptyFieldCleaner(brandTypes);
+      const dataListGroup = this.filterDrilldown(
+        cleanObject
+      );
       this.programCollectionsOptions = [
-        ...new Set(collections.map((item) => item.name)),
+        ...new Set(dataListGroup.map((item) => item.collection)),
       ].map((item) => {
-        return { name: item };
+        return {
+          name: item,
+        };
       });
-      this.skuOptions = [...new Set(skus.map((item) => item.name))].sort().map(
+      this.skuOptions = [...new Set(dataListGroup.map((item) => item.sku))].map(
         (item) => {
-          return { name: item };
+          return {
+            name: item,
+          };
         }
       );
     },
     subClaasesCollections(value) {
-      const optionGenerator = (data, keyName) => {
-        return [
-          /* { name: keyName }, */
-          ...[...new Set(data)].sort().map((item) => {
-            return { name: item };
-          }),
-        ];
-      };
-
-      let skus = [];
       this.$emit("getSkusValues", []);
       this.$refs.skus.values = [];
       this.collectionValues = value.map((item) => item.name);
@@ -2676,188 +1372,29 @@ export default {
         "getCollection",
         value.map((item) => item.name)
       );
-      let productSources;
-      let brandTypes;
-      let lifeCycles;
-      let newness;
-      let brands;
-      let programs;
-      let channels;
-      let subChannels;
-      let categories;
-      let classess;
-      let subClasses;
-      let brnds;
-      let collections = [];
-      if (
-        this.productSourceValues.length > 0 &&
-        !this.productSourceValues.find((item) => item.includes("All"))
-      ) {
-        productSources = this.productSourceValues;
-      } else {
-        productSources = this.productSourceOptions.map((item) => item.name);
-      }
-      if (
-        this.brandTypeValues.length > 0 &&
-        !this.brandTypeValues.find((item) => item.includes("All"))
-      ) {
-        brandTypes = this.brandTypeValues;
-      } else {
-        brandTypes = this.brandTypeOptions.map((item) => item.name);
-      }
-      if (
-        this.lifeCycleValues.length > 0 &&
-        !this.lifeCycleValues.find((item) => item.includes("All"))
-      ) {
-        lifeCycles = this.lifeCycleValues;
-      } else {
-        lifeCycles = this.lifeCycleOptions.map((item) => item.name);
-      }
-      if (
-        this.newnessValues.length > 0 &&
-        !this.newnessValues.find((item) => item.includes("All"))
-      ) {
-        newness = this.newnessValues;
-      } else {
-        newness = this.newnessOptions.map((item) => item.name);
-      }
-      if (
-        this.brandValues.length > 0 &&
-        !this.brandValues.find((item) => item.includes("All"))
-      ) {
-        brnds = this.brandValues;
-      } else {
-        brnds = this.brandOptions.map((item) => item.name);
-      }
-      if (
-        this.programValues.length > 0 &&
-        !this.programValues.find((item) => item.includes("All"))
-      ) {
-        programs = this.programValues;
-      } else {
-        programs = this.programs.map((item) => item.name);
-      }
-      if (
-        this.channelValues.length > 0 &&
-        !this.channelValues.find((item) => item.includes("All"))
-      ) {
-        channels = this.channelValues;
-      } else {
-        channels = this.channelOptions.map((item) => item.name);
-      }
-      if (
-        this.subChannelValues.length > 0 &&
-        !this.subChannelValues.find((item) => item.includes("All"))
-      ) {
-        subChannels = this.subChannelValues;
-      } else {
-        subChannels = this.programSubChannels.map((item) => item.name);
-      }
-      if (
-        this.categoriesValues.length > 0 &&
-        !this.categoriesValues.find((item) => item.includes("All"))
-      ) {
-        categories = this.categoriesValues;
-      } else {
-        categories = this.categoryOptions.map((item) => item.name);
-      }
-      if (
-        this.classesValues.length > 0 &&
-        !this.classesValues.find((item) => item.includes("All"))
-      ) {
-        classess = this.classesValues;
-      } else {
-        classess = this.classesOptions.map((item) => item.name);
-      }
-      if (
-        this.subClassValues.length > 0 &&
-        !this.subClassValues.find((item) => item.includes("All"))
-      ) {
-        subClasses = this.subClassValues;
-      } else {
-        subClasses = this.subClassesOptions.map((item) => item.name);
-      }
-      if (
-        this.collectionValues.length > 0 &&
-        !this.collectionValues.find((item) => item.includes("All"))
-      ) {
-        collections = this.collectionValues;
-      } else {
-        collections = this.programCollectionsOptions.map((item) => item.name);
-      }
-      for (let psource of productSources) {
-        if (psource.indexOf("All") > -1) {
-          continue;
-        }
-        for (let brandType of brandTypes) {
-          if (brandType.indexOf("All") > -1) {
-            continue;
-          }
-          for (let lifeC of lifeCycles) {
-            if (lifeC.indexOf("All") > -1) {
-              continue;
-            }
-            for (let newnss of newness) {
-              if (newnss.indexOf("All") > -1) {
-                continue;
-              }
-              for (let brnd of brnds) {
-                if (brnd.indexOf("All") > -1) {
-                  continue;
-                }
-                for (let program of programs) {
-                  if (program.indexOf("All") > -1) {
-                    continue;
-                  }
-                  for (let channel of channels) {
-                    if (channel.indexOf("All") > -1) {
-                      continue;
-                    }
-                    for (let subC of subChannels) {
-                      if (subC.indexOf("All") > -1) {
-                        continue;
-                      }
-                      for (let category of categories) {
-                        if (category.indexOf("All") > -1) {
-                          continue;
-                        }
-                        for (let classes of classess) {
-                          if (classes.indexOf("All") > -1) {
-                            continue;
-                          }
-                          for (let subCls of subClasses) {
-                            if (subCls.indexOf("All") > -1) {
-                              continue;
-                            }
-                            for (let colln of collections) {
-                              if (colln.indexOf("All") > -1) {
-                                continue;
-                              }
-                              skus.push(
-                                ...new Set(
-                                  optionGenerator(
-                                    this.filterApiData.programCollections.sku[
-                                      `('${psource}', '${brandType}', '${lifeC}', '${newnss}', '${brnd}', '${program}', '${channel}', '${subC}', '${category}', '${classes}', '${subCls}', '${colln}')`
-                                    ],
-                                    "All Skus"
-                                  )
-                                )
-                              );
-                            }
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-      this.skuOptions = [...new Set(skus.map((item) => item.name))].sort().map(
+      const brandTypes = {
+        brand_type: this.brandTypeValues,
+        product_source: this.productSourceValues,
+        life_cycle: this.lifeCycleValues,
+        newness: this.newnessValues,
+        brand: this.brandValues,
+        program: this.programValues,
+        channel: this.channelValues,
+        sub_channel: this.subChannelValues,
+        category: this.categoriesValues,
+        class: this.classesValues,
+        sub_class: this.subClassValues,
+        collection: this.collectionValues,
+      };
+      const cleanObject = this.emptyFieldCleaner(brandTypes);
+      const dataListGroup = this.filterDrilldown(
+        cleanObject
+      );
+      this.skuOptions = [...new Set(dataListGroup.map((item) => item.sku))].map(
         (item) => {
-          return { name: item };
+          return {
+            name: item,
+          };
         }
       );
     },
@@ -2867,72 +1404,53 @@ export default {
     },
   },
   async mounted() {
-    const allRegularFilterJSON = await this.$axios.$get(
-      "/program-filter-dropdown-cache",
-      {
-        progress: true,
-      }
-    );
-    this.filterApiData = allRegularFilterJSON.response;
-    const res = await this.$axios.$get("filter-all-options-dropdown-cache", {
-      progress: true,
-    });
+    const filterResponse = await this.$axios.$get("/program-filter-data");
+    this.programFilterGroupData = filterResponse.response;
     const optionGenerator = (data, keyName) => {
       return [
-        /*            { name: keyName }, */
-        ...[...new Set(Object.values(data))].sort().map((item) => {
+        ...[...new Set(data)].sort().map((item) => {
           return { name: item };
         }),
       ];
     };
     this.productSourceOptions = optionGenerator(
-      res.response.program.product_source,
-      "All Sources"
+      this.programFilterGroupData.map((item) => item.product_source)
     );
     this.lifeCycleOptions = optionGenerator(
-      res.response.program.life_cycle,
-      "All Life Cycles"
+      this.programFilterGroupData.map((item) => item.life_cycle)
     );
     this.brandTypeOptions = optionGenerator(
-      res.response.program.brand_type,
-      "All Brand Type"
+      this.programFilterGroupData.map((item) => item.brand_type)
     );
     this.newnessOptions = optionGenerator(
-      res.response.program.newness,
-      "All Newness"
+      this.programFilterGroupData.map((item) => item.newness)
     );
     this.programs = optionGenerator(
-      res.response.program.collab,
-      "All Programs"
+      this.programFilterGroupData.map((item) => item.collab)
     );
     this.channelOptions = optionGenerator(
-      res.response.program.channel,
-      "All Channels"
+      this.programFilterGroupData.map((item) => item.channel)
     );
     this.programSubChannels = optionGenerator(
-      res.response.program.sub_channel,
-      "All Sub Channels"
+      this.programFilterGroupData.map((item) => item.sub_channel)
     );
     this.categoryOptions = optionGenerator(
-      res.response.program.category,
-      "All Categories"
+      this.programFilterGroupData.map((item) => item.category)
     );
     this.classesOptions = optionGenerator(
-      res.response.program.class,
-      "All Classes"
+      this.programFilterGroupData.map((item) => item.class)
     );
     this.subClassesOptions = optionGenerator(
-      res.response.program.sub_class,
-      "All Sub Classes"
+      this.programFilterGroupData.map((item) => item.sub_class)
     );
     this.programCollectionsOptions = optionGenerator(
-      res.response.program.collection,
-      "All Collections"
+      this.programFilterGroupData.map((item) => item.collection)
     );
-    this.skuOptions = optionGenerator(res.response.program.sku, "All SKUs");
+    this.skuOptions = optionGenerator(
+      this.programFilterGroupData.map((item) => item.sku)
+    );
     this.brandOptions = optionGenerator(
-      res.response.program.brand,
-      "All Brands"
+      this.programFilterGroupData.map((item) => item.brand)
     );
   },
 };
