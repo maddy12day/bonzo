@@ -455,7 +455,5 @@ export default {
 </script>
 
 <style scoped>
-.chart-area {
-  overflow-y: scroll;
-}
+
 </style>
