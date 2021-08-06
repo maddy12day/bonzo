@@ -85,7 +85,7 @@
 import LineChart from "@/components/Charts/LineChart";
 import * as chartConfigs from "@/components/Charts/config";
 import config from "@/config";
-
+import moment from 'moment'
 let weeklyChartLabels = [
   "W01",
   "W02",
@@ -243,7 +243,7 @@ export default {
             dataMap.set(parseInt(d.date), d);
           }
         }
-        return [...dataMap.values()]
+        return [...dataMap.values()].slice(0, moment(new Date()).week()-1)
       } else {
         let dataMap = new Map();
         for (let i = 1; i <= 12; i++) {
@@ -254,7 +254,7 @@ export default {
             dataMap.set(parseInt(d.date), d);
           }
         }
-        return [...dataMap.values()]
+        return [...dataMap.values()].slice(0, new Date().getMonth()+1)
       }
     },
     async baseWeeklyChart() {
