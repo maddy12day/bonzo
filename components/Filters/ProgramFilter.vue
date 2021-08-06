@@ -1405,6 +1405,7 @@ export default {
   },
   async mounted() {
     const filterResponse = await this.$axios.$get("/program-filter-data");
+    if(filterResponse.response) {
     this.programFilterGroupData = filterResponse.response;
     const optionGenerator = (data, keyName) => {
       return [
@@ -1452,6 +1453,7 @@ export default {
     this.brandOptions = optionGenerator(
       this.programFilterGroupData.map((item) => item.brand)
     );
+    }
   },
 };
 </script>

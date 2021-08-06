@@ -859,6 +859,7 @@ export default {
   },
   async mounted() {
     const filterResponse = await this.$axios.$get("/regular-filter-data");
+    if(filterResponse.response) {
     this.regularFilterGroupData = filterResponse.response;
     const optionGenerator = (data) => {
       return [
@@ -867,6 +868,7 @@ export default {
         }),
       ];
     };
+
     this.productSourceOptions = optionGenerator(
       this.regularFilterGroupData.map((item) => item.product_source)
     );
@@ -897,6 +899,7 @@ export default {
     this.brandOptions = optionGenerator(
       this.regularFilterGroupData.map((item) => item.brand)
     );
+    }
   },
 };
 </script>
