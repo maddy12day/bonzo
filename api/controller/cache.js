@@ -11,13 +11,15 @@ const memcachedConnection = new memcached("localhost:11211", {
 });
 const newCache = new cache.Cache();
 export const programFiltersData = async (req, res) => {
+  const program = await newCache.get("globalProgramDataSet")
   res.json({
-    response: JSON.parse(newCache.get("globalProgramDataSet")),
+    response: JSON.parse(program),
   });
 };
 export const regularFiltersData = async (req, res) => {
+  const regular =  await newCache.get("globalRegularDataSet");
   res.json({
-    response: JSON.parse(newCache.get("globalRegularDataSet")),
+    response: JSON.parse(regular),
   });
 };
 export const regularFilterDropdownData = async (req, res) => {
