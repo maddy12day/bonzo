@@ -1,5 +1,6 @@
 import memcached from "memcached";
 import { PrismaClient } from "@prisma/client";
+import cache from 'memory-cache';
 
 const prisma = new PrismaClient();
 
@@ -8,17 +9,15 @@ const memcachedConnection = new memcached("localhost:11211", {
   retry: 10000,
   remove: true,
 });
-
-let globalProgramDataSet = [];
-let globalRegularDataSet = [];
+const newCache = new cache.Cache();
 export const programFiltersData = async (req, res) => {
   res.json({
-    response: globalProgramDataSet,
+    response: JSON.parse(newCache.get("globalProgramDataSet")),
   });
 };
 export const regularFiltersData = async (req, res) => {
   res.json({
-    response: globalRegularDataSet,
+    response: JSON.parse(newCache.get("globalRegularDataSet")),
   });
 };
 export const regularFilterDropdownData = async (req, res) => {
@@ -175,7 +174,7 @@ export const setProgramFilterCache = async (req, res) => {
                                 11,
                                 12,
                                 13;`);
-  globalProgramDataSet = program;
+  newCache.put("globalProgramDataSet", JSON.stringify(program))
   const regular = await prisma.$queryRaw(`SELECT
                                               IFNULL(TRIM(dp.product_third_party), 'N/A') AS product_source,
                                               IFNULL(TRIM(dp.product_morphe_new_brand_3p), 'N/A') AS brand_type,
@@ -223,7 +222,7 @@ export const setProgramFilterCache = async (req, res) => {
                                               8,
                                               9,
                                               10;`);
-  globalRegularDataSet = regular;
+  newCache.put("globalRegularDataSet", JSON.stringify(regular));
   res.json({
     mess: "set successfully..",
   });
