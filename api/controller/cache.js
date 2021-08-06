@@ -176,7 +176,7 @@ export const setProgramFilterCache = async (req, res) => {
                                 11,
                                 12,
                                 13;`);
-  newCache.put("globalProgramDataSet", JSON.stringify(program))
+  newCache.put("globalProgramDataSet", JSON.stringify(program), 6.912e+8)
   const regular = await prisma.$queryRaw(`SELECT
                                               IFNULL(TRIM(dp.product_third_party), 'N/A') AS product_source,
                                               IFNULL(TRIM(dp.product_morphe_new_brand_3p), 'N/A') AS brand_type,
@@ -224,7 +224,7 @@ export const setProgramFilterCache = async (req, res) => {
                                               8,
                                               9,
                                               10;`);
-  newCache.put("globalRegularDataSet", JSON.stringify(regular));
+  newCache.put("globalRegularDataSet", JSON.stringify(regular), 6.912e+8);
   res.json({
     mess: "set successfully..",
   });
