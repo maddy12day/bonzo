@@ -232,6 +232,31 @@ export default {
     },
   },
   methods: {
+     dataMappingWeekly(data, duration) {
+      if (duration == "Weekly") {
+        let dataMap = new Map();
+        for (let i = 1; i <= 52; i++) {
+          dataMap.set(i, { date: i, total_revenue: 0, total_units: 0 });
+        }
+        for (let d of data) {
+          if (parseInt(d.date) <= 52) {
+            dataMap.set(parseInt(d.date), d);
+          }
+        }
+        return [...dataMap.values()]
+      } else {
+        let dataMap = new Map();
+        for (let i = 1; i <= 12; i++) {
+          dataMap.set(i, { date: i, total_revenue: 0, total_units: 0 });
+        }
+        for (let d of data) {
+          if (parseInt(d.date) <= 12) {
+            dataMap.set(parseInt(d.date), d);
+          }
+        }
+        return [...dataMap.values()]
+      }
+    },
     async baseWeeklyChart() {
       const reqBody = this.requestedFilterOptionCom;
       delete reqBody["filterType"];
@@ -242,7 +267,6 @@ export default {
           duration: "week",
         }
       );
-      console.log("chartData", chartData);
       this.chartWeeklylApiJsonData = chartData;
       this.initForecastChartType(1);
       this.changeWeeklyDataByType("Units");
@@ -261,7 +285,7 @@ export default {
       this.changeMonthDataByType("Units");
     },
     initForecastChartType(index) {
-    this.activeIndexChart = index;
+      this.activeIndexChart = index;
       this.activeIndexChart == 1 && this.activeIndex == 1
         ? (this.changeWeeklyDataByType("Revenue"), this.initForecastChart(1))
         : this.changeWeeklyDataByType("Units");
@@ -282,32 +306,43 @@ export default {
       let forecastData = [];
       switch (forecastType) {
         case "Units":
-          plannedData = this.chartWeeklylApiJsonData?.chartData ? this.chartWeeklylApiJsonData?.chartData[0]?.map(
-            (item) => item.total_units
-          ):[];
-          thisYearData = this.chartWeeklylApiJsonData?.chartData ? this.chartWeeklylApiJsonData?.chartData[1]?.map(
-            (item) => item.total_units
-          ):[];
-          forecastData = this.chartWeeklylApiJsonData?.chartData ? this.chartWeeklylApiJsonData?.chartData[2]?.map(
-            (item) => item.total_units
-          ):[];
+          plannedData = this.chartWeeklylApiJsonData?.chartData
+            ? this.chartWeeklylApiJsonData?.chartData[0]?.map(
+                (item) => item.total_units
+              )
+            : [];
+          thisYearData = this.chartWeeklylApiJsonData?.chartData
+            ? this.dataMappingWeekly(this.chartWeeklylApiJsonData?.chartData[1] , "Weekly")?.map(
+                (item) => item.total_units
+              )
+            : [];
+          forecastData = this.chartWeeklylApiJsonData?.chartData
+            ? this.chartWeeklylApiJsonData?.chartData[2]?.map(
+                (item) => item.total_units
+              )
+            : [];
           break;
         case "Revenue":
-          plannedData = this.chartWeeklylApiJsonData?.chartData ? this.chartWeeklylApiJsonData?.chartData[0]?.map(
-            (item) => item.total_revenue
-          ):[];
-          thisYearData = this.chartWeeklylApiJsonData?.chartData ? this.chartWeeklylApiJsonData?.chartData[1]?.map(
-            (item) => item.total_revenue
-          ):[];
-          forecastData = this.chartWeeklylApiJsonData?.chartData ? this.chartWeeklylApiJsonData?.chartData[2]?.map(
-            (item) => item.total_revenue
-          ):[];
+          plannedData = this.chartWeeklylApiJsonData?.chartData
+            ? this.chartWeeklylApiJsonData?.chartData[0]?.map(
+                (item) => item.total_revenue
+              )
+            : [];
+          thisYearData = this.chartWeeklylApiJsonData?.chartData
+            ? this.dataMappingWeekly(this.chartWeeklylApiJsonData?.chartData[1], "Weekly")?.map(
+                (item) => item.total_revenue
+              )
+            : [];
+          forecastData = this.chartWeeklylApiJsonData?.chartData
+            ? this.chartWeeklylApiJsonData?.chartData[2]?.map(
+                (item) => item.total_revenue
+              )
+            : [];
           break;
       }
       this.weeklyUnitsChartData[0] = plannedData;
       this.weeklyUnitsChartData[1] = thisYearData;
       this.weeklyUnitsChartData[2] = forecastData;
-      console.log(this.weeklyUnitsChartData);
     },
     changeMonthDataByType(forecastType) {
       let plannedData = [];
@@ -315,32 +350,44 @@ export default {
       let forecastData = [];
       switch (forecastType) {
         case "Units":
-          plannedData =this.chartMonthlyApiJsonData?.chartData? this.chartMonthlyApiJsonData?.chartData[0]?.map(
-            (item) => item.total_units
-          ): [];
-          thisYearData =this.chartMonthlyApiJsonData?.chartData? this.chartMonthlyApiJsonData?.chartData[1]?.map(
-            (item) => item.total_units
-          ): [];
-          forecastData = this.chartMonthlyApiJsonData?.chartData? this.chartMonthlyApiJsonData?.chartData[2]?.map(
-            (item) => item.total_units
-          ): [];
+          plannedData = this.chartMonthlyApiJsonData?.chartData
+            ? this.chartMonthlyApiJsonData?.chartData[0]?.map(
+                (item) => item.total_units
+              )
+            : [];
+          thisYearData = this.chartMonthlyApiJsonData?.chartData
+            ? 
+             this.dataMappingWeekly(this.chartMonthlyApiJsonData?.chartData[1], "Monthly")?.map(
+                (item) => item.total_units
+              )
+            : [];
+          forecastData = this.chartMonthlyApiJsonData?.chartData
+            ? this.chartMonthlyApiJsonData?.chartData[2]?.map(
+                (item) => item.total_units
+              )
+            : [];
           break;
         case "Revenue":
-          plannedData = this.chartMonthlyApiJsonData?.chartData? this.chartMonthlyApiJsonData?.chartData[0]?.map(
-            (item) => item.total_revenue
-          ): [];
-          thisYearData = this.chartMonthlyApiJsonData?.chartData? this.chartMonthlyApiJsonData?.chartData[1]?.map(
-            (item) => item.total_revenue
-          ): [];
-          forecastData = this.chartMonthlyApiJsonData?.chartData? this.chartMonthlyApiJsonData?.chartData[2]?.map(
-            (item) => item.total_revenue
-          ): [];
+          plannedData = this.chartMonthlyApiJsonData?.chartData
+            ? this.chartMonthlyApiJsonData?.chartData[0]?.map(
+                (item) => item.total_revenue
+              )
+            : [];
+          thisYearData = this.chartMonthlyApiJsonData?.chartData
+            ? this.dataMappingWeekly(this.chartMonthlyApiJsonData?.chartData[1], "Monthly")?.map(
+                (item) => item.total_revenue
+              )
+            : [];
+          forecastData = this.chartMonthlyApiJsonData?.chartData
+            ? this.chartMonthlyApiJsonData?.chartData[2]?.map(
+                (item) => item.total_revenue
+              )
+            : [];
           break;
       }
       this.monthlyUnitsChartData[0] = plannedData;
       this.monthlyUnitsChartData[1] = thisYearData;
       this.monthlyUnitsChartData[2] = forecastData;
-      console.log(this.weeklyUnitsChartData);
     },
     initForecastChart(index) {
       this.activeIndex = index;
@@ -357,7 +404,6 @@ export default {
       this.activeIndexChart == 0 && this.activeIndex == 0
         ? this.changeMonthDataByType("Units")
         : this.changeMonthDataByType("Revenue");
-      console.log("(this.activeIndex ", this.activeIndex);
       this.activeIndex = index;
       if (index == 0) {
         let chartData = {
@@ -376,7 +422,9 @@ export default {
               pointHoverRadius: 4,
               pointHoverBorderWidth: 6,
               pointRadius: 1,
-              data: this.monthlyUnitsChartData[0],
+              data: this.monthlyUnitsChartData[0]
+                ? this.monthlyUnitsChartData[0]
+                : [],
             },
             {
               label: "This Year",
@@ -392,7 +440,9 @@ export default {
               pointHoverRadius: 4,
               pointHoverBorderWidth: 6,
               pointRadius: 1,
-              data: this.monthlyUnitsChartData[1],
+              data: this.monthlyUnitsChartData[1]
+                ? this.monthlyUnitsChartData[1]
+                : [],
             },
             {
               label: "Forecast",
@@ -408,7 +458,9 @@ export default {
               pointHoverRadius: 4,
               pointHoverBorderWidth: 6,
               pointRadius: 1,
-              data: this.monthlyUnitsChartData[2],
+              data: this.monthlyUnitsChartData[2]
+                ? this.monthlyUnitsChartData[2]
+                : [],
               legend: {
                 display: true,
               },
@@ -436,7 +488,9 @@ export default {
               pointHoverRadius: 4,
               pointHoverBorderWidth: 6,
               pointRadius: 1,
-              data: this.weeklyUnitsChartData[0],
+              data: this.weeklyUnitsChartData[0]
+                ? this.weeklyUnitsChartData[0]
+                : [],
             },
             {
               label: "This Year",
@@ -452,7 +506,9 @@ export default {
               pointHoverRadius: 4,
               pointHoverBorderWidth: 6,
               pointRadius: 1,
-              data: this.weeklyUnitsChartData[1],
+              data: this.weeklyUnitsChartData[1]
+                ? this.weeklyUnitsChartData[1]
+                : [],
             },
             {
               label: "Forecast",
@@ -468,7 +524,9 @@ export default {
               pointHoverRadius: 4,
               pointHoverBorderWidth: 6,
               pointRadius: 1,
-              data: this.weeklyUnitsChartData[2],
+              data: this.weeklyUnitsChartData[2]
+                ? this.weeklyUnitsChartData[2]
+                : [],
             },
           ],
           labels: weeklyChartLabels,
@@ -482,7 +540,6 @@ export default {
   created() {},
   getLatestFilteredData() {},
   mounted() {
-    console.log("rendered......");
     this.baseWeeklyChart();
     this.baseMonthlyChart();
   },
