@@ -37,7 +37,7 @@
             align="right"
           >
             <template slot-scope="scope">{{
-              scope.row.yearly_aggregate | toLocaleStr
+              parseInt(scope.row.yearly_aggregate) | toLocaleStr
             }}</template>
           </el-table-column>
           <el-table-column
@@ -47,7 +47,7 @@
             align="right"
           >
             <template slot-scope="scope">{{
-              scope.row.q1_aggregate | toLocaleStr
+             parseInt( scope.row.q1_aggregate)| toLocaleStr
             }}</template>
           </el-table-column>
           <el-table-column
@@ -57,7 +57,7 @@
             align="right"
           >
             <template slot-scope="scope">{{
-              scope.row.q2_aggregate | toLocaleStr
+              parseInt(scope.row.q2_aggregate) | toLocaleStr
             }}</template>
           </el-table-column>
           <el-table-column
@@ -67,7 +67,7 @@
             align="right"
           >
             <template slot-scope="scope">{{
-              scope.row.q3_aggregate | toLocaleStr
+              parseInt(scope.row.q3_aggregate) | toLocaleStr
             }}</template>
           </el-table-column>
           <el-table-column
@@ -77,7 +77,7 @@
             align="right"
           >
             <template slot-scope="scope">{{
-              scope.row.q4_aggregate | toLocaleStr
+             parseInt(scope.row.q4_aggregate) | toLocaleStr
             }}</template>
           </el-table-column>
 
