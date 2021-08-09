@@ -31,7 +31,23 @@
               </span>
             </template>
           </el-table-column>
+          <el-table-column min-width="150" sortable label="Start Date">
+            <template slot-scope="scope">
+              <p>{{ formatDate(scope.row.start_date) }}</p>
+            </template>
+          </el-table-column>
 
+          <el-table-column min-width="150" sortable label="End Date">
+            <template slot-scope="scope">
+              <p>{{ formatDate(scope.row.end_date) }}</p>
+            </template>
+          </el-table-column>
+          <el-table-column
+            min-width="150"
+            sortable
+            label="Amount"
+            property="amount"
+          ></el-table-column>
           <el-table-column
             min-width="115"
             sortable
@@ -132,13 +148,6 @@
           <el-table-column
             min-width="150"
             sortable
-            label="Amount"
-            property="amount"
-          ></el-table-column>
-
-          <el-table-column
-            min-width="150"
-            sortable
             label="Programs"
             property="filter_programs"
           ></el-table-column>
@@ -163,18 +172,6 @@
             label="Sub Classes"
             property="filter_sub_classes"
           ></el-table-column>
-
-          <el-table-column min-width="150" sortable label="Start Date">
-            <template slot-scope="scope">
-              <p>{{ formatDate(scope.row.start_date) }}</p>
-            </template>
-          </el-table-column>
-
-          <el-table-column min-width="150" sortable label="End Date">
-            <template slot-scope="scope">
-              <p>{{ formatDate(scope.row.end_date) }}</p>
-            </template>
-          </el-table-column>
         </el-table>
         <el-pagination
           small
@@ -338,7 +335,7 @@ export default {
         `/get-scenario-detail-by-id/${data.id}`
       );
       console.log("scenarioDetails", scenarioDetails, data.id);
-    /*   const obj = {
+      /*   const obj = {
         filter_brand_types: scenarioDetails.scenario.filter_brand_types,
         filter_brands: scenarioDetails.scenario.filter_brands,
         filter_categories: scenarioDetails.scenario.filter_categories,
@@ -390,13 +387,13 @@ export default {
       }
       return reqBody;
     },
-    getUserName: function (id) {
+    getUserName: function(id) {
       let allUserInfo = JSON.parse(window.localStorage.getItem("allUsersInfo"));
       let userName = allUserInfo.users.filter((user) => (user.id = id))[0]
         .first_name;
       return userName;
     },
-    addUserToScenarioTableData: function (scenarioTableData, type) {
+    addUserToScenarioTableData: function(scenarioTableData, type) {
       if ((type = "sharedScenarios")) {
         this.scenarioTableDataForTable = scenarioTableData.map((v) => ({
           ...v,
