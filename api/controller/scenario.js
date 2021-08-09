@@ -151,11 +151,11 @@ export const parseCategoryUnitComparision = (results) => {
     plan["Comparision"] = "Planned Units";
     forecast["Comparision"] = "Forecast Units";
     adjusted["Comparision"] = "Adjusted Units";
-    plan[`W-${currWeek} (${moment(result.weekend).format("MM/DD/YYYY")})`] =
+    plan[`W${currWeek} (${moment(result.weekend).format("MM/DD/YYYY")})`] =
       result.planned_units;
-    forecast[`W-${currWeek} (${moment(result.weekend).format("MM/DD/YYYY")})`] =
+    forecast[`W${currWeek} (${moment(result.weekend).format("MM/DD/YYYY")})`] =
       result.forecasted_units;
-    adjusted[`W-${currWeek} (${moment(result.weekend).format("MM/DD/YYYY")})`] =
+    adjusted[`W${currWeek} (${moment(result.weekend).format("MM/DD/YYYY")})`] =
       result.adjusted_units;
   }
   parsedData.push({ ...plan }, { ...forecast }, { ...adjusted });
@@ -174,11 +174,11 @@ export const parseCategorySaleComparision = (results) => {
     plan["Comparision"] = "Planned Revenue";
     forecast["Comparision"] = "Forecast Revenue";
     adjusted["Comparision"] = "Adjusted Revenue";
-    plan[`W-${currWeek} (${moment(result.weekend).format("MM/DD/YYYY")})`] =
+    plan[`W${currWeek} (${moment(result.weekend).format("MM/DD/YYYY")})`] =
       result.planned_revenue;
-    forecast[`W-${currWeek} (${moment(result.weekend).format("MM/DD/YYYY")})`] =
+    forecast[`W${currWeek} (${moment(result.weekend).format("MM/DD/YYYY")})`] =
       result.forecasted_revenue;
-    adjusted[`W-${currWeek} (${moment(result.weekend).format("MM/DD/YYYY")})`] =
+    adjusted[`W${currWeek} (${moment(result.weekend).format("MM/DD/YYYY")})`] =
       result.adjusted_revenue;
   }
   parsedData.push({ ...plan }, { ...forecast }, { ...adjusted });
@@ -197,7 +197,7 @@ const parseUnitSaleComparision = (results) => {
       for (let result of results) {
         let currWeek = moment(new Date(result.weekend)).week() - 1;
         newObject[
-          `W-${currWeek} (${moment(result.weekend).format("MM/DD/YYYY")})`
+          `W${currWeek} (${moment(result.weekend).format("MM/DD/YYYY")})`
         ] = result.planned_units;
         parsedData.push(newObject);
       }
@@ -205,7 +205,7 @@ const parseUnitSaleComparision = (results) => {
       for (let result of results) {
         let currWeek = moment(new Date(result.weekend)).week() - 1;
         newObject[
-          `W-${currWeek} (${moment(result.weekend).format("MM/DD/YYYY")})`
+          `W${currWeek} (${moment(result.weekend).format("MM/DD/YYYY")})`
         ] = result.forecasted_units;
         parsedData.push(newObject);
       }
@@ -213,7 +213,7 @@ const parseUnitSaleComparision = (results) => {
       for (let result of results) {
         let currWeek = moment(new Date(result.weekend)).week() - 1;
         newObject[
-          `W-${currWeek} (${moment(result.weekend).format("MM/DD/YYYY")})`
+          `W${currWeek} (${moment(result.weekend).format("MM/DD/YYYY")})`
         ] = result.adjusted_units;
         parsedData.push(newObject);
       }
@@ -239,7 +239,7 @@ const parseUnitRevenueComparision = (results) => {
       for (let result of results) {
         let currWeek = moment(new Date(result.weekend)).week() - 1;
         newObject[
-          `W-${currWeek} (${moment(result.weekend).format("MM/DD/YYYY")})`
+          `W${currWeek} (${moment(result.weekend).format("MM/DD/YYYY")})`
         ] = result.planned_revenue;
         parsedData.push(newObject);
       }
@@ -247,7 +247,7 @@ const parseUnitRevenueComparision = (results) => {
       for (let result of results) {
         let currWeek = moment(new Date(result.weekend)).week() - 1;
         newObject[
-          `W-${currWeek} (${moment(result.weekend).format("MM/DD/YYYY")})`
+          `W${currWeek} (${moment(result.weekend).format("MM/DD/YYYY")})`
         ] = result.forecasted_revenue;
         parsedData.push(newObject);
       }
@@ -255,7 +255,7 @@ const parseUnitRevenueComparision = (results) => {
       for (let result of results) {
         let currWeek = moment(new Date(result.weekend)).week() - 1;
         newObject[
-          `W-${currWeek} (${moment(result.weekend).format("MM/DD/YYYY")})`
+          `W${currWeek} (${moment(result.weekend).format("MM/DD/YYYY")})`
         ] = result.adjusted_revenue;
         parsedData.push(newObject);
       }

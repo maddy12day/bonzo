@@ -65,14 +65,14 @@
           :units="
             `${
               yearlyFilteredStats[1] && yearlyFilteredStats[1][0]
-                ? yearlyFilteredStats[1][0].total_units
+                ? parseInt(yearlyFilteredStats[1][0].total_units)
                 : ''
             }`
           "
           :revenue="
             `${
               yearlyFilteredStats[1] && yearlyFilteredStats[1][0]
-                ? yearlyFilteredStats[1][0].total_revenue
+                ? parseInt(yearlyFilteredStats[1][0].total_revenue)
                 : ''
             }`
           "
@@ -85,14 +85,14 @@
           :units="
             `${
               yearlyFilteredStats[2] && yearlyFilteredStats[2][0]
-                ? yearlyFilteredStats[2][0].total_units
+                ? parseInt(yearlyFilteredStats[2][0].total_units)
                 : ''
             }`
           "
           :revenue="
             `${
               yearlyFilteredStats[2] && yearlyFilteredStats[2][0]
-                ? yearlyFilteredStats[2][0].total_revenue
+                ? parseInt(yearlyFilteredStats[2][0].total_revenue)
                 : ''
             }`
           "
@@ -107,14 +107,14 @@
           :units="
             `${
               quarterlyFilteredStats[0] && quarterlyFilteredStats[0][0]
-                ? quarterlyFilteredStats[0][0].total_units
+                ? parseInt(quarterlyFilteredStats[0][0].total_units)
                 : ''
             }`
           "
           :revenue="
             `${
               quarterlyFilteredStats[0] && quarterlyFilteredStats[0][0]
-                ? quarterlyFilteredStats[0][0].total_revenue
+                ? parseInt(quarterlyFilteredStats[0][0].total_revenue)
                 : ''
             }`
           "
@@ -127,14 +127,14 @@
           :units="
             `${
               quarterlyFilteredStats[1] && quarterlyFilteredStats[1][0]
-                ? quarterlyFilteredStats[1][0].total_units
+                ? parseInt(quarterlyFilteredStats[1][0].total_units)
                 : ''
             }`
           "
           :revenue="
             `${
               quarterlyFilteredStats[1] && quarterlyFilteredStats[1][0]
-                ? quarterlyFilteredStats[1][0].total_revenue
+                ? parseInt(quarterlyFilteredStats[1][0].total_revenue)
                 : ''
             }`
           "
@@ -147,14 +147,14 @@
           :units="
             `${
               quarterlyFilteredStats[2] && quarterlyFilteredStats[2][0]
-                ? quarterlyFilteredStats[2][0].total_units
+                ? parseInt(quarterlyFilteredStats[2][0].total_units)
                 : ''
             }`
           "
           :revenue="
             `${
               quarterlyFilteredStats[2] && quarterlyFilteredStats[2][0]
-                ? quarterlyFilteredStats[2][0].total_revenue
+                ? parseInt(quarterlyFilteredStats[2][0].total_revenue)
                 : ''
             }`
           "
@@ -169,14 +169,14 @@
           :units="
             `${
               quarterlyFilteredStats[0] && quarterlyFilteredStats[0][1]
-                ? quarterlyFilteredStats[0][1].total_units
+                ? parseInt(quarterlyFilteredStats[0][1].total_units)
                 : ''
             }`
           "
           :revenue="
             `${
               quarterlyFilteredStats[0] && quarterlyFilteredStats[0][1]
-                ? quarterlyFilteredStats[0][1].total_revenue
+                ? parseInt(quarterlyFilteredStats[0][1].total_revenue)
                 : ''
             }`
           "
@@ -189,14 +189,14 @@
           :units="
             `${
               quarterlyFilteredStats[1] && quarterlyFilteredStats[1][1]
-                ? quarterlyFilteredStats[1][1].total_units
+                ? parseInt(quarterlyFilteredStats[1][1].total_units)
                 : ''
             }`
           "
           :revenue="
             `${
               quarterlyFilteredStats[1] && quarterlyFilteredStats[1][1]
-                ? quarterlyFilteredStats[1][1].total_revenue
+                ? parseInt(quarterlyFilteredStats[1][1].total_revenue)
                 : ''
             }`
           "
@@ -209,14 +209,14 @@
           :units="
             `${
               quarterlyFilteredStats[2] && quarterlyFilteredStats[2][1]
-                ? quarterlyFilteredStats[2][1].total_units
+                ? parseInt(quarterlyFilteredStats[2][1].total_units)
                 : ''
             }`
           "
           :revenue="
             `${
               quarterlyFilteredStats[2] && quarterlyFilteredStats[2][1]
-                ? quarterlyFilteredStats[2][1].total_revenue
+                ? parseInt(quarterlyFilteredStats[2][1].total_revenue)
                 : ''
             }`
           "
@@ -231,14 +231,14 @@
           :units="
             `${
               quarterlyFilteredStats[0] && quarterlyFilteredStats[0][2]
-                ? quarterlyFilteredStats[0][2].total_units
+                ? parseInt(quarterlyFilteredStats[0][2].total_units)
                 : ''
             }`
           "
           :revenue="
             `${
               quarterlyFilteredStats[0][2] && quarterlyFilteredStats[0][2]
-                ? quarterlyFilteredStats[0][2].total_revenue
+                ? parseInt(quarterlyFilteredStats[0][2].total_revenue)
                 : ''
             }`
           "
@@ -251,14 +251,14 @@
           :units="
             `${
               quarterlyFilteredStats[1] && quarterlyFilteredStats[1][2]
-                ? quarterlyFilteredStats[1][2].total_units
+                ? parseInt(quarterlyFilteredStats[1][2].total_units)
                 : ''
             }`
           "
           :revenue="
             `${
               quarterlyFilteredStats[1] && quarterlyFilteredStats[1][2]
-                ? quarterlyFilteredStats[1][2].total_revenue
+                ? parseInt(quarterlyFilteredStats[1][2].total_revenue)
                 : ''
             }`
           "
@@ -271,14 +271,14 @@
           :units="
             `${
               quarterlyFilteredStats[2] && quarterlyFilteredStats[2][2]
-                ? quarterlyFilteredStats[2][2].total_units
+                ? parseInt(quarterlyFilteredStats[2][2].total_units)
                 : ''
             }`
           "
           :revenue="
             `${
               quarterlyFilteredStats[2] && quarterlyFilteredStats[2][2]
-                ? quarterlyFilteredStats[2][2].total_revenue
+                ? parseInt(quarterlyFilteredStats[2][2].total_revenue)
                 : ''
             }`
           "
@@ -293,14 +293,14 @@
           :units="
             `${
               quarterlyFilteredStats[0] && quarterlyFilteredStats[0][3]
-                ? quarterlyFilteredStats[0][3].total_units
+                ? parseInt(quarterlyFilteredStats[0][3].total_units)
                 : ''
             }`
           "
           :revenue="
             `${
               quarterlyFilteredStats[0] && quarterlyFilteredStats[0][3]
-                ? quarterlyFilteredStats[0][3].total_revenue
+                ? parseInt(quarterlyFilteredStats[0][3].total_revenue)
                 : ''
             }`
           "
@@ -313,14 +313,14 @@
           :units="
             `${
               quarterlyFilteredStats[1] && quarterlyFilteredStats[1][3]
-                ? quarterlyFilteredStats[1][3].total_units
+                ? parseInt(quarterlyFilteredStats[1][3].total_units)
                 : ''
             }`
           "
           :revenue="
             `${
               quarterlyFilteredStats[1] && quarterlyFilteredStats[1][3]
-                ? quarterlyFilteredStats[1][3].total_revenue
+                ? parseInt(quarterlyFilteredStats[1][3].total_revenue)
                 : ''
             }`
           "
@@ -333,14 +333,14 @@
           :units="
             `${
               quarterlyFilteredStats[2] && quarterlyFilteredStats[2][3]
-                ? quarterlyFilteredStats[2][3].total_units
+                ? parseInt(quarterlyFilteredStats[2][3].total_units)
                 : ''
             }`
           "
           :revenue="
             `${
               quarterlyFilteredStats[2] && quarterlyFilteredStats[2][3]
-                ? quarterlyFilteredStats[2][3].total_revenue
+                ? parseInt(quarterlyFilteredStats[2][3].total_revenue)
                 : ''
             }`
           "
