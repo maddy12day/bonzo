@@ -691,6 +691,9 @@ export default {
       this.createExportCSV();
     },
   },
+  mounted() {
+    console.log(this.allAppliedFilters)
+  },
   methods: {
     getCSVName() {
       return `Filtered Weekly Metrics Table ${moment().format(
@@ -702,6 +705,8 @@ export default {
         (data) => {
           let metricTableRow = {
             "Metrics Name": data["Metrics Name"],
+            filterName: this.allAppliedFilters.map(item => item.split(': ')[0]),
+            filterValue: this.allAppliedFilters.map(item => item.split(': ')[1]),
             Yearly: data.yearly_aggregate,
             Q1: data.Q1,
             Q2: data.Q2,

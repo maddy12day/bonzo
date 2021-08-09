@@ -243,7 +243,7 @@
           class="mt-1 btn btn-sm"
           style="line-height:1;"
           :data="skusJsonData"
-          name="data.csv"
+          :name="csvFileName"
           :disabled="isDownloadCsvDisbled"
         >
           Download CSV
@@ -293,6 +293,7 @@ import ManualAdjustmentTable from "../components/Metrics/ManualAdjustmentTable.v
 import Tags from "../components/Tags.vue";
 import ChartWidget from "../components/ChartWidget.vue";
 import FilteredChartWidget from '../components/FilterChartWidget.vue';
+import moment from 'moment';
 
 export default {
   name: "Forecast",
@@ -349,6 +350,7 @@ export default {
       selectedFilterOptions: [],
       skusJsonData: [],
       isDownloadCsvDisbled: true,
+      csvFileName: `data-${moment().format("YYYY-MM-DD HH:MM:SS")}.csv`
     };
   },
   methods: {
@@ -530,6 +532,8 @@ export default {
         this.filterPayload
       );
       this.skusJsonData = csvJsonData.parsedWeeklyData;
+      console.log("skusJsonData",this.skusJsonData);
+      console.log(this.selectedFilters)
       this.isDownloadCsvDisbled = false; /* .map(item => {
         return {
           sku: item.sku,

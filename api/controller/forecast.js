@@ -37,6 +37,8 @@ const weeklyCommonTableDataMappingForAll = (data) => {
     const revenueObj = {
       sku: uniqueSkus[i],
       title: uniqueSkusTitle[i],
+      filterName: "",
+      filterValue: "",
       Forecast: "",
     };
     const revenueSales = arr.map(
