@@ -163,7 +163,7 @@ export default {
   props: ["requestedFilterOption"],
   data() {
     return {
-      activeIndex: 1,
+      activeIndex: 0,
       activeIndexChart: 1,
       chartWeeklylApiJsonData: [],
       weeklyUnitsChartData: [],
@@ -268,7 +268,6 @@ export default {
         }
       );
       this.chartWeeklylApiJsonData = chartData;
-      this.initForecastChartType(1);
       this.changeWeeklyDataByType("Units");
     },
     async baseMonthlyChart() {
@@ -282,6 +281,7 @@ export default {
         }
       );
       this.chartMonthlyApiJsonData = chartData;
+          this.initForecastChartType(0);
       this.changeMonthDataByType("Units");
     },
     initForecastChartType(index) {

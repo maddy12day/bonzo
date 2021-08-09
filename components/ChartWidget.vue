@@ -162,7 +162,7 @@ export default {
   },
   data() {
     return {
-      activeIndex: 1,
+      activeIndex: 0,
       activeIndexChart: 1,
       chartWeeklylApiJsonData: [],
       weeklyUnitsChartData: [],
@@ -217,12 +217,13 @@ export default {
       const chartData = await this.$axios.$get("/weekly-base-forecast-chart");
       this.chartWeeklylApiJsonData = chartData;
       this.changeWeeklyDataByType("Revenue");
-      this.initForecastChart(1);
+     
     },
     async baseMonthlyChart() {
       const chartData = await this.$axios.$get("/monthly-base-forecast-chart");
       this.chartMonthlyApiJsonData = chartData;
       this.changeMonthDataByType("Revenue");
+       this.initForecastChart(0);
     },
     initForecastChartType(index) {
       console.log("omg", index);

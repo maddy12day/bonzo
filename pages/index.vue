@@ -81,7 +81,7 @@ export default {
     return {
       sharedScenariosList: [],
       baseMetricsList: [],
-      activeTab: "Weekly",
+      activeTab: "Monthly",
       userInfo: [],
       callToIntervalAjax: true,
       genesisNodeTimeline: [],
@@ -193,7 +193,7 @@ export default {
   async mounted() {
     console.log("opopopoop00---");
     this.getTimelineDetails();
-    this.showMetricsByDuration("Weekly");
+    this.showMetricsByDuration("Monthly");
     this.getAllUserData();
     this.getWeekendDates();
     setTimeout(() => {

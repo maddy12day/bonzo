@@ -323,8 +323,8 @@ export default {
       isFilteredStatsLoaded: false,
       isTopSkuDataLoaded: false,
       activeFilterType: "Regular",
-      activeTab: "Weekly",
-      filteredActiveTab: "Weekly",
+      activeTab: "Monthly",
+      filteredActiveTab: "Monthly",
       baseAdjustmentsList: [],
       baseMetricsList: [],
       topTenSkusData: [],
@@ -791,7 +791,7 @@ export default {
   },
   mounted() {
     this.getBaseAdjustments();
-    this.showMetricsByDuration("Weekly");
+    this.showMetricsByDuration("Monthly");
     setInterval(() => {
       this.checkManualAdjustmentStatus();
     }, 10000);
