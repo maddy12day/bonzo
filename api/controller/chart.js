@@ -28,10 +28,12 @@ export const getWeeklyChartBaseData = async (req, res) => {
   try {
     const plannedData = await prisma.$queryRaw(`SELECT round(sum(units), 0) as units, ROUND(sum(revenue), 2) as revenue from morphe_staging.planned_weekly_units_revenue_by_channel_by_sku pwurbcbs
                                                 where YEAR(weekend_date) = YEAR(CURRENT_DATE())
+                                                and channel <> 'Wholesale'
                                                 group by WEEK(weekend_date) ;`);
 
     const thisYearData = await prisma.$queryRaw(`SELECT weekend, round(sum(unit_sales), 0) as units, ROUND(sum(revenue), 2) as revenue from morphe_staging.fact_sales_ending_inventory_sku_by_week pwurbcbs
                                                   where YEAR(weekend) = YEAR(CURRENT_DATE())
+                                                  and channel <> 'Wholesale'
                                                   group by WEEK(weekend);`);
 
     const forecastData = await prisma.$queryRaw(`
@@ -110,10 +112,12 @@ export const getMonthlyChartBaseData = async (req, res) => {
   try {
     const plannedData = await prisma.$queryRaw(`SELECT round(sum(units), 0) as units, ROUND(sum(revenue), 2) as revenue from morphe_staging.planned_monthly_units_revenue_by_channel_by_sku pwurbcbs
                                                 where YEAR(monthend_date) = YEAR(CURRENT_DATE())
+                                                and channel <> 'Wholesale'
                                                 group by Month(monthend_date)`);
 
     const thisYearData = await prisma.$queryRaw(`SELECT weekend, round(sum(unit_sales), 0) as units, ROUND(sum(revenue), 2) as revenue from morphe_staging.fact_sales_ending_inventory_sku_by_week pwurbcbs
                                                   where YEAR(weekend) = YEAR(CURRENT_DATE())
+                                                  and channel <> 'Wholesale'
                                                   group by Month(weekend);`);
 
     const forecastData = await prisma.$queryRaw(`
