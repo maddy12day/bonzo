@@ -195,9 +195,9 @@ export const setProgramFilterCache = async (req, res) => {
         `globalProgramDataSet${index}`,
         program.slice(prevIndex, nextIndex)
       );
+      programKeysArray.push(`globalProgramDataSet${index}`);
       prevIndex = nextIndex;
       nextIndex = prevIndex + nextIndex;
-      programKeysArray.push(`globalProgramDataSet${index}`);
       index++;
     }
     regularKeysArray = [];
