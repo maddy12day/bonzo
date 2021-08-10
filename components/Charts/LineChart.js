@@ -91,15 +91,15 @@ export default {
               ];
               if (tooltipItem.xLabel.startsWith("W")) {
                 if (Number(tooltipItem.yLabel)  > 999) {
-                  return parseInt(Number(tooltipItem.yLabel)  / 1000) + "K"  + `  (date: ${weekendDates[tooltipItem.index]})`;
+                  return parseFloat(Number(tooltipItem.yLabel)  / 1000) + "K"  + `  (date: ${weekendDates[tooltipItem.index]})`;
                 } else if (Number(tooltipItem.yLabel)  < 999) {
-                  return parseInt(Number(tooltipItem.yLabel) ) +  `  (date: ${weekendDates[tooltipItem.index]})`;
+                  return parseFloat(Number(tooltipItem.yLabel) ) +  `  (date: ${weekendDates[tooltipItem.index]})`;
                 }
               }else {
                 if (Number(tooltipItem.yLabel)  > 999) {
-                  return parseInt(Number(tooltipItem.yLabel)  / 1000) + "K"
+                  return parseFloat(Number(tooltipItem.yLabel)  / 1000) + "K"
                 } else if (Number(tooltipItem.yLabel)  < 999) {
-                  return parseInt(Number(tooltipItem.yLabel) )
+                  return parseFloat(Number(tooltipItem.yLabel) )
                 } 
               }
             },
@@ -115,11 +115,11 @@ export default {
               ticks: {
                 callback: function(value, index, values) {
                   if (value > 999 && value < 1000000) {
-                    return parseInt(value / 1000) + "K";
+                    return parseFloat(value / 1000) + "K";
                   } else if (value < 999) {
-                    return parseInt(value);
+                    return parseFloat(value);
                   } else {
-                    return parseInt(value / 1000000) + "M";
+                    return parseFloat(value / 1000000) + "M";
                   }
                 },
                 beginAtZero: true,
