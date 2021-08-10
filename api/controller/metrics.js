@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-import { getMasterMetricData } from "./forecast"
+import { getMasterMetricData } from "./forecast";
 
 const prisma = new PrismaClient();
 
@@ -13,21 +13,27 @@ export const getBaseWeeklyMetrics = async (req, res) => {
         id: true,
       },
     });
-    let forecastedWeeklyMetrics = await prisma.forecasted_weekly_metrics.findMany({
-      where: {
-        demand_forecast_run_log_id: demandForecastRunLog[0].id,
-      },
-      include: {
-        metrics_master: {
-          select: {
-            title: true,
+    let forecastedWeeklyMetrics = await prisma.forecasted_weekly_metrics.findMany(
+      {
+        where: {
+          demand_forecast_run_log_id: demandForecastRunLog[0].id,
+        },
+        include: {
+          metrics_master: {
+            select: {
+              title: true,
+            },
           },
         },
-      },
-    });
-    
-    forecastedWeeklyMetrics = forecastedWeeklyMetrics.filter(obj => (obj.metrics_name !== 'aps' && obj.metrics_name !== 'inventory_dc_units' && obj.metrics_name !== 'inventory_dc_cost'));
-    
+      }
+    );
+
+    forecastedWeeklyMetrics = forecastedWeeklyMetrics.filter(
+      (obj) =>
+        obj.metrics_name !== "aps" &&
+        obj.metrics_name !== "inventory_dc_units" &&
+        obj.metrics_name !== "inventory_dc_cost"
+    );
 
     const baseWeeklyMetrics = JSON.stringify(
       forecastedWeeklyMetrics,
@@ -53,20 +59,27 @@ export const getBaseMonthlyMetrics = async (req, res) => {
         id: true,
       },
     });
-    let forecastedMonthlyMetrics = await prisma.forecasted_monthly_metrics.findMany({
-      where: {
-        demand_forecast_run_log_id: demandForecastRunLog[0].id,
-      },
-      include: {
-        metrics_master: {
-          select: {
-            title: true,
+    let forecastedMonthlyMetrics = await prisma.forecasted_monthly_metrics.findMany(
+      {
+        where: {
+          demand_forecast_run_log_id: demandForecastRunLog[0].id,
+        },
+        include: {
+          metrics_master: {
+            select: {
+              title: true,
+            },
           },
         },
-      },
-    });
+      }
+    );
 
-    forecastedMonthlyMetrics = forecastedMonthlyMetrics.filter(obj => (obj.metrics_name !== 'aps' && obj.metrics_name !== 'inventory_dc_units' && obj.metrics_name !== 'inventory_dc_cost'));
+    forecastedMonthlyMetrics = forecastedMonthlyMetrics.filter(
+      (obj) =>
+        obj.metrics_name !== "aps" &&
+        obj.metrics_name !== "inventory_dc_units" &&
+        obj.metrics_name !== "inventory_dc_cost"
+    );
 
     const baseMonthlyMetrics = JSON.stringify(
       forecastedMonthlyMetrics,
@@ -93,21 +106,23 @@ export const getBaseYearlyQarterlyForecast = async (req, res) => {
         id: true,
       },
     });
-    const forecastedYearlyQuarterlyForecast = await prisma.forecasted_weekly_metrics.findMany({
-      where: {
-        demand_forecast_run_log_id: demandForecastRunLog[0].id,
-        metrics_name: {
-          in: ["retail_sales", "units_sales"],
+    const forecastedYearlyQuarterlyForecast = await prisma.forecasted_weekly_metrics.findMany(
+      {
+        where: {
+          demand_forecast_run_log_id: demandForecastRunLog[0].id,
+          metrics_name: {
+            in: ["retail_sales", "units_sales"],
+          },
         },
-      },
-      select: {
-        yearly_aggregate: true,
-        q1_aggregate: true,
-        q2_aggregate: true,
-        q3_aggregate: true,
-        q4_aggregate: true,
-      },
-    });
+        select: {
+          yearly_aggregate: true,
+          q1_aggregate: true,
+          q2_aggregate: true,
+          q3_aggregate: true,
+          q4_aggregate: true,
+        },
+      }
+    );
     const baseYQForecast = JSON.stringify(
       forecastedYearlyQuarterlyForecast,
       (key, value) => (typeof value === "bigint" ? value.toString() : value) // return everything else unchanged
@@ -124,17 +139,19 @@ export const getBaseYearlyQarterlyForecast = async (req, res) => {
 };
 export const getBaseYearlyPlanned = async (req, res) => {
   try {
-    const baseYearlyPlanned = await prisma.planned_weekly_units_revenue_by_channel_by_sku.groupBy({
-      by: ["plan_year"],
-      where: {
-        plan_year: "2021",
-        channel: {in: ['Ecomm','Retail']},
-      },
-      _sum: {
-        units: true,
-        revenue: true,
-      },
-    });
+    const baseYearlyPlanned = await prisma.planned_weekly_units_revenue_by_channel_by_sku.groupBy(
+      {
+        by: ["plan_year"],
+        where: {
+          plan_year: "2021",
+          channel: { in: ["Ecomm", "Retail"] },
+        },
+        _sum: {
+          units: true,
+          revenue: true,
+        },
+      }
+    );
 
     res.status(200).json({
       baseYearlyPlanned,
@@ -219,4 +236,13 @@ export const getBaseThisYearlySale = async (req, res) => {
       error: `${error}`,
     });
   }
+};
+
+export const getWeekends = async (req, res) => {
+  const weekends = await prisma.$queryRaw(`SELECT weekend from morphe_staging.dim_morphe_retail_weekends dmrw 
+                                 where Year in (year(CURRENT_DATE()), year(CURRENT_DATE())+1)
+                                 and weekend >= CURRENT_DATE() `);
+  res.json({
+    weekends: weekends.map(item => moment(item).format('YYYY-MM-DD')),
+  });
 };
