@@ -133,6 +133,8 @@ export const filterAllOptions = async (req, res) => {
 export const setProgramFilterCache = async (req, res) => {
   try {
     programKeysArray = [];
+        regularKeysArray = [];
+
     const program = await prisma.$queryRaw(`SELECT
                                                 IFNULL(TRIM(dp.product_third_party), 'N/A') AS product_source,
                                                 IFNULL(TRIM(dp.product_morphe_new_brand_3p), 'N/A') AS brand_type,
@@ -190,7 +192,7 @@ export const setProgramFilterCache = async (req, res) => {
     let prevIndex = 1;
     let nextIndex = 3000;
     let index = 1;
-    for (let i = 1; i <= program.length / 3000; i++) {
+    for (let prog of program.slice(0, program.length / 3000)) {
       await newCache.set(
         `globalProgramDataSet${index}`,
         program.slice(prevIndex, nextIndex)
@@ -200,7 +202,6 @@ export const setProgramFilterCache = async (req, res) => {
       nextIndex = prevIndex + nextIndex;
       index++;
     }
-    regularKeysArray = [];
     const regular = await prisma.$queryRaw(`SELECT
                                                 IFNULL(TRIM(dp.product_third_party), 'N/A') AS product_source,
                                                 IFNULL(TRIM(dp.product_morphe_new_brand_3p), 'N/A') AS brand_type,
@@ -252,7 +253,7 @@ export const setProgramFilterCache = async (req, res) => {
     let prevIndex2 = 1;
     let nextIndex2 = 3000;
     let index2 = 1;
-    for (let j = 1; j <= program.length / 3000; j++) {
+    for (let reg of regular.slice(0, regular.length / 3000)) {
       await newCache.set(
         `globalRegularDataSet${index2}`,
         program.slice(prevIndex2, nextIndex2)
