@@ -15,12 +15,14 @@ export const programFiltersData = async (req, res) => {
   const program2 = await newCache.get("globalProgramDataSet2")
   const program3 = await newCache.get("globalProgramDataSet3")
   const program4 = await newCache.get("globalProgramDataSet4")
+  const program5 = await newCache.get("globalProgramDataSet5")
   res.json({
     response: [
       ...program1,
       ...program2,
       ...program3,
       ...program4,
+      ...program5
     ]
   });
 };
@@ -33,6 +35,7 @@ export const regularFiltersData = async (req, res) => {
   const regular6 =  await newCache.get("globalRegularDataSet6");
   const regular7 =  await newCache.get("globalRegularDataSet7");
   const regular8 =  await newCache.get("globalRegularDataSet8");
+  const regular9 =  await newCache.get("globalRegularDataSet9");
 
   res.json({
     response: [
@@ -43,7 +46,8 @@ export const regularFiltersData = async (req, res) => {
       ...regular5,
       ...regular6,
       ...regular7,
-      ...regular8
+      ...regular8,
+      ...regular9
     ]
   });
 };
@@ -206,6 +210,7 @@ await newCache.set("globalProgramDataSet1", program.slice(0, 1000))
 await newCache.set("globalProgramDataSet2", program.slice(1000, 3000))
 await newCache.set("globalProgramDataSet3", program.slice(3000, 6000))
 await newCache.set("globalProgramDataSet4", program.slice(6000, 9000))
+await newCache.set("globalProgramDataSet5", program.slice(9000, 11000))
 
 const regular = await prisma.$queryRaw(`SELECT
                 IFNULL(TRIM(dp.product_third_party), 'N/A') AS product_source,
@@ -262,6 +267,7 @@ await newCache.set("globalRegularDataSet5", regular.slice(9000, 12000))
 await newCache.set("globalRegularDataSet6", regular.slice(12000, 15000))
 await newCache.set("globalRegularDataSet7", regular.slice(15000, 18000))
 await newCache.set("globalRegularDataSet8", regular.slice(18000, 20000))
+await newCache.set("globalRegularDataSet9", regular.slice(20000, 23000));
 res.json({
 mess: "set successfully..",
 });

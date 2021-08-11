@@ -160,7 +160,7 @@ export const getFilteredForecastData = async (req, res) => {
                 WITH iskus AS (
                   select
                     idfbwm.sku as sku,
-                    sum(idfbwm.units_sales) as unit_sales
+                    sum(idfbwm.retail_sales) as retail_sales
                   from
                     ${transaction_db}.demand_forecast_base_weekly_metrics idfbwm
                   where
@@ -225,7 +225,7 @@ export const downloadAllSkusData = async (req, res) => {
                 WITH iskus AS (
                   select
                     idfbwm.sku as sku,
-                    sum(idfbwm.units_sales) as unit_sales
+                    sum(idfbwm.retail_sales) as retail_sales
                   from
                     ${transaction_db}.demand_forecast_base_weekly_metrics idfbwm
                   where
