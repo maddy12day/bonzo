@@ -156,6 +156,7 @@ export const getFilteredForecastData = async (req, res) => {
   let transaction_db = "morphe_staging";
   delete req.body.filterType;
   try {
+    const { filterForecastedYear } = req.params;
     let query = `
                 WITH iskus AS (
                   select
@@ -189,9 +190,9 @@ export const getFilteredForecastData = async (req, res) => {
                   ${transaction_db}.demand_forecast_base_weekly_metrics dfbwm,
                   ${transaction_db}.dim_products dp
                 WHERE
-
                   demand_forecast_run_log_id = (select id from ${transaction_db}.demand_forecast_run_log dfrl where is_base_forecast = true limit 1)
                   AND dfbwm.sku = dp.SKU
+                  AND YEAR(dfbwm.weekend) = ${filterForecastedYear}
                   AND dfbwm.sku IN (
                     select
                       sku
@@ -221,6 +222,7 @@ export const downloadAllSkusData = async (req, res) => {
   let transaction_db = "morphe_staging";
   delete req.body.filterType;
   try {
+    const {filterForecastedYear} = req.params;
     let query = `
                 WITH iskus AS (
                   select
@@ -257,9 +259,9 @@ export const downloadAllSkusData = async (req, res) => {
                   ${transaction_db}.demand_forecast_base_weekly_metrics dfbwm,
                   ${transaction_db}.dim_products dp
                 WHERE
-
                   demand_forecast_run_log_id = (select id from ${transaction_db}.demand_forecast_run_log dfrl where is_base_forecast = true limit 1)
                   AND dfbwm.sku = dp.SKU
+                  AND YEAR(dfbwm.weekend) = ${filterForecastedYear}
                   AND dfbwm.sku IN (
                     select
                       sku
@@ -511,7 +513,7 @@ const parseFilteredForecastData = (
   return parsedData;
 };
 
-const getWeeklyFilteredForecastMetricsQuery = (transaction_db, regularQuery, countryQuery1, duration, countryQuery) => {
+const getWeeklyFilteredForecastMetricsQuery = (transaction_db, regularQuery, countryQuery1, duration, countryQuery, year) => {
   let query = `
                 WITH current_base_forecast_run_log_id AS (
                 select
@@ -557,7 +559,7 @@ const getWeeklyFilteredForecastMetricsQuery = (transaction_db, regularQuery, cou
                 FROM
                   ${transaction_db}.dim_morphe_retail_weekends dmrw
                 WHERE
-                  dmrw.year = YEAR(CURRENT_DATE())
+                  dmrw.year = ${year}
                 LIMIT 1 )
                 SELECT
                   ${duration}(dfbwm.weekend) AS date,
@@ -591,7 +593,7 @@ const getWeeklyFilteredForecastMetricsQuery = (transaction_db, regularQuery, cou
                 FROM
                   ${transaction_db}.demand_forecast_base_weekly_metrics dfbwm
                 WHERE
-                  YEAR(dfbwm.weekend)=(YEAR(CURRENT_DATE()))
+                  YEAR(dfbwm.weekend)=${year}
                   ${countryQuery}
                   AND dfbwm.demand_forecast_run_log_id = (
                   select
@@ -609,7 +611,7 @@ const getWeeklyFilteredForecastMetricsQuery = (transaction_db, regularQuery, cou
   return query;
 }
 
-const getMonthlyFilteredForecastMetricsQuery = (transaction_db, regularQuery, countryQuery1, duration, countryQuery) => {
+const getMonthlyFilteredForecastMetricsQuery = (transaction_db, regularQuery, countryQuery1, duration, countryQuery, year) => {
   let query = `WITH current_base_forecast_run_log_id AS (
     select
       id
@@ -654,7 +656,7 @@ const getMonthlyFilteredForecastMetricsQuery = (transaction_db, regularQuery, co
     FROM
       ${transaction_db}.dim_morphe_retail_weekends dmrw
     WHERE
-      dmrw.year = YEAR(CURRENT_DATE())
+      dmrw.year = ${year}
     LIMIT 1 )
     SELECT
       ${duration}(dfbwm.monthend) AS date,
@@ -688,7 +690,7 @@ const getMonthlyFilteredForecastMetricsQuery = (transaction_db, regularQuery, co
     FROM
       ${transaction_db}.demand_forecast_base_monthly_metrics dfbwm
     WHERE
-      YEAR(dfbwm.monthend)=(YEAR(CURRENT_DATE()))
+      YEAR(dfbwm.monthend)=${year}
       ${countryQuery}
       AND dfbwm.demand_forecast_run_log_id = (
       select
@@ -706,6 +708,7 @@ const getMonthlyFilteredForecastMetricsQuery = (transaction_db, regularQuery, co
 }
 
 export const getFilteredForecastMetrics = async (req, res) => {
+  const { filterForecastedYear } = req.params;
   let duration = req.body.filterType;
   delete req.body.filterType;
 
@@ -750,9 +753,9 @@ export const getFilteredForecastMetrics = async (req, res) => {
 
     let query = '';
     if (duration == 'month') {
-      query = getMonthlyFilteredForecastMetricsQuery(transaction_db, regularQuery, countryQuery1, duration, countryQuery);
+      query = getMonthlyFilteredForecastMetricsQuery(transaction_db, regularQuery, countryQuery1, duration, countryQuery, filterForecastedYear);
     } else {
-      query = getWeeklyFilteredForecastMetricsQuery(transaction_db, regularQuery, countryQuery1, duration, countryQuery);
+      query = getWeeklyFilteredForecastMetricsQuery(transaction_db, regularQuery, countryQuery1, duration, countryQuery, filterForecastedYear);
     }
 
     const filteredForecastData = await prisma.$queryRaw(query);

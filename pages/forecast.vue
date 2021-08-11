@@ -118,7 +118,19 @@
     />
 
     <card card-body-classes="table-full-width" v-if="!isFilteredForecast">
-      <div class="col-md-12 text-right p-0">
+       <div class="row mt-1">
+        <div class="col-md-2 text-left">
+          <select
+            class="form-control selectpicker"
+            data-style="btn btn-link"
+            id="exampleFormControlSelect1"
+            @change="getSelectedYear"
+          >
+            <option value="2021">2021</option>
+            <option value="2022">2022</option>
+          </select>
+        </div>
+      <div class="col-md-2 text-right offset-md-8">
         <div class="btn-group btn-group-toggle" data-toggle="buttons">
           <label
             v-for="(option, index) in Durations"
@@ -139,6 +151,7 @@
           </label>
         </div>
       </div>
+       </div>
 
       <ManualAdjustmentTable
         v-if="activeTab == 'Weekly' && showManualAdj"
@@ -194,7 +207,19 @@
 
     <!-- <div v-if="isFilteredForecast"> -->
     <card card-body-classes="table-full-width" v-if="isFilteredForecast">
-      <div class="col-md-12 text-right p-0">
+    <div class="row mt-1">
+        <div class="col-md-2 text-left">
+          <select
+            class="form-control selectpicker"
+            data-style="btn btn-link"
+            id="exampleFormControlSelect1"
+            @change="getSelectedFilteredYear"
+          >
+            <option value="2021">2021</option>
+            <option value="2022">2022</option>
+          </select>
+        </div>
+      <div class="col-md-2 text-right offset-md-8">
         <div class="btn-group btn-group-toggle" data-toggle="buttons">
           <label
             v-for="(option, index) in FilteredDurations"
@@ -215,6 +240,7 @@
           </label>
         </div>
       </div>
+    </div>
 
       <FilteredWeeklyMetricsTable
         v-if="filteredActiveTab == 'Weekly'"
@@ -350,10 +376,22 @@ export default {
       selectedFilterOptions: [],
       skusJsonData: [],
       isDownloadCsvDisbled: true,
+      forecastedYear: '2021',
+      filteredForecastedYear: '2021',
       csvFileName: `data-${moment().format("YYYY-MM-DD HH:MM:SS")}.csv`
     };
   },
   methods: {
+      getSelectedYear(evt) {
+      this.forecastedYear = evt.target.value;
+      this.showMetricsByDuration(this.activeTab);
+    },
+    getSelectedFilteredYear(evt) {
+      this.filteredForecastedYear = evt.target.value;
+      this.showFilteredMetricsByDuration(this.filteredActiveTab);
+      this.getFilteredTopSkus();
+      this.getFilteredWeeklyMetrics(requestedFilterOption)
+    },
     // filter value getter methods
     getProductSource(values) {
       this.productSourceValues = values;
@@ -458,7 +496,7 @@ export default {
       if (this.activeTab == "Weekly") {
         // base metrics table for weekly
         const baseWeeklyMetricsListString = await this.$axios.$get(
-          "/base-weekly-metrics",
+          `/base-weekly-metrics/${this.forecastedYear}`,
           {
             progress: true,
           }
@@ -477,7 +515,7 @@ export default {
       } else {
         // base metrics table for monthly
         const baseMonthlyMetricsListString = await this.$axios.$get(
-          "/base-monthly-metrics",
+          `/base-monthly-metrics/${this.forecastedYear}`,
           {
             progress: true,
           }
@@ -500,7 +538,7 @@ export default {
         this.filterMonthly = true;
       }
       this.filteredForecastMetrics = await this.$axios.$post(
-        `/get-filtered-forecast-metrics`,
+        `/get-filtered-forecast-metrics/${this.filteredForecastedYear}`,
         requestedFilterOption
       );
     },
@@ -512,9 +550,9 @@ export default {
     },
     async getFilteredWeeklyMetrics(requestedFilterOption) {
       requestedFilterOption["filterType"] = "week";
-
+      this.requestedFilterOption = requestedFilterOption;
       const filteredWeeklyforecast = await this.$axios.$post(
-        `/get-filtered-forecast-metrics`,
+        `/get-filtered-forecast-metrics/${this.filteredForecastedYear}`,
         requestedFilterOption
       );
       this.filteredForecastMetrics = filteredWeeklyforecast;
@@ -523,12 +561,12 @@ export default {
       this.skusJsonData = [];
       this.isDownloadCsvDisbled = true;
       const topTenSkusData = await this.$axios.$post(
-        `/get-filtered-forecast-data`,
+        `/get-filtered-forecast-data/${this.filteredForecastedYear}`,
         this.filterPayload
       );
       this.topTenSkusData = topTenSkusData;
       const csvJsonData = await this.$axios.$post(
-        "/download-all-skus-data",
+        `/download-all-skus-data/${this.filteredForecastedYear}`,
         this.filterPayload
       );
       this.skusJsonData = csvJsonData.parsedWeeklyData;

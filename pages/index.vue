@@ -30,25 +30,38 @@
     />
 
     <card card-body-classes="table-full-width">
-      <div class="col-md-12 text-right p-0">
-        <div class="btn-group btn-group-toggle" data-toggle="buttons">
-          <label
-            v-for="(option, index) in Durations"
-            :key="option.name"
-            class="btn btn-sm btn-primary btn-simple"
-            :id="index"
-            :class="{ active: activeTab == option.name }"
+      <div class="row mt-1">
+        <div class="col-md-2 text-left">
+          <select
+            class="form-control selectpicker"
+            data-style="btn btn-link"
+            id="exampleFormControlSelect1"
+            @change="getSelectedYear"
           >
-            <input
-              type="radio"
-              name="options"
-              autocomplete="off"
-              checked=""
-              @click="showMetricsByDuration(option.name)"
-            />
-            <span class="d-none d-sm-block">{{ option.name }}</span>
-            <span class="d-block d-sm-none">{{ option.name }}</span>
-          </label>
+            <option value="2021">2021</option>
+            <option value="2022">2022</option>
+          </select>
+        </div>
+        <div class="col-md-2 text-right offset-md-8">
+          <div class="btn-group btn-group-toggle" data-toggle="buttons">
+            <label
+              v-for="(option, index) in Durations"
+              :key="option.name"
+              class="btn btn-sm btn-primary btn-simple"
+              :id="index"
+              :class="{ active: activeTab == option.name }"
+            >
+              <input
+                type="radio"
+                name="options"
+                autocomplete="off"
+                checked=""
+                @click="showMetricsByDuration(option.name)"
+              />
+              <span class="d-none d-sm-block">{{ option.name }}</span>
+              <span class="d-block d-sm-none">{{ option.name }}</span>
+            </label>
+          </div>
         </div>
       </div>
       <client-only>
@@ -86,6 +99,7 @@ export default {
       callToIntervalAjax: true,
       genesisNodeTimeline: [],
       mergedScenariosTimeLine: [],
+      forecastedYear: '2021',
     };
   },
   components: {
@@ -102,6 +116,11 @@ export default {
       this.sharedScenariosList = await this.$axios.$get("/shared-scenarios", {
         progress: true,
       });
+    },
+    getSelectedYear(evt) {
+      this.forecastedYear = evt.target.value;
+      this.showMetricsByDuration("Weekly");
+
     },
     // timeline api call
     async getTimelineDetails() {
@@ -144,7 +163,7 @@ export default {
         });
         // base metrics table for weekly
         const baseWeeklyMetricsListString = await this.$axios.$get(
-          "/base-weekly-metrics",
+          `/base-weekly-metrics/${this.forecastedYear}`,
           {
             progress: true,
           }
@@ -159,7 +178,7 @@ export default {
       } else {
         // base metrics table for monthly
         const baseMonthlyMetricsListString = await this.$axios.$get(
-          "/base-monthly-metrics",
+          `/base-monthly-metrics/${this.forecastedYear}`,
           {
             progress: true,
           }

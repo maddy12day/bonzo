@@ -284,7 +284,7 @@ export default {
     async forecastYearlyQuarterly() {
       this.$store.commit("toggleStatsAPIResponseState",false);
       const forecast = await this.$axios.$get(
-        "/base-yearly-quarterly-forecast",
+        "/base-yearly-quarterly-forecast/2021",
         {
           progress: true,
         }
