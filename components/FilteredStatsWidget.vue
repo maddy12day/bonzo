@@ -445,4 +445,9 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped>
+#exampleFormControlSelect1 {
+  height: auto;
+  margin-top: 3px;
+}
+</style>
