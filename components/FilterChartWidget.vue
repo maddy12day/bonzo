@@ -236,7 +236,7 @@ export default {
     initChart(year) {
       this.forecastedYear = year;
       this.baseWeeklyChart();
-    this.baseMonthlyChart();
+      this.baseMonthlyChart();
   },
      dataMappingWeekly(data, duration) {
       if (duration == "Weekly") {
