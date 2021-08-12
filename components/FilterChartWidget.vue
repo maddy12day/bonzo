@@ -204,6 +204,7 @@ export default {
         gradientStops: [1, 0.4, 0],
         categories: [],
       },
+      forecastedYear: "2021"
     };
   },
   computed: {
@@ -232,6 +233,11 @@ export default {
     },
   },
   methods: {
+    initChart(year) {
+      this.forecastedYear = year;
+      this.baseWeeklyChart();
+    this.baseMonthlyChart();
+  },
      dataMappingWeekly(data, duration) {
       if (duration == "Weekly") {
         let dataMap = new Map();
@@ -261,7 +267,7 @@ export default {
       const reqBody = this.requestedFilterOptionCom;
       delete reqBody["filterType"];
       const chartData = await this.$axios.$post(
-        "/get-filtered-chart-data-by-duration",
+        `/get-filtered-chart-data-by-duration/${this.forecastedYear}`,
         {
           filters: { ...reqBody },
           duration: "week",
@@ -274,7 +280,7 @@ export default {
       const reqBody = this.requestedFilterOptionCom;
       delete reqBody["filterType"];
       const chartData = await this.$axios.$post(
-        "/get-filtered-chart-data-by-duration",
+        `/get-filtered-chart-data-by-duration/${this.forecastedYear}`,
         {
           filters: { ...reqBody },
           duration: "month",
@@ -538,7 +544,7 @@ export default {
   },
 
   created() {},
-  getLatestFilteredData() {},
+  
   mounted() {
     this.baseWeeklyChart();
     this.baseMonthlyChart();

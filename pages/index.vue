@@ -13,9 +13,8 @@
         </div>
       </el-collapse-item>
     </el-collapse>
-
-    <StatsWidget />
-    <ChartWidget />
+    <StatsWidget @getSelectedYear="getSelectedYear" />
+    <ChartWidget ref="chartWidget"/>
 
     <ScenarioTable
       v-if="
@@ -31,18 +30,7 @@
 
     <card card-body-classes="table-full-width">
       <div class="row mt-1">
-        <div class="col-md-2 text-left">
-          <select
-            class="form-control selectpicker"
-            data-style="btn btn-link"
-            id="exampleFormControlSelect1"
-            @change="getSelectedYear"
-          >
-            <option value="2021">2021</option>
-            <option value="2022">2022</option>
-          </select>
-        </div>
-        <div class="col-md-2 text-right offset-md-8">
+        <div class="col-md-2 text-right offset-md-10">
           <div class="btn-group btn-group-toggle" data-toggle="buttons">
             <label
               v-for="(option, index) in Durations"
@@ -99,7 +87,7 @@ export default {
       callToIntervalAjax: true,
       genesisNodeTimeline: [],
       mergedScenariosTimeLine: [],
-      forecastedYear: '2021',
+      forecastedYear: "2021",
     };
   },
   components: {
@@ -117,10 +105,11 @@ export default {
         progress: true,
       });
     },
-    getSelectedYear(evt) {
-      this.forecastedYear = evt.target.value;
+    getSelectedYear(value) {
+      console.log("value", value);
+      this.forecastedYear = value;
       this.showMetricsByDuration("Weekly");
-
+      this.$refs.chartWidget.chartInit(value);
     },
     // timeline api call
     async getTimelineDetails() {
@@ -219,8 +208,15 @@ export default {
       this.checkMergeScenarioStatus();
     }, 10000);
   },
-
+  watch: {
+    forecastedYearWatch(val) {
+      this.forecastedYear = val;
+    },
+  },
   computed: {
+    forecatedYearCom() {
+      return this.forecastedYear;
+    },
     callToIntervalAjaxSCom() {
       return this.callToIntervalAjax;
     },

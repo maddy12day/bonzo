@@ -98,16 +98,25 @@
     <!-- Applied filters pills (Vishal) -->
 
     <!-- Base Year/Quarter Stats / Filtered Year/Quarter Stats (Vishal) -->
-    <StatsWidget v-if="!isFilteredForecast" />
+    <StatsWidget
+      v-if="!isFilteredForecast"
+      @getSelectedYear="getSelectedYear"
+    />
     <FilteredStatsWidget
       :filterPayload="filterPayload"
       ref="filterWidgets"
       v-if="isFilteredForecast"
       :allAppliedFilters="allAppliedFilters"
       :key="filteredStatsComponentKey"
+      @getSelectedYear="getSelectedFilteredYear"
     />
-    <ChartWidget v-if="!isFilteredForecast"/>
-    <FilteredChartWidget v-if="isFilteredForecast" :requestedFilterOption="requestedFilterOption" :key="filterChartComponentKey"/>
+    <ChartWidget v-if="!isFilteredForecast" />
+    <FilteredChartWidget
+      ref="filteredChartWidget"
+      v-if="isFilteredForecast"
+      :requestedFilterOption="requestedFilterOption"
+      :key="filterChartComponentKey"
+    />
 
     <!-- Adjustments Table -->
     <AdjustmentTable
@@ -118,40 +127,29 @@
     />
 
     <card card-body-classes="table-full-width" v-if="!isFilteredForecast">
-       <div class="row mt-1">
-        <div class="col-md-2 text-left">
-          <select
-            class="form-control selectpicker"
-            data-style="btn btn-link"
-            id="exampleFormControlSelect1"
-            @change="getSelectedYear"
-          >
-            <option value="2021">2021</option>
-            <option value="2022">2022</option>
-          </select>
-        </div>
-      <div class="col-md-2 text-right offset-md-8">
-        <div class="btn-group btn-group-toggle" data-toggle="buttons">
-          <label
-            v-for="(option, index) in Durations"
-            :key="option.name"
-            class="btn btn-sm btn-primary btn-simple"
-            :id="index"
-            :class="{ active: activeTab == option.name }"
-          >
-            <input
-              type="radio"
-              name="options"
-              autocomplete="off"
-              checked=""
-              @click="showMetricsByDuration(option.name)"
-            />
-            <span class="d-none d-sm-block">{{ option.name }}</span>
-            <span class="d-block d-sm-none">{{ option.name }}</span>
-          </label>
+      <div class="row mt-1">
+        <div class="col-md-2 text-right offset-md-10">
+          <div class="btn-group btn-group-toggle" data-toggle="buttons">
+            <label
+              v-for="(option, index) in Durations"
+              :key="option.name"
+              class="btn btn-sm btn-primary btn-simple"
+              :id="index"
+              :class="{ active: activeTab == option.name }"
+            >
+              <input
+                type="radio"
+                name="options"
+                autocomplete="off"
+                checked=""
+                @click="showMetricsByDuration(option.name)"
+              />
+              <span class="d-none d-sm-block">{{ option.name }}</span>
+              <span class="d-block d-sm-none">{{ option.name }}</span>
+            </label>
+          </div>
         </div>
       </div>
-       </div>
 
       <ManualAdjustmentTable
         v-if="activeTab == 'Weekly' && showManualAdj"
@@ -207,40 +205,29 @@
 
     <!-- <div v-if="isFilteredForecast"> -->
     <card card-body-classes="table-full-width" v-if="isFilteredForecast">
-    <div class="row mt-1">
-        <div class="col-md-2 text-left">
-          <select
-            class="form-control selectpicker"
-            data-style="btn btn-link"
-            id="exampleFormControlSelect1"
-            @change="getSelectedFilteredYear"
-          >
-            <option value="2021">2021</option>
-            <option value="2022">2022</option>
-          </select>
-        </div>
-      <div class="col-md-2 text-right offset-md-8">
-        <div class="btn-group btn-group-toggle" data-toggle="buttons">
-          <label
-            v-for="(option, index) in FilteredDurations"
-            :key="option.name"
-            class="btn btn-sm btn-primary btn-simple"
-            :id="index"
-            :class="{ active: filteredActiveTab == option.name }"
-          >
-            <input
-              type="radio"
-              name="options"
-              autocomplete="off"
-              checked=""
-              @click="showFilteredMetricsByDuration(option.name)"
-            />
-            <span class="d-none d-sm-block">{{ option.name }}</span>
-            <span class="d-block d-sm-none">{{ option.acronym }}</span>
-          </label>
+      <div class="row mt-1">
+        <div class="col-md-2 text-right offset-md-10">
+          <div class="btn-group btn-group-toggle" data-toggle="buttons">
+            <label
+              v-for="(option, index) in FilteredDurations"
+              :key="option.name"
+              class="btn btn-sm btn-primary btn-simple"
+              :id="index"
+              :class="{ active: filteredActiveTab == option.name }"
+            >
+              <input
+                type="radio"
+                name="options"
+                autocomplete="off"
+                checked=""
+                @click="showFilteredMetricsByDuration(option.name)"
+              />
+              <span class="d-none d-sm-block">{{ option.name }}</span>
+              <span class="d-block d-sm-none">{{ option.acronym }}</span>
+            </label>
+          </div>
         </div>
       </div>
-    </div>
 
       <FilteredWeeklyMetricsTable
         v-if="filteredActiveTab == 'Weekly'"
@@ -265,15 +252,15 @@
       <div class="col-md-3">
         <a>
           <download-csv
-          v-if="isFilteredForecast"
-          class="mt-1 btn btn-sm"
-          style="line-height:1;"
-          :data="skusJsonData"
-          :name="csvFileName"
-          :disabled="isDownloadCsvDisbled"
-        >
-          Download CSV
-        </download-csv>
+            v-if="isFilteredForecast"
+            class="mt-1 btn btn-sm"
+            style="line-height:1;"
+            :data="skusJsonData"
+            :name="csvFileName"
+            :disabled="isDownloadCsvDisbled"
+          >
+            Download CSV
+          </download-csv>
         </a>
       </div>
     </div>
@@ -318,8 +305,8 @@ import FilteredStatsWidget from "../components/FilteredStatsWidget.vue";
 import ManualAdjustmentTable from "../components/Metrics/ManualAdjustmentTable.vue";
 import Tags from "../components/Tags.vue";
 import ChartWidget from "../components/ChartWidget.vue";
-import FilteredChartWidget from '../components/FilterChartWidget.vue';
-import moment from 'moment';
+import FilteredChartWidget from "../components/FilterChartWidget.vue";
+import moment from "moment";
 
 export default {
   name: "Forecast",
@@ -376,21 +363,22 @@ export default {
       selectedFilterOptions: [],
       skusJsonData: [],
       isDownloadCsvDisbled: true,
-      forecastedYear: '2021',
-      filteredForecastedYear: '2021',
-      csvFileName: `data-${moment().format("YYYY-MM-DD HH:MM:SS")}.csv`
+      forecastedYear: "2021",
+      filteredForecastedYear: "2021",
+      csvFileName: `data-${moment().format("YYYY-MM-DD HH:MM:SS")}.csv`,
     };
   },
   methods: {
-      getSelectedYear(evt) {
-      this.forecastedYear = evt.target.value;
+    getSelectedYear(value) {
+      this.forecastedYear = value;
       this.showMetricsByDuration(this.activeTab);
     },
-    getSelectedFilteredYear(evt) {
-      this.filteredForecastedYear = evt.target.value;
+    getSelectedFilteredYear(value) {
+      this.filteredForecastedYear = value;
+      this.$refs.filteredChartWidget.initChart(value);
       this.showFilteredMetricsByDuration(this.filteredActiveTab);
       this.getFilteredTopSkus();
-      this.getFilteredWeeklyMetrics(requestedFilterOption)
+      this.getFilteredWeeklyMetrics(this.requestedFilterOption);
     },
     // filter value getter methods
     getProductSource(values) {
@@ -570,8 +558,8 @@ export default {
         this.filterPayload
       );
       this.skusJsonData = csvJsonData.parsedWeeklyData;
-      console.log("skusJsonData",this.skusJsonData);
-      console.log(this.selectedFilters)
+      console.log("skusJsonData", this.skusJsonData);
+      console.log(this.selectedFilters);
       this.isDownloadCsvDisbled = false; /* .map(item => {
         return {
           sku: item.sku,
@@ -682,7 +670,7 @@ export default {
         }
       }
     },
-      
+
     resetFilter() {
       this.forceRerender();
       this.isFilteredForecast = false;
@@ -734,7 +722,7 @@ export default {
       }
 
       this.requestedFilterOption = requestedFilterOption;
-        this.filterChartComponentKey +=1;
+      this.filterChartComponentKey += 1;
       delete this.requestedFilterOption["filterType"];
       // await this.getFilteredForecastData(requestedFilterOption);
       this.filteredStatsComponentKey += 1;
@@ -771,7 +759,7 @@ export default {
       this.regularFiltersComponentKey += 1;
       this.filteredStatsComponentKey += 1;
       this.programFiltersComponentKey += 1;
-      this.filterChartComponentKey +=1;
+      this.filterChartComponentKey += 1;
     },
   },
   computed: {

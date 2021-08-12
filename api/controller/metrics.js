@@ -18,7 +18,7 @@ export const getBaseWeeklyMetrics = async (req, res) => {
       {
         where: {
           demand_forecast_run_log_id: demandForecastRunLog[0].id,
-          forecast_year: forecast_year
+          forecast_year: forecast_year,
         },
         include: {
           metrics_master: {
@@ -66,7 +66,7 @@ export const getBaseMonthlyMetrics = async (req, res) => {
       {
         where: {
           demand_forecast_run_log_id: demandForecastRunLog[0].id,
-          forecast_year: forecast_year
+          forecast_year: forecast_year,
         },
         include: {
           metrics_master: {
@@ -102,7 +102,7 @@ export const getBaseMonthlyMetrics = async (req, res) => {
 
 export const getBaseYearlyQarterlyForecast = async (req, res) => {
   try {
-    const  { forecast_year }  = req.params;
+    const { forecast_year } = req.params;
     const demandForecastRunLog = await prisma.demand_forecast_run_log.findMany({
       where: {
         is_base_forecast: true,
@@ -119,7 +119,6 @@ export const getBaseYearlyQarterlyForecast = async (req, res) => {
           metrics_name: {
             in: ["retail_sales", "units_sales"],
           },
-         
         },
         select: {
           yearly_aggregate: true,
@@ -146,11 +145,12 @@ export const getBaseYearlyQarterlyForecast = async (req, res) => {
 };
 export const getBaseYearlyPlanned = async (req, res) => {
   try {
+    const { forecast_year } = req.params;
     const baseYearlyPlanned = await prisma.planned_weekly_units_revenue_by_channel_by_sku.groupBy(
       {
         by: ["plan_year"],
         where: {
-          plan_year: "2021",
+          plan_year: forecast_year,
           channel: { in: ["Ecomm", "Retail"] },
         },
         _sum: {
@@ -173,9 +173,10 @@ export const getBaseYearlyPlanned = async (req, res) => {
 
 export const getBaseQuarterlyPlanned = async (req, res) => {
   try {
+    const { forecast_year } = req.params;
     const baseQuarterlyPlanned = await prisma.$queryRaw(`SELECT QUARTER(weekend_date) AS qtr, ROUND(SUM(revenue),0) AS qtr_revenue, ROUND(SUM(units),0) AS qtr_units
                                                         FROM morphe_staging.planned_weekly_units_revenue_by_channel_by_sku
-                                                        WHERE weekend_date BETWEEN '2021-01-01' AND '2021-12-31'
+                                                        WHERE YEAR(weekend_date) = ${forecast_year}
                                                         GROUP BY QUARTER(weekend_date);`);
 
     res.status(200).json({
@@ -191,13 +192,14 @@ export const getBaseQuarterlyPlanned = async (req, res) => {
 
 export const getBaseThisQuarterlySale = async (req, res) => {
   try {
+    const { forecast_year } = req.params;
     const baseQuarterlySale = await prisma.$queryRaw(`SELECT 
                                                         QUARTER(weekend) AS qtr, 
                                                         ROUND(SUM(revenue),0) AS qtr_revenue, 
                                                         ROUND(SUM(unit_sales),0) AS qtr_units
                                                       FROM morphe_staging.fact_sales_ending_inventory_sku_by_week fseisbw 
                                                       WHERE 
-                                                        weekend BETWEEN '2021-01-01' AND '2021-12-31'
+                                                        YEAR(weekend) = ${forecast_year}
                                                         AND fseisbw.sku IN (select sku from morphe_staging.planned_weekly_units_revenue_by_channel_by_sku)
                                                       GROUP BY 
                                                         QUARTER(weekend);`);
@@ -214,6 +216,7 @@ export const getBaseThisQuarterlySale = async (req, res) => {
 };
 export const getBaseThisYearlySale = async (req, res) => {
   try {
+    const { forecast_year } = req.params;
     // const baseYearlySale = await prisma.$queryRaw(`SELECT
     //                                                 Year(weekend) AS qtr,
     //                                                 ROUND(SUM(revenue),0) AS qtr_revenue,
@@ -231,7 +234,7 @@ export const getBaseThisYearlySale = async (req, res) => {
                                                     ROUND(SUM(unit_sales),0) AS qtr_units
                                                   FROM morphe_staging.fact_sales_ending_inventory_sku_by_week fseisbw 
                                                   WHERE 
-                                                    year(weekend) = year(CURRENT_TIMESTAMP) AND fseisbw.channel <> 'Wholesale'
+                                                    year(weekend) = ${forecast_year} AND fseisbw.channel <> 'Wholesale'
                                                   GROUP BY 
                                                     Year(weekend);`);
     res.status(200).json({
@@ -250,6 +253,6 @@ export const getWeekends = async (req, res) => {
                                  where Year in (year(CURRENT_DATE()), year(CURRENT_DATE())+1)
                                  and weekend >= CURRENT_DATE() `);
   res.json({
-    weekends: weekends.map(item => moment(item).format('YYYY-MM-DD')),
+    weekends: weekends.map((item) => moment(item).format("YYYY-MM-DD")),
   });
 };
