@@ -879,7 +879,7 @@ const typlanChartQueryGeneratorByDurations = (
                 ${transaction_db}.${tableName} pwurbcbs
               WHERE
                 pwurbcbs.channel <> 'Wholesale'
-                AND pwurbcbs.plan_year =  ${year}
+                AND pwurbcbs.plan_year = ${year}
                 AND pwurbcbs.sku in (
                 select
                   SKU
@@ -896,8 +896,8 @@ const typlanChartQueryGeneratorByDurations = (
 const thisYearSaleYearlyQuarterly = (
   duration,
   whereQueryString,
+  transaction_db,
   year,
-  transaction_db
 ) => {
   let dateOffset;
   let whereQueryStr = "";
@@ -926,6 +926,8 @@ const thisYearSaleYearlyQuarterly = (
                   ${duration}(fseisbw.weekend)
                 ORDER BY
                   ${duration}(fseisbw.weekend);`;
+console.log("query 1", query);
+
   return query;
 };
 
@@ -933,8 +935,8 @@ const thisYearSaleYearlyQuarterly = (
 const forecastQueryGenByDuration = (
   duration,
   whereQueryString,
-  year,
-  transaction_db
+  transaction_db,
+  year
 ) => {
   // let changeAlias = whereQueryString ? `AND ${whereQueryString}` : "";
   const query = `
@@ -966,6 +968,7 @@ const forecastQueryGenByDuration = (
                 ${duration}(fseisbw.weekend)
               ORDER BY
                 ${duration}(fseisbw.weekend);`;
+  console.log("query 2", query);
   return query;
 };
 
@@ -989,7 +992,6 @@ export const getFilteredYearlyStatsData = async (req, res) => {
   const filteredThisYearSaleDataQuery = thisYearSaleYearlyQuarterly(
     "YEAR",
     filteredThisYearSaleWhereQuery,
-    0,
     "morphe_staging",
     filterForecastedYear
   );
@@ -999,7 +1001,6 @@ export const getFilteredYearlyStatsData = async (req, res) => {
   const filteredForecastDataQuery = forecastQueryGenByDuration(
     "YEAR",
     filteredForecastWhereQuery,
-    0,
     "morphe_staging",
     filterForecastedYear
   );
@@ -1048,7 +1049,6 @@ export const getFilteredQuarterlyStatsData = async (req, res) => {
   const filteredQuarterlyThisYearSaleDataQuery = thisYearSaleYearlyQuarterly(
     "QUARTER",
     filteredQuarterlyThisYearSaleWhereQuery,
-    0,
     "morphe_staging",
     filterForecastedYear
   );
@@ -1058,7 +1058,6 @@ export const getFilteredQuarterlyStatsData = async (req, res) => {
   const filteredQuarterlyForecastDataQuery = forecastQueryGenByDuration(
     "QUARTER",
     filteredQuarterlyForecastWhereQuery,
-    0,
     "morphe_staging",
     filterForecastedYear
   );
@@ -1108,7 +1107,6 @@ export const getFilterChartData = async (req, res) => {
   const filteredQuarterlyThisYearSaleDataQuery = thisYearSaleYearlyQuarterly(
     req.body.duration,
     filteredQuarterlyThisYearSaleWhereQuery,
-    0,
     "morphe_staging",
     filterForecastedYear
   );
@@ -1118,7 +1116,6 @@ export const getFilterChartData = async (req, res) => {
   const filteredQuarterlyForecastDataQuery = forecastQueryGenByDuration(
     req.body.duration,
     filteredQuarterlyForecastWhereQuery,
-    0,
     "morphe_staging",
     filterForecastedYear
   );

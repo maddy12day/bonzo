@@ -375,6 +375,7 @@ export default {
       quarterlyFilteredStats: [],
       filterQuarterlyPayload: {},
       isFilteredQuarterlyStatsFetched: false,
+      forecastedYear: "2021"
     };
   },
   components: {
