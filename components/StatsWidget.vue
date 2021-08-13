@@ -27,16 +27,20 @@
       <div class="col-md-4 mt-1">
         <YearlyQuarterlyCard
           title="Planned"
-          :units="`${
-            yearlyPlannedData[0]
-              ? parseInt(yearlyPlannedData[0]._sum.units)
-              : ''
-          }`"
-          :revenue="`${
-            yearlyPlannedData[0]
-              ? parseInt(yearlyPlannedData[0]._sum.revenue)
-              : ''
-          }`"
+          :units="
+            `${
+              yearlyPlannedData[0]
+                ? parseInt(yearlyPlannedData[0]._sum.units)
+                : ''
+            }`
+          "
+          :revenue="
+            `${
+              yearlyPlannedData[0]
+                ? parseInt(yearlyPlannedData[0]._sum.revenue)
+                : ''
+            }`
+          "
           class="border border-info"
         />
         <p><sub>*Plan does not contain all the skus</sub></p>
@@ -44,21 +48,35 @@
       <div class="col-md-4 mt-1">
         <YearlyQuarterlyCard
           title="This Year"
-          :units="`${yearlySaleData[0] ? parseInt(yearlySaleData[0].qtr_units): ''}`"
-          :revenue="`${yearlySaleData[0] ? parseInt( yearlySaleData[0].qtr_revenue ): ''}`"
-          class="border border-danger"
+          :units="
+            `${yearlySaleData[0] ? parseInt(yearlySaleData[0].qtr_units) : ''}`
+          "
+          :revenue="
+            `${
+              yearlySaleData[0] ? parseInt(yearlySaleData[0].qtr_revenue) : ''
+            }`
+          "
+          class="border border-info"
         />
       </div>
       <div class="col-md-4 mt-1">
         <YearlyQuarterlyCard
           title="Forecast"
-          :units="`${
-            forecastYQData[1] ? parseInt(forecastYQData[1].yearly_aggregate) : ''
-          }`"
-          :revenue="`${
-            forecastYQData[0] ? parseInt(forecastYQData[0].yearly_aggregate) : ''
-          }`"
-          class="border border-warning"
+          :units="
+            `${
+              forecastYQData[1]
+                ? parseInt(forecastYQData[1].yearly_aggregate)
+                : ''
+            }`
+          "
+          :revenue="
+            `${
+              forecastYQData[0]
+                ? parseInt(forecastYQData[0].yearly_aggregate)
+                : ''
+            }`
+          "
+          class="border border-info"
         />
       </div>
     </div>
@@ -66,12 +84,20 @@
       <div class="col-md-4 mt-1">
         <YearlyQuarterlyCard
           title="Planned"
-          :units="`${
-            quarterlyPlannedData[0] ? parseInt(quarterlyPlannedData[0].qtr_units): ''
-          }`"
-          :revenue="`${
-            quarterlyPlannedData[0] ? parseInt(quarterlyPlannedData[0].qtr_revenue) : ''
-          }`"
+          :units="
+            `${
+              quarterlyPlannedData[0]
+                ? parseInt(quarterlyPlannedData[0].qtr_units)
+                : ''
+            }`
+          "
+          :revenue="
+            `${
+              quarterlyPlannedData[0]
+                ? parseInt(quarterlyPlannedData[0].qtr_revenue)
+                : ''
+            }`
+          "
           class="border border-info"
         />
         <p><sub>*Plan does not contain all the skus</sub></p>
@@ -79,23 +105,37 @@
       <div class="col-md-4 mt-1">
         <YearlyQuarterlyCard
           title="This Year"
-          :units="`${
-            quarterlySaleData[0] ? parseInt(quarterlySaleData[0].qtr_units) : ''
-          }`"
-          :revenue="`${
-            quarterlySaleData[0] ? parseInt(quarterlySaleData[0].qtr_revenue) : ''
-          }`"
-          class="border border-danger"
+          :units="
+            `${
+              quarterlySaleData[0]
+                ? parseInt(quarterlySaleData[0].qtr_units)
+                : ''
+            }`
+          "
+          :revenue="
+            `${
+              quarterlySaleData[0]
+                ? parseInt(quarterlySaleData[0].qtr_revenue)
+                : ''
+            }`
+          "
+          class="border border-info"
         />
       </div>
       <div class="col-md-4 mt-1">
         <YearlyQuarterlyCard
           title="Forecast"
-          :units="`${forecastYQData[0] ? parseInt(forecastYQData[0].q1_aggregate) : ''}`"
-          :revenue="`${
-            forecastYQData[1] ? parseInt(forecastYQData[1].q1_aggregate) : ''
-          }`"
-          class="border border-warning"
+          :units="
+            `${
+              forecastYQData[0] ? parseInt(forecastYQData[0].q1_aggregate) : ''
+            }`
+          "
+          :revenue="
+            `${
+              forecastYQData[1] ? parseInt(forecastYQData[1].q1_aggregate) : ''
+            }`
+          "
+          class="border border-info"
         />
       </div>
     </div>
@@ -103,12 +143,20 @@
       <div class="col-md-4 mt-1">
         <YearlyQuarterlyCard
           title="Planned"
-          :units="`${
-            quarterlyPlannedData[1] ? parseInt(quarterlyPlannedData[1].qtr_units) : ''
-          }`"
-          :revenue="`${
-            quarterlyPlannedData[1] ? parseInt( quarterlyPlannedData[1].qtr_revenue) : ''
-          }`"
+          :units="
+            `${
+              quarterlyPlannedData[1]
+                ? parseInt(quarterlyPlannedData[1].qtr_units)
+                : ''
+            }`
+          "
+          :revenue="
+            `${
+              quarterlyPlannedData[1]
+                ? parseInt(quarterlyPlannedData[1].qtr_revenue)
+                : ''
+            }`
+          "
           class="border border-info"
         />
         <p><sub>*Plan does not contain all the skus</sub></p>
@@ -116,23 +164,37 @@
       <div class="col-md-4 mt-1">
         <YearlyQuarterlyCard
           title="This Year"
-          :units="`${
-            quarterlySaleData[1] ? parseInt(quarterlySaleData[1].qtr_units) : ''
-          }`"
-          :revenue="`${
-            quarterlySaleData[1] ? parseInt(quarterlySaleData[1].qtr_revenue ): ''
-          }`"
-          class="border border-danger"
+          :units="
+            `${
+              quarterlySaleData[1]
+                ? parseInt(quarterlySaleData[1].qtr_units)
+                : ''
+            }`
+          "
+          :revenue="
+            `${
+              quarterlySaleData[1]
+                ? parseInt(quarterlySaleData[1].qtr_revenue)
+                : ''
+            }`
+          "
+          class="border border-info"
         />
       </div>
       <div class="col-md-4 mt-1">
         <YearlyQuarterlyCard
           title="Forecast"
-          :units="`${forecastYQData[1] ? parseInt(forecastYQData[1].q2_aggregate) : ''}`"
-          :revenue="`${
-            forecastYQData[0] ? parseInt(forecastYQData[0].q2_aggregate) : ''
-          }`"
-          class="border border-warning"
+          :units="
+            `${
+              forecastYQData[1] ? parseInt(forecastYQData[1].q2_aggregate) : ''
+            }`
+          "
+          :revenue="
+            `${
+              forecastYQData[0] ? parseInt(forecastYQData[0].q2_aggregate) : ''
+            }`
+          "
+          class="border border-info"
         />
       </div>
     </div>
@@ -140,12 +202,20 @@
       <div class="col-md-4 mt-1">
         <YearlyQuarterlyCard
           title="Planned"
-          :units="`${
-            quarterlyPlannedData[2] ? parseInt(quarterlyPlannedData[2].qtr_units) : ''
-          }`"
-          :revenue="`${
-            quarterlyPlannedData[2] ? parseInt(quarterlyPlannedData[2].qtr_revenue) : ''
-          }`"
+          :units="
+            `${
+              quarterlyPlannedData[2]
+                ? parseInt(quarterlyPlannedData[2].qtr_units)
+                : ''
+            }`
+          "
+          :revenue="
+            `${
+              quarterlyPlannedData[2]
+                ? parseInt(quarterlyPlannedData[2].qtr_revenue)
+                : ''
+            }`
+          "
           class="border border-info"
         />
         <p><sub>*Plan does not contain all the skus</sub></p>
@@ -153,21 +223,37 @@
       <div class="col-md-4 mt-1">
         <YearlyQuarterlyCard
           title="This Year"
-          :units="`${
-            quarterlySaleData[2] ? parseInt(quarterlySaleData[2].qtr_units ): ''
-          }`"
-          :revenue="`${
-            quarterlySaleData[2] ? parseInt(quarterlySaleData[2].qtr_revenue) : ''
-          }`"
-          class="border border-danger"
+          :units="
+            `${
+              quarterlySaleData[2]
+                ? parseInt(quarterlySaleData[2].qtr_units)
+                : ''
+            }`
+          "
+          :revenue="
+            `${
+              quarterlySaleData[2]
+                ? parseInt(quarterlySaleData[2].qtr_revenue)
+                : ''
+            }`
+          "
+          class="border border-info"
         />
       </div>
       <div class="col-md-4 mt-1">
         <YearlyQuarterlyCard
           title="Forecast"
-          :units="`${forecastYQData[1] ? parseInt(forecastYQData[1].q3_aggregate) : ''}`"
-          :revenue="`${forecastYQData[0] ? parseInt(forecastYQData[0].q3_aggregate) : ''}`"
-          class="border border-warning"
+          :units="
+            `${
+              forecastYQData[1] ? parseInt(forecastYQData[1].q3_aggregate) : ''
+            }`
+          "
+          :revenue="
+            `${
+              forecastYQData[0] ? parseInt(forecastYQData[0].q3_aggregate) : ''
+            }`
+          "
+          class="border border-info"
         />
       </div>
     </div>
@@ -175,12 +261,20 @@
       <div class="col-md-4 mt-1">
         <YearlyQuarterlyCard
           title="Planned"
-          :units="`${
-            quarterlyPlannedData[3] ? parseInt(quarterlyPlannedData[3].qtr_units) : ''
-          }`"
-          :revenue="`${
-            quarterlyPlannedData[3] ? parseInt(quarterlyPlannedData[3].qtr_revenue) : ''
-          }`"
+          :units="
+            `${
+              quarterlyPlannedData[3]
+                ? parseInt(quarterlyPlannedData[3].qtr_units)
+                : ''
+            }`
+          "
+          :revenue="
+            `${
+              quarterlyPlannedData[3]
+                ? parseInt(quarterlyPlannedData[3].qtr_revenue)
+                : ''
+            }`
+          "
           class="border border-info"
         />
         <p><sub>*Plan does not contain all the skus</sub></p>
@@ -188,23 +282,37 @@
       <div class="col-md-4 mt-1">
         <YearlyQuarterlyCard
           title="This Year"
-          :units="`${
-            quarterlySaleData[3] ? parseInt(quarterlySaleData[3].qtr_units) : ''
-          }`"
-          :revenue="`${
-            quarterlySaleData[3] ? parseInt(quarterlySaleData[3].qtr_revenue) : ''
-          }`"
-          class="border border-danger"
+          :units="
+            `${
+              quarterlySaleData[3]
+                ? parseInt(quarterlySaleData[3].qtr_units)
+                : ''
+            }`
+          "
+          :revenue="
+            `${
+              quarterlySaleData[3]
+                ? parseInt(quarterlySaleData[3].qtr_revenue)
+                : ''
+            }`
+          "
+          class="border border-info"
         />
       </div>
       <div class="col-md-4 mt-1">
         <YearlyQuarterlyCard
           title="Forecast"
-          :units="`${forecastYQData[1] ? parseInt(forecastYQData[1].q4_aggregate) : ''}`"
-          :revenue="`${
-            forecastYQData[0] ? parseInt(forecastYQData[0].q4_aggregate) : ''
-          }`"
-          class="border border-warning"
+          :units="
+            `${
+              forecastYQData[1] ? parseInt(forecastYQData[1].q4_aggregate) : ''
+            }`
+          "
+          :revenue="
+            `${
+              forecastYQData[0] ? parseInt(forecastYQData[0].q4_aggregate) : ''
+            }`
+          "
+          class="border border-info"
         />
       </div>
     </div>
@@ -243,7 +351,7 @@ export default {
     },
 
     async quarterlySale() {
-      this.$store.commit("toggleStatsAPIResponseState",false);
+      this.$store.commit("toggleStatsAPIResponseState", false);
       const quaterly = await this.$axios.$get(
         "/based-quarterly-sale-this-year",
         {
@@ -251,47 +359,47 @@ export default {
         }
       );
       this.quarterlySaleData = quaterly.baseQuarterlySale;
-      this.$store.commit("toggleStatsAPIResponseState",true);
+      this.$store.commit("toggleStatsAPIResponseState", true);
     },
 
     async quarterlyPlanned() {
-      this.$store.commit("toggleStatsAPIResponseState",false);
+      this.$store.commit("toggleStatsAPIResponseState", false);
       const quarterly = await this.$axios.$get("/based-quarterly-planned", {
         progress: true,
       });
       this.quarterlyPlannedData = quarterly.baseQuarterlyPlanned;
-      this.$store.commit("toggleStatsAPIResponseState",true);
+      this.$store.commit("toggleStatsAPIResponseState", true);
     },
 
     async yearlySale() {
-      this.$store.commit("toggleStatsAPIResponseState",false);
+      this.$store.commit("toggleStatsAPIResponseState", false);
       const yearly = await this.$axios.$get("/based-yearly-sale-this-year", {
         progress: true,
       });
       this.yearlySaleData = yearly.baseYearlySale;
-      this.$store.commit("toggleStatsAPIResponseState",true);
+      this.$store.commit("toggleStatsAPIResponseState", true);
     },
 
     async yearlyPlanned() {
-      this.$store.commit("toggleStatsAPIResponseState",false);
+      this.$store.commit("toggleStatsAPIResponseState", false);
       const yearly = await this.$axios.$get("/base-yearly-planned", {
         progress: true,
       });
       this.yearlyPlannedData = yearly.baseYearlyPlanned;
-      this.$store.commit("toggleStatsAPIResponseState",true);
+      this.$store.commit("toggleStatsAPIResponseState", true);
     },
 
     async forecastYearlyQuarterly() {
-      this.$store.commit("toggleStatsAPIResponseState",false);
+      this.$store.commit("toggleStatsAPIResponseState", false);
       const forecast = await this.$axios.$get(
         "/base-yearly-quarterly-forecast",
         {
           progress: true,
         }
       );
-      console.log("forecast",JSON.parse(forecast.baseYQForecast));
+      console.log("forecast", JSON.parse(forecast.baseYQForecast));
       this.forecastYQData = JSON.parse(forecast.baseYQForecast);
-      this.$store.commit("toggleStatsAPIResponseState",true);
+      this.$store.commit("toggleStatsAPIResponseState", true);
     },
   },
   async mounted() {
@@ -313,5 +421,4 @@ export default {
 };
 </script>
 
-<style>
-</style>
+<style></style>
