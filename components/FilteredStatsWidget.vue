@@ -81,7 +81,7 @@
                 : ''
             }`
           "
-          class="border border-danger"
+          class="border border-info"
         />
       </div>
       <div class="col-md-4 mt-1">
@@ -101,7 +101,7 @@
                 : ''
             }`
           "
-          class="border border-warning"
+          class="border border-info"
         />
       </div>
     </div>
@@ -143,7 +143,7 @@
                 : ''
             }`
           "
-          class="border border-danger"
+          class="border border-info"
         />
       </div>
       <div class="col-md-4 mt-1">
@@ -163,7 +163,7 @@
                 : ''
             }`
           "
-          class="border border-warning"
+          class="border border-info"
         />
       </div>
     </div>
@@ -205,7 +205,7 @@
                 : ''
             }`
           "
-          class="border border-danger"
+          class="border border-info"
         />
       </div>
       <div class="col-md-4 mt-1">
@@ -225,7 +225,7 @@
                 : ''
             }`
           "
-          class="border border-warning"
+          class="border border-info"
         />
       </div>
     </div>
@@ -267,7 +267,7 @@
                 : ''
             }`
           "
-          class="border border-danger"
+          class="border border-info"
         />
       </div>
       <div class="col-md-4 mt-1">
@@ -287,7 +287,7 @@
                 : ''
             }`
           "
-          class="border border-warning"
+          class="border border-info"
         />
       </div>
     </div>
@@ -329,7 +329,7 @@
                 : ''
             }`
           "
-          class="border border-danger"
+          class="border border-info"
         />
       </div>
       <div class="col-md-4 mt-1">
@@ -349,7 +349,7 @@
                 : ''
             }`
           "
-          class="border border-warning"
+          class="border border-info"
         />
       </div>
     </div>
@@ -362,7 +362,7 @@ import YearlyQuarterlyCard from "../components/YearlyQuarterlyCards/YearlyQuarte
 import Tags from "../components/Tags.vue";
 
 export default {
-  props: ["filterPayload","allAppliedFilters"],
+  props: ["filterPayload", "allAppliedFilters"],
   data() {
     return {
       forecastYQData: {},
@@ -381,7 +381,7 @@ export default {
   components: {
     Card,
     YearlyQuarterlyCard,
-    Tags
+    Tags,
   },
   methods: {
      getSelectedYear(evt) {
@@ -401,7 +401,7 @@ export default {
       }
     },
     async getFilteredQuarterlyStatsWidgetData() {
-      this.$store.commit("toggleStatsAPIResponseState",false);
+      this.$store.commit("toggleStatsAPIResponseState", false);
       const filteredStatsWidgetData = await this.$axios.$post(
         `/get-filtered-quarterly-stats/${this.forecastedYear}`,
         this.filterQuarterlyPayload
@@ -411,10 +411,10 @@ export default {
         filteredStatsWidgetData.filteredStats.quarterlyFilteredStats;
       this.yearlyFilteredStats =
         filteredStatsWidgetData.filteredStats.yearlyFilteredStats;
-      this.$store.commit("toggleStatsAPIResponseState",true);
+      this.$store.commit("toggleStatsAPIResponseState", true);
     },
     async getFilteredStatsWidgetData() {
-      this.$store.commit("toggleStatsAPIResponseState",false);
+      this.$store.commit("toggleStatsAPIResponseState", false);
       const filteredStatsWidgetData = await this.$axios.$post(
         `/get-filtered-yearly-stats/${this.forecastedYear}`,
         this.filterQuarterlyPayload
@@ -425,7 +425,7 @@ export default {
         filteredStatsWidgetData.filteredStats.quarterlyFilteredStats;
       this.yearlyFilteredStats =
         filteredStatsWidgetData.filteredStats.yearlyFilteredStats;
-      this.$store.commit("toggleStatsAPIResponseState",true);
+      this.$store.commit("toggleStatsAPIResponseState", true);
     },
   },
   async created() {

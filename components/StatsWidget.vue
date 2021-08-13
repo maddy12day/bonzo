@@ -67,7 +67,7 @@
               yearlySaleData[0] ? parseInt(yearlySaleData[0].qtr_revenue) : ''
             }`
           "
-          class="border border-danger"
+          class="border border-info"
         />
       </div>
       <div class="col-md-4 mt-1">
@@ -87,7 +87,7 @@
                 : ''
             }`
           "
-          class="border border-warning"
+          class="border border-info"
         />
       </div>
     </div>
@@ -130,7 +130,7 @@
                 : ''
             }`
           "
-          class="border border-danger"
+          class="border border-info"
         />
       </div>
       <div class="col-md-4 mt-1">
@@ -146,7 +146,7 @@
               forecastYQData[1] ? parseInt(forecastYQData[1].q1_aggregate) : ''
             }`
           "
-          class="border border-warning"
+          class="border border-info"
         />
       </div>
     </div>
@@ -189,7 +189,7 @@
                 : ''
             }`
           "
-          class="border border-danger"
+          class="border border-info"
         />
       </div>
       <div class="col-md-4 mt-1">
@@ -205,7 +205,7 @@
               forecastYQData[0] ? parseInt(forecastYQData[0].q2_aggregate) : ''
             }`
           "
-          class="border border-warning"
+          class="border border-info"
         />
       </div>
     </div>
@@ -248,7 +248,7 @@
                 : ''
             }`
           "
-          class="border border-danger"
+          class="border border-info"
         />
       </div>
       <div class="col-md-4 mt-1">
@@ -264,7 +264,7 @@
               forecastYQData[0] ? parseInt(forecastYQData[0].q3_aggregate) : ''
             }`
           "
-          class="border border-warning"
+          class="border border-info"
         />
       </div>
     </div>
@@ -307,7 +307,7 @@
                 : ''
             }`
           "
-          class="border border-danger"
+          class="border border-info"
         />
       </div>
       <div class="col-md-4 mt-1">
@@ -323,7 +323,7 @@
               forecastYQData[0] ? parseInt(forecastYQData[0].q4_aggregate) : ''
             }`
           "
-          class="border border-warning"
+          class="border border-info"
         />
       </div>
     </div>
