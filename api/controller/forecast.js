@@ -64,7 +64,11 @@ const weeklyCommonTableDataMappingForAll = (data, filter) => {
     delete revenueObj["Title"];
     delete revenueObj["SKU"];
     for (let [key, value] of Object.entries(filter)) {
-      delete revenueObj[key];
+      let jsonKey = `Filter - ${key.replace("filter_",'').replace("_",' ').toLowerCase()
+      .split(' ')
+      .map((s) => s.charAt(0).toUpperCase() + s.substring(1))
+      .join(' ')}`;
+      delete revenueObj[jsonKey];
     }
     revenueObj["Forecast"] = "Units";
     finalData.push({
@@ -78,7 +82,11 @@ const weeklyCommonTableDataMappingForAll = (data, filter) => {
     delete revenueObj["Title"];
     delete revenueObj["SKU"];
     for (let [key, value] of Object.entries(filter)) {
-      delete revenueObj[key];
+      let jsonKey = `Filter - ${key.replace("filter_",'').replace("_",' ').toLowerCase()
+      .split(' ')
+      .map((s) => s.charAt(0).toUpperCase() + s.substring(1))
+      .join(' ')}`;
+      delete revenueObj[jsonKey];
     }
     revenueObj["Forecast"] = "AUR";
     finalData.push({
