@@ -350,7 +350,7 @@ export default {
       selectedFilterOptions: [],
       skusJsonData: [],
       isDownloadCsvDisbled: true,
-      csvFileName: `data-${moment().format("YYYY-MM-DD HH:MM:SS")}.csv`
+      csvFileName: `Filtered SKUs - ${moment().format("YYYY-MM-DD HH:MM:SS")}.csv`
     };
   },
   methods: {
