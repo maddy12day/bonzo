@@ -1,5 +1,5 @@
 <template>
-  <div class="row">
+  <div class="row selected-filters">
     <el-tag
       v-for="(item, index) in allAppliedFilters"
       :key="index"
@@ -34,5 +34,11 @@ export default {
 <style lang="scss">
 .filter-category {
   font-size: 16px;
+}
+
+.row {
+  &.selected-filters {
+    overflow-x: auto;
+  }
 }
 </style>

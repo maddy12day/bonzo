@@ -94,84 +94,144 @@
             sortable
             label="Source"
             property="filter_product_sources"
-          ></el-table-column>
+          >
+           <template slot-scope="scope">
+              <p v-if="scope.row.filter_product_sources != null">{{ scope.row.filter_product_sources }}</p>
+              <p v-else>All</p>
+            </template>
+          </el-table-column>
 
           <el-table-column
             min-width="150"
             sortable
             label="Life Cycle"
             property="filter_life_cycles"
-          ></el-table-column>
+          >
+           <template slot-scope="scope">
+              <p v-if="scope.row.filter_life_cycles != null">{{ scope.row.filter_life_cycles }}</p>
+              <p v-else>All</p>
+            </template>
+          </el-table-column>
 
           <el-table-column
             min-width="150"
             sortable
             label="Newness"
             property="filter_newness"
-          ></el-table-column>
+          >
+            <template slot-scope="scope">
+              <p v-if="scope.row.filter_newness != null">{{ scope.row.filter_newness }}</p>
+              <p v-else>All</p>
+            </template>
+          </el-table-column>
 
           <el-table-column
             min-width="150"
             sortable
             label="Brands"
             property="filter_brands"
-          ></el-table-column>
+          >
+            <template slot-scope="scope">
+              <p v-if="scope.row.filter_brands != null">{{ scope.row.filter_brands }}</p>
+              <p v-else>All</p>
+            </template>
+          </el-table-column>
 
           <el-table-column
             min-width="150"
             sortable
             label="Channels"
             property="filter_channels"
-          ></el-table-column>
+          >
+            <template slot-scope="scope">
+              <p v-if="scope.row.filter_channels != null">{{ scope.row.filter_channels }}</p>
+              <p v-else>All</p>
+            </template>
+          </el-table-column>
 
           <el-table-column
             min-width="150"
             sortable
             label="Sub Channels"
             property="filter_sub_channels"
-          ></el-table-column>
+          >
+            <template slot-scope="scope">
+              <p v-if="scope.row.filter_sub_channels != null">{{ scope.row.filter_sub_channels }}</p>
+              <p v-else>All</p>
+            </template>
+          </el-table-column>
 
           <el-table-column
             min-width="350"
             sortable
             label="Collections"
             property="filter_collections"
-          ></el-table-column>
+          >
+            <template slot-scope="scope">
+              <p v-if="scope.row.filter_collections != null">{{ scope.row.filter_collections }}</p>
+              <p v-else>All</p>
+            </template>
+          </el-table-column>
 
           <el-table-column
             min-width="150"
             sortable
             label="Skus"
             property="filter_skus"
-          ></el-table-column>
+          >
+            <template slot-scope="scope">
+              <p v-if="scope.row.filter_skus != null">{{ scope.row.filter_skus }}</p>
+              <p v-else>All</p>
+            </template>
+          </el-table-column>
 
           <el-table-column
             min-width="150"
             sortable
             label="Programs"
             property="filter_programs"
-          ></el-table-column>
+          >
+            <template slot-scope="scope">
+              <p v-if="scope.row.filter_programs != null">{{ scope.row.filter_programs }}</p>
+              <p v-else>All</p>
+            </template>
+          </el-table-column>
 
           <el-table-column
             min-width="300"
             sortable
             label="Categories"
             property="filter_categories"
-          ></el-table-column>
+          >
+            <template slot-scope="scope">
+              <p v-if="scope.row.filter_categories != null">{{ scope.row.filter_categories }}</p>
+              <p v-else>All</p>
+            </template>
+          </el-table-column>
 
           <el-table-column
             min-width="150"
             sortable
             label="Classes"
             property="filter_classes"
-          ></el-table-column>
+          >
+            <template slot-scope="scope">
+              <p v-if="scope.row.filter_classes != null">{{ scope.row.filter_classes }}</p>
+              <p v-else>All</p>
+            </template>
+          </el-table-column>
 
           <el-table-column
             min-width="150"
             sortable
             label="Sub Classes"
             property="filter_sub_classes"
-          ></el-table-column>
+          >
+            <template slot-scope="scope">
+              <p v-if="scope.row.filter_sub_classes != null">{{ scope.row.filter_sub_classes }}</p>
+              <p v-else>All</p>
+            </template>
+          </el-table-column>
         </el-table>
         <el-pagination
           small

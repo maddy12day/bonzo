@@ -23,7 +23,7 @@ const weeklyCommonTableDataMapping = (data) => {
   return finalData;
 };
 
-const weeklyCommonTableDataMappingForAll = (data) => {
+const weeklyCommonTableDataMappingForAll = (data, filter) => {
   const skus = data.map((item) => item.sku);
   const titles = data.map((item) => item.title);
   let uniqueSkus = [...new Set(skus)];
@@ -35,12 +35,17 @@ const weeklyCommonTableDataMappingForAll = (data) => {
       (item) => item.sku == uniqueSkus[i] && item.title == uniqueSkusTitle[i]
     );
     const revenueObj = {
-      sku: uniqueSkus[i],
-      title: uniqueSkusTitle[i],
-      filterName: "",
-      filterValue: "",
-      Forecast: "",
+      SKU: uniqueSkus[i],
+      Title: uniqueSkusTitle[i],
     };
+    for (let [key, value] of Object.entries(filter)) {
+      let jsonKey = `Filter - ${key.replace("filter_",'').replace("_",' ').toLowerCase()
+      .split(' ')
+      .map((s) => s.charAt(0).toUpperCase() + s.substring(1))
+      .join(' ')}`;
+      revenueObj[jsonKey] = value;
+    }
+    revenueObj["Forecast"] = "";
     const revenueSales = arr.map(
       (item, index) =>
         (revenueObj[`${moment(item.weekend).format("YYYY-MM-DD")}`] =
@@ -56,8 +61,15 @@ const weeklyCommonTableDataMappingForAll = (data) => {
         (revenueObj[`${moment(item.weekend).format("YYYY-MM-DD")}`] =
           item.units_sales)
     );
-    delete revenueObj.title;
-    delete revenueObj.sku;
+    delete revenueObj["Title"];
+    delete revenueObj["SKU"];
+    for (let [key, value] of Object.entries(filter)) {
+      let jsonKey = `Filter - ${key.replace("filter_",'').replace("_",' ').toLowerCase()
+      .split(' ')
+      .map((s) => s.charAt(0).toUpperCase() + s.substring(1))
+      .join(' ')}`;
+      delete revenueObj[jsonKey];
+    }
     revenueObj["Forecast"] = "Units";
     finalData.push({
       ...revenueObj,
@@ -67,8 +79,15 @@ const weeklyCommonTableDataMappingForAll = (data) => {
       (item, index) =>
         (revenueObj[`${moment(item.weekend).format("YYYY-MM-DD")}`] = item.aur)
     );
-    delete revenueObj.title;
-    delete revenueObj.sku;
+    delete revenueObj["Title"];
+    delete revenueObj["SKU"];
+    for (let [key, value] of Object.entries(filter)) {
+      let jsonKey = `Filter - ${key.replace("filter_",'').replace("_",' ').toLowerCase()
+      .split(' ')
+      .map((s) => s.charAt(0).toUpperCase() + s.substring(1))
+      .join(' ')}`;
+      delete revenueObj[jsonKey];
+    }
     revenueObj["Forecast"] = "AUR";
     finalData.push({
       ...revenueObj,
@@ -274,7 +293,8 @@ export const downloadAllSkusData = async (req, res) => {
 
     const filteredForecastData = await prisma.$queryRaw(query);
     let parsedWeeklyData = weeklyCommonTableDataMappingForAll(
-      filteredForecastData
+      filteredForecastData,
+      req.body
     );
     res.status(200).json({
       parsedWeeklyData,
@@ -365,7 +385,7 @@ const parseFilteredForecastData = (
           quarterTotal =
             quarterTotal +
             filteredForecastData[j][`${masterMetricData[i].name}`];
-          if (type == 'week') {
+          if (type == "week") {
             if (index == 13) {
               obj["Q1"] = quarterTotal;
               if (obj["Metrics Slug"] == "retail_sales") {
@@ -459,34 +479,34 @@ const parseFilteredForecastData = (
           quarterTotal =
             quarterTotal +
             filteredForecastData[j][`${masterMetricData[i].name}`];
-            if (type == 'week') {
-              if (index == 13) {
-                obj["Q1"] = (quarterTotal / 13).toFixed(2);
-                quarterTotal = 0;
-              } else if (index == 26) {
-                obj["Q2"] = (quarterTotal / 13).toFixed(2);
-                quarterTotal = 0;
-              } else if (index == 39) {
-                obj["Q3"] = (quarterTotal / 13).toFixed(2);
-                quarterTotal = 0;
-              } else if (index == 52) {
-                obj["Q4"] = (quarterTotal / 13).toFixed(2);
-                quarterTotal = 0;
-              }
-            } else {
-              if (index == 3) {
-                obj["Q1"] = (quarterTotal / 3).toFixed(2);
-                quarterTotal = 0;
-              } else if (index == 6) {
-                obj["Q2"] = (quarterTotal / 3).toFixed(2);
-                quarterTotal = 0;
-              } else if (index == 9) {
-                obj["Q3"] = (quarterTotal / 3).toFixed(2);
-                quarterTotal = 0;
-              } else if (index == 12) {
-                obj["Q4"] = (quarterTotal / 3).toFixed(2);
-                quarterTotal = 0;
-              }
+          if (type == "week") {
+            if (index == 13) {
+              obj["Q1"] = (quarterTotal / 13).toFixed(2);
+              quarterTotal = 0;
+            } else if (index == 26) {
+              obj["Q2"] = (quarterTotal / 13).toFixed(2);
+              quarterTotal = 0;
+            } else if (index == 39) {
+              obj["Q3"] = (quarterTotal / 13).toFixed(2);
+              quarterTotal = 0;
+            } else if (index == 52) {
+              obj["Q4"] = (quarterTotal / 13).toFixed(2);
+              quarterTotal = 0;
+            }
+          } else {
+            if (index == 3) {
+              obj["Q1"] = (quarterTotal / 3).toFixed(2);
+              quarterTotal = 0;
+            } else if (index == 6) {
+              obj["Q2"] = (quarterTotal / 3).toFixed(2);
+              quarterTotal = 0;
+            } else if (index == 9) {
+              obj["Q3"] = (quarterTotal / 3).toFixed(2);
+              quarterTotal = 0;
+            } else if (index == 12) {
+              obj["Q4"] = (quarterTotal / 3).toFixed(2);
+              quarterTotal = 0;
+            }
           }
         }
         obj["yearly_aggregate"] = (sum / indexForAvg).toFixed(2);
@@ -511,7 +531,13 @@ const parseFilteredForecastData = (
   return parsedData;
 };
 
-const getWeeklyFilteredForecastMetricsQuery = (transaction_db, regularQuery, countryQuery1, duration, countryQuery) => {
+const getWeeklyFilteredForecastMetricsQuery = (
+  transaction_db,
+  regularQuery,
+  countryQuery1,
+  duration,
+  countryQuery
+) => {
   let query = `
                 WITH current_base_forecast_run_log_id AS (
                 select
@@ -607,9 +633,15 @@ const getWeeklyFilteredForecastMetricsQuery = (transaction_db, regularQuery, cou
                   ${duration}(dfbwm.weekend);`;
 
   return query;
-}
+};
 
-const getMonthlyFilteredForecastMetricsQuery = (transaction_db, regularQuery, countryQuery1, duration, countryQuery) => {
+const getMonthlyFilteredForecastMetricsQuery = (
+  transaction_db,
+  regularQuery,
+  countryQuery1,
+  duration,
+  countryQuery
+) => {
   let query = `WITH current_base_forecast_run_log_id AS (
     select
       id
@@ -702,8 +734,8 @@ const getMonthlyFilteredForecastMetricsQuery = (transaction_db, regularQuery, co
         iskus)
     GROUP BY
       ${duration}(dfbwm.monthend);`;
-      return query;
-}
+  return query;
+};
 
 export const getFilteredForecastMetrics = async (req, res) => {
   let duration = req.body.filterType;
@@ -748,11 +780,23 @@ export const getFilteredForecastMetrics = async (req, res) => {
   try {
     let transaction_db = "morphe_staging";
 
-    let query = '';
-    if (duration == 'month') {
-      query = getMonthlyFilteredForecastMetricsQuery(transaction_db, regularQuery, countryQuery1, duration, countryQuery);
+    let query = "";
+    if (duration == "month") {
+      query = getMonthlyFilteredForecastMetricsQuery(
+        transaction_db,
+        regularQuery,
+        countryQuery1,
+        duration,
+        countryQuery
+      );
     } else {
-      query = getWeeklyFilteredForecastMetricsQuery(transaction_db, regularQuery, countryQuery1, duration, countryQuery);
+      query = getWeeklyFilteredForecastMetricsQuery(
+        transaction_db,
+        regularQuery,
+        countryQuery1,
+        duration,
+        countryQuery
+      );
     }
 
     const filteredForecastData = await prisma.$queryRaw(query);
