@@ -11,14 +11,21 @@ const weeklyCommonTableDataMapping = (data) => {
   let counter = uniqueSkus.length <= 10 ? uniqueSkus.length : 10;
   const finalData = [];
   for (let i = 0; i < counter; i++) {
-    let arr = data.filter(
-      (item) => item.sku == uniqueSkus[i] && item.title == uniqueSkusTitle[i]
-    );
+    let arr = data
+      .filter(
+        (item) =>
+          item.sku == uniqueSkus[i] &&
+          item.title == uniqueSkusTitle[i] &&
+          item.title &&
+          uniqueSkus[i]
+      )
+      if(uniqueSkusTitle[i] && arr.length > 0) {
     finalData.push({
       sku: uniqueSkus[i],
       title: uniqueSkusTitle[i],
       data: arr,
     });
+  }
   }
   return finalData;
 };
@@ -204,7 +211,6 @@ export const getFilteredForecastData = async (req, res) => {
                 ORDER BY
                   dfbwm.sku,
                   dfbwm.weekend;`;
-
     const filteredForecastData = await prisma.$queryRaw(query);
     let parsedWeeklyData = weeklyCommonTableDataMapping(filteredForecastData);
     res.status(200).json({
@@ -500,7 +506,6 @@ const parseFilteredForecastData = (
         ] = "--";
       }
       if (obj["Metrics Slug"] == "aur") {
-        console.log("quarter1RevenueTotal--", quarter1RevenueTotal);
         obj["yearly_aggregate"] = (revenueTotal / unitsTotal).toFixed(2);
         obj["Q1"] = (quarter1RevenueTotal / quarter1UnitsTotal).toFixed(2);
         obj["Q2"] = (quarter2RevenueTotal / quarter2UnitsTotal).toFixed(2);
@@ -845,7 +850,6 @@ const typlanQueryGeneratorByDurations = (
               GROUP BY
               ${duration}(pwurbcbs.weekend_date)`;
 
-  console.log("query--99--", query);
   return query;
 };
 
@@ -897,7 +901,7 @@ const thisYearSaleYearlyQuarterly = (
   duration,
   whereQueryString,
   transaction_db,
-  year,
+  year
 ) => {
   let dateOffset;
   let whereQueryStr = "";
@@ -926,7 +930,7 @@ const thisYearSaleYearlyQuarterly = (
                   ${duration}(fseisbw.weekend)
                 ORDER BY
                   ${duration}(fseisbw.weekend);`;
-console.log("query 1", query);
+  console.log("query 1", query);
 
   return query;
 };
