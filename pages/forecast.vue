@@ -110,7 +110,7 @@
       :key="filteredStatsComponentKey"
       @getSelectedYear="getSelectedFilteredYear"
     />
-    <ChartWidget v-if="!isFilteredForecast" />
+    <ChartWidget v-if="!isFilteredForecast" ref="chartWidget"/>
     <FilteredChartWidget
       ref="filteredChartWidget"
       v-if="isFilteredForecast"
@@ -373,6 +373,7 @@ export default {
       this.forecastedYear = value;
       this.showMetricsByDuration(this.activeTab);
       this.getWeekendDates(value);
+       this.$refs.chartWidget.chartInit(value);
     },
     getSelectedFilteredYear(value) {
       this.filteredForecastedYear = value;
