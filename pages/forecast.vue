@@ -372,13 +372,16 @@ export default {
     getSelectedYear(value) {
       this.forecastedYear = value;
       this.showMetricsByDuration(this.activeTab);
+      this.getWeekendDates(value);
     },
     getSelectedFilteredYear(value) {
       this.filteredForecastedYear = value;
+  
       this.$refs.filteredChartWidget.initChart(value);
       this.showFilteredMetricsByDuration(this.filteredActiveTab);
       this.getFilteredTopSkus();
       this.getFilteredWeeklyMetrics(this.requestedFilterOption);
+      this.getWeekendDates(value);
     },
     // filter value getter methods
     getProductSource(values) {
@@ -544,6 +547,19 @@ export default {
         requestedFilterOption
       );
       this.filteredForecastMetrics = filteredWeeklyforecast;
+    },
+    // retail weeekends
+     async getWeekendDates(value) {
+      const weekendDates = await this.$axios.$get(`/get-weekend-dates/${value}`);
+      window.localStorage.setItem(
+        "allUsersInfo",
+        JSON.stringify(this.userInfo)
+      );
+
+      localStorage.setItem(
+        "weekendDates",
+        JSON.stringify(weekendDates.weekends)
+      );
     },
     async getFilteredTopSkus() {
       this.skusJsonData = [];

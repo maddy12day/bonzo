@@ -109,6 +109,7 @@ export default {
       console.log("value", value);
       this.forecastedYear = value;
       this.showMetricsByDuration("Weekly");
+      this.getWeekendDates();
       this.$refs.chartWidget.chartInit(value);
     },
     // timeline api call
@@ -186,7 +187,7 @@ export default {
       );
     },
     async getWeekendDates() {
-      const weekendDates = await this.$axios.$get("/get-weekend-dates");
+      const weekendDates = await this.$axios.$get(`/get-weekend-dates/${this.forecastedYear}`);
       window.localStorage.setItem(
         "allUsersInfo",
         JSON.stringify(this.userInfo)

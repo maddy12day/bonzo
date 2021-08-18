@@ -47,7 +47,7 @@ export const getWeekendDates = async (req, res) => {
   try {
     const weekends = await prisma.dim_morphe_retail_weekends.findMany({
       where: {
-        year: "2021",
+        year: req.params.year,
       },
       select: {
         weekend: true,
@@ -232,9 +232,10 @@ export const getAdjustmentCategorySalesComparison = async (req, res) => {
 
 export const getWeekendDate = async () => {
   try{
+    const { year } = req.params;
     const weekends = await prisma.dim_morphe_retail_weekends.findMany({
      where: {
-     year: "2021"
+     year: year
      },
      select: {
        weekend: true
