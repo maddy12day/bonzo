@@ -30,7 +30,7 @@ const weeklyCommonTableDataMapping = (data) => {
   return finalData;
 };
 
-const weeklyCommonTableDataMappingForAll = (data) => {
+const weeklyCommonTableDataMappingForAll = (data, filter) => {
   const skus = data.map((item) => item.sku);
   const titles = data.map((item) => item.title);
   let uniqueSkus = [...new Set(skus)];
@@ -42,12 +42,17 @@ const weeklyCommonTableDataMappingForAll = (data) => {
       (item) => item.sku == uniqueSkus[i] && item.title == uniqueSkusTitle[i]
     );
     const revenueObj = {
-      sku: uniqueSkus[i],
-      title: uniqueSkusTitle[i],
-      filterName: "",
-      filterValue: "",
-      Forecast: "",
+      SKU: uniqueSkus[i],
+      Title: uniqueSkusTitle[i],
     };
+    for (let [key, value] of Object.entries(filter)) {
+      let jsonKey = `Filter - ${key.replace("filter_",'').replace("_",' ').toLowerCase()
+      .split(' ')
+      .map((s) => s.charAt(0).toUpperCase() + s.substring(1))
+      .join(' ')}`;
+      revenueObj[jsonKey] = value;
+    }
+    revenueObj["Forecast"] = "";
     const revenueSales = arr.map(
       (item, index) =>
         (revenueObj[`${moment(item.weekend).format("YYYY-MM-DD")}`] =
@@ -63,8 +68,15 @@ const weeklyCommonTableDataMappingForAll = (data) => {
         (revenueObj[`${moment(item.weekend).format("YYYY-MM-DD")}`] =
           item.units_sales)
     );
-    delete revenueObj.title;
-    delete revenueObj.sku;
+    delete revenueObj["Title"];
+    delete revenueObj["SKU"];
+    for (let [key, value] of Object.entries(filter)) {
+      let jsonKey = `Filter - ${key.replace("filter_",'').replace("_",' ').toLowerCase()
+      .split(' ')
+      .map((s) => s.charAt(0).toUpperCase() + s.substring(1))
+      .join(' ')}`;
+      delete revenueObj[jsonKey];
+    }
     revenueObj["Forecast"] = "Units";
     finalData.push({
       ...revenueObj,
@@ -74,8 +86,15 @@ const weeklyCommonTableDataMappingForAll = (data) => {
       (item, index) =>
         (revenueObj[`${moment(item.weekend).format("YYYY-MM-DD")}`] = item.aur)
     );
-    delete revenueObj.title;
-    delete revenueObj.sku;
+    delete revenueObj["Title"];
+    delete revenueObj["SKU"];
+    for (let [key, value] of Object.entries(filter)) {
+      let jsonKey = `Filter - ${key.replace("filter_",'').replace("_",' ').toLowerCase()
+      .split(' ')
+      .map((s) => s.charAt(0).toUpperCase() + s.substring(1))
+      .join(' ')}`;
+      delete revenueObj[jsonKey];
+    }
     revenueObj["Forecast"] = "AUR";
     finalData.push({
       ...revenueObj,
@@ -282,7 +301,8 @@ export const downloadAllSkusData = async (req, res) => {
 
     const filteredForecastData = await prisma.$queryRaw(query);
     let parsedWeeklyData = weeklyCommonTableDataMappingForAll(
-      filteredForecastData
+      filteredForecastData,
+      req.body
     );
     res.status(200).json({
       parsedWeeklyData,
