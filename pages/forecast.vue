@@ -106,8 +106,12 @@
       :allAppliedFilters="allAppliedFilters"
       :key="filteredStatsComponentKey"
     />
-    <ChartWidget v-if="!isFilteredForecast"/>
-    <FilteredChartWidget v-if="isFilteredForecast" :requestedFilterOption="requestedFilterOption" :key="filterChartComponentKey"/>
+    <ChartWidget v-if="!isFilteredForecast" />
+    <FilteredChartWidget
+      v-if="isFilteredForecast"
+      :requestedFilterOption="requestedFilterOption"
+      :key="filterChartComponentKey"
+    />
 
     <!-- Adjustments Table -->
     <AdjustmentTable
@@ -238,16 +242,15 @@
       </div>
       <div class="col-md-3">
         <a>
-          <download-csv
-          v-if="isFilteredForecast"
-          class="mt-1 btn btn-sm"
-          style="line-height:1;"
-          :data="skusJsonData"
-          :name="csvFileName"
-          :disabled="isDownloadCsvDisbled"
-        >
-          Download CSV
-        </download-csv>
+          <button
+            v-if="isFilteredForecast"
+            class="mt-1 btn btn-sm"
+            style="line-height:1;"
+            @click="exportToExcel"
+            :disabled="isDownloadCsvDisbled"
+          >
+            Download CSV
+          </button>
         </a>
       </div>
     </div>
@@ -292,8 +295,10 @@ import FilteredStatsWidget from "../components/FilteredStatsWidget.vue";
 import ManualAdjustmentTable from "../components/Metrics/ManualAdjustmentTable.vue";
 import Tags from "../components/Tags.vue";
 import ChartWidget from "../components/ChartWidget.vue";
-import FilteredChartWidget from '../components/FilterChartWidget.vue';
-import moment from 'moment';
+import FilteredChartWidget from "../components/FilterChartWidget.vue";
+import moment from "moment";
+import XLSX from "xlsx";
+// import api from "@/service";
 
 export default {
   name: "Forecast",
@@ -350,10 +355,42 @@ export default {
       selectedFilterOptions: [],
       skusJsonData: [],
       isDownloadCsvDisbled: true,
-      csvFileName: `Filtered SKUs - ${moment().format("YYYY-MM-DD HH:MM:SS")}.csv`
+      filterArray: [],
+      csvFileName: `Filtered SKUs - ${moment().format(
+        "YYYY-MM-DD HH:MM:SS"
+      )}.xlsx`,
     };
   },
   methods: {
+    exportToExcel() {
+      this.filterArray = [];
+      for (let [key, value] of Object.entries(this.filterPayload)) {
+        let jsonKey = `${key
+          .replace("filter_", "")
+          .replace("_", " ")
+          .toLowerCase()
+          .split(" ")
+          .map((s) => s.charAt(0).toUpperCase() + s.substring(1))
+          .join(" ")}`;
+        this.filterArray.push({
+          "Filter Name": jsonKey,
+          "Filter Value": value.join(","),
+        });
+      }
+
+      let filterPayload = XLSX.utils.json_to_sheet(this.filterArray);
+      let skus = XLSX.utils.json_to_sheet(this.skusJsonData);
+
+      let wb = XLSX.utils.book_new(); // make Workbook of Excel
+
+      // add Worksheet to Workbook
+      // Workbook contains one or more worksheets
+      XLSX.utils.book_append_sheet(wb, filterPayload, "Applied Filters"); // sheetAName is name of Worksheet
+      XLSX.utils.book_append_sheet(wb, skus, "SKUs");
+
+      // export Excel file
+      XLSX.writeFile(wb, this.csvFileName); // name of the file is 'book.xlsx'
+    },
     // filter value getter methods
     getProductSource(values) {
       this.productSourceValues = values;
@@ -532,8 +569,8 @@ export default {
         this.filterPayload
       );
       this.skusJsonData = csvJsonData.parsedWeeklyData;
-      console.log("skusJsonData",this.skusJsonData);
-      console.log(this.selectedFilters)
+      console.log("skusJsonData", this.skusJsonData);
+      console.log(this.selectedFilters);
       this.isDownloadCsvDisbled = false; /* .map(item => {
         return {
           sku: item.sku,
@@ -644,7 +681,7 @@ export default {
         }
       }
     },
-      
+
     resetFilter() {
       this.forceRerender();
       this.isFilteredForecast = false;
@@ -696,7 +733,7 @@ export default {
       }
 
       this.requestedFilterOption = requestedFilterOption;
-        this.filterChartComponentKey +=1;
+      this.filterChartComponentKey += 1;
       delete this.requestedFilterOption["filterType"];
       // await this.getFilteredForecastData(requestedFilterOption);
       this.filteredStatsComponentKey += 1;
@@ -733,7 +770,7 @@ export default {
       this.regularFiltersComponentKey += 1;
       this.filteredStatsComponentKey += 1;
       this.programFiltersComponentKey += 1;
-      this.filterChartComponentKey +=1;
+      this.filterChartComponentKey += 1;
     },
   },
   computed: {

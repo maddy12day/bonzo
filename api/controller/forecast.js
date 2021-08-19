@@ -37,15 +37,16 @@ const weeklyCommonTableDataMappingForAll = (data, filter) => {
     const revenueObj = {
       SKU: uniqueSkus[i],
       Title: uniqueSkusTitle[i],
+      Forecast: "",
     };
-    for (let [key, value] of Object.entries(filter)) {
-      let jsonKey = `Filter - ${key.replace("filter_",'').replace("_",' ').toLowerCase()
-      .split(' ')
-      .map((s) => s.charAt(0).toUpperCase() + s.substring(1))
-      .join(' ')}`;
-      revenueObj[jsonKey] = value;
-    }
-    revenueObj["Forecast"] = "";
+    // for (let [key, value] of Object.entries(filter)) {
+    //   let jsonKey = `Filter - ${key.replace("filter_",'').replace("_",' ').toLowerCase()
+    //   .split(' ')
+    //   .map((s) => s.charAt(0).toUpperCase() + s.substring(1))
+    //   .join(' ')}`;
+    //   revenueObj[jsonKey] = value;
+    // }
+
     const revenueSales = arr.map(
       (item, index) =>
         (revenueObj[`${moment(item.weekend).format("YYYY-MM-DD")}`] =
@@ -63,13 +64,13 @@ const weeklyCommonTableDataMappingForAll = (data, filter) => {
     );
     delete revenueObj["Title"];
     delete revenueObj["SKU"];
-    for (let [key, value] of Object.entries(filter)) {
-      let jsonKey = `Filter - ${key.replace("filter_",'').replace("_",' ').toLowerCase()
-      .split(' ')
-      .map((s) => s.charAt(0).toUpperCase() + s.substring(1))
-      .join(' ')}`;
-      delete revenueObj[jsonKey];
-    }
+    // for (let [key, value] of Object.entries(filter)) {
+    //   let jsonKey = `Filter - ${key.replace("filter_",'').replace("_",' ').toLowerCase()
+    //   .split(' ')
+    //   .map((s) => s.charAt(0).toUpperCase() + s.substring(1))
+    //   .join(' ')}`;
+    //   delete revenueObj[jsonKey];
+    // }
     revenueObj["Forecast"] = "Units";
     finalData.push({
       ...revenueObj,
@@ -81,13 +82,13 @@ const weeklyCommonTableDataMappingForAll = (data, filter) => {
     );
     delete revenueObj["Title"];
     delete revenueObj["SKU"];
-    for (let [key, value] of Object.entries(filter)) {
-      let jsonKey = `Filter - ${key.replace("filter_",'').replace("_",' ').toLowerCase()
-      .split(' ')
-      .map((s) => s.charAt(0).toUpperCase() + s.substring(1))
-      .join(' ')}`;
-      delete revenueObj[jsonKey];
-    }
+    // for (let [key, value] of Object.entries(filter)) {
+    //   let jsonKey = `Filter - ${key.replace("filter_",'').replace("_",' ').toLowerCase()
+    //   .split(' ')
+    //   .map((s) => s.charAt(0).toUpperCase() + s.substring(1))
+    //   .join(' ')}`;
+    //   delete revenueObj[jsonKey];
+    // }
     revenueObj["Forecast"] = "AUR";
     finalData.push({
       ...revenueObj,
