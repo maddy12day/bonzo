@@ -251,16 +251,15 @@
       </div>
       <div class="col-md-3">
         <a>
-          <download-csv
+          <button
             v-if="isFilteredForecast"
             class="mt-1 btn btn-sm"
             style="line-height:1;"
-            :data="skusJsonData"
-            :name="csvFileName"
+            @click="exportToExcel"
             :disabled="isDownloadCsvDisbled"
           >
             Download CSV
-          </download-csv>
+          </button>
         </a>
       </div>
     </div>
@@ -307,6 +306,7 @@ import Tags from "../components/Tags.vue";
 import ChartWidget from "../components/ChartWidget.vue";
 import FilteredChartWidget from "../components/FilterChartWidget.vue";
 import moment from "moment";
+import XLSX from "xlsx";
 
 export default {
   name: "Forecast",
@@ -365,10 +365,38 @@ export default {
       isDownloadCsvDisbled: true,
       forecastedYear: "2021",
       filteredForecastedYear: "2021",
-      csvFileName: `data-${moment().format("YYYY-MM-DD HH:MM:SS")}.csv`,
+      filterArray: [],
+      csvFileName: `Filtered SKUs - ${moment().format(
+        "YYYY-MM-DD HH:MM:SS"
+      )}.xlsx`,
     };
   },
   methods: {
+    exportToExcel() {
+      this.filterArray = [];
+      for (let [key, value] of Object.entries(this.filterPayload)) {
+        let jsonKey = `${key
+          .replace("filter_", "")
+          .replace("_", " ")
+          .toLowerCase()
+          .split(" ")
+          .map((s) => s.charAt(0).toUpperCase() + s.substring(1))
+          .join(" ")}`;
+        this.filterArray.push({
+          "Filter Name": jsonKey,
+          "Filter Value": value.join(","),
+        });
+      }
+      let filterPayload = XLSX.utils.json_to_sheet(this.filterArray);
+      let skus = XLSX.utils.json_to_sheet(this.skusJsonData);
+      let wb = XLSX.utils.book_new(); // make Workbook of Excel
+      // add Worksheet to Workbook
+      // Workbook contains one or more worksheets
+      XLSX.utils.book_append_sheet(wb, filterPayload, "Applied Filters"); // sheetAName is name of Worksheet
+      XLSX.utils.book_append_sheet(wb, skus, "SKUs");
+      // export Excel file
+      XLSX.writeFile(wb, this.csvFileName); // name of the file is 'book.xlsx'
+    },
     getSelectedYear(value) {
       this.forecastedYear = value;
       this.showMetricsByDuration(this.activeTab);
