@@ -387,6 +387,7 @@ export default {
      getSelectedYear(evt) {
       this.forecastedYear = evt.target.value;
       this.$emit("getSelectedYear", this.forecastedYear);
+      this.getFilteredStatsWidgetData()
      },
     async calloutByDuration(duration) {
       this.currentYQTab = duration;
