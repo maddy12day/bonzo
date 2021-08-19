@@ -3,7 +3,7 @@ import { getBaseAdjustments, createManualAdjustment, getWeekendDates, checkAdjus
 
 const router = Router();
 router.get("/get-base-adjustments", getBaseAdjustments);
-router.get('/get-weekend-dates', getWeekendDates);
+router.get('/get-weekend-dates/:year', getWeekendDates);
 router.post('/create-manualadjustment', createManualAdjustment);
 router.get('/get-adjustment-status/:id', checkAdjustmentStatus);
 router.get('/get-adjustment/:id', getAdjustmentById)

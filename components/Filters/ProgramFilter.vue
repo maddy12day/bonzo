@@ -998,12 +998,14 @@ export default {
         life_cycle: this.lifeCycleValues,
         newness: this.newnessValues,
         brand: this.brandValues,
-        program: this.programValues,
+        collab: this.programValues,
       };
+      console.log(brandTypes)
       const cleanObject = this.emptyFieldCleaner(brandTypes);
       const dataListGroup = this.filterDrilldown(
         cleanObject
       );
+      console.log(dataListGroup)
       this.channelOptions = [
         ...new Set(dataListGroup.map((item) => item.channel)),
       ].map((item) => {
@@ -1087,7 +1089,7 @@ export default {
         life_cycle: this.lifeCycleValues,
         newness: this.newnessValues,
         brand: this.brandValues,
-        program: this.programValues,
+        collab: this.programValues,
         channel: this.channelValues,
       };
       const cleanObject = this.emptyFieldCleaner(brandTypes);
@@ -1162,7 +1164,7 @@ export default {
         life_cycle: this.lifeCycleValues,
         newness: this.newnessValues,
         brand: this.brandValues,
-        program: this.programValues,
+        collab: this.programValues,
         channel: this.channelValues,
         sub_channel: this.subChannelValues,
       };
@@ -1230,7 +1232,7 @@ export default {
         life_cycle: this.lifeCycleValues,
         newness: this.newnessValues,
         brand: this.brandValues,
-        program: this.programValues,
+        collab: this.programValues,
         channel: this.channelValues,
         sub_channel: this.subChannelValues,
         category: this.categoriesValues,
@@ -1288,7 +1290,7 @@ export default {
         life_cycle: this.lifeCycleValues,
         newness: this.newnessValues,
         brand: this.brandValues,
-        program: this.programValues,
+        collab: this.programValues,
         channel: this.channelValues,
         sub_channel: this.subChannelValues,
         category: this.categoriesValues,
@@ -1337,7 +1339,7 @@ export default {
         life_cycle: this.lifeCycleValues,
         newness: this.newnessValues,
         brand: this.brandValues,
-        program: this.programValues,
+        collab: this.programValues,
         channel: this.channelValues,
         sub_channel: this.subChannelValues,
         category: this.categoriesValues,
@@ -1378,7 +1380,7 @@ export default {
         life_cycle: this.lifeCycleValues,
         newness: this.newnessValues,
         brand: this.brandValues,
-        program: this.programValues,
+        collab: this.programValues,
         channel: this.channelValues,
         sub_channel: this.subChannelValues,
         category: this.categoriesValues,

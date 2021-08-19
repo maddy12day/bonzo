@@ -1,7 +1,18 @@
 <template>
   <card card-body-classes="table-full-width">
-    <div class="row" v-if="forecastYQData.length > 0">
-      <div class="col-md-12 text-right mb-2">
+    <div class="row">
+      <div class="col-md-2">
+        <select
+          class="form-control selectpicker"
+          data-style="btn btn-link"
+          id="exampleFormControlSelect1"
+          @change="getSelectedYear"
+        >
+          <option value="2021">2021</option>
+          <option value="2022">2022</option>
+        </select>
+      </div>
+      <div class="col-md-3 mb-2 text-right offset-md-7">
         <div class="btn-group btn-group-toggle" data-toggle="buttons">
           <label
             v-for="(option, index) in yearlyQuarterlyTabs"
@@ -332,6 +343,7 @@ export default {
       yearlyPlannedData: [],
       yearlySaleData: [],
       currentYQTab: "Yearly",
+      forecastedYear: "2021",
     };
   },
   components: {
@@ -339,6 +351,14 @@ export default {
     YearlyQuarterlyCard,
   },
   methods: {
+    getSelectedYear(evt) {
+      this.forecastedYear = evt.target.value;
+       this.forecastYearlyQuarterly();
+      this.yearlySale();
+      this.yearlyPlanned()
+      this.$emit("getSelectedYear", evt.target.value);
+     ;
+    },
     async calloutByDuration(duration) {
       this.currentYQTab = duration;
       const booleanDuration = ["Q1", "Q2", "Q3", "Q4"].find(
@@ -353,7 +373,7 @@ export default {
     async quarterlySale() {
       this.$store.commit("toggleStatsAPIResponseState", false);
       const quaterly = await this.$axios.$get(
-        "/based-quarterly-sale-this-year",
+        `/based-quarterly-sale-this-year/${this.forecastedYear}`,
         {
           progress: true,
         }
@@ -364,27 +384,36 @@ export default {
 
     async quarterlyPlanned() {
       this.$store.commit("toggleStatsAPIResponseState", false);
-      const quarterly = await this.$axios.$get("/based-quarterly-planned", {
-        progress: true,
-      });
+      const quarterly = await this.$axios.$get(
+        `/based-quarterly-planned/${this.forecastedYear}`,
+        {
+          progress: true,
+        }
+      );
       this.quarterlyPlannedData = quarterly.baseQuarterlyPlanned;
       this.$store.commit("toggleStatsAPIResponseState", true);
     },
 
     async yearlySale() {
       this.$store.commit("toggleStatsAPIResponseState", false);
-      const yearly = await this.$axios.$get("/based-yearly-sale-this-year", {
-        progress: true,
-      });
+      const yearly = await this.$axios.$get(
+        `/based-yearly-sale-this-year/${this.forecastedYear}`,
+        {
+          progress: true,
+        }
+      );
       this.yearlySaleData = yearly.baseYearlySale;
       this.$store.commit("toggleStatsAPIResponseState", true);
     },
 
     async yearlyPlanned() {
       this.$store.commit("toggleStatsAPIResponseState", false);
-      const yearly = await this.$axios.$get("/base-yearly-planned", {
-        progress: true,
-      });
+      const yearly = await this.$axios.$get(
+        `/base-yearly-planned/${this.forecastedYear}`,
+        {
+          progress: true,
+        }
+      );
       this.yearlyPlannedData = yearly.baseYearlyPlanned;
       this.$store.commit("toggleStatsAPIResponseState", true);
     },
@@ -392,7 +421,7 @@ export default {
     async forecastYearlyQuarterly() {
       this.$store.commit("toggleStatsAPIResponseState", false);
       const forecast = await this.$axios.$get(
-        "/base-yearly-quarterly-forecast",
+        `/base-yearly-quarterly-forecast/${this.forecastedYear}`,
         {
           progress: true,
         }
@@ -402,12 +431,16 @@ export default {
       this.$store.commit("toggleStatsAPIResponseState", true);
     },
   },
+  watch: {},
   async mounted() {
     this.forecastYearlyQuarterly();
     this.yearlySale();
     this.yearlyPlanned();
   },
   computed: {
+    forecastYearCom() {
+      return this.forecastedYear;
+    },
     yearlyQuarterlyTabs() {
       return [
         { name: "Yearly", acronym: "Y", icon: "tim-icons icon-planet" },
@@ -421,4 +454,9 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped>
+#exampleFormControlSelect1 {
+  height: auto;
+  margin-top: 3px;
+}
+</style>

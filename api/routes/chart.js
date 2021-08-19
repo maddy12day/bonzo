@@ -3,7 +3,7 @@ import { getMonthlyChartBaseData, getWeeklyChartBaseData, getWeeklyChartData } f
 
 const router = Router();
 router.get("/weekly-chart-data", getWeeklyChartData);
-router.get('/weekly-base-forecast-chart', getWeeklyChartBaseData);
-router.get('/monthly-base-forecast-chart', getMonthlyChartBaseData)
+router.get('/weekly-base-forecast-chart/:forecasted_year', getWeeklyChartBaseData);
+router.get('/monthly-base-forecast-chart/:forecasted_year', getMonthlyChartBaseData)
 
 export default router;

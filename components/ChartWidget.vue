@@ -160,6 +160,7 @@ export default {
   components: {
     LineChart,
   },
+  
   data() {
     return {
       activeIndex: 0,
@@ -188,6 +189,7 @@ export default {
         gradientStops: [1, 0.4, 0],
         categories: [],
       },
+        forecastedYear: "2021"
     };
   },
   computed: {
@@ -213,17 +215,25 @@ export default {
     },
   },
   methods: {
+    chartInit(year) {
+    this.forecastedYear = year;
+     this.baseWeeklyChart();
+    this.baseMonthlyChart();
+  },
     async baseWeeklyChart() {
-      const chartData = await this.$axios.$get("/weekly-base-forecast-chart");
+      const chartData = await this.$axios.$get(
+        `/weekly-base-forecast-chart/${this.forecastedYear}`
+      );
       this.chartWeeklylApiJsonData = chartData;
       this.changeWeeklyDataByType("Revenue");
-     
     },
     async baseMonthlyChart() {
-      const chartData = await this.$axios.$get("/monthly-base-forecast-chart");
+      const chartData = await this.$axios.$get(
+        `/monthly-base-forecast-chart/${this.forecastedYear}`
+      );
       this.chartMonthlyApiJsonData = chartData;
       this.changeMonthDataByType("Revenue");
-       this.initForecastChart(0);
+      this.initForecastChart(0);
     },
     initForecastChartType(index) {
       console.log("omg", index);
@@ -316,6 +326,7 @@ export default {
 
       console.log(this.weeklyUnitsChartData);
     },
+
     initForecastChart(index) {
       this.activeIndex = index;
       this.activeIndexChart == 1 && this.activeIndex == 1
@@ -448,13 +459,12 @@ export default {
       }
     },
   },
+ 
+
   mounted() {
-    this.baseWeeklyChart();
-    this.baseMonthlyChart();
+   this.chartInit(this.forecastedYear)
   },
 };
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

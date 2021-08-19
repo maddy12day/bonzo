@@ -98,16 +98,21 @@
     <!-- Applied filters pills (Vishal) -->
 
     <!-- Base Year/Quarter Stats / Filtered Year/Quarter Stats (Vishal) -->
-    <StatsWidget v-if="!isFilteredForecast" />
+    <StatsWidget
+      v-if="!isFilteredForecast"
+      @getSelectedYear="getSelectedYear"
+    />
     <FilteredStatsWidget
       :filterPayload="filterPayload"
       ref="filterWidgets"
       v-if="isFilteredForecast"
       :allAppliedFilters="allAppliedFilters"
       :key="filteredStatsComponentKey"
+      @getSelectedYear="getSelectedFilteredYear"
     />
-    <ChartWidget v-if="!isFilteredForecast" />
+    <ChartWidget v-if="!isFilteredForecast" ref="chartWidget"/>
     <FilteredChartWidget
+      ref="filteredChartWidget"
       v-if="isFilteredForecast"
       :requestedFilterOption="requestedFilterOption"
       :key="filterChartComponentKey"
@@ -122,25 +127,27 @@
     />
 
     <card card-body-classes="table-full-width" v-if="!isFilteredForecast">
-      <div class="col-md-12 text-right p-0">
-        <div class="btn-group btn-group-toggle" data-toggle="buttons">
-          <label
-            v-for="(option, index) in Durations"
-            :key="option.name"
-            class="btn btn-sm btn-primary btn-simple"
-            :id="index"
-            :class="{ active: activeTab == option.name }"
-          >
-            <input
-              type="radio"
-              name="options"
-              autocomplete="off"
-              checked=""
-              @click="showMetricsByDuration(option.name)"
-            />
-            <span class="d-none d-sm-block">{{ option.name }}</span>
-            <span class="d-block d-sm-none">{{ option.name }}</span>
-          </label>
+      <div class="row mt-1">
+        <div class="col-md-2 text-right offset-md-10">
+          <div class="btn-group btn-group-toggle" data-toggle="buttons">
+            <label
+              v-for="(option, index) in Durations"
+              :key="option.name"
+              class="btn btn-sm btn-primary btn-simple"
+              :id="index"
+              :class="{ active: activeTab == option.name }"
+            >
+              <input
+                type="radio"
+                name="options"
+                autocomplete="off"
+                checked=""
+                @click="showMetricsByDuration(option.name)"
+              />
+              <span class="d-none d-sm-block">{{ option.name }}</span>
+              <span class="d-block d-sm-none">{{ option.name }}</span>
+            </label>
+          </div>
         </div>
       </div>
 
@@ -198,25 +205,27 @@
 
     <!-- <div v-if="isFilteredForecast"> -->
     <card card-body-classes="table-full-width" v-if="isFilteredForecast">
-      <div class="col-md-12 text-right p-0">
-        <div class="btn-group btn-group-toggle" data-toggle="buttons">
-          <label
-            v-for="(option, index) in FilteredDurations"
-            :key="option.name"
-            class="btn btn-sm btn-primary btn-simple"
-            :id="index"
-            :class="{ active: filteredActiveTab == option.name }"
-          >
-            <input
-              type="radio"
-              name="options"
-              autocomplete="off"
-              checked=""
-              @click="showFilteredMetricsByDuration(option.name)"
-            />
-            <span class="d-none d-sm-block">{{ option.name }}</span>
-            <span class="d-block d-sm-none">{{ option.acronym }}</span>
-          </label>
+      <div class="row mt-1">
+        <div class="col-md-2 text-right offset-md-10">
+          <div class="btn-group btn-group-toggle" data-toggle="buttons">
+            <label
+              v-for="(option, index) in FilteredDurations"
+              :key="option.name"
+              class="btn btn-sm btn-primary btn-simple"
+              :id="index"
+              :class="{ active: filteredActiveTab == option.name }"
+            >
+              <input
+                type="radio"
+                name="options"
+                autocomplete="off"
+                checked=""
+                @click="showFilteredMetricsByDuration(option.name)"
+              />
+              <span class="d-none d-sm-block">{{ option.name }}</span>
+              <span class="d-block d-sm-none">{{ option.acronym }}</span>
+            </label>
+          </div>
         </div>
       </div>
 
@@ -298,7 +307,6 @@ import ChartWidget from "../components/ChartWidget.vue";
 import FilteredChartWidget from "../components/FilterChartWidget.vue";
 import moment from "moment";
 import XLSX from "xlsx";
-// import api from "@/service";
 
 export default {
   name: "Forecast",
@@ -355,6 +363,8 @@ export default {
       selectedFilterOptions: [],
       skusJsonData: [],
       isDownloadCsvDisbled: true,
+      forecastedYear: "2021",
+      filteredForecastedYear: "2021",
       filterArray: [],
       csvFileName: `Filtered SKUs - ${moment().format(
         "YYYY-MM-DD HH:MM:SS"
@@ -377,19 +387,30 @@ export default {
           "Filter Value": value.join(","),
         });
       }
-
       let filterPayload = XLSX.utils.json_to_sheet(this.filterArray);
       let skus = XLSX.utils.json_to_sheet(this.skusJsonData);
-
       let wb = XLSX.utils.book_new(); // make Workbook of Excel
-
       // add Worksheet to Workbook
       // Workbook contains one or more worksheets
       XLSX.utils.book_append_sheet(wb, filterPayload, "Applied Filters"); // sheetAName is name of Worksheet
       XLSX.utils.book_append_sheet(wb, skus, "SKUs");
-
       // export Excel file
       XLSX.writeFile(wb, this.csvFileName); // name of the file is 'book.xlsx'
+    },
+    getSelectedYear(value) {
+      this.forecastedYear = value;
+      this.showMetricsByDuration(this.activeTab);
+      this.getWeekendDates(value);
+       this.$refs.chartWidget.chartInit(value);
+    },
+    getSelectedFilteredYear(value) {
+      this.filteredForecastedYear = value;
+  
+      this.$refs.filteredChartWidget.initChart(value);
+      this.showFilteredMetricsByDuration(this.filteredActiveTab);
+      this.getFilteredTopSkus();
+      this.getFilteredWeeklyMetrics(this.requestedFilterOption);
+      this.getWeekendDates(value);
     },
     // filter value getter methods
     getProductSource(values) {
@@ -495,7 +516,7 @@ export default {
       if (this.activeTab == "Weekly") {
         // base metrics table for weekly
         const baseWeeklyMetricsListString = await this.$axios.$get(
-          "/base-weekly-metrics",
+          `/base-weekly-metrics/${this.forecastedYear}`,
           {
             progress: true,
           }
@@ -514,7 +535,7 @@ export default {
       } else {
         // base metrics table for monthly
         const baseMonthlyMetricsListString = await this.$axios.$get(
-          "/base-monthly-metrics",
+          `/base-monthly-metrics/${this.forecastedYear}`,
           {
             progress: true,
           }
@@ -537,7 +558,7 @@ export default {
         this.filterMonthly = true;
       }
       this.filteredForecastMetrics = await this.$axios.$post(
-        `/get-filtered-forecast-metrics`,
+        `/get-filtered-forecast-metrics/${this.filteredForecastedYear}`,
         requestedFilterOption
       );
     },
@@ -549,23 +570,36 @@ export default {
     },
     async getFilteredWeeklyMetrics(requestedFilterOption) {
       requestedFilterOption["filterType"] = "week";
-
+      this.requestedFilterOption = requestedFilterOption;
       const filteredWeeklyforecast = await this.$axios.$post(
-        `/get-filtered-forecast-metrics`,
+        `/get-filtered-forecast-metrics/${this.filteredForecastedYear}`,
         requestedFilterOption
       );
       this.filteredForecastMetrics = filteredWeeklyforecast;
+    },
+    // retail weeekends
+     async getWeekendDates(value) {
+      const weekendDates = await this.$axios.$get(`/get-weekend-dates/${value}`);
+      window.localStorage.setItem(
+        "allUsersInfo",
+        JSON.stringify(this.userInfo)
+      );
+
+      localStorage.setItem(
+        "weekendDates",
+        JSON.stringify(weekendDates.weekends)
+      );
     },
     async getFilteredTopSkus() {
       this.skusJsonData = [];
       this.isDownloadCsvDisbled = true;
       const topTenSkusData = await this.$axios.$post(
-        `/get-filtered-forecast-data`,
+        `/get-filtered-forecast-data/${this.filteredForecastedYear}`,
         this.filterPayload
       );
       this.topTenSkusData = topTenSkusData;
       const csvJsonData = await this.$axios.$post(
-        "/download-all-skus-data",
+        `/download-all-skus-data/${this.filteredForecastedYear}`,
         this.filterPayload
       );
       this.skusJsonData = csvJsonData.parsedWeeklyData;

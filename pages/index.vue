@@ -13,9 +13,8 @@
         </div>
       </el-collapse-item>
     </el-collapse>
-
-    <StatsWidget />
-    <ChartWidget />
+    <StatsWidget @getSelectedYear="getSelectedYear" />
+    <ChartWidget ref="chartWidget"/>
 
     <ScenarioTable
       v-if="
@@ -30,25 +29,27 @@
     />
 
     <card card-body-classes="table-full-width">
-      <div class="col-md-12 text-right p-0">
-        <div class="btn-group btn-group-toggle" data-toggle="buttons">
-          <label
-            v-for="(option, index) in Durations"
-            :key="option.name"
-            class="btn btn-sm btn-primary btn-simple"
-            :id="index"
-            :class="{ active: activeTab == option.name }"
-          >
-            <input
-              type="radio"
-              name="options"
-              autocomplete="off"
-              checked=""
-              @click="showMetricsByDuration(option.name)"
-            />
-            <span class="d-none d-sm-block">{{ option.name }}</span>
-            <span class="d-block d-sm-none">{{ option.name }}</span>
-          </label>
+      <div class="row mt-1">
+        <div class="col-md-2 text-right offset-md-10">
+          <div class="btn-group btn-group-toggle" data-toggle="buttons">
+            <label
+              v-for="(option, index) in Durations"
+              :key="option.name"
+              class="btn btn-sm btn-primary btn-simple"
+              :id="index"
+              :class="{ active: activeTab == option.name }"
+            >
+              <input
+                type="radio"
+                name="options"
+                autocomplete="off"
+                checked=""
+                @click="showMetricsByDuration(option.name)"
+              />
+              <span class="d-none d-sm-block">{{ option.name }}</span>
+              <span class="d-block d-sm-none">{{ option.name }}</span>
+            </label>
+          </div>
         </div>
       </div>
       <client-only>
@@ -86,6 +87,7 @@ export default {
       callToIntervalAjax: true,
       genesisNodeTimeline: [],
       mergedScenariosTimeLine: [],
+      forecastedYear: "2021",
     };
   },
   components: {
@@ -102,6 +104,13 @@ export default {
       this.sharedScenariosList = await this.$axios.$get("/shared-scenarios", {
         progress: true,
       });
+    },
+    getSelectedYear(value) {
+      console.log("value", value);
+      this.forecastedYear = value;
+      this.showMetricsByDuration("Weekly");
+      this.getWeekendDates();
+      this.$refs.chartWidget.chartInit(value);
     },
     // timeline api call
     async getTimelineDetails() {
@@ -144,7 +153,7 @@ export default {
         });
         // base metrics table for weekly
         const baseWeeklyMetricsListString = await this.$axios.$get(
-          "/base-weekly-metrics",
+          `/base-weekly-metrics/${this.forecastedYear}`,
           {
             progress: true,
           }
@@ -159,7 +168,7 @@ export default {
       } else {
         // base metrics table for monthly
         const baseMonthlyMetricsListString = await this.$axios.$get(
-          "/base-monthly-metrics",
+          `/base-monthly-metrics/${this.forecastedYear}`,
           {
             progress: true,
           }
@@ -178,7 +187,7 @@ export default {
       );
     },
     async getWeekendDates() {
-      const weekendDates = await this.$axios.$get("/get-weekend-dates");
+      const weekendDates = await this.$axios.$get(`/get-weekend-dates/${this.forecastedYear}`);
       window.localStorage.setItem(
         "allUsersInfo",
         JSON.stringify(this.userInfo)
@@ -200,8 +209,15 @@ export default {
       this.checkMergeScenarioStatus();
     }, 10000);
   },
-
+  watch: {
+    forecastedYearWatch(val) {
+      this.forecastedYear = val;
+    },
+  },
   computed: {
+    forecatedYearCom() {
+      return this.forecastedYear;
+    },
     callToIntervalAjaxSCom() {
       return this.callToIntervalAjax;
     },

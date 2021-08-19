@@ -26,13 +26,14 @@ export const getWeeklyChartData = async (req, res) => {
 
 export const getWeeklyChartBaseData = async (req, res) => {
   try {
+    const { forecasted_year } = req.params; 
     const plannedData = await prisma.$queryRaw(`SELECT round(sum(units), 0) as units, ROUND(sum(revenue), 2) as revenue from morphe_staging.planned_weekly_units_revenue_by_channel_by_sku pwurbcbs
-                                                where YEAR(weekend_date) = YEAR(CURRENT_DATE())
+                                                where YEAR(weekend_date) = ${forecasted_year}
                                                 and channel <> 'Wholesale'
                                                 group by WEEK(weekend_date) ;`);
 
     const thisYearData = await prisma.$queryRaw(`SELECT weekend, round(sum(unit_sales), 0) as units, ROUND(sum(revenue), 2) as revenue from morphe_staging.fact_sales_ending_inventory_sku_by_week pwurbcbs
-                                                  where YEAR(weekend) = YEAR(CURRENT_DATE())
+                                                  where YEAR(weekend) = ${forecasted_year}
                                                   and channel <> 'Wholesale'
                                                   group by WEEK(weekend);`);
 
@@ -94,6 +95,7 @@ export const getWeeklyChartBaseData = async (req, res) => {
                                               where 
                                               wm.metrics_name in ('units_sales', 'retail_sales') 
                                               and wm.demand_forecast_run_log_id = dfrl.id 
+                                              and wm.forecast_year = ${forecasted_year}
                                               and dfrl.is_base_forecast = true;`);
 
     res.json({
@@ -110,13 +112,14 @@ export const getWeeklyChartBaseData = async (req, res) => {
 
 export const getMonthlyChartBaseData = async (req, res) => {
   try {
+    const { forecasted_year } = req.params; 
     const plannedData = await prisma.$queryRaw(`SELECT round(sum(units), 0) as units, ROUND(sum(revenue), 2) as revenue from morphe_staging.planned_monthly_units_revenue_by_channel_by_sku pwurbcbs
-                                                where YEAR(monthend_date) = YEAR(CURRENT_DATE())
+                                                where YEAR(monthend_date) = ${forecasted_year}
                                                 and channel <> 'Wholesale'
                                                 group by Month(monthend_date)`);
 
     const thisYearData = await prisma.$queryRaw(`SELECT weekend, round(sum(unit_sales), 0) as units, ROUND(sum(revenue), 2) as revenue from morphe_staging.fact_sales_ending_inventory_sku_by_week pwurbcbs
-                                                  where YEAR(weekend) = YEAR(CURRENT_DATE())
+                                                  where YEAR(weekend) = ${forecasted_year}
                                                   and channel <> 'Wholesale'
                                                   group by Month(weekend);`);
 
@@ -138,6 +141,7 @@ export const getMonthlyChartBaseData = async (req, res) => {
                                               where 
                                               mm.metrics_name in ('units_sales', 'retail_sales') 
                                               and mm.demand_forecast_run_log_id = dfrl.id 
+                                              and mm.forecast_year = ${forecasted_year}
                                               and dfrl.is_base_forecast = true;`);
 
     res.json({

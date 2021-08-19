@@ -6,14 +6,19 @@
     </div>
     <div
       class="row"
-      v-if="
-        forecastYQData &&
-          forecastYQData.filteredStats &&
-          (forecastYQData.filteredStats.yearlyFilteredStats.length > 0 ||
-            forecastYQData.filteredStats.quarterlyFilteredStats.length > 0)
-      "
     >
-      <div class="col-md-12 text-right mb-2">
+    <div class="col-md-2">
+        <select
+          class="form-control selectpicker"
+          data-style="btn btn-link"
+          id="exampleFormControlSelect1"
+          @change="getSelectedYear"
+        >
+          <option value="2021">2021</option>
+          <option value="2022">2022</option>
+        </select>
+      </div>
+      <div class="col-md-3 text-right mb-2 offset-md-7">
         <div class="btn-group btn-group-toggle" data-toggle="buttons">
           <label
             v-for="(option, index) in yearlyQuarterlyTabs"
@@ -370,6 +375,7 @@ export default {
       quarterlyFilteredStats: [],
       filterQuarterlyPayload: {},
       isFilteredQuarterlyStatsFetched: false,
+      forecastedYear: "2021"
     };
   },
   components: {
@@ -378,6 +384,10 @@ export default {
     Tags,
   },
   methods: {
+     getSelectedYear(evt) {
+      this.forecastedYear = evt.target.value;
+      this.$emit("getSelectedYear", this.forecastedYear);
+     },
     async calloutByDuration(duration) {
       this.currentYQTab = duration;
       if (duration == "Yearly") {
@@ -393,7 +403,7 @@ export default {
     async getFilteredQuarterlyStatsWidgetData() {
       this.$store.commit("toggleStatsAPIResponseState", false);
       const filteredStatsWidgetData = await this.$axios.$post(
-        "/get-filtered-quarterly-stats",
+        `/get-filtered-quarterly-stats/${this.forecastedYear}`,
         this.filterQuarterlyPayload
       );
       this.forecastYQData = filteredStatsWidgetData;
@@ -406,10 +416,11 @@ export default {
     async getFilteredStatsWidgetData() {
       this.$store.commit("toggleStatsAPIResponseState", false);
       const filteredStatsWidgetData = await this.$axios.$post(
-        "/get-filtered-yearly-stats",
+        `/get-filtered-yearly-stats/${this.forecastedYear}`,
         this.filterQuarterlyPayload
       );
       this.forecastYQData = filteredStatsWidgetData;
+      console.log(filteredStatsWidgetData)
       this.quarterlyFilteredStats =
         filteredStatsWidgetData.filteredStats.quarterlyFilteredStats;
       this.yearlyFilteredStats =
@@ -435,4 +446,9 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped>
+#exampleFormControlSelect1 {
+  height: auto;
+  margin-top: 3px;
+}
+</style>
