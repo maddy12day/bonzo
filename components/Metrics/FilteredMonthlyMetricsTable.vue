@@ -3,17 +3,15 @@
     <div class="col-lg-12">
       <div class="col-md-12 text-right p-0">
         <br />
-        <a>
-          <download-csv
+         <a>
+          <button
             v-if="metricTableDataExportDataProp.length > 0"
             class="mt-1 btn btn-sm"
             style="line-height:1;"
-            :data="metricTableDataExportData"
-            :name="getCSVName()"
-            :disabled="metricTableDataExportDataProp.length < 0"
+            @click="exportToExcel"
           >
-            Download CSV
-          </download-csv>
+            Download Excel
+          </button>
         </a>
       </div>
       <card card-body-classes="table-full-width">
@@ -229,6 +227,7 @@
 import { Table, TableColumn } from "element-ui";
 import Tags from "../../components/Tags.vue";
 import moment from "moment";
+import XLSX from "xlsx";
 
 export default {
   name: "FilteredMonthlyMetricsTable",
@@ -237,7 +236,7 @@ export default {
     [TableColumn.name]: TableColumn,
     Tags,
   },
-  props: ["tableHeading", "filteredForecastMetrics", "allAppliedFilters"],
+  props: ["tableHeading", "filteredForecastMetrics", "allAppliedFilters", "filterArray"],
   data() {
     return {
       metricTableDataExportData: [],
@@ -245,10 +244,6 @@ export default {
   },
   computed: {
     metricTableDataExportDataProp() {
-      console.log(
-        "this.metricTableDataExportData---",
-        this.metricTableDataExportData.lenght
-      );
       return this.metricTableDataExportData;
     },
   },
@@ -258,10 +253,23 @@ export default {
     },
   },
   methods: {
+    exportToExcel() { 
+      
+      let metricTableDataExportData = XLSX.utils.json_to_sheet(this.metricTableDataExportData);
+      let filterArray = XLSX.utils.json_to_sheet(this.filterArray);
+
+      let wb = XLSX.utils.book_new() // make Workbook of Excel
+
+      // add Worksheet to Workbook
+      // Workbook contains one or more worksheets
+      XLSX.utils.book_append_sheet(wb, filterArray, "Applied Filters");
+      XLSX.utils.book_append_sheet(wb, metricTableDataExportData, 'Filtered Monthly Metrics') // sheetAName is name of Worksheet
+
+      // export Excel file
+      XLSX.writeFile(wb, this.getCSVName()) // name of the file is 'book.xlsx'
+    },
     getCSVName() {
-      return `Filtered Monthly Metrics Table ${moment().format(
-        "MM-DD-YYYY"
-      )}.csv`;
+      return `Filtered Monthly Metrics Table ${moment().format("MM-DD-YYYY")}.xlsx`;
     },
     createExportCSV() {
       this.metricTableDataExportData = this.filteredForecastMetrics.parsedFilteredForecastData.map(

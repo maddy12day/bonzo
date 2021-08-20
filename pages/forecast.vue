@@ -234,6 +234,7 @@
         :filteredForecastMetrics="filteredForecastMetrics"
         tableHeading="Filtered Weekly Forecast Metrics"
         :allAppliedFilters="allAppliedFilters"
+        :filterArray="filterArray"
       />
 
       <FilteredMonthlyMetricsTable
@@ -241,6 +242,7 @@
         :filteredForecastMetrics="filteredForecastMetrics"
         tableHeading="Filtered Monthly Forecast Metrics"
         :allAppliedFilters="allAppliedFilters"
+        :filterArray="filterArray"
       />
     </card>
     <div class="row">
@@ -258,7 +260,7 @@
             @click="exportToExcel"
             :disabled="isDownloadCsvDisbled"
           >
-            Download CSV
+            Download Excel
           </button>
         </a>
       </div>
@@ -373,20 +375,6 @@ export default {
   },
   methods: {
     exportToExcel() {
-      this.filterArray = [];
-      for (let [key, value] of Object.entries(this.filterPayload)) {
-        let jsonKey = `${key
-          .replace("filter_", "")
-          .replace("_", " ")
-          .toLowerCase()
-          .split(" ")
-          .map((s) => s.charAt(0).toUpperCase() + s.substring(1))
-          .join(" ")}`;
-        this.filterArray.push({
-          "Filter Name": jsonKey,
-          "Filter Value": value.join(","),
-        });
-      }
       let filterPayload = XLSX.utils.json_to_sheet(this.filterArray);
       let skus = XLSX.utils.json_to_sheet(this.skusJsonData);
       let wb = XLSX.utils.book_new(); // make Workbook of Excel
@@ -764,6 +752,21 @@ export default {
         this.allAppliedFilters.push(
           key.replace("filter_", "").replace("_", " ") + ": " + value.join(", ")
         );
+      }
+
+      this.filterArray = [];
+      for (let [key, value] of Object.entries(this.filterPayload)) {
+        let jsonKey = `${key
+          .replace("filter_", "")
+          .replace("_", " ")
+          .toLowerCase()
+          .split(" ")
+          .map((s) => s.charAt(0).toUpperCase() + s.substring(1))
+          .join(" ")}`;
+        this.filterArray.push({
+          "Filter Name": jsonKey,
+          "Filter Value": value.join(","),
+        });
       }
 
       this.requestedFilterOption = requestedFilterOption;
