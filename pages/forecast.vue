@@ -480,7 +480,6 @@ export default {
           key.replace("filter_", "").replace("_", " ") + ": " + value.join(", ")
         );
       }
-      console.log("selectedFilterOptions", selectedFilter);
     },
     // manual adjustments
     discardChanges() {
@@ -591,16 +590,7 @@ export default {
         this.filterPayload
       );
       this.skusJsonData = csvJsonData.parsedWeeklyData;
-      console.log("skusJsonData", this.skusJsonData);
-      console.log(this.selectedFilters);
-      this.isDownloadCsvDisbled = false; /* .map(item => {
-        return {
-          sku: item.sku,
-          title: item.title,
-          units: Object.assign({}, item.data.map(skuDetail => skuDetail.units_sales))
-        }
-      }); */
-      console.log(this.skusJsonData);
+      this.isDownloadCsvDisbled = false;
     },
     emptyFieldCleaner(reqBody) {
       for (let key in reqBody) {

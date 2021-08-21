@@ -510,22 +510,14 @@ export const activeMergedScenarioAsBase = async (req, res) => {
         is_part_of_base: true,
       },
     });
-    console.log("before run log ");
     const whereIsbaseForecstFalse = await prisma.$queryRaw(
       `update morphe_staging.demand_forecast_run_log set is_base_forecast=false where is_base_forecast= true`
-    );
-    console.log("before whereIsbaseForecstTrue");
-    console.log(
-      `update morphe_staging.demand_forecast_run_log set is_base_forecast=true where scenario_id=${parseInt(
-        req.params.id
-      )} AND forecast_type='Merge' AND status='Merge Completed'`
     );
     const whereIsbaseForecstTrue = await prisma.$queryRaw(
       `update morphe_staging.demand_forecast_run_log set is_base_forecast=true where scenario_id=${parseInt(
         req.params.id
       )} AND forecast_type='Merge' AND status='Merge Completed'`
     );
-    console.log("after whereIsbaseForecstTrue");
 
     res.json({
       isPartOfBase,

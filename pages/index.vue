@@ -106,7 +106,6 @@ export default {
       });
     },
     getSelectedYear(value) {
-      console.log("value", value);
       this.forecastedYear = value;
       this.showMetricsByDuration("Weekly");
       this.getWeekendDates();
@@ -200,7 +199,6 @@ export default {
     },
   },
   async mounted() {
-    console.log("opopopoop00---");
     this.getTimelineDetails();
     this.showMetricsByDuration("Monthly");
     this.getAllUserData();
