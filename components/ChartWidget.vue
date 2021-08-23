@@ -236,7 +236,6 @@ export default {
       this.initForecastChart(0);
     },
     initForecastChartType(index) {
-      console.log("omg", index);
       this.activeIndexChart = index;
       this.activeIndexChart == 1 && this.activeIndex == 1
         ? (this.changeWeeklyDataByType("Revenue"), this.initForecastChart(1))
@@ -286,7 +285,6 @@ export default {
       this.weeklyUnitsChartData[1] = thisYearData;
       this.weeklyUnitsChartData[2] = forecastData;
 
-      console.log(this.weeklyUnitsChartData);
     },
     changeMonthDataByType(forecastType) {
       let plannedData = [];
@@ -324,7 +322,6 @@ export default {
       this.monthlyUnitsChartData[1] = thisYearData;
       this.monthlyUnitsChartData[2] = forecastData;
 
-      console.log(this.weeklyUnitsChartData);
     },
 
     initForecastChart(index) {
@@ -342,7 +339,6 @@ export default {
       this.activeIndexChart == 0 && this.activeIndex == 0
         ? this.changeMonthDataByType("Units")
         : this.changeMonthDataByType("Revenue");
-      console.log("(this.activeIndex ", this.activeIndex);
       if (this.activeIndex == 0) {
         let chartData = {
           datasets: [

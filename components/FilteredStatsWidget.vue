@@ -421,7 +421,6 @@ export default {
         this.filterQuarterlyPayload
       );
       this.forecastYQData = filteredStatsWidgetData;
-      console.log(filteredStatsWidgetData)
       this.quarterlyFilteredStats =
         filteredStatsWidgetData.filteredStats.quarterlyFilteredStats;
       this.yearlyFilteredStats =

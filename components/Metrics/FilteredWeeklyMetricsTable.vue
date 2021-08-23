@@ -775,10 +775,6 @@ export default {
           return metricTableRow;
         }
       );
-      console.log(
-        "this.metricTableDataExportData0---",
-        this.metricTableDataExportData
-      );
     },
     getWeekendDates(index) {
       return JSON.parse(window.localStorage.getItem("weekendDates"))

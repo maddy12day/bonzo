@@ -778,10 +778,6 @@ export default {
         metricTableRow[`W52 ${this.getWeekendDates(52)}`] = data.w52;
         return metricTableRow;
       });
-      console.log(
-        "this.metricTableDataExportData---",
-        this.metricTableDataExportData
-      );
     },
   },
 };

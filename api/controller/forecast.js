@@ -202,7 +202,11 @@ export const getFilteredForecastData = async (req, res) => {
                         ${whereQueryString(req.body, "idfbwm").replace(
                           /dp/g,
                           "idp"
-                        )})
+                        )}
+                        AND idp.life_cycle <> 'OBSOLETE'
+                        AND idp.life_cycle <> 'disco'
+                        AND YEAR(idp.launch_date) <= YEAR(CURRENT_DATE())
+                        )
                   group by 1
                   order by 2 desc
                   limit 10)
@@ -299,7 +303,6 @@ export const downloadAllSkusData = async (req, res) => {
                 ORDER BY
                   dfbwm.sku,
                   dfbwm.weekend;`;
-
     const filteredForecastData = await prisma.$queryRaw(query);
     let parsedWeeklyData = weeklyCommonTableDataMappingForAll(
       filteredForecastData,
@@ -914,7 +917,6 @@ const typlanChartQueryGeneratorByDurations = (
                   ${whereQueryStr})
               GROUP BY
                 ${duration}(weekend_date)`;
-  console.log("queryqueryqueryqueryquery", query);
   return query;
 };
 // This Year Sale Query Generator
@@ -951,8 +953,6 @@ const thisYearSaleYearlyQuarterly = (
                   ${duration}(fseisbw.weekend)
                 ORDER BY
                   ${duration}(fseisbw.weekend);`;
-  console.log("query 1", query);
-
   return query;
 };
 
@@ -993,7 +993,6 @@ const forecastQueryGenByDuration = (
                 ${duration}(fseisbw.weekend)
               ORDER BY
                 ${duration}(fseisbw.weekend);`;
-  console.log("query 2", query);
   return query;
 };
 
