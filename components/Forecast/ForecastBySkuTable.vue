@@ -584,8 +584,8 @@ export default {
   },
   computed: {},
   methods: {
-    async getFilteredForecastData() {
-      const data = await this.$axios.$get(`/get-filtered-forecast-data`);
+    async getFilteredForecastData(forecastYear) {
+      const data = await this.$axios.$get(`/get-filtered-forecast-data/${forecastYear}`);
       this.forecastData = data;
     },
     getWeekendDates(index) {

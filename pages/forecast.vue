@@ -266,6 +266,7 @@
 
     <ForecastBySkuTable
       v-if="isFilteredForecast"
+       ref="filterChartWidget"
       :tableHeading="'Revenue'"
       :forecast_attribute="'retail_sales'"
       :topTenSkusData="topTenSkusData"
@@ -273,12 +274,14 @@
     />
     <ForecastBySkuTable
       v-if="isFilteredForecast"
+       ref="filterChartWidget"
       :tableHeading="'Units Sales'"
       :forecast_attribute="'units_sales'"
       :topTenSkusData="topTenSkusData"
       :allAppliedFilters="allAppliedFilters"
     />
     <ForecastBySkuTable
+    ref="filterChartWidget"
       v-if="isFilteredForecast"
       :tableHeading="'AUR'"
       :forecast_attribute="'aur'"
@@ -407,6 +410,7 @@ export default {
       this.filteredForecastedYear = value;
   
       this.$refs.filteredChartWidget.initChart(value);
+      this.$refs.filterChartWidget.getFilteredForecastData(value)
       this.showFilteredMetricsByDuration(this.filteredActiveTab);
       this.getFilteredTopSkus();
       this.getFilteredWeeklyMetrics(this.requestedFilterOption);
