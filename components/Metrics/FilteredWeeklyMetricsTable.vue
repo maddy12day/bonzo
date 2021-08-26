@@ -4,16 +4,14 @@
       <div class="col-md-12 text-right p-0">
         <br />
         <a>
-          <download-csv
+          <button
             v-if="metricTableDataExportDataProp.length > 0"
             class="mt-1 btn btn-sm"
             style="line-height:1;"
-            :data="metricTableDataExportData"
-            :name="getCSVName()"
-            :disabled="metricTableDataExportDataProp.length < 0"
+            @click="exportToExcel"
           >
-            Download CSV
-          </download-csv>
+            Download Excel
+          </button>
         </a>
       </div>
       <card card-body-classes="table-full-width">
@@ -667,6 +665,7 @@
 import { Table, TableColumn } from "element-ui";
 import Tags from "../../components/Tags.vue";
 import moment from "moment";
+import XLSX from "xlsx";
 
 export default {
   name: "FilteredWeeklyMetricsTable",
@@ -680,7 +679,7 @@ export default {
       metricTableDataExportData: [],
     };
   },
-  props: ["tableHeading", "filteredForecastMetrics", "allAppliedFilters"],
+  props: ["tableHeading", "filteredForecastMetrics", "allAppliedFilters", "filterArray"],
   computed: {
     metricTableDataExportDataProp() {
       return this.metricTableDataExportData;
@@ -692,10 +691,23 @@ export default {
     },
   },
   methods: {
+    exportToExcel() { 
+      
+      let metricTableDataExportData = XLSX.utils.json_to_sheet(this.metricTableDataExportData);
+      let filterArray = XLSX.utils.json_to_sheet(this.filterArray);
+
+      let wb = XLSX.utils.book_new() // make Workbook of Excel
+
+      // add Worksheet to Workbook
+      // Workbook contains one or more worksheets
+      XLSX.utils.book_append_sheet(wb, filterArray, "Applied Filters");
+      XLSX.utils.book_append_sheet(wb, metricTableDataExportData, 'Filtered Weekly Metrics') // sheetAName is name of Worksheet
+
+      // export Excel file
+      XLSX.writeFile(wb, this.getCSVName()) // name of the file is 'book.xlsx'
+    },
     getCSVName() {
-      return `Filtered Weekly Metrics Table ${moment().format(
-        "MM-DD-YYYY"
-      )}.csv`;
+      return `Filtered Weekly Metrics Table ${moment().format("MM-DD-YYYY")}.xlsx`;
     },
     createExportCSV() {
       this.metricTableDataExportData = this.filteredForecastMetrics.parsedFilteredForecastData.map(
@@ -762,10 +774,6 @@ export default {
           metricTableRow[`W52 ${this.getWeekendDates(52)}`] = data.w52;
           return metricTableRow;
         }
-      );
-      console.log(
-        "this.metricTableDataExportData0---",
-        this.metricTableDataExportData
       );
     },
     getWeekendDates(index) {

@@ -1000,12 +1000,10 @@ export default {
         brand: this.brandValues,
         collab: this.programValues,
       };
-      console.log(brandTypes)
       const cleanObject = this.emptyFieldCleaner(brandTypes);
       const dataListGroup = this.filterDrilldown(
         cleanObject
       );
-      console.log(dataListGroup)
       this.channelOptions = [
         ...new Set(dataListGroup.map((item) => item.channel)),
       ].map((item) => {

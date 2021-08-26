@@ -155,7 +155,6 @@ export default {
          const scenarioDetails = await this.$axios.$get(
         `/get-scenario-detail-by-id/${data.id}`
       );
-      console.log("scenarioDetails", scenarioDetails, data.id);
        this.scenarioDetails = scenarioDetails.scenario;
       this.currentScenarioStatus = scenarioDetails.scenario;
       this.dialogVisible = true;

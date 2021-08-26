@@ -4,16 +4,14 @@
       <div class="col-md-12 text-right p-0">
         <br />
         <a>
-          <download-csv
+          <button
             v-if="metricTableDataExportDataProp.length > 0"
             class="mt-1 btn btn-sm"
             style="line-height:1;"
-            :data="metricTableDataExportData"
-            :name="getCSVName()"
-            :disabled="metricTableDataExportDataProp.length < 0"
+            @click="exportToExcel"
           >
-            Download CSV
-          </download-csv>
+            Download Excel
+          </button>
         </a>
       </div>
       <card card-body-classes="table-full-width">
@@ -224,6 +222,7 @@
 <script>
 import { Table, TableColumn } from "element-ui";
 import moment from "moment";
+import XLSX from "xlsx";
 
 export default {
   name: "dashboard",
@@ -248,8 +247,21 @@ export default {
     },
   },
   methods: {
+    exportToExcel() { 
+      
+      let metricTableDataExportData = XLSX.utils.json_to_sheet(this.metricTableDataExportData) 
+
+      let wb = XLSX.utils.book_new() // make Workbook of Excel
+
+      // add Worksheet to Workbook
+      // Workbook contains one or more worksheets
+      XLSX.utils.book_append_sheet(wb, metricTableDataExportData, 'Monthly Metrics') // sheetAName is name of Worksheet
+
+      // export Excel file
+      XLSX.writeFile(wb, this.getCSVName()) // name of the file is 'book.xlsx'
+    },
     getCSVName() {
-      return `Monthly Metrics Table ${moment().format("MM-DD-YYYY")}.csv`;
+      return `Monthly Metrics Table ${moment().format("MM-DD-YYYY")}.xlsx`;
     },
     createExportCSV() {
       this.metricTableDataExportData = this.metricsTableData.map((data) => {

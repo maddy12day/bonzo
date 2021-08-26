@@ -202,7 +202,11 @@ export const getFilteredForecastData = async (req, res) => {
                         ${whereQueryString(req.body, "idfbwm").replace(
                           /dp/g,
                           "idp"
-                        )})
+                        )}
+                        AND idp.life_cycle <> 'OBSOLETE'
+                        AND idp.life_cycle <> 'disco'
+                        AND YEAR(idp.launch_date) <= YEAR(CURRENT_DATE())
+                        )
                   group by 1
                   order by 2 desc
                   limit 10)
@@ -299,7 +303,6 @@ export const downloadAllSkusData = async (req, res) => {
                 ORDER BY
                   dfbwm.sku,
                   dfbwm.weekend;`;
-
     const filteredForecastData = await prisma.$queryRaw(query);
     let parsedWeeklyData = weeklyCommonTableDataMappingForAll(
       filteredForecastData,
@@ -527,11 +530,11 @@ const parseFilteredForecastData = (
         ] = "--";
       }
       if (obj["Metrics Slug"] == "aur") {
-        obj["yearly_aggregate"] = (revenueTotal / unitsTotal).toFixed(2);
-        obj["Q1"] = (quarter1RevenueTotal / quarter1UnitsTotal).toFixed(2);
-        obj["Q2"] = (quarter2RevenueTotal / quarter2UnitsTotal).toFixed(2);
-        obj["Q3"] = (quarter3RevenueTotal / quarter3UnitsTotal).toFixed(2);
-        obj["Q4"] = (quarter4RevenueTotal / quarter4UnitsTotal).toFixed(2);
+        obj["yearly_aggregate"] = isNaN(revenueTotal/unitsTotal) ? 0 : (revenueTotal/unitsTotal).toFixed(2);
+        obj["Q1"] = isNaN(quarter1RevenueTotal / quarter1UnitsTotal) ? 0 : (quarter1RevenueTotal / quarter1UnitsTotal).toFixed(2);
+        obj["Q2"] = isNaN(quarter2RevenueTotal / quarter2UnitsTotal) ? 0 : (quarter2RevenueTotal / quarter2UnitsTotal).toFixed(2);
+        obj["Q3"] = isNaN(quarter3RevenueTotal / quarter3UnitsTotal) ? 0 : (quarter3RevenueTotal / quarter3UnitsTotal).toFixed(2);
+        obj["Q4"] = isNaN(quarter4RevenueTotal / quarter4UnitsTotal) ? 0 : (quarter4RevenueTotal / quarter4UnitsTotal).toFixed(2);
       }
       parsedData.push(obj);
     }
@@ -914,7 +917,6 @@ const typlanChartQueryGeneratorByDurations = (
                   ${whereQueryStr})
               GROUP BY
                 ${duration}(weekend_date)`;
-  console.log("queryqueryqueryqueryquery", query);
   return query;
 };
 // This Year Sale Query Generator
@@ -951,8 +953,6 @@ const thisYearSaleYearlyQuarterly = (
                   ${duration}(fseisbw.weekend)
                 ORDER BY
                   ${duration}(fseisbw.weekend);`;
-  console.log("query 1", query);
-
   return query;
 };
 
@@ -993,7 +993,6 @@ const forecastQueryGenByDuration = (
                 ${duration}(fseisbw.weekend)
               ORDER BY
                 ${duration}(fseisbw.weekend);`;
-  console.log("query 2", query);
   return query;
 };
 
