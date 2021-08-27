@@ -19,7 +19,7 @@ const weeklyCommonTableDataMapping = (data) => {
           item.title &&
           uniqueSkus[i]
       )
-      if(uniqueSkusTitle[i] && arr.length > 0 && arr.length == 53) {
+      if(uniqueSkusTitle[i] && arr.length > 0) {
     finalData.push({
       sku: uniqueSkus[i],
       title: uniqueSkusTitle[i],
