@@ -7,6 +7,7 @@
       <h5 class="text-bold font-weight-bold">Applied Filters</h5>
       <Tags :allAppliedFilters="allAppliedFilters" />
     </div>
+    {{topTenSkusData}}
     <el-table :data="topTenSkusData.parsedWeeklyData">
       <template v-if="topTenSkusData && topTenSkusData.parsedWeeklyData && topTenSkusData.parsedWeeklyData.length=='0'">
         <div slot="append">
