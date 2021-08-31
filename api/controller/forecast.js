@@ -235,9 +235,7 @@ export const getFilteredForecastData = async (req, res) => {
                 ORDER BY
                   dfbwm.sku,
                   dfbwm.weekend;`;
-                  console.log("query--",query);
     const filteredForecastData = await prisma.$queryRaw(query);
-    console.log("filteredForecastData--",filteredForecastData);
     let parsedWeeklyData = weeklyCommonTableDataMapping(filteredForecastData);
     res.status(200).json({
       parsedWeeklyData,
@@ -306,7 +304,6 @@ export const downloadAllSkusData = async (req, res) => {
                 ORDER BY
                   dfbwm.sku,
                   dfbwm.weekend;`;
-                  console.log("query-0-",query);
     const filteredForecastData = await prisma.$queryRaw(query);
     let parsedWeeklyData = weeklyCommonTableDataMappingForAll(
       filteredForecastData,

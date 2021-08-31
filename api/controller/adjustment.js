@@ -99,7 +99,6 @@ export const createManualAdjustment = async (req, res) => {
 };
 
 export const activateManualAdjustment = async (req, res) => {
-  console.log("---",parseInt(req.body.id))
   try {
     const manualAdjustments = await prisma.manual_adjustments.update({
       where: {
