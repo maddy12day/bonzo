@@ -48,8 +48,8 @@
             </tr>
           </tbody>
         </table>
-        <p class="text-right">
-          <button class="btn btn-primary" @click="showDialog = false">
+        <p class="text-right" v-if="!adjustmentDetails.is_active">
+          <button class="btn btn-primary" @click="activateManualAdjustment">
             Activate
           </button>
         </p>
@@ -448,6 +448,7 @@ export default {
   data() {
     return {
       showDialog: false,
+      typeColor: ["", "info", "success", "warning", "danger"],
       adjustmentSalesSummary: {},
       adjustmentUnitSalesComparison: {},
       adjustmentCategorySalesComparison: {},
@@ -466,6 +467,17 @@ export default {
     },
   },
   methods: {
+    notifyVue(verticalAlign, horizontalAlign, message) {
+      let color = 2;
+      this.$notify({
+        message: message,
+        timeout: 12000,
+        icon: "tim-icons icon-bell-55",
+        horizontalAlign: horizontalAlign,
+        verticalAlign: verticalAlign,
+        type: this.typeColor[color],
+      });
+    },
     formatDate(date) {
       return moment(date).format("MM-DD-YYYY");
     },
@@ -489,6 +501,20 @@ export default {
         `/get-adjustment-category-sales-comparison/${this.adjustmentId}`
       );
     },
+    async activateManualAdjustment() {
+      console.log("this.adjustmentId--",this.adjustmentId);
+      await this.$axios.$post(
+        `/activate-adjustments`,
+        {   
+          id: this.adjustmentId,
+        }
+      );
+      this.notifyVue(
+        "top",
+        "right",
+        "Manual Adjustment is Activated"
+      );
+    }
   },
   created() {
     this.showDialog = this.dialogVisible;

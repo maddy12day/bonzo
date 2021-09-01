@@ -98,6 +98,29 @@ export const createManualAdjustment = async (req, res) => {
   }
 };
 
+export const activateManualAdjustment = async (req, res) => {
+  try {
+    const manualAdjustments = await prisma.manual_adjustments.update({
+      where: {
+        id: parseInt(req.body.id),
+      },
+      data: {
+        is_active: true,
+      },
+    });
+    res.json({
+      manualAdjustments,
+      message: "Adjustment Activated Successfully",
+    });
+  } catch (error) {
+    res.status(500).json({
+      error: `Error: ${error}`,
+    });
+  }
+};
+
+
+
 // check user created adjustments status
 export const checkAdjustmentStatus = async (req, res) => {
   try {

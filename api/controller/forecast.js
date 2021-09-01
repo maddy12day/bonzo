@@ -246,6 +246,7 @@ export const getFilteredForecastData = async (req, res) => {
       error: `${error}`,
     });
   }
+  
 };
 // download all skus data
 export const downloadAllSkusData = async (req, res) => {
