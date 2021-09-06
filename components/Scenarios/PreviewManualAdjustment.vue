@@ -457,7 +457,7 @@ export default {
   data() {
     return {
       showDialog: false,
-      status: {},
+      typeColor: ["", "info", "success", "warning", "danger"],
       adjustmentSalesSummary: {},
       adjustmentUnitSalesComparison: {},
       adjustmentCategorySalesComparison: {},
@@ -481,6 +481,18 @@ export default {
       await this.$axios.$get(
         `/activate-manual-adjustment/${this.adjustmentId}`
       );
+      this.$store.commit('reRender');
+    },
+    notifyVue(verticalAlign, horizontalAlign, message) {
+      let color = 2;
+      this.$notify({
+        message: message,
+        timeout: 12000,
+        icon: "tim-icons icon-bell-55",
+        horizontalAlign: horizontalAlign,
+        verticalAlign: verticalAlign,
+        type: this.typeColor[color],
+      });
     },
     formatDate(date) {
       return moment(date).format("MM-DD-YYYY");
