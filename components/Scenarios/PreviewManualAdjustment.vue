@@ -49,7 +49,11 @@
           </tbody>
         </table>
         <p class="text-right">
-          <button class="btn btn-primary" @click="showDialog = false">
+          <button
+            class="btn btn-primary"
+            @click="(showDialog = false), activateAjustment()"
+            v-if="Object.keys(status).length == 0"
+          >
             Activate
           </button>
         </p>
@@ -250,9 +254,14 @@
           </el-table-column>
         </el-table>
       </card>
-      <card v-if="adjustmentUnitSalesCategoryComparison.parsedData" class="preview-table-div">
+      <card
+        v-if="adjustmentUnitSalesCategoryComparison.parsedData"
+        class="preview-table-div"
+      >
         <h4 class="font-weight-bold">Category Summary Comparison</h4>
-        <table class="table table-bordered bg-white overflow-auto preview-table">
+        <table
+          class="table table-bordered bg-white overflow-auto preview-table"
+        >
           <thead v-if="adjustmentUnitSalesCategoryComparison.parsedData">
             <tr>
               <th class="theader">Category</th>
@@ -287,7 +296,7 @@
                     : 0 | toLocaleStr
                 }}
               </td>
-              <td >
+              <td>
                 {{
                   col2.planned_revenue
                     ? parseInt(col2.planned_revenue)
@@ -448,6 +457,7 @@ export default {
   data() {
     return {
       showDialog: false,
+      status: {},
       adjustmentSalesSummary: {},
       adjustmentUnitSalesComparison: {},
       adjustmentCategorySalesComparison: {},
@@ -462,12 +472,24 @@ export default {
     showDialog: function() {
       if (!this.showDialog) {
         this.$emit("dialogVisibleEvt", false);
+        this.$store.commit("reRender");
       }
     },
   },
   methods: {
+    async activateAjustment() {
+      await this.$axios.$get(
+        `/activate-manual-adjustment/${this.adjustmentId}`
+      );
+    },
     formatDate(date) {
       return moment(date).format("MM-DD-YYYY");
+    },
+    async adjustmentStatus() {
+      this.status = await this.$axios.$get(
+        `/check-adjustment-status/${this.adjustmentId}`
+      );
+      console.log();
     },
     async getAdjustmentSalesSummary() {
       this.adjustmentSalesSummary = await this.$axios.$get(
@@ -498,6 +520,7 @@ export default {
     this.getAdjustmentUnitSalesComparison();
     this.getAdjustmentUnitSalesCategoryComparison();
     this.getCategorySummery();
+    this.adjustmentStatus();
   },
 };
 </script>
@@ -543,7 +566,8 @@ tr td {
   overflow-x: auto;
   width: 100%;
 
-  th,td {
+  th,
+  td {
     min-width: 150px !important;
   }
 }

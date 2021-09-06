@@ -1,18 +1,21 @@
 import { PrismaClient } from "@prisma/client";
 import { getAllUsers } from "../controller/user";
-import { parseCategorySaleComparision, parseCategoryUnitComparision } from "../controller/scenario";
+import {
+  parseCategorySaleComparision,
+  parseCategoryUnitComparision,
+} from "../controller/scenario";
 
 const prisma = new PrismaClient();
 
 const getUserName = (id, allUsers) => {
-  let userName
+  let userName;
   if (allUsers.length > 0) {
-    userName = allUsers.filter((user) => (user.id == id))[0].first_name;
+    userName = allUsers.filter((user) => user.id == id)[0].first_name;
   } else {
-    userName = '';
+    userName = "";
   }
   return userName;
-}
+};
 
 // get Base Adjustments
 export const getBaseAdjustments = async (req, res) => {
@@ -27,8 +30,8 @@ export const getBaseAdjustments = async (req, res) => {
     });
     let allUsers = await getAllUsers();
     let adjustmentsResponse = adjustments.map((v) => ({
-          ...v,
-          adjustedBy: getUserName(v.adjusted_by_user_id,allUsers),
+      ...v,
+      adjustedBy: getUserName(v.adjusted_by_user_id, allUsers),
     }));
 
     res.status(200).json({
@@ -54,7 +57,9 @@ export const getWeekendDates = async (req, res) => {
       },
     });
     res.status(200).json({
-      weekends: weekends.map((item) => item.weekend.toISOString().split("T")[0]),
+      weekends: weekends.map(
+        (item) => item.weekend.toISOString().split("T")[0]
+      ),
     });
   } catch (error) {
     res.status(500).json({
@@ -76,17 +81,19 @@ export const createManualAdjustment = async (req, res) => {
         id: req.body.adjusted_by_user_id,
       },
     });
-    const demandForecastRunlogRes = await prisma.demand_forecast_run_log.create({
-      data: {
-        is_base_forecast: false,
-        demand_planner_user_id: req.body.adjusted_by_user_id,
-        manual_adjustment_id: manualAjustment.id,
-        ma_source_scenario_id: 0,
-        status: "Pending",
-        forecast_type: "Adjustment",
-        executed_by: `${executed_by.first_name} ${executed_by.last_name}`,
-      },
-    });
+    const demandForecastRunlogRes = await prisma.demand_forecast_run_log.create(
+      {
+        data: {
+          is_base_forecast: false,
+          demand_planner_user_id: req.body.adjusted_by_user_id,
+          manual_adjustment_id: manualAjustment.id,
+          ma_source_scenario_id: 0,
+          status: "Pending",
+          forecast_type: "Adjustment",
+          executed_by: `${executed_by.first_name} ${executed_by.last_name}`,
+        },
+      }
+    );
     res.json({
       manualAjustment,
       message: "adjustment created successfully",
@@ -128,7 +135,7 @@ export const getAdjustmentById = async (req, res) => {
   try {
     const adjustments = await prisma.manual_adjustments.findUnique({
       where: {
-        id: parseInt(req.params.id)
+        id: parseInt(req.params.id),
       },
     });
     res.json({
@@ -205,7 +212,8 @@ export const getAdjustmentCategoryComparison = async (req, res) => {
     parsedData["Revenue"] = parseCategorySaleComparision(result);
 
     res.status(200).json({
-      parsedData, result
+      parsedData,
+      result,
     });
   } catch (error) {
     res.status(500).json({
@@ -218,7 +226,9 @@ export const getAdjustmentCategoryComparison = async (req, res) => {
 //API: Adjustment Category Total Sales Comparison
 export const getAdjustmentCategorySalesComparison = async (req, res) => {
   try {
-    const result = await prisma.$queryRaw(`SELECT * from morphe_staging.adjustment_influenced_leveled_aggregates WHERE adjustment_id = ${req.params.id} AND level = "CATEGORY";`);
+    const result = await prisma.$queryRaw(
+      `SELECT * from morphe_staging.adjustment_influenced_leveled_aggregates WHERE adjustment_id = ${req.params.id} AND level = "CATEGORY";`
+    );
     res.status(200).json({
       result,
     });
@@ -231,24 +241,22 @@ export const getAdjustmentCategorySalesComparison = async (req, res) => {
 };
 
 export const getWeekendDate = async () => {
-  try{
+  try {
     const { year } = req.params;
     const weekends = await prisma.dim_morphe_retail_weekends.findMany({
-     where: {
-     year: year
-     },
-     select: {
-       weekend: true
-     },
-    })
+      where: {
+        year: year,
+      },
+      select: {
+        weekend: true,
+      },
+    });
 
     return weekends;
-    
-  }catch(error) {
+  } catch (error) {
     return error;
   }
-}
-
+};
 
 // export const parseCategoryUnitComparision = (results) => {
 //   const fields = ["Planned Units", "Adjusted Units", "Forecast Units"];
@@ -285,21 +293,75 @@ export const getWeekendDate = async () => {
 //   return parsedData;
 // };
 
-
 //API: Adjustment Unit & Sales Comparison
 export const getAdjustmentUnitSalesComparison = async (req, res) => {
   try {
-    let result = await prisma.$queryRaw(`SELECT * FROM morphe_staging.adjustment_influenced_metrics WHERE adjustment_id = ${req.params.id};`);
+    let result = await prisma.$queryRaw(
+      `SELECT * FROM morphe_staging.adjustment_influenced_metrics WHERE adjustment_id = ${req.params.id};`
+    );
     let parsedData = {};
     parsedData["Units"] = parseCategoryUnitComparision(result);
     parsedData["Revenue"] = parseCategorySaleComparision(result);
     res.status(200).json({
-      parsedData
+      parsedData,
     });
   } catch (error) {
     res.status(500).json({
       message: "Unable to Fetch Data",
       error: `${error}`,
+    });
+  }
+};
+
+export const activateAdjustmentAsBase = async (req, res) => {
+  try {
+  
+    const isPartOfBase = await prisma.manual_adjustments.update({
+      where: {
+        id: parseInt(req.params.id),
+      },
+      data: {
+        is_active: true,
+      },
+    }); 
+    const whereIsbaseForecstFalse = await prisma.$queryRaw(
+      `update morphe_staging.demand_forecast_run_log set is_base_forecast=false where is_base_forecast= true`
+    );
+    const whereIsbaseForecstTrue = await prisma.$queryRaw(
+      `update morphe_staging.demand_forecast_run_log set is_base_forecast=true where manual_adjustment_id=${parseInt(
+        req.params.id
+      )} AND forecast_type='Adjustment' AND status='Completed'`
+    );
+    res.json({
+      whereIsbaseForecstTrue,
+      isPartOfBase
+    });
+  } catch (error) {
+    res.json({
+      error: `something went activeMergedScenarioAsBase  ${error}.`,
+    });
+  }
+};
+
+export const AdjustmentStatus = async (req, res) => {
+  try {
+    const adjustments = await prisma.demand_forecast_run_log.findMany({
+      where: {
+        manual_adjustment_id: parseInt(req.params.id),
+        is_base_forecast: true,
+        forecast_type: 'Adjustment'
+      },
+      select: {
+        status: true,
+        id: true,
+      },
+    });
+    res.json({
+      adjustment: adjustments[0],
+    });
+  } catch (error) {
+    res.status(500).json({
+      error: `something went wrong in check scenario status api. ${error}`,
     });
   }
 };

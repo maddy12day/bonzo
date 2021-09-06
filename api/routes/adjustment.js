@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getBaseAdjustments, createManualAdjustment, getWeekendDates, checkAdjustmentStatus, getAdjustmentSalesSummary, getMasterMetricsData, getAdjustmentCategoryComparison, getAdjustmentCategorySalesComparison, getAdjustmentUnitSalesComparison, getAdjustmentById } from "../controller/adjustment";
+import { getBaseAdjustments, createManualAdjustment, getWeekendDates, checkAdjustmentStatus, getAdjustmentSalesSummary, getMasterMetricsData, getAdjustmentCategoryComparison, getAdjustmentCategorySalesComparison, getAdjustmentUnitSalesComparison, getAdjustmentById, activateAdjustmentAsBase, AdjustmentStatus } from "../controller/adjustment";
 
 const router = Router();
 router.get("/get-base-adjustments", getBaseAdjustments);
@@ -12,5 +12,7 @@ router.get('/master-metrics-data', getMasterMetricsData)
 router.get("/get-adjustment-category-comparison/:id", getAdjustmentCategoryComparison);
 router.get("/get-adjustment-category-sales-comparison/:id", getAdjustmentCategorySalesComparison);
 router.get("/get-adjustment-unit-sales-comparison/:id",getAdjustmentUnitSalesComparison);
+router.get('/activate-manual-adjustment/:id', activateAdjustmentAsBase);
+router.get('/check-adjustment-status/:id', AdjustmentStatus)
 
 export default router;
