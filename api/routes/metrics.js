@@ -8,6 +8,9 @@ import {
   getBaseYearlyPlanned,
   getBaseYearlyQarterlyForecast,
   getWeekends,
+  collectionForecast,
+  collectionForecastByEcomm,
+  collectionForecastByRetail,
 } from "../controller/metrics";
 
 const router = Router();
@@ -29,5 +32,15 @@ router.get(
   getBaseThisYearlySale
 );
 router.get("/getWeekends", getWeekends);
+// collection level forecast
+router.get("/collection-forecast/:forecast_year", collectionForecast);
+router.get(
+  "/collection-forecast-by-ecomm/:forecast_year",
+  collectionForecastByEcomm
+);
+router.get(
+  "/collection-forecast-by-retail/:forecast_year",
+  collectionForecastByRetail
+);
 
 export default router;

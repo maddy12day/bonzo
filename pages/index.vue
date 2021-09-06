@@ -14,7 +14,7 @@
       </el-collapse-item>
     </el-collapse>
     <StatsWidget @getSelectedYear="getSelectedYear" />
-    <ChartWidget ref="chartWidget"/>
+    <ChartWidget ref="chartWidget" />
 
     <ScenarioTable
       v-if="
@@ -186,7 +186,9 @@ export default {
       );
     },
     async getWeekendDates() {
-      const weekendDates = await this.$axios.$get(`/get-weekend-dates/${this.forecastedYear}`);
+      const weekendDates = await this.$axios.$get(
+        `/get-weekend-dates/${this.forecastedYear}`
+      );
       window.localStorage.setItem(
         "allUsersInfo",
         JSON.stringify(this.userInfo)
@@ -206,6 +208,18 @@ export default {
     setTimeout(() => {
       this.checkMergeScenarioStatus();
     }, 10000);
+    const collectionForecast = await this.$axios(
+      `/collection-forecast/${this.forecastedYear}`
+    );
+    const collectionForecastByEcomm = await this.$axios(
+      `/collection-forecast-by-ecomm/${this.forecastedYear}`
+    );
+    const collectionForecastByRetail = await this.$axios(
+      `/collection-forecast-by-retail/${this.forecastedYear}`
+    );
+    console.log(collectionForecast);
+    console.log(collectionForecastByEcomm);
+    console.log(collectionForecastByRetail);
   },
   watch: {
     forecastedYearWatch(val) {

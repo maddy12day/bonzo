@@ -5,9 +5,13 @@ export const state = () => ({
   appliedRegularFilter: [],
   isDataLoading: false,
   isAPIFetchComplete: false,
+  key: 1
 });
 
 export const mutations = {
+  reRender(state) {
+    state.key = Math.random();
+  },
   toggleCTAState(state) {
     state.regularFilterCTADisabled = !state.regularFilterCTADisabled;
   },

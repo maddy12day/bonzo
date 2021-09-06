@@ -1,7 +1,7 @@
 <template>
-  <div>
+  <div :key="reRender">
     <!-- Filters component (Vishal) -->
-    <card card-body-classes="table-full-width">
+    <card card-body-classes="table-full-width" >
       <div class="forecast-filter-buttons">
         <div class="btn-group btn-group-toggle p-0 mb-2" data-toggle="buttons">
           <label
@@ -312,6 +312,7 @@ import ChartWidget from "../components/ChartWidget.vue";
 import FilteredChartWidget from "../components/FilterChartWidget.vue";
 import moment from "moment";
 import XLSX from "xlsx";
+import { mapState } from 'vuex';
 
 export default {
   name: "Forecast",
@@ -805,6 +806,12 @@ export default {
     },
   },
   computed: {
+    reRender() {
+      console.log( this.$store.state.key);
+          this.getBaseAdjustments();
+    this.showMetricsByDuration("Monthly");
+      return  this.$store.state.key;
+    },
     selectedFilters() {
       return this.selectedFilterOptions;
     },

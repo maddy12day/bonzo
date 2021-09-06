@@ -48,8 +48,17 @@
             </tr>
           </tbody>
         </table>
+<<<<<<< HEAD
+        <p class="text-right">
+          <button
+            class="btn btn-primary"
+            @click="(showDialog = false), activateAjustment()"
+            v-if="Object.keys(status).length == 0"
+          >
+=======
         <p class="text-right" v-if="!adjustmentDetails.is_active">
           <button class="btn btn-primary" @click="activateManualAdjustment">
+>>>>>>> 5b200c656f913be59040b814b75645cb5ccb71c5
             Activate
           </button>
         </p>
@@ -250,9 +259,14 @@
           </el-table-column>
         </el-table>
       </card>
-      <card v-if="adjustmentUnitSalesCategoryComparison.parsedData" class="preview-table-div">
+      <card
+        v-if="adjustmentUnitSalesCategoryComparison.parsedData"
+        class="preview-table-div"
+      >
         <h4 class="font-weight-bold">Category Summary Comparison</h4>
-        <table class="table table-bordered bg-white overflow-auto preview-table">
+        <table
+          class="table table-bordered bg-white overflow-auto preview-table"
+        >
           <thead v-if="adjustmentUnitSalesCategoryComparison.parsedData">
             <tr>
               <th class="theader">Category</th>
@@ -287,7 +301,7 @@
                     : 0 | toLocaleStr
                 }}
               </td>
-              <td >
+              <td>
                 {{
                   col2.planned_revenue
                     ? parseInt(col2.planned_revenue)
@@ -448,7 +462,11 @@ export default {
   data() {
     return {
       showDialog: false,
+<<<<<<< HEAD
+      status: {},
+=======
       typeColor: ["", "info", "success", "warning", "danger"],
+>>>>>>> 5b200c656f913be59040b814b75645cb5ccb71c5
       adjustmentSalesSummary: {},
       adjustmentUnitSalesComparison: {},
       adjustmentCategorySalesComparison: {},
@@ -463,10 +481,17 @@ export default {
     showDialog: function() {
       if (!this.showDialog) {
         this.$emit("dialogVisibleEvt", false);
+        this.$store.commit("reRender");
       }
     },
   },
   methods: {
+<<<<<<< HEAD
+    async activateAjustment() {
+      await this.$axios.$get(
+        `/activate-manual-adjustment/${this.adjustmentId}`
+      );
+=======
     notifyVue(verticalAlign, horizontalAlign, message) {
       let color = 2;
       this.$notify({
@@ -477,9 +502,16 @@ export default {
         verticalAlign: verticalAlign,
         type: this.typeColor[color],
       });
+>>>>>>> 5b200c656f913be59040b814b75645cb5ccb71c5
     },
     formatDate(date) {
       return moment(date).format("MM-DD-YYYY");
+    },
+    async adjustmentStatus() {
+      this.status = await this.$axios.$get(
+        `/check-adjustment-status/${this.adjustmentId}`
+      );
+      console.log();
     },
     async getAdjustmentSalesSummary() {
       this.adjustmentSalesSummary = await this.$axios.$get(
@@ -524,6 +556,7 @@ export default {
     this.getAdjustmentUnitSalesComparison();
     this.getAdjustmentUnitSalesCategoryComparison();
     this.getCategorySummery();
+    this.adjustmentStatus();
   },
 };
 </script>
@@ -569,7 +602,8 @@ tr td {
   overflow-x: auto;
   width: 100%;
 
-  th,td {
+  th,
+  td {
     min-width: 150px !important;
   }
 }
