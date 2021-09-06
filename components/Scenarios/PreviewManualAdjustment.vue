@@ -48,12 +48,17 @@
             </tr>
           </tbody>
         </table>
+<<<<<<< HEAD
         <p class="text-right">
           <button
             class="btn btn-primary"
             @click="(showDialog = false), activateAjustment()"
             v-if="Object.keys(status).length == 0"
           >
+=======
+        <p class="text-right" v-if="!adjustmentDetails.is_active">
+          <button class="btn btn-primary" @click="activateManualAdjustment">
+>>>>>>> 5b200c656f913be59040b814b75645cb5ccb71c5
             Activate
           </button>
         </p>
@@ -457,7 +462,11 @@ export default {
   data() {
     return {
       showDialog: false,
+<<<<<<< HEAD
       status: {},
+=======
+      typeColor: ["", "info", "success", "warning", "danger"],
+>>>>>>> 5b200c656f913be59040b814b75645cb5ccb71c5
       adjustmentSalesSummary: {},
       adjustmentUnitSalesComparison: {},
       adjustmentCategorySalesComparison: {},
@@ -477,10 +486,23 @@ export default {
     },
   },
   methods: {
+<<<<<<< HEAD
     async activateAjustment() {
       await this.$axios.$get(
         `/activate-manual-adjustment/${this.adjustmentId}`
       );
+=======
+    notifyVue(verticalAlign, horizontalAlign, message) {
+      let color = 2;
+      this.$notify({
+        message: message,
+        timeout: 12000,
+        icon: "tim-icons icon-bell-55",
+        horizontalAlign: horizontalAlign,
+        verticalAlign: verticalAlign,
+        type: this.typeColor[color],
+      });
+>>>>>>> 5b200c656f913be59040b814b75645cb5ccb71c5
     },
     formatDate(date) {
       return moment(date).format("MM-DD-YYYY");
@@ -511,6 +533,20 @@ export default {
         `/get-adjustment-category-sales-comparison/${this.adjustmentId}`
       );
     },
+    async activateManualAdjustment() {
+      console.log("this.adjustmentId--",this.adjustmentId);
+      await this.$axios.$post(
+        `/activate-adjustments`,
+        {   
+          id: this.adjustmentId,
+        }
+      );
+      this.notifyVue(
+        "top",
+        "right",
+        "Manual Adjustment is Activated"
+      );
+    }
   },
   created() {
     this.showDialog = this.dialogVisible;
