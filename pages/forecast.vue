@@ -807,9 +807,8 @@ export default {
   },
   computed: {
     reRender() {
-      console.log( this.$store.state.key);
-          this.getBaseAdjustments();
-    this.showMetricsByDuration("Monthly");
+      this.getBaseAdjustments();
+      this.showMetricsByDuration(this.activeTab);
       return  this.$store.state.key;
     },
     selectedFilters() {
