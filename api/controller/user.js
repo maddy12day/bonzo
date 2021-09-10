@@ -38,14 +38,7 @@ export const resetPassword = async (req, res) => {
     
     const { email, password } = req.body;
     const hash_pass = bcrypt.hashSync(password, 10);
-    const user = await prisma.users.update({
-      where: {
-        email_id: email,
-      },
-      data: {
-        password: hash_pass,
-      },
-    });
+    const user = await prisma.$queryRaw(`update morphe_staging.users set password='${password}' where email_id=${email};`);
     res.json({
       user,
       message: "password updated successfully....",
