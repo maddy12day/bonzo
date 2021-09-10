@@ -35,13 +35,15 @@ export const registerUser = async (req, res) => {
 };
 export const resetPassword = async (req, res) => {
   try {
+    
     const { email, password } = req.body;
+    const hash_pass = bcrypt.hashSync(password, 10);
     const user = await prisma.users.update({
       where: {
         email_id: email,
       },
       data: {
-        password: bcrypt.hashSync(password, 10),
+        password: hash_pass,
       },
     });
     res.json({
