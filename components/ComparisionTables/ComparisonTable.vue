@@ -5,18 +5,24 @@
         <thead>
           <tr class="text-center">
             <th></th>
-            <th class="" colspan="2">Total</th>
-            <th class="" colspan="2">Ecomm</th>
-            <th class="" colspan="2">Retail</th>
+            <th class="border-left border-right border-muted border-bottom" colspan="2">
+              Total
+            </th>
+            <th class="border-left border-right border-muted border-bottom" colspan="2">
+              Ecomm
+            </th>
+            <th class="border-left border-right border-muted border-bottom" colspan="2">
+              Retail
+            </th>
           </tr>
           <tr>
             <th>Name</th>
-            <th>Units</th>
-            <th>Revenue</th>
-            <th>Units</th>
-            <th>Revenue</th>
-            <th>Units</th>
-            <th>Revenue</th>
+            <th class="border-left border-muted">Units</th>
+            <th class="border-right border-muted">Revenue</th>
+            <th class="border-left border-muted">Units</th>
+            <th class="border-right border-muted">Revenue</th>
+            <th class="border-left border-muted">Units</th>
+            <th class="border-right border-muted">Revenue</th>
           </tr>
         </thead>
         <tbody>
@@ -42,7 +48,7 @@ export default {
 </script>
 <style scoped>
 .comparision-table {
-    height: 400px;
-    overflow-y: scroll;
+  height: 400px;
+  overflow-y: scroll;
 }
 </style>
