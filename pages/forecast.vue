@@ -265,7 +265,7 @@
         </a>
       </div>
     </div>
-    <ComparisonTable :tableData="comparisonCollnData" />
+    <ComparisonTable :tableData="comparisonCollnData" v-if="!isFilteredForecast"/>
     <ForecastBySkuTable
       v-if="isFilteredForecast"
       ref="filterChartWidget"
@@ -313,7 +313,7 @@ import FilteredChartWidget from "../components/FilterChartWidget.vue";
 import moment from "moment";
 import XLSX from "xlsx";
 import { mapState } from "vuex";
-import ComparisonTable from '../components/ComparisionTables/ComparisonTable.vue'
+import ComparisonTable from "../components/ComparisionTables/ComparisonTable.vue";
 
 export default {
   name: "Forecast",
@@ -333,7 +333,7 @@ export default {
     FilteredChartWidget,
     Tags,
     ChartWidget,
-    ComparisonTable
+    ComparisonTable,
   },
 
   data() {

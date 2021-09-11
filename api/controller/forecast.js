@@ -11,21 +11,20 @@ const weeklyCommonTableDataMapping = (data) => {
   let counter = uniqueSkus.length <= 10 ? uniqueSkus.length : 10;
   const finalData = [];
   for (let i = 0; i < counter; i++) {
-    let arr = data
-      .filter(
-        (item) =>
-          item.sku == uniqueSkus[i] &&
-          item.title == uniqueSkusTitle[i] &&
-          item.title &&
-          uniqueSkus[i]
-      )
-      if(uniqueSkusTitle[i] && arr.length > 0) {
-    finalData.push({
-      sku: uniqueSkus[i],
-      title: uniqueSkusTitle[i],
-      data: arr,
-    });
-  }
+    let arr = data.filter(
+      (item) =>
+        item.sku == uniqueSkus[i] &&
+        item.title == uniqueSkusTitle[i] &&
+        item.title &&
+        uniqueSkus[i]
+    );
+    if (uniqueSkusTitle[i] && arr.length > 0) {
+      finalData.push({
+        sku: uniqueSkus[i],
+        title: uniqueSkusTitle[i],
+        data: arr,
+      });
+    }
   }
   return finalData;
 };
@@ -176,6 +175,7 @@ const whereQueryString = (obj, alias = "fseisbw") => {
         .join(",")}) AND `;
     }
   });
+  console.log("qyerrrrrrrrrrrrrrrr", str2.slice(0, str2.length - 4))
   return str2.slice(0, str2.length - 4);
 };
 //top 10 skus
@@ -246,7 +246,6 @@ export const getFilteredForecastData = async (req, res) => {
       error: `${error}`,
     });
   }
-  
 };
 // download all skus data
 export const downloadAllSkusData = async (req, res) => {
@@ -531,11 +530,21 @@ const parseFilteredForecastData = (
         ] = "--";
       }
       if (obj["Metrics Slug"] == "aur") {
-        obj["yearly_aggregate"] = isNaN(revenueTotal/unitsTotal) ? 0 : (revenueTotal/unitsTotal).toFixed(2);
-        obj["Q1"] = isNaN(quarter1RevenueTotal / quarter1UnitsTotal) ? 0 : (quarter1RevenueTotal / quarter1UnitsTotal).toFixed(2);
-        obj["Q2"] = isNaN(quarter2RevenueTotal / quarter2UnitsTotal) ? 0 : (quarter2RevenueTotal / quarter2UnitsTotal).toFixed(2);
-        obj["Q3"] = isNaN(quarter3RevenueTotal / quarter3UnitsTotal) ? 0 : (quarter3RevenueTotal / quarter3UnitsTotal).toFixed(2);
-        obj["Q4"] = isNaN(quarter4RevenueTotal / quarter4UnitsTotal) ? 0 : (quarter4RevenueTotal / quarter4UnitsTotal).toFixed(2);
+        obj["yearly_aggregate"] = isNaN(revenueTotal / unitsTotal)
+          ? 0
+          : (revenueTotal / unitsTotal).toFixed(2);
+        obj["Q1"] = isNaN(quarter1RevenueTotal / quarter1UnitsTotal)
+          ? 0
+          : (quarter1RevenueTotal / quarter1UnitsTotal).toFixed(2);
+        obj["Q2"] = isNaN(quarter2RevenueTotal / quarter2UnitsTotal)
+          ? 0
+          : (quarter2RevenueTotal / quarter2UnitsTotal).toFixed(2);
+        obj["Q3"] = isNaN(quarter3RevenueTotal / quarter3UnitsTotal)
+          ? 0
+          : (quarter3RevenueTotal / quarter3UnitsTotal).toFixed(2);
+        obj["Q4"] = isNaN(quarter4RevenueTotal / quarter4UnitsTotal)
+          ? 0
+          : (quarter4RevenueTotal / quarter4UnitsTotal).toFixed(2);
       }
       parsedData.push(obj);
     }
@@ -763,7 +772,6 @@ export const getFilteredForecastMetrics = async (req, res) => {
   let regularFilter = {};
   let countryFilter = {};
   let countryFilter1 = {};
-
   for (let item in req.body) {
     if (item !== "filter_sub_channels" && item !== "filter_channels") {
       regularFilter[item] = req.body[item];
@@ -1158,6 +1166,90 @@ export const getFilterChartData = async (req, res) => {
     res.status(500).json({
       message: "Unable to Fetch Filtered Forecast Data",
       error: `${error}`,
+    });
+  }
+};
+// ============================ collection queries ==================================
+
+export const collectionFilteredForecast = async (req, res) => {
+  try {
+    const { forecast_year } = req.params;
+    const collections = await prisma.$queryRaw(`
+                                            SELECT
+                                          	dfbwm.collection AS collection,
+                                          	ROUND(SUM(units_sales),0) AS total_units,
+                                          	ROUND(SUM(retail_sales),0) AS total_revenue
+                                          FROM
+                                          	morphe_staging.demand_forecast_base_weekly_metrics dfbwm,
+                                          	morphe_staging.demand_forecast_run_log dfrl
+                                          WHERE
+                                          	dfrl.is_base_forecast = 1
+                                          	AND dfrl.id = dfbwm.demand_forecast_run_log_id
+                                          	AND YEAR(dfbwm.weekend) = ${forecast_year}
+                                          GROUP BY 1
+                                          ORDER BY 3 DESC;`);
+    res.status(200).json({
+      collections,
+    });
+  } catch (error) {
+    res.status(500).json({
+      error,
+    });
+  }
+};
+
+export const collectionFilteredForecastByEcomm = async (req, res) => {
+  try {
+    const { forecast_year } = req.params;
+    const collections = await prisma.$queryRaw(`
+                                          SELECT
+                                        	dfbwm.collection AS collection,
+                                        	ROUND(SUM(units_sales),0) AS total_units,
+                                        	ROUND(SUM(retail_sales),0) AS total_revenue
+                                        FROM
+                                        	morphe_staging.demand_forecast_base_weekly_metrics dfbwm,
+                                        	morphe_staging.demand_forecast_run_log dfrl
+                                        WHERE
+                                        	dfrl.is_base_forecast = 1
+                                        	AND dfrl.id = dfbwm.demand_forecast_run_log_id
+                                        	AND YEAR(dfbwm.weekend) = ${forecast_year}
+                                        	AND dfbwm.channel = 'Ecomm'
+                                        GROUP BY 1
+                                        ORDER BY 3 DESC;`);
+    res.status(200).json({
+      collections,
+    });
+  } catch (error) {
+    res.status(500).json({
+      error,
+    });
+  }
+};
+
+export const collectionFilteredForecastByRetail = async (req, res) => {
+  try {
+    const { forecast_year } = req.params;
+    const collections = await prisma.$queryRaw(`
+                                                SELECT
+                                              	dfbwm.collection AS collection,
+                                              	ROUND(SUM(units_sales),0) AS total_units,
+                                              	ROUND(SUM(retail_sales),0) AS total_revenue
+                                              FROM
+                                              	morphe_staging.demand_forecast_base_weekly_metrics dfbwm,
+                                              	morphe_staging.demand_forecast_run_log dfrl
+                                              WHERE
+                                              	dfrl.is_base_forecast = 1
+                                              	AND dfrl.id = dfbwm.demand_forecast_run_log_id
+                                              	AND YEAR(dfbwm.weekend) = ${forecast_year}
+                                              	AND dfbwm.channel = 'Retail'
+                                              GROUP BY 1
+                                              ORDER BY 3 DESC;`);
+    res.status(200).json({
+      collections,
+    });
+  } catch (error) {
+    res.status(500).json({
+      error,
     });
   }
 };
