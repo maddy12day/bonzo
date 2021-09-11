@@ -5,18 +5,27 @@
         <thead>
           <tr class="text-center">
             <th></th>
-            <th class="border-left border-right border-muted border-bottom" colspan="2">
+            <th
+              class="border-left border-right border-muted border-bottom"
+              colspan="2"
+            >
               Total
             </th>
-            <th class="border-left border-right border-muted border-bottom" colspan="2">
+            <th
+              class="border-left border-right border-muted border-bottom"
+              colspan="2"
+            >
               Ecomm
             </th>
-            <th class="border-left border-right border-muted border-bottom" colspan="2">
+            <th
+              class="border-left border-right border-muted border-bottom"
+              colspan="2"
+            >
               Retail
             </th>
           </tr>
-          <tr>
-            <th>Name</th>
+          <tr class="text-right">
+            <th class="text-left">Name</th>
             <th class="border-left border-muted">Units</th>
             <th class="border-right border-muted">Revenue</th>
             <th class="border-left border-muted">Units</th>
@@ -27,13 +36,25 @@
         </thead>
         <tbody>
           <tr v-for="(row, index) in tableData" :key="index">
-            <td>{{ row.total.collection }}</td>
-            <td>{{ row.total.total_units }}</td>
-            <td>{{ row.total.total_revenue }}</td>
-            <td>{{ row.ecomm.total_units }}</td>
-            <td>{{ row.ecomm.total_revenue }}</td>
-            <td>{{ row.retail.total_units }}</td>
-            <td>{{ row.retail.total_revenue }}</td>
+            <td>{{ row.total.collection | toLocaleStr }}</td>
+            <td class="text-right">
+              {{ row.total.total_units | toLocaleStr }}
+            </td>
+            <td class="text-right">
+              {{ row.total.total_revenue | toLocaleStr }}
+            </td>
+            <td class="text-right">
+              {{ row.ecomm.total_units | toLocaleStr }}
+            </td>
+            <td class="text-right">
+              {{ row.ecomm.total_revenue | toLocaleStr }}
+            </td>
+            <td class="text-right">
+              {{ row.retail.total_units | toLocaleStr }}
+            </td>
+            <td class="text-right">
+              {{ row.retail.total_revenue | toLocaleStr }}
+            </td>
           </tr>
         </tbody>
       </table>
