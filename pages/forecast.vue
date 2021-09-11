@@ -1,7 +1,7 @@
 <template>
   <div :key="reRender">
     <!-- Filters component (Vishal) -->
-    <card card-body-classes="table-full-width" >
+    <card card-body-classes="table-full-width">
       <div class="forecast-filter-buttons">
         <div class="btn-group btn-group-toggle p-0 mb-2" data-toggle="buttons">
           <label
@@ -110,7 +110,7 @@
       :key="filteredStatsComponentKey"
       @getSelectedYear="getSelectedFilteredYear"
     />
-    <ChartWidget v-if="!isFilteredForecast" ref="chartWidget"/>
+    <ChartWidget v-if="!isFilteredForecast" ref="chartWidget" />
     <FilteredChartWidget
       ref="filteredChartWidget"
       v-if="isFilteredForecast"
@@ -265,10 +265,10 @@
         </a>
       </div>
     </div>
-
+    <ComparisonTable :tableData="comparisonCollnData" />
     <ForecastBySkuTable
       v-if="isFilteredForecast"
-       ref="filterChartWidget"
+      ref="filterChartWidget"
       :tableHeading="'Revenue'"
       :forecast_attribute="'retail_sales'"
       :topTenSkusData="topTenSkusData"
@@ -276,14 +276,14 @@
     />
     <ForecastBySkuTable
       v-if="isFilteredForecast"
-       ref="filterChartWidget"
+      ref="filterChartWidget"
       :tableHeading="'Units Sales'"
       :forecast_attribute="'units_sales'"
       :topTenSkusData="topTenSkusData"
       :allAppliedFilters="allAppliedFilters"
     />
     <ForecastBySkuTable
-    ref="filterChartWidget"
+      ref="filterChartWidget"
       v-if="isFilteredForecast"
       :tableHeading="'AUR'"
       :forecast_attribute="'aur'"
@@ -312,7 +312,8 @@ import ChartWidget from "../components/ChartWidget.vue";
 import FilteredChartWidget from "../components/FilterChartWidget.vue";
 import moment from "moment";
 import XLSX from "xlsx";
-import { mapState } from 'vuex';
+import { mapState } from "vuex";
+import ComparisonTable from '../components/ComparisionTables/ComparisonTable.vue'
 
 export default {
   name: "Forecast",
@@ -332,6 +333,7 @@ export default {
     FilteredChartWidget,
     Tags,
     ChartWidget,
+    ComparisonTable
   },
 
   data() {
@@ -375,9 +377,44 @@ export default {
       csvFileName: `Filtered SKUs - ${moment().format(
         "YYYY-MM-DD HH:MM:SS"
       )}.xlsx`,
+      comparisonCollnData: [],
     };
   },
   methods: {
+    async comparisonTableDataGenerator() {
+      const collectionForecast = await this.$axios(
+        `/collection-forecast/${this.forecastedYear}`
+      );
+      const collectionForecastByEcomm = await this.$axios(
+        `/collection-forecast-by-ecomm/${this.forecastedYear}`
+      );
+      const collectionForecastByRetail = await this.$axios(
+        `/collection-forecast-by-retail/${this.forecastedYear}`
+      );
+      this.comparisonCollnData = [];
+      for (let collection of collectionForecast.data.collections) {
+        for (let ecolln of collectionForecastByEcomm.data.collections) {
+          for (let rcolln of collectionForecastByRetail.data.collections) {
+            if (
+              collection.collection == ecolln.collection &&
+              collection.collection == rcolln.collection
+            ) {
+              this.comparisonCollnData.push({
+                total: {
+                  ...collection,
+                },
+                ecomm: {
+                  ...ecolln,
+                },
+                retail: {
+                  ...rcolln,
+                },
+              });
+            }
+          }
+        }
+      }
+    },
     exportToExcel() {
       let filterPayload = XLSX.utils.json_to_sheet(this.filterArray);
       let skus = XLSX.utils.json_to_sheet(this.skusJsonData);
@@ -393,13 +430,14 @@ export default {
       this.forecastedYear = value;
       this.showMetricsByDuration(this.activeTab);
       this.getWeekendDates(value);
-       this.$refs.chartWidget.chartInit(value);
+      this.$refs.chartWidget.chartInit(value);
+      this.comparisonTableDataGenerator();
     },
     getSelectedFilteredYear(value) {
       this.filteredForecastedYear = value;
-  
+
       this.$refs.filteredChartWidget.initChart(value);
-      this.$refs.filterChartWidget.getFilteredForecastData(value)
+      this.$refs.filterChartWidget.getFilteredForecastData(value);
       this.showFilteredMetricsByDuration(this.filteredActiveTab);
       this.getFilteredTopSkus();
       this.getFilteredWeeklyMetrics(this.requestedFilterOption);
@@ -570,8 +608,10 @@ export default {
       this.filteredForecastMetrics = filteredWeeklyforecast;
     },
     // retail weeekends
-     async getWeekendDates(value) {
-      const weekendDates = await this.$axios.$get(`/get-weekend-dates/${value}`);
+    async getWeekendDates(value) {
+      const weekendDates = await this.$axios.$get(
+        `/get-weekend-dates/${value}`
+      );
       window.localStorage.setItem(
         "allUsersInfo",
         JSON.stringify(this.userInfo)
@@ -809,7 +849,7 @@ export default {
     reRender() {
       this.getBaseAdjustments();
       this.showMetricsByDuration(this.activeTab);
-      return  this.$store.state.key;
+      return this.$store.state.key;
     },
     selectedFilters() {
       return this.selectedFilterOptions;
@@ -866,6 +906,7 @@ export default {
   mounted() {
     this.getBaseAdjustments();
     this.showMetricsByDuration("Monthly");
+    this.comparisonTableDataGenerator();
     setInterval(() => {
       this.checkManualAdjustmentStatus();
     }, 10000);
