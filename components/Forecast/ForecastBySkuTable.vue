@@ -7,8 +7,8 @@
       <h5 class="text-bold font-weight-bold">Applied Filters</h5>
       <Tags :allAppliedFilters="allAppliedFilters" />
     </div>
-    <el-table :data="topTenSkusData.parsedWeeklyData">
-      <template v-if="topTenSkusData && topTenSkusData.parsedWeeklyData && topTenSkusData.parsedWeeklyData.length=='0'">
+    <el-table :data="topSkusData.parsedWeeklyData">
+      <template v-if="topSkusData && topSkusData.parsedWeeklyData && topSkusData.parsedWeeklyData.length=='0'">
         <div slot="append">
         </div>
       </template>
@@ -580,7 +580,7 @@ export default {
   props: [
     "tableHeading",
     "forecast_attribute",
-    "topTenSkusData",
+    "topSkusData",
     "allAppliedFilters",
   ],
   data() {

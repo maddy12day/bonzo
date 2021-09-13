@@ -8,24 +8,23 @@ const weeklyCommonTableDataMapping = (data) => {
   const titles = data.map((item) => item.title);
   let uniqueSkus = [...new Set(skus)];
   let uniqueSkusTitle = [...new Set(titles)];
-  let counter = uniqueSkus.length <= 10 ? uniqueSkus.length : 10;
+  let counter = uniqueSkus.length <= 50 ? uniqueSkus.length : 50;
   const finalData = [];
   for (let i = 0; i < counter; i++) {
-    let arr = data
-      .filter(
-        (item) =>
-          item.sku == uniqueSkus[i] &&
-          item.title == uniqueSkusTitle[i] &&
-          item.title &&
-          uniqueSkus[i]
-      )
-      if(uniqueSkusTitle[i] && arr.length > 0) {
-    finalData.push({
-      sku: uniqueSkus[i],
-      title: uniqueSkusTitle[i],
-      data: arr,
-    });
-  }
+    let arr = data.filter(
+      (item) =>
+        item.sku == uniqueSkus[i] &&
+        item.title == uniqueSkusTitle[i] &&
+        item.title &&
+        uniqueSkus[i]
+    );
+    if (uniqueSkusTitle[i] && arr.length > 0) {
+      finalData.push({
+        sku: uniqueSkus[i],
+        title: uniqueSkusTitle[i],
+        data: arr,
+      });
+    }
   }
   return finalData;
 };
@@ -209,7 +208,7 @@ export const getFilteredForecastData = async (req, res) => {
                         )
                   group by 1
                   order by 2 desc
-                  limit 10)
+                  limit 50)
                 SELECT
                   dfbwm.sku AS sku,
                   dp.title AS title,
@@ -246,7 +245,6 @@ export const getFilteredForecastData = async (req, res) => {
       error: `${error}`,
     });
   }
-  
 };
 // download all skus data
 export const downloadAllSkusData = async (req, res) => {
@@ -531,11 +529,21 @@ const parseFilteredForecastData = (
         ] = "--";
       }
       if (obj["Metrics Slug"] == "aur") {
-        obj["yearly_aggregate"] = isNaN(revenueTotal/unitsTotal) ? 0 : (revenueTotal/unitsTotal).toFixed(2);
-        obj["Q1"] = isNaN(quarter1RevenueTotal / quarter1UnitsTotal) ? 0 : (quarter1RevenueTotal / quarter1UnitsTotal).toFixed(2);
-        obj["Q2"] = isNaN(quarter2RevenueTotal / quarter2UnitsTotal) ? 0 : (quarter2RevenueTotal / quarter2UnitsTotal).toFixed(2);
-        obj["Q3"] = isNaN(quarter3RevenueTotal / quarter3UnitsTotal) ? 0 : (quarter3RevenueTotal / quarter3UnitsTotal).toFixed(2);
-        obj["Q4"] = isNaN(quarter4RevenueTotal / quarter4UnitsTotal) ? 0 : (quarter4RevenueTotal / quarter4UnitsTotal).toFixed(2);
+        obj["yearly_aggregate"] = isNaN(revenueTotal / unitsTotal)
+          ? 0
+          : (revenueTotal / unitsTotal).toFixed(2);
+        obj["Q1"] = isNaN(quarter1RevenueTotal / quarter1UnitsTotal)
+          ? 0
+          : (quarter1RevenueTotal / quarter1UnitsTotal).toFixed(2);
+        obj["Q2"] = isNaN(quarter2RevenueTotal / quarter2UnitsTotal)
+          ? 0
+          : (quarter2RevenueTotal / quarter2UnitsTotal).toFixed(2);
+        obj["Q3"] = isNaN(quarter3RevenueTotal / quarter3UnitsTotal)
+          ? 0
+          : (quarter3RevenueTotal / quarter3UnitsTotal).toFixed(2);
+        obj["Q4"] = isNaN(quarter4RevenueTotal / quarter4UnitsTotal)
+          ? 0
+          : (quarter4RevenueTotal / quarter4UnitsTotal).toFixed(2);
       }
       parsedData.push(obj);
     }
