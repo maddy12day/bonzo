@@ -8,6 +8,7 @@ export const registerUser = async (req, res) => {
   try {
     const { email, password, first_name, last_name } = req.body;
     const pass_hash = bcrypt.hashSync(password, 10);
+
     const user = await prisma.users.create({
       data: {
         email_id: email,
@@ -32,6 +33,24 @@ export const registerUser = async (req, res) => {
     });
   }
 };
+export const resetPassword = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    const hash_pass = bcrypt.hashSync(password, 10);
+    const user = await prisma.$queryRaw(
+      `update morphe_staging.users set password='${hash_pass}' where email_id='${email}';`
+    );
+    res.json({
+      user,
+      message: "password updated successfully....",
+    });
+  } catch (error) {
+    res.json({
+      error: error,
+      mess: "something went wrong in password reset api...",
+    });
+  }
+};
 
 export const authenticateUser = async (req, res) => {
   try {
@@ -44,16 +63,23 @@ export const authenticateUser = async (req, res) => {
       const first_name = current_user.first_name;
       const last_name = current_user.last_name;
       const user_id = current_user.id;
-      const isAuthenticate = bcrypt.compareSync(password, current_user.password);
+      const isAuthenticate = bcrypt.compareSync(
+        password,
+        current_user.password
+      );
       if (isAuthenticate) {
-        const token = jwt.sign({ email, first_name, last_name, user_id}, process.env.BONZO_AI_TOKEN_SALT, { expiresIn: "24h" });
+        const token = jwt.sign(
+          { email, first_name, last_name, user_id },
+          process.env.BONZO_AI_TOKEN_SALT,
+          { expiresIn: "24h" }
+        );
         res.status(200).send({
           message: "Authentication successful",
           token: token,
           sessionId: current_user.id,
           userRole: "Admin",
           username: `${first_name} ${last_name}`,
-          user_id
+          user_id,
         });
       } else {
         res.status(401).send({
@@ -74,13 +100,17 @@ export const userInfo = async (req, res) => {
   var token = req.headers.authorization;
   if (token) {
     // verifies secret and checks if the token is expired
-    jwt.verify(token.replace(/^Bearer\s/, ""), process.env.BONZO_AI_TOKEN_SALT, function(err, decoded) {
-      if (err) {
-        return res.status(401).json({ message: "unauthorized" });
-      } else {
-        return res.json({ user: decoded });
+    jwt.verify(
+      token.replace(/^Bearer\s/, ""),
+      process.env.BONZO_AI_TOKEN_SALT,
+      function(err, decoded) {
+        if (err) {
+          return res.status(401).json({ message: "unauthorized" });
+        } else {
+          return res.json({ user: decoded });
+        }
       }
-    });
+    );
   } else {
     return res.status(401).json({ message: "unauthorized" });
   }

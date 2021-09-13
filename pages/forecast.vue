@@ -281,6 +281,7 @@
       </el-select>
     </template>
     </div>
+    <ComparisonTable :tableData="comparisonCollnData" v-if="!isFilteredForecast"/>
     <ForecastBySkuTable
       v-if="isFilteredForecast"
       ref="filterChartWidget"
@@ -329,6 +330,7 @@ import FilteredChartWidget from "../components/FilterChartWidget.vue";
 import moment from "moment";
 import XLSX from "xlsx";
 import { mapState } from "vuex";
+import ComparisonTable from "../components/ComparisionTables/ComparisonTable.vue";
 
 export default {
   name: "Forecast",
@@ -350,6 +352,7 @@ export default {
     ChartWidget,
     [Select.name]: Select,
     [Option.name]: Option,
+    ComparisonTable,
   },
 
   data() {
@@ -413,6 +416,7 @@ export default {
       csvFileName: `Filtered SKUs - ${moment().format(
         "YYYY-MM-DD HH:MM:SS"
       )}.xlsx`,
+      comparisonCollnData: [],
     };
   },
   methods: {
@@ -434,6 +438,40 @@ export default {
       }
       this.topSkusData = topLimitedSkuData;
     },
+    async comparisonTableDataGenerator() {
+      const collectionForecast = await this.$axios(
+        `/collection-forecast/${this.forecastedYear}`
+      );
+      const collectionForecastByEcomm = await this.$axios(
+        `/collection-forecast-by-ecomm/${this.forecastedYear}`
+      );
+      const collectionForecastByRetail = await this.$axios(
+        `/collection-forecast-by-retail/${this.forecastedYear}`
+      );
+      this.comparisonCollnData = [];
+      for (let collection of collectionForecast.data.collections) {
+        for (let ecolln of collectionForecastByEcomm.data.collections) {
+          for (let rcolln of collectionForecastByRetail.data.collections) {
+            if (
+              collection.collection == ecolln.collection &&
+              collection.collection == rcolln.collection
+            ) {
+              this.comparisonCollnData.push({
+                total: {
+                  ...collection,
+                },
+                ecomm: {
+                  ...ecolln,
+                },
+                retail: {
+                  ...rcolln,
+                },
+              });
+            }
+          }
+        }
+      }
+    },
     exportToExcel() {
       let filterPayload = XLSX.utils.json_to_sheet(this.filterArray);
       let skus = XLSX.utils.json_to_sheet(this.skusJsonData);
@@ -450,9 +488,11 @@ export default {
       this.showMetricsByDuration(this.activeTab);
       this.getWeekendDates(value);
       this.$refs.chartWidget.chartInit(value);
+      this.comparisonTableDataGenerator();
     },
     getSelectedFilteredYear(value) {
       this.filteredForecastedYear = value;
+
       this.$refs.filteredChartWidget.initChart(value);
       this.$refs.filterChartWidget.getFilteredForecastData(value);
       this.showFilteredMetricsByDuration(this.filteredActiveTab);
@@ -936,6 +976,7 @@ export default {
   mounted() {
     this.getBaseAdjustments();
     this.showMetricsByDuration("Monthly");
+    this.comparisonTableDataGenerator();
     setInterval(() => {
       this.checkManualAdjustmentStatus();
     }, 10000);
@@ -943,7 +984,7 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .card-body {
   h4 {
     margin: 0;
@@ -973,7 +1014,7 @@ export default {
     position: absolute;
     right: 0;
 
-    .el-input:hover .el-input__icon, .el-select .el-input:hover input {
+    .el-input:hover .el-input__icon, .el-input:hover input {
       color: black
     }
   }

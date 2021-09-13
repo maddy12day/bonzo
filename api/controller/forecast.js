@@ -175,6 +175,7 @@ const whereQueryString = (obj, alias = "fseisbw") => {
         .join(",")}) AND `;
     }
   });
+  console.log("qyerrrrrrrrrrrrrrrr", str2.slice(0, str2.length - 4))
   return str2.slice(0, str2.length - 4);
 };
 //top 10 skus
@@ -771,7 +772,6 @@ export const getFilteredForecastMetrics = async (req, res) => {
   let regularFilter = {};
   let countryFilter = {};
   let countryFilter1 = {};
-
   for (let item in req.body) {
     if (item !== "filter_sub_channels" && item !== "filter_channels") {
       regularFilter[item] = req.body[item];
@@ -1166,6 +1166,90 @@ export const getFilterChartData = async (req, res) => {
     res.status(500).json({
       message: "Unable to Fetch Filtered Forecast Data",
       error: `${error}`,
+    });
+  }
+};
+// ============================ collection queries ==================================
+
+export const collectionFilteredForecast = async (req, res) => {
+  try {
+    const { forecast_year } = req.params;
+    const collections = await prisma.$queryRaw(`
+                                            SELECT
+                                          	dfbwm.collection AS collection,
+                                          	ROUND(SUM(units_sales),0) AS total_units,
+                                          	ROUND(SUM(retail_sales),0) AS total_revenue
+                                          FROM
+                                          	morphe_staging.demand_forecast_base_weekly_metrics dfbwm,
+                                          	morphe_staging.demand_forecast_run_log dfrl
+                                          WHERE
+                                          	dfrl.is_base_forecast = 1
+                                          	AND dfrl.id = dfbwm.demand_forecast_run_log_id
+                                          	AND YEAR(dfbwm.weekend) = ${forecast_year}
+                                          GROUP BY 1
+                                          ORDER BY 3 DESC;`);
+    res.status(200).json({
+      collections,
+    });
+  } catch (error) {
+    res.status(500).json({
+      error,
+    });
+  }
+};
+
+export const collectionFilteredForecastByEcomm = async (req, res) => {
+  try {
+    const { forecast_year } = req.params;
+    const collections = await prisma.$queryRaw(`
+                                          SELECT
+                                        	dfbwm.collection AS collection,
+                                        	ROUND(SUM(units_sales),0) AS total_units,
+                                        	ROUND(SUM(retail_sales),0) AS total_revenue
+                                        FROM
+                                        	morphe_staging.demand_forecast_base_weekly_metrics dfbwm,
+                                        	morphe_staging.demand_forecast_run_log dfrl
+                                        WHERE
+                                        	dfrl.is_base_forecast = 1
+                                        	AND dfrl.id = dfbwm.demand_forecast_run_log_id
+                                        	AND YEAR(dfbwm.weekend) = ${forecast_year}
+                                        	AND dfbwm.channel = 'Ecomm'
+                                        GROUP BY 1
+                                        ORDER BY 3 DESC;`);
+    res.status(200).json({
+      collections,
+    });
+  } catch (error) {
+    res.status(500).json({
+      error,
+    });
+  }
+};
+
+export const collectionFilteredForecastByRetail = async (req, res) => {
+  try {
+    const { forecast_year } = req.params;
+    const collections = await prisma.$queryRaw(`
+                                                SELECT
+                                              	dfbwm.collection AS collection,
+                                              	ROUND(SUM(units_sales),0) AS total_units,
+                                              	ROUND(SUM(retail_sales),0) AS total_revenue
+                                              FROM
+                                              	morphe_staging.demand_forecast_base_weekly_metrics dfbwm,
+                                              	morphe_staging.demand_forecast_run_log dfrl
+                                              WHERE
+                                              	dfrl.is_base_forecast = 1
+                                              	AND dfrl.id = dfbwm.demand_forecast_run_log_id
+                                              	AND YEAR(dfbwm.weekend) = ${forecast_year}
+                                              	AND dfbwm.channel = 'Retail'
+                                              GROUP BY 1
+                                              ORDER BY 3 DESC;`);
+    res.status(200).json({
+      collections,
+    });
+  } catch (error) {
+    res.status(500).json({
+      error,
     });
   }
 };

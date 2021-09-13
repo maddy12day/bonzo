@@ -65,6 +65,7 @@
         tableHeading="Monthly Forecast Metrics"
       />
     </card>
+    <ComparisonTable :tableData="comparisonCollnData" />
   </div>
 </template>
 
@@ -76,6 +77,7 @@ import WeeklyMetricsTable from "../components/Metrics/WeeklyMetricsTable.vue";
 import MonthlyMetricsTable from "../components/Metrics/MonthlyMetricsTable.vue";
 import Card from "~/components/Cards/Card.vue";
 import Timeline from "../components/Timeline/Timeline.vue";
+import ComparisonTable from "../components/ComparisionTables/ComparisonTable.vue";
 
 export default {
   data() {
@@ -88,6 +90,7 @@ export default {
       genesisNodeTimeline: [],
       mergedScenariosTimeLine: [],
       forecastedYear: "2021",
+      comparisonCollnData: [],
     };
   },
   components: {
@@ -98,6 +101,7 @@ export default {
     MonthlyMetricsTable,
     Card,
     Timeline,
+    ComparisonTable,
   },
   methods: {
     async scenarioMergeStatusUpdate() {
@@ -110,6 +114,7 @@ export default {
       this.showMetricsByDuration("Weekly");
       this.getWeekendDates();
       this.$refs.chartWidget.chartInit(value);
+      this.comparisonTableDataGenerator();
     },
     // timeline api call
     async getTimelineDetails() {
@@ -177,7 +182,40 @@ export default {
         );
       }
     },
-
+    async comparisonTableDataGenerator() {
+      const collectionForecast = await this.$axios(
+        `/collection-forecast/${this.forecastedYear}`
+      );
+      const collectionForecastByEcomm = await this.$axios(
+        `/collection-forecast-by-ecomm/${this.forecastedYear}`
+      );
+      const collectionForecastByRetail = await this.$axios(
+        `/collection-forecast-by-retail/${this.forecastedYear}`
+      );
+      this.comparisonCollnData = [];
+      for (let collection of collectionForecast.data.collections) {
+        for (let ecolln of collectionForecastByEcomm.data.collections) {
+          for (let rcolln of collectionForecastByRetail.data.collections) {
+            if (
+              collection.collection == ecolln.collection &&
+              collection.collection == rcolln.collection
+            ) {
+              this.comparisonCollnData.push({
+                total: {
+                  ...collection,
+                },
+                ecomm: {
+                  ...ecolln,
+                },
+                retail: {
+                  ...rcolln,
+                },
+              });
+            }
+          }
+        }
+      }
+    },
     async getAllUserData() {
       this.userInfo = await this.$axios.$get("/get-all-users");
       window.localStorage.setItem(
@@ -205,21 +243,10 @@ export default {
     this.showMetricsByDuration("Monthly");
     this.getAllUserData();
     this.getWeekendDates();
+    this.comparisonTableDataGenerator();
     setTimeout(() => {
       this.checkMergeScenarioStatus();
     }, 10000);
-    const collectionForecast = await this.$axios(
-      `/collection-forecast/${this.forecastedYear}`
-    );
-    const collectionForecastByEcomm = await this.$axios(
-      `/collection-forecast-by-ecomm/${this.forecastedYear}`
-    );
-    const collectionForecastByRetail = await this.$axios(
-      `/collection-forecast-by-retail/${this.forecastedYear}`
-    );
-    console.log(collectionForecast);
-    console.log(collectionForecastByEcomm);
-    console.log(collectionForecastByRetail);
   },
   watch: {
     forecastedYearWatch(val) {
