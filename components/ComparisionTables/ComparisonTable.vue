@@ -1,6 +1,8 @@
 <template>
   <div class="card py-3">
+    
     <div class="card-body comparision-table">
+      <h3> {{jsonkey}} comparison</h3>
       <table class="table table-stripped table-bordered">
         <thead>
           <tr class="text-center">
@@ -36,7 +38,7 @@
         </thead>
         <tbody>
           <tr v-for="(row, index) in tableData" :key="index">
-            <td>{{ row.total.collection | toLocaleStr }}</td>
+            <td>{{ row.total[jsonkey] | toLocaleStr }}</td>
             <td class="text-right">
               {{ row.total.total_units | toLocaleStr }}
             </td>
@@ -64,7 +66,7 @@
 <script>
 export default {
   name: "ComparisonTable",
-  props: ["tableData"],
+  props: ["tableData","jsonkey"],
 };
 </script>
 <style scoped>

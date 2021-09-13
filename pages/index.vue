@@ -65,7 +65,8 @@
         tableHeading="Monthly Forecast Metrics"
       />
     </card>
-    <ComparisonTable :tableData="comparisonCollnData" />
+    <ComparisonTable :tableData="comparisonCollnData" jsonkey="collection"/>
+    <ComparisonTable :tableData="ComparisonCategoryData"  jsonkey="category"/>
   </div>
 </template>
 
@@ -78,9 +79,11 @@ import MonthlyMetricsTable from "../components/Metrics/MonthlyMetricsTable.vue";
 import Card from "~/components/Cards/Card.vue";
 import Timeline from "../components/Timeline/Timeline.vue";
 import ComparisonTable from "../components/ComparisionTables/ComparisonTable.vue";
+import CategoryTable from "../components/ComparisionTables/ComparisonTable.vue";
 
 export default {
   data() {
+    
     return {
       sharedScenariosList: [],
       baseMetricsList: [],
@@ -91,6 +94,7 @@ export default {
       mergedScenariosTimeLine: [],
       forecastedYear: "2021",
       comparisonCollnData: [],
+      ComparisonCategoryData:[],
     };
   },
   components: {
@@ -102,6 +106,7 @@ export default {
     Card,
     Timeline,
     ComparisonTable,
+    CategoryTable
   },
   methods: {
     async scenarioMergeStatusUpdate() {
@@ -183,6 +188,19 @@ export default {
       }
     },
     async comparisonTableDataGenerator() {
+      const CategoryRetailForecast = await this.$axios(
+        `/forecast-category-by-retail/${this.forecastedYear}`
+        );
+         const CategoryEcommForecast = await this.$axios(
+        `/forecast-category-by-ecomm/${this.forecastedYear}`
+        );
+         const CategoryTotalForecast = await this.$axios(
+        `/forecast-category-by-total/${this.forecastedYear}`
+        );
+           console.log("this is Retail calling",CategoryRetailForecast);
+           console.log("this is Ecomm calling",CategoryEcommForecast);
+            console.log("this is total calling",CategoryTotalForecast);
+
       const collectionForecast = await this.$axios(
         `/collection-forecast/${this.forecastedYear}`
       );
@@ -193,6 +211,29 @@ export default {
         `/collection-forecast-by-retail/${this.forecastedYear}`
       );
       this.comparisonCollnData = [];
+      this.ComparisonCategoryData=[];
+       for (let category of CategoryTotalForecast.data.category) {
+        for (let ecategory of CategoryEcommForecast.data.category) {
+          for (let rcategory of CategoryRetailForecast.data.category) {
+            if (
+              category.category == ecategory.category &&
+              category.category == rcategory.category
+            ) {
+              this.ComparisonCategoryData.push({
+                total: {
+                  ...category,
+                },
+                ecomm: {
+                  ...ecategory,
+                },
+                retail: {
+                  ...rcategory,
+                },
+              });
+            }
+          }
+        }
+      }
       for (let collection of collectionForecast.data.collections) {
         for (let ecolln of collectionForecastByEcomm.data.collections) {
           for (let rcolln of collectionForecastByRetail.data.collections) {
