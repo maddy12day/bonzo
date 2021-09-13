@@ -8,7 +8,7 @@ const weeklyCommonTableDataMapping = (data) => {
   const titles = data.map((item) => item.title);
   let uniqueSkus = [...new Set(skus)];
   let uniqueSkusTitle = [...new Set(titles)];
-  let counter = uniqueSkus.length <= 10 ? uniqueSkus.length : 10;
+  let counter = uniqueSkus.length <= 50 ? uniqueSkus.length : 50;
   const finalData = [];
   for (let i = 0; i < counter; i++) {
     let arr = data.filter(
@@ -209,7 +209,7 @@ export const getFilteredForecastData = async (req, res) => {
                         )
                   group by 1
                   order by 2 desc
-                  limit 10)
+                  limit 50)
                 SELECT
                   dfbwm.sku AS sku,
                   dp.title AS title,
