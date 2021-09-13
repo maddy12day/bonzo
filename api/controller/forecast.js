@@ -175,7 +175,6 @@ const whereQueryString = (obj, alias = "fseisbw") => {
         .join(",")}) AND `;
     }
   });
-  console.log("qyerrrrrrrrrrrrrrrr", str2.slice(0, str2.length - 4))
   return str2.slice(0, str2.length - 4);
 };
 //top 10 skus

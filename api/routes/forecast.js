@@ -6,6 +6,9 @@ import {
   getFilteredQuarterlyStatsData,
   downloadAllSkusData,
   getFilterChartData,
+  collectionFilteredForecast,
+  collectionFilteredForecastByEcomm,
+  collectionFilteredForecastByRetail,
 } from "../controller/forecast";
 const router = Router();
 
@@ -32,6 +35,15 @@ router.post(
 router.post(
   "/get-filtered-chart-data-by-duration/:filterForecastedYear",
   getFilterChartData
+);
+router.post("/collection-forecast/:forecast_year", collectionFilteredForecast);
+router.post(
+  "/collection-forecast-by-ecomm/:forecast_year",
+  collectionFilteredForecastByEcomm
+);
+router.post(
+  "/collection-forecast-by-retail/:forecast_year",
+  collectionFilteredForecastByRetail
 );
 
 export default router;

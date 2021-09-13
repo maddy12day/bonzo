@@ -11,6 +11,12 @@ import {
   collectionForecast,
   collectionForecastByEcomm,
   collectionForecastByRetail,
+  forecastByCategoryByEcomm,
+  forecastByCategoryByTotal,
+  ecommForecast,
+  retailForecast,
+  totalForecast,
+  forecastByCategoryByRetail,
 } from "../controller/metrics";
 
 const router = Router();
@@ -42,5 +48,20 @@ router.get(
   "/collection-forecast-by-retail/:forecast_year",
   collectionForecastByRetail
 );
+router.get(
+  "/forecast-category-by-ecomm/:forecast_year",
+  forecastByCategoryByEcomm
+);
+router.get(
+  "/forecast-category-by-retail/:forecast_year",
+  forecastByCategoryByRetail
+);
+router.get(
+  "/forecast-category-by-total/:forecast_year",
+  forecastByCategoryByTotal
+);
+router.get("/retial-forecast/:forecast_year", retailForecast);
+router.get("/ecomm-forecast/:forecast_year", ecommForecast);
+router.get("/total-forecast/:forecast_year", totalForecast);
 
 export default router;

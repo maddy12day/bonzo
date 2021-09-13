@@ -339,3 +339,161 @@ export const collectionForecastByRetail = async (req, res) => {
     });
   }
 };
+
+export const ecommForecast = async (req, res) => {
+  try {
+    const { forecast_year } = req.params;
+    const channel = await prisma.$queryRaw(`
+                                              SELECT
+                                              	dfbwm.channel AS channel,
+                                              	ROUND(SUM(units_sales),0) AS total_units,
+                                              	ROUND(SUM(retail_sales),0) AS total_revenue
+                                              FROM
+                                              	morphe_staging.demand_forecast_base_weekly_metrics dfbwm,
+                                              	morphe_staging.demand_forecast_run_log dfrl
+                                              WHERE
+                                              	dfrl.is_base_forecast = 1
+                                              	AND dfrl.id = dfbwm.demand_forecast_run_log_id
+                                              	AND YEAR(dfbwm.weekend) = ${forecast_year}
+                                              	AND dfbwm.channel = 'Retail'
+                                              GROUP BY 1
+                                              ORDER BY 3 DESC;`);
+    res.status(200).json({
+      channel,
+    });
+  } catch (error) {
+    res.status(500).json({
+      error,
+    });
+  }
+};
+export const retailForecast = async (req, res) => {
+  try {
+    const { forecast_year } = req.params;
+    const channel = await prisma.$queryRaw(`
+                                              SELECT
+                                              	dfbwm.channel AS channel,
+                                              	ROUND(SUM(units_sales),0) AS total_units,
+                                              	ROUND(SUM(retail_sales),0) AS total_revenue
+                                              FROM
+                                              	morphe_staging.demand_forecast_base_weekly_metrics dfbwm,
+                                              	morphe_staging.demand_forecast_run_log dfrl
+                                              WHERE
+                                              	dfrl.is_base_forecast = 1
+                                              	AND dfrl.id = dfbwm.demand_forecast_run_log_id
+                                              	AND YEAR(dfbwm.weekend) = ${forecast_year}
+                                              	AND dfbwm.channel = 'Ecomm'
+                                              GROUP BY 1
+                                              ORDER BY 3 DESC;`);
+    res.status(200).json({
+      channel,
+    });
+  } catch (error) {
+    res.status(500).json({
+      error,
+    });
+  }
+};
+export const totalForecast = async (req, res) => {
+  try {
+    const { forecast_year } = req.params;
+    const channel = await prisma.$queryRaw(`
+                                            SELECT
+                                            ROUND(SUM(units_sales), 0) AS total_units,
+                                            ROUND(SUM(retail_sales), 0) AS total_revenue
+                                          FROM
+                                            morphe_staging.demand_forecast_base_weekly_metrics dfbwm,
+                                            morphe_staging.demand_forecast_run_log dfrl
+                                          WHERE
+                                            dfrl.is_base_forecast = 1
+                                            AND dfrl.id = dfbwm.demand_forecast_run_log_id
+                                            AND YEAR(dfbwm.weekend) = ${forecast_year};`);
+    res.status(200).json({
+      channel,
+    });
+  } catch (error) {
+    res.status(500).json({
+      error,
+    });
+  }
+};
+export const forecastByCategoryByEcomm = async (req, res) => {
+  try {
+    const { forecast_year } = req.params;
+    const category = await prisma.$queryRaw(`
+                          SELECT
+                          dfbwm.category AS category,
+                          ROUND(SUM(units_sales),0) AS total_units,
+                          ROUND(SUM(retail_sales),0) AS total_revenue
+                        FROM
+                          morphe_staging.demand_forecast_base_weekly_metrics dfbwm,
+                          morphe_staging.demand_forecast_run_log dfrl
+                        WHERE
+                          dfrl.is_base_forecast = 1
+                          AND dfrl.id = dfbwm.demand_forecast_run_log_id
+                          AND YEAR(dfbwm.weekend) = ${forecast_year}
+                          AND dfbwm.channel = 'Ecomm'
+                        GROUP BY 1
+                        ORDER BY 3 DESC;`);
+    res.status(200).json({
+      category,
+    });
+  } catch (error) {
+    res.status(500).json({
+      error,
+    });
+  }
+};
+export const forecastByCategoryByRetail = async (req, res) => {
+  try {
+    const { forecast_year } = req.params;
+    const category = await prisma.$queryRaw(`
+                          SELECT
+                          dfbwm.category AS category,
+                          ROUND(SUM(units_sales),0) AS total_units,
+                          ROUND(SUM(retail_sales),0) AS total_revenue
+                        FROM
+                          morphe_staging.demand_forecast_base_weekly_metrics dfbwm,
+                          morphe_staging.demand_forecast_run_log dfrl
+                        WHERE
+                          dfrl.is_base_forecast = 1
+                          AND dfrl.id = dfbwm.demand_forecast_run_log_id
+                          AND YEAR(dfbwm.weekend) = ${forecast_year}
+                          AND dfbwm.channel = 'Retail'
+                        GROUP BY 1
+                        ORDER BY 3 DESC;`);
+    res.status(200).json({
+      category,
+    });
+  } catch (error) {
+    res.status(500).json({
+      error,
+    });
+  }
+};
+export const forecastByCategoryByTotal = async (req, res) => {
+  try {
+    const { forecast_year } = req.params;
+    const category = await prisma.$queryRaw(`
+                          SELECT
+                          dfbwm.category AS category,
+                          ROUND(SUM(units_sales),0) AS total_units,
+                          ROUND(SUM(retail_sales),0) AS total_revenue
+                        FROM
+                          morphe_staging.demand_forecast_base_weekly_metrics dfbwm,
+                          morphe_staging.demand_forecast_run_log dfrl
+                        WHERE
+                          dfrl.is_base_forecast = 1
+                          AND dfrl.id = dfbwm.demand_forecast_run_log_id
+                          AND YEAR(dfbwm.weekend) = ${forecast_year}
+                        GROUP BY 1
+                        ORDER BY 3 DESC;`);
+    res.status(200).json({
+      category,
+    });
+  } catch (error) {
+    res.status(500).json({
+      error,
+    });
+  }
+};
