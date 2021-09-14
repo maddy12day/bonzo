@@ -246,6 +246,101 @@ export const getFilteredForecastData = async (req, res) => {
     });
   }
 };
+export const downloadAllSkuByMonth = async (req, res) => {
+  try {
+    let transaction_db = "morphe_staging";
+    delete req.body.filterType;
+    const { filterForecastedYear } = req.params;
+    const query = `
+    WITH iskus AS (
+      select
+        idfbwm.sku as sku,
+        sum(idfbwm.retail_sales) as retail_sales
+      from
+      ${transaction_db}.demand_forecast_base_monthly_metrics idfbwm
+      where
+        idfbwm.demand_forecast_run_log_id = (
+        select
+          id
+        from
+        ${transaction_db}.demand_forecast_run_log dfrl
+        where
+          is_base_forecast = true
+        limit 1)
+        and idfbwm.sku in (
+        select
+          idp.SKU
+        from
+        ${transaction_db}.dim_products idp
+        where
+        ${whereQueryString(req.body, "idfbwm").replace(/dp/g, "idp")}
+            AND idp.life_cycle <> 'OBSOLETE'
+            AND idp.life_cycle <> 'disco'
+            AND YEAR(idp.launch_date) <= YEAR(CURRENT_DATE()) )
+      group by
+        1
+      order by
+        2 desc )
+      SELECT
+        dp.brand as brand, 
+        dfbwm.channel as channel,
+        dp.ns_category as category,
+        dfbwm.country as country, 
+        dp.ns_class as class,
+        dp.ns_subclass as sub_class,
+        dp.ns_collection as collection, 
+        dfbwm.sku AS sku,
+        dp.title AS title,
+        MONTHNAME(dfbwm.monthend) AS monthend,
+        ROUND(SUM(dfbwm.retail_sales), 0) AS retail_sales,
+        SUM(dfbwm.units_sales) AS units_sales,
+        ROUND((SUM(dfbwm.retail_sales) / SUM(dfbwm.units_sales)), 2) AS aur
+      FROM
+      ${transaction_db}.demand_forecast_base_monthly_metrics dfbwm,
+      ${transaction_db}.dim_products dp
+      WHERE
+        demand_forecast_run_log_id = (
+        select
+          id
+        from
+        ${transaction_db}.demand_forecast_run_log dfrl
+        where
+          is_base_forecast = true
+        limit 1)
+        AND dfbwm.sku = dp.SKU
+        AND YEAR(dfbwm.monthend) = ${filterForecastedYear}
+        AND dfbwm.sku IN (
+        select
+          sku
+        from
+          iskus)
+      GROUP BY
+            dfbwm.sku,
+            dfbwm.monthend,
+            dfbwm.channel,
+            dfbwm.country,
+            dfbwm.brand,
+            dfbwm.category,
+            dfbwm.collection
+      ORDER BY
+        dfbwm.sku,
+        dfbwm.monthend ; `;
+    const filteredForecastData = await prisma.$queryRaw(query);
+    console.log(filteredForecastData)
+    /* let parsedWeeklyData = weeklyCommonTableDataMappingForAll(
+      filteredForecastData,
+      req.body
+    ); */
+     res.status(200).json({
+      parsedWeeklyData: filteredForecastData,
+    }); 
+  } catch (error) {
+    res.status(500).json({
+      message: "something went wrong in downloadAllSkusData api",
+      error: `${error}`,
+    });
+  }
+};
 // download all skus data
 export const downloadAllSkusData = async (req, res) => {
   let transaction_db = "morphe_staging";

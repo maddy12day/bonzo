@@ -245,7 +245,10 @@
         :filterArray="filterArray"
       />
     </card>
-        <ComparisonTable :tableData="comparisonCollnData" v-if="!isFilteredForecast"/>
+    <ComparisonTable
+      :tableData="comparisonCollnData"
+      v-if="!isFilteredForecast"
+    />
     <div class="row sku-component">
       <div class="col-md-2">
         <h4 class="font-weight-bold" v-if="isFilteredForecast">
@@ -266,21 +269,21 @@
         </a>
       </div>
       <template>
-      <el-select
-      v-if="isFilteredForecast"
-        v-model="topSkusLimit"
-        placeholder="Select"
-        @change="setUpdatedSKUsLimit"
-      >
-        <el-option
-          v-for="item in options"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value"
+        <el-select
+          v-if="isFilteredForecast"
+          v-model="topSkusLimit"
+          placeholder="Select"
+          @change="setUpdatedSKUsLimit"
         >
-        </el-option>
-      </el-select>
-    </template>
+          <el-option
+            v-for="item in options"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          >
+          </el-option>
+        </el-select>
+      </template>
     </div>
     <ForecastBySkuTable
       v-if="isFilteredForecast"
@@ -697,10 +700,12 @@ export default {
       }
       this.topSkusData = topLimitedSkuData;
       this.topLimitedSkuData = topSkusData;
+      const csvJsonData = await this.$axios.$post(`/download-all-skus-data-by-month/${this.filteredForecastedYear}`, this.filterPayload);
+     /*  console.log("test", test)
       const csvJsonData = await this.$axios.$post(
         `/download-all-skus-data/${this.filteredForecastedYear}`,
         this.filterPayload
-      );
+      ); */
       this.skusJsonData = csvJsonData.parsedWeeklyData;
       this.isDownloadCsvDisbled = false;
     },
@@ -1014,8 +1019,9 @@ export default {
     position: absolute;
     right: 0;
 
-    .el-input:hover .el-input__icon, .el-input:hover input {
-      color: black
+    .el-input:hover .el-input__icon,
+    .el-input:hover input {
+      color: black;
     }
   }
 }
