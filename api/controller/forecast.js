@@ -292,6 +292,7 @@ export const downloadAllSkuByMonth = async (req, res) => {
         dfbwm.sku AS sku,
         dp.title AS title,
         MONTHNAME(dfbwm.monthend) AS monthend,
+        year(dfbwm.monthend) as year,
         ROUND(SUM(dfbwm.retail_sales), 0) AS retail_sales,
         SUM(dfbwm.units_sales) AS units_sales,
         ROUND((SUM(dfbwm.retail_sales) / SUM(dfbwm.units_sales)), 2) AS aur
@@ -321,7 +322,8 @@ export const downloadAllSkuByMonth = async (req, res) => {
             dfbwm.country,
             dfbwm.brand,
             dfbwm.category,
-            dfbwm.collection
+            dfbwm.collection,
+            year(dfbwm.monthend)
       ORDER BY
         dfbwm.sku,
         dfbwm.monthend ; `;
