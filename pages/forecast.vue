@@ -245,6 +245,7 @@
         :filterArray="filterArray"
       />
     </card>
+        <ComparisonTable :tableData="comparisonCollnData" v-if="!isFilteredForecast"/>
     <div class="row sku-component">
       <div class="col-md-2">
         <h4 class="font-weight-bold" v-if="isFilteredForecast">
@@ -281,7 +282,6 @@
       </el-select>
     </template>
     </div>
-    <ComparisonTable :tableData="comparisonCollnData" v-if="!isFilteredForecast"/>
     <ForecastBySkuTable
       v-if="isFilteredForecast"
       ref="filterChartWidget"
