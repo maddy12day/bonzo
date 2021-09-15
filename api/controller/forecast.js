@@ -282,21 +282,21 @@ export const downloadAllSkuByMonth = async (req, res) => {
       order by
         2 desc )
       SELECT
-        dp.brand as brand, 
-        dp.ns_product_subcollection, 
-        dfbwm.channel as channel,
-        dp.ns_category as category,
-        dfbwm.country as country, 
-        dp.ns_class as class,
-        dp.ns_subclass as sub_class,
-        dp.ns_collection as collection, 
-        dfbwm.sku AS sku,
-        dp.title AS title,
-        MONTHNAME(dfbwm.monthend) AS monthend,
-        year(dfbwm.monthend) as year,
-        ROUND(SUM(dfbwm.retail_sales), 0) AS retail_sales,
-        SUM(dfbwm.units_sales) AS units_sales,
-        ROUND((SUM(dfbwm.retail_sales) / SUM(dfbwm.units_sales)), 2) AS aur
+        dfbwm.sku AS SKU,
+        dp.title AS Title,
+        dp.brand as Brand, 
+        dfbwm.channel as Channel,
+        dfbwm.country as Country, 
+        dp.ns_category as Category,
+        dp.ns_class as Class,
+        dp.ns_subclass as Subclass,
+        dp.ns_collection as Collection, 
+        dp.ns_product_subcollection as Collab, 
+        MONTHNAME(dfbwm.monthend) AS Month,
+        year(dfbwm.monthend) as Year,
+        ROUND(SUM(dfbwm.retail_sales), 0) AS RevenueFcast,
+        SUM(dfbwm.units_sales) AS UnitsFcast,
+        ROUND((SUM(dfbwm.retail_sales) / SUM(dfbwm.units_sales)), 2) AS AURFcast
       FROM
       ${transaction_db}.demand_forecast_base_monthly_metrics dfbwm,
       ${transaction_db}.dim_products dp
