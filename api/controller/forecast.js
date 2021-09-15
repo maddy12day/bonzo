@@ -283,6 +283,7 @@ export const downloadAllSkuByMonth = async (req, res) => {
         2 desc )
       SELECT
         dp.brand as brand, 
+        dp.ns_product_subcollection, 
         dfbwm.channel as channel,
         dp.ns_category as category,
         dfbwm.country as country, 
@@ -323,10 +324,12 @@ export const downloadAllSkuByMonth = async (req, res) => {
             dfbwm.brand,
             dfbwm.category,
             dfbwm.collection,
+            dp.ns_product_subcollection, 
             year(dfbwm.monthend)
       ORDER BY
         dfbwm.sku,
         dfbwm.monthend ; `;
+        console.log("===========queryquery==========",query);
     const filteredForecastData = await prisma.$queryRaw(query);
     console.log(filteredForecastData)
     /* let parsedWeeklyData = weeklyCommonTableDataMappingForAll(
