@@ -8,24 +8,23 @@ const weeklyCommonTableDataMapping = (data) => {
   const titles = data.map((item) => item.title);
   let uniqueSkus = [...new Set(skus)];
   let uniqueSkusTitle = [...new Set(titles)];
-  let counter = uniqueSkus.length <= 10 ? uniqueSkus.length : 10;
+  let counter = uniqueSkus.length <= 50 ? uniqueSkus.length : 50;
   const finalData = [];
   for (let i = 0; i < counter; i++) {
-    let arr = data
-      .filter(
-        (item) =>
-          item.sku == uniqueSkus[i] &&
-          item.title == uniqueSkusTitle[i] &&
-          item.title &&
-          uniqueSkus[i]
-      )
-      if(uniqueSkusTitle[i] && arr.length > 0) {
-    finalData.push({
-      sku: uniqueSkus[i],
-      title: uniqueSkusTitle[i],
-      data: arr,
-    });
-  }
+    let arr = data.filter(
+      (item) =>
+        item.sku == uniqueSkus[i] &&
+        item.title == uniqueSkusTitle[i] &&
+        item.title &&
+        uniqueSkus[i]
+    );
+    if (uniqueSkusTitle[i] && arr.length > 0) {
+      finalData.push({
+        sku: uniqueSkus[i],
+        title: uniqueSkusTitle[i],
+        data: arr,
+      });
+    }
   }
   return finalData;
 };
@@ -209,7 +208,7 @@ export const getFilteredForecastData = async (req, res) => {
                         )
                   group by 1
                   order by 2 desc
-                  limit 10)
+                  limit 50)
                 SELECT
                   dfbwm.sku AS sku,
                   dp.title AS title,
@@ -246,7 +245,106 @@ export const getFilteredForecastData = async (req, res) => {
       error: `${error}`,
     });
   }
-  
+};
+export const downloadAllSkuByMonth = async (req, res) => {
+  try {
+    let transaction_db = "morphe_staging";
+    delete req.body.filterType;
+    const { filterForecastedYear } = req.params;
+    const query = `
+    WITH iskus AS (
+      select
+        idfbwm.sku as sku,
+        sum(idfbwm.retail_sales) as retail_sales
+      from
+      ${transaction_db}.demand_forecast_base_monthly_metrics idfbwm
+      where
+        idfbwm.demand_forecast_run_log_id = (
+        select
+          id
+        from
+        ${transaction_db}.demand_forecast_run_log dfrl
+        where
+          is_base_forecast = true
+        limit 1)
+        and idfbwm.sku in (
+        select
+          idp.SKU
+        from
+        ${transaction_db}.dim_products idp
+        where
+        ${whereQueryString(req.body, "idfbwm").replace(/dp/g, "idp")}
+            AND idp.life_cycle <> 'OBSOLETE'
+            AND idp.life_cycle <> 'disco'
+            AND YEAR(idp.launch_date) <= YEAR(CURRENT_DATE()) )
+      group by
+        1
+      order by
+        2 desc )
+      SELECT
+        dfbwm.sku AS SKU,
+        dp.title AS Title,
+        dp.brand as Brand, 
+        dfbwm.channel as Channel,
+        dfbwm.country as Country, 
+        dp.ns_category as Category,
+        dp.ns_class as Class,
+        dp.ns_subclass as Subclass,
+        dp.ns_collection as Collection, 
+        dp.ns_product_subcollection as Collab, 
+        MONTHNAME(dfbwm.monthend) AS Month,
+        year(dfbwm.monthend) as Year,
+        ROUND(SUM(dfbwm.retail_sales), 0) AS RevenueFcast,
+        SUM(dfbwm.units_sales) AS UnitsFcast,
+        ROUND((SUM(dfbwm.retail_sales) / SUM(dfbwm.units_sales)), 2) AS AURFcast
+      FROM
+      ${transaction_db}.demand_forecast_base_monthly_metrics dfbwm,
+      ${transaction_db}.dim_products dp
+      WHERE
+        demand_forecast_run_log_id = (
+        select
+          id
+        from
+        ${transaction_db}.demand_forecast_run_log dfrl
+        where
+          is_base_forecast = true
+        limit 1)
+        AND dfbwm.sku = dp.SKU
+        AND YEAR(dfbwm.monthend) = ${filterForecastedYear}
+        AND dfbwm.sku IN (
+        select
+          sku
+        from
+          iskus)
+      GROUP BY
+            dfbwm.sku,
+            dfbwm.monthend,
+            dfbwm.channel,
+            dfbwm.country,
+            dfbwm.brand,
+            dfbwm.category,
+            dfbwm.collection,
+            dp.ns_product_subcollection, 
+            year(dfbwm.monthend)
+      ORDER BY
+        dfbwm.sku,
+        dfbwm.monthend ; `;
+        console.log("===========queryquery==========",query);
+    const filteredForecastData = await prisma.$queryRaw(query);
+    console.log(filteredForecastData)
+    /* let parsedWeeklyData = weeklyCommonTableDataMappingForAll(
+      filteredForecastData,
+      req.body
+    ); */
+     res.status(200).json({
+      parsedWeeklyData: filteredForecastData,
+    }); 
+  } catch (error) {
+    res.status(500).json({
+      message: "something went wrong in downloadAllSkusData api",
+      error: `${error}`,
+    });
+  }
 };
 // download all skus data
 export const downloadAllSkusData = async (req, res) => {
@@ -531,11 +629,21 @@ const parseFilteredForecastData = (
         ] = "--";
       }
       if (obj["Metrics Slug"] == "aur") {
-        obj["yearly_aggregate"] = isNaN(revenueTotal/unitsTotal) ? 0 : (revenueTotal/unitsTotal).toFixed(2);
-        obj["Q1"] = isNaN(quarter1RevenueTotal / quarter1UnitsTotal) ? 0 : (quarter1RevenueTotal / quarter1UnitsTotal).toFixed(2);
-        obj["Q2"] = isNaN(quarter2RevenueTotal / quarter2UnitsTotal) ? 0 : (quarter2RevenueTotal / quarter2UnitsTotal).toFixed(2);
-        obj["Q3"] = isNaN(quarter3RevenueTotal / quarter3UnitsTotal) ? 0 : (quarter3RevenueTotal / quarter3UnitsTotal).toFixed(2);
-        obj["Q4"] = isNaN(quarter4RevenueTotal / quarter4UnitsTotal) ? 0 : (quarter4RevenueTotal / quarter4UnitsTotal).toFixed(2);
+        obj["yearly_aggregate"] = isNaN(revenueTotal / unitsTotal)
+          ? 0
+          : (revenueTotal / unitsTotal).toFixed(2);
+        obj["Q1"] = isNaN(quarter1RevenueTotal / quarter1UnitsTotal)
+          ? 0
+          : (quarter1RevenueTotal / quarter1UnitsTotal).toFixed(2);
+        obj["Q2"] = isNaN(quarter2RevenueTotal / quarter2UnitsTotal)
+          ? 0
+          : (quarter2RevenueTotal / quarter2UnitsTotal).toFixed(2);
+        obj["Q3"] = isNaN(quarter3RevenueTotal / quarter3UnitsTotal)
+          ? 0
+          : (quarter3RevenueTotal / quarter3UnitsTotal).toFixed(2);
+        obj["Q4"] = isNaN(quarter4RevenueTotal / quarter4UnitsTotal)
+          ? 0
+          : (quarter4RevenueTotal / quarter4UnitsTotal).toFixed(2);
       }
       parsedData.push(obj);
     }
@@ -763,7 +871,6 @@ export const getFilteredForecastMetrics = async (req, res) => {
   let regularFilter = {};
   let countryFilter = {};
   let countryFilter1 = {};
-
   for (let item in req.body) {
     if (item !== "filter_sub_channels" && item !== "filter_channels") {
       regularFilter[item] = req.body[item];
@@ -1158,6 +1265,90 @@ export const getFilterChartData = async (req, res) => {
     res.status(500).json({
       message: "Unable to Fetch Filtered Forecast Data",
       error: `${error}`,
+    });
+  }
+};
+// ============================ collection queries ==================================
+
+export const collectionFilteredForecast = async (req, res) => {
+  try {
+    const { forecast_year } = req.params;
+    const collections = await prisma.$queryRaw(`
+                                            SELECT
+                                          	dfbwm.collection AS collection,
+                                          	ROUND(SUM(units_sales),0) AS total_units,
+                                          	ROUND(SUM(retail_sales),0) AS total_revenue
+                                          FROM
+                                          	morphe_staging.demand_forecast_base_weekly_metrics dfbwm,
+                                          	morphe_staging.demand_forecast_run_log dfrl
+                                          WHERE
+                                          	dfrl.is_base_forecast = 1
+                                          	AND dfrl.id = dfbwm.demand_forecast_run_log_id
+                                          	AND YEAR(dfbwm.weekend) = ${forecast_year}
+                                          GROUP BY 1
+                                          ORDER BY 3 DESC;`);
+    res.status(200).json({
+      collections,
+    });
+  } catch (error) {
+    res.status(500).json({
+      error,
+    });
+  }
+};
+
+export const collectionFilteredForecastByEcomm = async (req, res) => {
+  try {
+    const { forecast_year } = req.params;
+    const collections = await prisma.$queryRaw(`
+                                          SELECT
+                                        	dfbwm.collection AS collection,
+                                        	ROUND(SUM(units_sales),0) AS total_units,
+                                        	ROUND(SUM(retail_sales),0) AS total_revenue
+                                        FROM
+                                        	morphe_staging.demand_forecast_base_weekly_metrics dfbwm,
+                                        	morphe_staging.demand_forecast_run_log dfrl
+                                        WHERE
+                                        	dfrl.is_base_forecast = 1
+                                        	AND dfrl.id = dfbwm.demand_forecast_run_log_id
+                                        	AND YEAR(dfbwm.weekend) = ${forecast_year}
+                                        	AND dfbwm.channel = 'Ecomm'
+                                        GROUP BY 1
+                                        ORDER BY 3 DESC;`);
+    res.status(200).json({
+      collections,
+    });
+  } catch (error) {
+    res.status(500).json({
+      error,
+    });
+  }
+};
+
+export const collectionFilteredForecastByRetail = async (req, res) => {
+  try {
+    const { forecast_year } = req.params;
+    const collections = await prisma.$queryRaw(`
+                                                SELECT
+                                              	dfbwm.collection AS collection,
+                                              	ROUND(SUM(units_sales),0) AS total_units,
+                                              	ROUND(SUM(retail_sales),0) AS total_revenue
+                                              FROM
+                                              	morphe_staging.demand_forecast_base_weekly_metrics dfbwm,
+                                              	morphe_staging.demand_forecast_run_log dfrl
+                                              WHERE
+                                              	dfrl.is_base_forecast = 1
+                                              	AND dfrl.id = dfbwm.demand_forecast_run_log_id
+                                              	AND YEAR(dfbwm.weekend) = ${forecast_year}
+                                              	AND dfbwm.channel = 'Retail'
+                                              GROUP BY 1
+                                              ORDER BY 3 DESC;`);
+    res.status(200).json({
+      collections,
+    });
+  } catch (error) {
+    res.status(500).json({
+      error,
     });
   }
 };

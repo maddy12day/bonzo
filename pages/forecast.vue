@@ -1,7 +1,7 @@
 <template>
   <div :key="reRender">
     <!-- Filters component (Vishal) -->
-    <card card-body-classes="table-full-width" >
+    <card card-body-classes="table-full-width">
       <div class="forecast-filter-buttons">
         <div class="btn-group btn-group-toggle p-0 mb-2" data-toggle="buttons">
           <label
@@ -110,7 +110,7 @@
       :key="filteredStatsComponentKey"
       @getSelectedYear="getSelectedFilteredYear"
     />
-    <ChartWidget v-if="!isFilteredForecast" ref="chartWidget"/>
+    <ChartWidget v-if="!isFilteredForecast" ref="chartWidget" />
     <FilteredChartWidget
       ref="filteredChartWidget"
       v-if="isFilteredForecast"
@@ -245,10 +245,14 @@
         :filterArray="filterArray"
       />
     </card>
-    <div class="row">
+    <ComparisonTable
+      :tableData="comparisonCollnData"
+      v-if="!isFilteredForecast"
+    />
+    <div class="row sku-component">
       <div class="col-md-2">
         <h4 class="font-weight-bold" v-if="isFilteredForecast">
-          Top 10 SKUs Forecast
+          Top {{ topSKUsCountLable }} SKUs Forecast
         </h4>
       </div>
       <div class="col-md-3">
@@ -264,30 +268,45 @@
           </button>
         </a>
       </div>
+      <template>
+        <el-select
+          v-if="isFilteredForecast"
+          v-model="topSkusLimit"
+          placeholder="Select"
+          @change="setUpdatedSKUsLimit"
+        >
+          <el-option
+            v-for="item in options"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          >
+          </el-option>
+        </el-select>
+      </template>
     </div>
-
     <ForecastBySkuTable
       v-if="isFilteredForecast"
-       ref="filterChartWidget"
+      ref="filterChartWidget"
       :tableHeading="'Revenue'"
       :forecast_attribute="'retail_sales'"
-      :topTenSkusData="topTenSkusData"
+      :topSkusData="topSkusData"
       :allAppliedFilters="allAppliedFilters"
     />
     <ForecastBySkuTable
       v-if="isFilteredForecast"
-       ref="filterChartWidget"
+      ref="filterChartWidget"
       :tableHeading="'Units Sales'"
       :forecast_attribute="'units_sales'"
-      :topTenSkusData="topTenSkusData"
+      :topSkusData="topSkusData"
       :allAppliedFilters="allAppliedFilters"
     />
     <ForecastBySkuTable
-    ref="filterChartWidget"
+      ref="filterChartWidget"
       v-if="isFilteredForecast"
       :tableHeading="'AUR'"
       :forecast_attribute="'aur'"
-      :topTenSkusData="topTenSkusData"
+      :topSkusData="topSkusData"
       :allAppliedFilters="allAppliedFilters"
     />
     <!-- </div> -->
@@ -308,11 +327,13 @@ import FilteredWeeklyMetricsTable from "../components/Metrics/FilteredWeeklyMetr
 import FilteredStatsWidget from "../components/FilteredStatsWidget.vue";
 import ManualAdjustmentTable from "../components/Metrics/ManualAdjustmentTable.vue";
 import Tags from "../components/Tags.vue";
+import { Select, Option } from "element-ui";
 import ChartWidget from "../components/ChartWidget.vue";
 import FilteredChartWidget from "../components/FilterChartWidget.vue";
 import moment from "moment";
 import XLSX from "xlsx";
-import { mapState } from 'vuex';
+import { mapState } from "vuex";
+import ComparisonTable from "../components/ComparisionTables/ComparisonTable.vue";
 
 export default {
   name: "Forecast",
@@ -332,10 +353,32 @@ export default {
     FilteredChartWidget,
     Tags,
     ChartWidget,
+    [Select.name]: Select,
+    [Option.name]: Option,
+    ComparisonTable,
   },
 
   data() {
     return {
+      options: [
+        {
+          value: "top_10",
+          label: "Top 10",
+          limit: 10,
+        },
+        {
+          value: "top_25",
+          label: "Top 25",
+          limit: 25,
+        },
+        {
+          value: "top_50",
+          label: "Top 50",
+          limit: 50,
+        },
+      ],
+      topSkusLimit: "top_10",
+      topSKUsCountLable: 10,
       isFilteredForecast: false,
       isFilteredPageDataLoading: false,
       isFilteredWeeklyMetricsLoaded: false,
@@ -346,7 +389,8 @@ export default {
       filteredActiveTab: "Monthly",
       baseAdjustmentsList: [],
       baseMetricsList: [],
-      topTenSkusData: [],
+      topSkusData: [],
+      topLimitedSkuData: [],
       showManualAdj: false,
       changeMABtnText: false,
       disbleAdjustment: false,
@@ -375,9 +419,62 @@ export default {
       csvFileName: `Filtered SKUs - ${moment().format(
         "YYYY-MM-DD HH:MM:SS"
       )}.xlsx`,
+      comparisonCollnData: [],
     };
   },
   methods: {
+    setUpdatedSKUsLimit() {
+      console.log("lklklk", this.topSkusLimit);
+      let selectedOption = this.options.filter(
+        (o) => o.value == this.topSkusLimit
+      );
+      this.topSKUsCountLable = selectedOption[0].limit;
+
+      let topLimitedSkuData = {};
+      topLimitedSkuData["parsedWeeklyData"] = [];
+      for (let i = 0; i < this.topSKUsCountLable; i++) {
+        if (this.topLimitedSkuData.parsedWeeklyData[i]) {
+          topLimitedSkuData["parsedWeeklyData"].push(
+            this.topLimitedSkuData.parsedWeeklyData[i]
+          );
+        }
+      }
+      this.topSkusData = topLimitedSkuData;
+    },
+    async comparisonTableDataGenerator() {
+      const collectionForecast = await this.$axios(
+        `/collection-forecast/${this.forecastedYear}`
+      );
+      const collectionForecastByEcomm = await this.$axios(
+        `/collection-forecast-by-ecomm/${this.forecastedYear}`
+      );
+      const collectionForecastByRetail = await this.$axios(
+        `/collection-forecast-by-retail/${this.forecastedYear}`
+      );
+      this.comparisonCollnData = [];
+      for (let collection of collectionForecast.data.collections) {
+        for (let ecolln of collectionForecastByEcomm.data.collections) {
+          for (let rcolln of collectionForecastByRetail.data.collections) {
+            if (
+              collection.collection == ecolln.collection &&
+              collection.collection == rcolln.collection
+            ) {
+              this.comparisonCollnData.push({
+                total: {
+                  ...collection,
+                },
+                ecomm: {
+                  ...ecolln,
+                },
+                retail: {
+                  ...rcolln,
+                },
+              });
+            }
+          }
+        }
+      }
+    },
     exportToExcel() {
       let filterPayload = XLSX.utils.json_to_sheet(this.filterArray);
       let skus = XLSX.utils.json_to_sheet(this.skusJsonData);
@@ -393,13 +490,14 @@ export default {
       this.forecastedYear = value;
       this.showMetricsByDuration(this.activeTab);
       this.getWeekendDates(value);
-       this.$refs.chartWidget.chartInit(value);
+      this.$refs.chartWidget.chartInit(value);
+      this.comparisonTableDataGenerator();
     },
     getSelectedFilteredYear(value) {
       this.filteredForecastedYear = value;
-  
+
       this.$refs.filteredChartWidget.initChart(value);
-      this.$refs.filterChartWidget.getFilteredForecastData(value)
+      this.$refs.filterChartWidget.getFilteredForecastData(value);
       this.showFilteredMetricsByDuration(this.filteredActiveTab);
       this.getFilteredTopSkus();
       this.getFilteredWeeklyMetrics(this.requestedFilterOption);
@@ -570,8 +668,10 @@ export default {
       this.filteredForecastMetrics = filteredWeeklyforecast;
     },
     // retail weeekends
-     async getWeekendDates(value) {
-      const weekendDates = await this.$axios.$get(`/get-weekend-dates/${value}`);
+    async getWeekendDates(value) {
+      const weekendDates = await this.$axios.$get(
+        `/get-weekend-dates/${value}`
+      );
       window.localStorage.setItem(
         "allUsersInfo",
         JSON.stringify(this.userInfo)
@@ -585,15 +685,27 @@ export default {
     async getFilteredTopSkus() {
       this.skusJsonData = [];
       this.isDownloadCsvDisbled = true;
-      const topTenSkusData = await this.$axios.$post(
+      const topSkusData = await this.$axios.$post(
         `/get-filtered-forecast-data/${this.filteredForecastedYear}`,
         this.filterPayload
       );
-      this.topTenSkusData = topTenSkusData;
+      let topLimitedSkuData = {};
+      topLimitedSkuData["parsedWeeklyData"] = [];
+      for (let i = 0; i < this.topSKUsCountLable; i++) {
+        if (topSkusData.parsedWeeklyData[i]) {
+          topLimitedSkuData["parsedWeeklyData"].push(
+            topSkusData.parsedWeeklyData[i]
+          );
+        }
+      }
+      this.topSkusData = topLimitedSkuData;
+      this.topLimitedSkuData = topSkusData;
+      const csvJsonData = await this.$axios.$post(`/download-all-skus-data-by-month/${this.filteredForecastedYear}`, this.filterPayload);
+     /*  console.log("test", test)
       const csvJsonData = await this.$axios.$post(
         `/download-all-skus-data/${this.filteredForecastedYear}`,
         this.filterPayload
-      );
+      ); */
       this.skusJsonData = csvJsonData.parsedWeeklyData;
       this.isDownloadCsvDisbled = false;
     },
@@ -806,10 +918,13 @@ export default {
     },
   },
   computed: {
+    getTopSkusCount() {
+      return this.topSKUsCountLable;
+    },
     reRender() {
       this.getBaseAdjustments();
       this.showMetricsByDuration(this.activeTab);
-      return  this.$store.state.key;
+      return this.$store.state.key;
     },
     selectedFilters() {
       return this.selectedFilterOptions;
@@ -866,6 +981,7 @@ export default {
   mounted() {
     this.getBaseAdjustments();
     this.showMetricsByDuration("Monthly");
+    this.comparisonTableDataGenerator();
     setInterval(() => {
       this.checkManualAdjustmentStatus();
     }, 10000);
@@ -873,7 +989,7 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .card-body {
   h4 {
     margin: 0;
@@ -893,6 +1009,19 @@ export default {
     text-transform: capitalize;
     h4 {
       margin-bottom: 4px;
+    }
+  }
+}
+.sku-component {
+  position: relative;
+  margin-right: 0;
+  .el-select {
+    position: absolute;
+    right: 0;
+
+    .el-input:hover .el-input__icon,
+    .el-input:hover input {
+      color: black;
     }
   }
 }
