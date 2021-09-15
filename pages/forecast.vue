@@ -245,10 +245,10 @@
         :filterArray="filterArray"
       />
     </card>
-    <ComparisonTable
+   <!--  <ComparisonTable
       :tableData="comparisonCollnData"
       v-if="!isFilteredForecast"
-    />
+    /> -->
     <div class="row sku-component">
       <div class="col-md-2">
         <h4 class="font-weight-bold" v-if="isFilteredForecast">
@@ -981,7 +981,7 @@ export default {
   mounted() {
     this.getBaseAdjustments();
     this.showMetricsByDuration("Monthly");
-    this.comparisonTableDataGenerator();
+   /*  this.comparisonTableDataGenerator(); */
     setInterval(() => {
       this.checkManualAdjustmentStatus();
     }, 10000);
