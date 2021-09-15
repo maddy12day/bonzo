@@ -1,7 +1,17 @@
 .el-table .cell {
   word-break: break-word !important;
 }
+
 .el-collapse-item__header {
   padding-left: 24px;
   font-size: 17px !important;
+}
+
+::-webkit-scrollbar {
+  border: 8px solid #665252;
+  height: 15px !important;
+}
+
+::-webkit-scrollbar-track {
+  border: 8px solid #665252;
 }
