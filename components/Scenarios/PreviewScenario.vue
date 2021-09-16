@@ -501,51 +501,7 @@
           </el-table-column>
         </el-table>
       </card>
-
-      <card
-        card-body-classes="table-full-width preview-table"
-        v-if="
-          scenarioUnitSalesComparison.parsedData &&
-            scenarioUnitSalesComparison.parsedData.Units.length > 0
-        "
-      >
-        <h4 slot="header" class="card-title text-bold font-weight-bold">
-          Category Units Comparison
-        </h4>
-        <table
-          class="bg-danger table table-bordered bg-white preview-table overflow-scroll"
-          style="overflow-x: scroll"
-        >
-          <thead>
-            <tr>
-              <th
-                v-for="(col, index2) in Object.keys(
-                  this.scenarioUnitSalesComparison.parsedData.Units[0]
-                )"
-                :key="Math.random(index2, 300)"
-                :class="{ fixedWidth: index2 === 0 }"
-              >
-                {{ col }}
-              </th>
-            </tr>
-          </thead>
-          <tbody v-if="scenarioUnitSalesComparison.parsedData">
-            <tr
-              v-for="(col2, index) in scenarioUnitSalesComparison.parsedData
-                .Units"
-              :key="Math.random(index, 100)"
-            >
-              <td
-                v-for="(col2, index) in Object.values(col2)"
-                :key="Math.random(index, 200)"
-              >
-                {{ index > 0 ? parseInt(col2) : col2 }}
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </card>
-      <card
+       <card
         card-body-classes="table-full-width preview-table"
         v-if="
           scenarioUnitSalesComparison.parsedData &&
@@ -553,7 +509,7 @@
         "
       >
         <h4 slot="header" class="card-title text-bold font-weight-bold">
-          Category Sales Comparison
+           Revenue Comparison
         </h4>
         <table
           class="bg-danger table table-bordered bg-white preview-table overflow-auto"
@@ -588,6 +544,51 @@
           </tbody>
         </table>
       </card>
+
+      <card
+        card-body-classes="table-full-width preview-table"
+        v-if="
+          scenarioUnitSalesComparison.parsedData &&
+            scenarioUnitSalesComparison.parsedData.Units.length > 0
+        "
+      >
+        <h4 slot="header" class="card-title text-bold font-weight-bold">
+           Units Comparison
+        </h4>
+        <table
+          class="bg-danger table table-bordered bg-white preview-table overflow-scroll"
+          style="overflow-x: scroll"
+        >
+          <thead>
+            <tr>
+              <th
+                v-for="(col, index2) in Object.keys(
+                  this.scenarioUnitSalesComparison.parsedData.Units[0]
+                )"
+                :key="Math.random(index2, 300)"
+                :class="{ fixedWidth: index2 === 0 }"
+              >
+                {{ col }}
+              </th>
+            </tr>
+          </thead>
+          <tbody v-if="scenarioUnitSalesComparison.parsedData">
+            <tr
+              v-for="(col2, index) in scenarioUnitSalesComparison.parsedData
+                .Units"
+              :key="Math.random(index, 100)"
+            >
+              <td
+                v-for="(col2, index) in Object.values(col2)"
+                :key="Math.random(index, 200)"
+              >
+                {{ index > 0 ? parseInt(col2) : col2 }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </card>
+     
     </el-dialog>
   </div>
 </template>
@@ -676,7 +677,7 @@ export default {
   background: #f5f6fa;
 }
 .scenario-details-header th {
-  font-size: 10px !important;
+  font-size: 12px !important;
 }
 
 .scenario-details-table {
