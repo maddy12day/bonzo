@@ -33,7 +33,7 @@
           </span>
         </span>
         <span
-          v-if="title === 'This Year'"
+          v-if="['2021','2022'].includes(title) "
           class="text-info display-4 font-weight-normal"
         >
           <span v-if="units && isAPIFetchComplete">
@@ -95,7 +95,7 @@
           </span>
         </span>
         <span
-          v-if="title === 'This Year'"
+          v-if="['2021','2022'].includes(title) "
           class="text-info display-4 font-weight-normal"
         >
           <span v-if="revenue && isAPIFetchComplete">
