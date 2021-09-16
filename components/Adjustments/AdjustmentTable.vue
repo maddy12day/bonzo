@@ -48,7 +48,7 @@
           >
           </el-table-column>
           <el-table-column
-            min-width="150"
+            min-width="155"
             label="Adjustment On"
             property="adjusted_metrics_name"
           >
@@ -79,7 +79,7 @@
           </el-table-column>
 
           <el-table-column
-            min-width="150"
+            min-width="155"
             label="Adjusted Value"
             property="new_adjusted_value"
             align="right"
