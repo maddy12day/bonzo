@@ -7,11 +7,6 @@
   font-size: 17px !important;
 }
 
-/* ::-webkit-scrollbar {
-  border: 8px solid #665252;
-  height: 15px !important;
+::-webkit-scrollbar-thumb:horizontal {
+  border: 8px solid #0098F0;
 }
-
-::-webkit-scrollbar-track {
-  border: 8px solid #665252;
-} */
