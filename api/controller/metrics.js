@@ -177,6 +177,7 @@ export const getBaseQuarterlyPlanned = async (req, res) => {
     const baseQuarterlyPlanned = await prisma.$queryRaw(`SELECT QUARTER(weekend_date) AS qtr, ROUND(SUM(revenue),0) AS qtr_revenue, ROUND(SUM(units),0) AS qtr_units
                                                         FROM morphe_staging.planned_weekly_units_revenue_by_channel_by_sku
                                                         WHERE YEAR(weekend_date) = ${forecast_year}
+                                                        AND AND channel <> 'Wholesale'
                                                         GROUP BY QUARTER(weekend_date);`);
 
     res.status(200).json({
@@ -200,6 +201,7 @@ export const getBaseThisQuarterlySale = async (req, res) => {
                                                       FROM morphe_staging.fact_sales_ending_inventory_sku_by_week fseisbw 
                                                       WHERE 
                                                         YEAR(weekend) = ${forecast_year}
+                                                        AND channel <> 'Wholesale'
                                                         AND fseisbw.sku IN (select sku from morphe_staging.planned_weekly_units_revenue_by_channel_by_sku)
                                                       GROUP BY 
                                                         QUARTER(weekend);`);
