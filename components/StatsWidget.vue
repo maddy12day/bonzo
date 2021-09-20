@@ -58,7 +58,7 @@
       </div>
       <div class="col-md-4 mt-1">
         <YearlyQuarterlyCard
-          title="This Year"
+          :title="forecastedYear"
           :units="
             `${yearlySaleData[0] ? parseInt(yearlySaleData[0].qtr_units) : ''}`
           "
@@ -115,7 +115,7 @@
       </div>
       <div class="col-md-4 mt-1">
         <YearlyQuarterlyCard
-          title="This Year"
+          :title="forecastedYear"
           :units="
             `${
               quarterlySaleData[0]
@@ -174,7 +174,7 @@
       </div>
       <div class="col-md-4 mt-1">
         <YearlyQuarterlyCard
-          title="This Year"
+          :title="forecastedYear"
           :units="
             `${
               quarterlySaleData[1]
@@ -233,7 +233,7 @@
       </div>
       <div class="col-md-4 mt-1">
         <YearlyQuarterlyCard
-          title="This Year"
+          :title="forecastedYear"
           :units="
             `${
               quarterlySaleData[2]
@@ -292,7 +292,7 @@
       </div>
       <div class="col-md-4 mt-1">
         <YearlyQuarterlyCard
-          title="This Year"
+          :title="forecastedYear"
           :units="
             `${
               quarterlySaleData[3]

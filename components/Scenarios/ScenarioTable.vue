@@ -67,7 +67,7 @@
           </el-table-column>
 
           <el-table-column
-            min-width="130"
+            min-width="140"
             sortable
             label="Shared By"
             property="sharedBy"
@@ -150,7 +150,7 @@
           </el-table-column>
 
           <el-table-column
-            min-width="150"
+            min-width="170"
             sortable
             label="Sub Channels"
             property="filter_sub_channels"
