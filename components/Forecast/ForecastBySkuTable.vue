@@ -36,7 +36,7 @@
           align="right"
         >
           <template slot-scope="scope">
-            {{ scope.row.data[0][`${forecast_attribute}`] | toLocaleStr }}
+            {{ scope.row.data[0][`${forecast_attribute}`] | toLocaleStr }} {{getPercent(forecast_attribute,scope.row.data[0])}}
           </template>
         </el-table-column>
         <el-table-column
@@ -46,17 +46,17 @@
           align="right"
         >
           <template slot-scope="scope">
-            {{ scope.row.data[1][`${forecast_attribute}`] | toLocaleStr }}
+            {{ scope.row.data[1][`${forecast_attribute}`] | toLocaleStr }} {{getPercent(forecast_attribute,scope.row.data[1])}}
           </template>
         </el-table-column>
         <el-table-column
           min-width="150"
-          :label="`w2 ${getWeekendDates(3)}`"
+          :label="`w3 ${getWeekendDates(3)}`"
           :class-name="checkIfPastWeek(3)"
           align="right"
         >
           <template slot-scope="scope">
-            {{ scope.row.data[2][`${forecast_attribute}`] | toLocaleStr }}
+            {{ scope.row.data[2][`${forecast_attribute}`] | toLocaleStr }} {{getPercent(forecast_attribute,scope.row.data[2])}}
           </template>
         </el-table-column>
         <el-table-column
@@ -66,7 +66,7 @@
           align="right"
         >
           <template slot-scope="scope">
-            {{ scope.row.data[3][`${forecast_attribute}`] | toLocaleStr }}
+            {{ scope.row.data[3][`${forecast_attribute}`] | toLocaleStr }} {{getPercent(forecast_attribute,scope.row.data[3])}}
           </template>
         </el-table-column>
         <el-table-column
@@ -76,7 +76,7 @@
           align="right"
         >
           <template slot-scope="scope">
-            {{ scope.row.data[4][`${forecast_attribute}`] | toLocaleStr }}
+            {{ scope.row.data[4][`${forecast_attribute}`] | toLocaleStr }} {{getPercent(forecast_attribute,scope.row.data[4])}}
           </template>
         </el-table-column>
         <el-table-column
@@ -86,7 +86,7 @@
           align="right"
         >
           <template slot-scope="scope">
-            {{ scope.row.data[5][`${forecast_attribute}`] | toLocaleStr }}
+            {{ scope.row.data[5][`${forecast_attribute}`] | toLocaleStr }} {{getPercent(forecast_attribute,scope.row.data[5])}}
           </template>
         </el-table-column>
         <el-table-column
@@ -96,7 +96,7 @@
           align="right"
         >
           <template slot-scope="scope">
-            {{ scope.row.data[6][`${forecast_attribute}`] | toLocaleStr }}
+            {{ scope.row.data[6][`${forecast_attribute}`] | toLocaleStr }} {{getPercent(forecast_attribute,scope.row.data[6])}}
           </template>
         </el-table-column>
 
@@ -107,7 +107,7 @@
           align="right"
         >
           <template slot-scope="scope">
-            {{ scope.row.data[7][`${forecast_attribute}`] | toLocaleStr }}
+            {{ scope.row.data[7][`${forecast_attribute}`] | toLocaleStr }} {{getPercent(forecast_attribute,scope.row.data[7])}}
           </template>
         </el-table-column>
 
@@ -118,7 +118,7 @@
           align="right"
         >
           <template slot-scope="scope">
-            {{ scope.row.data[8][`${forecast_attribute}`] | toLocaleStr }}
+            {{ scope.row.data[8][`${forecast_attribute}`] | toLocaleStr }} {{getPercent(forecast_attribute,scope.row.data[8])}}
           </template>
         </el-table-column>
         <el-table-column
@@ -128,7 +128,7 @@
           align="right"
         >
           <template slot-scope="scope">
-            {{ scope.row.data[9][`${forecast_attribute}`] | toLocaleStr }}
+            {{ scope.row.data[9][`${forecast_attribute}`] | toLocaleStr }} {{getPercent(forecast_attribute,scope.row.data[9])}}
           </template>
         </el-table-column>
         <el-table-column
@@ -138,7 +138,7 @@
           align="right"
         >
           <template slot-scope="scope">
-            {{ scope.row.data[10][`${forecast_attribute}`] | toLocaleStr }}
+            {{ scope.row.data[10][`${forecast_attribute}`] | toLocaleStr }} {{getPercent(forecast_attribute,scope.row.data[10])}}
           </template>
         </el-table-column>
         <el-table-column
@@ -148,7 +148,7 @@
           align="right"
         >
           <template slot-scope="scope">
-            {{ scope.row.data[11][`${forecast_attribute}`] | toLocaleStr }}
+            {{ scope.row.data[11][`${forecast_attribute}`] | toLocaleStr }} {{getPercent(forecast_attribute,scope.row.data[11])}}
           </template>
         </el-table-column>
         <el-table-column
@@ -158,7 +158,7 @@
           align="right"
         >
           <template slot-scope="scope">
-            {{ scope.row.data[12][`${forecast_attribute}`] | toLocaleStr }}
+            {{ scope.row.data[12][`${forecast_attribute}`] | toLocaleStr }} {{getPercent(forecast_attribute,scope.row.data[12])}}
           </template>
         </el-table-column>
         <el-table-column
@@ -168,7 +168,7 @@
           align="right"
         >
           <template slot-scope="scope">
-            {{ scope.row.data[13][`${forecast_attribute}`] | toLocaleStr }}
+            {{ scope.row.data[13][`${forecast_attribute}`] | toLocaleStr }} {{getPercent(forecast_attribute,scope.row.data[13])}}
           </template>
         </el-table-column>
         <el-table-column
@@ -178,7 +178,7 @@
           align="right"
         >
           <template slot-scope="scope">
-            {{ scope.row.data[14][`${forecast_attribute}`] | toLocaleStr }}
+            {{ scope.row.data[14][`${forecast_attribute}`] | toLocaleStr }} {{getPercent(forecast_attribute,scope.row.data[14])}}
           </template>
         </el-table-column>
         <el-table-column
@@ -188,7 +188,7 @@
           align="right"
         >
           <template slot-scope="scope">
-            {{ scope.row.data[15][`${forecast_attribute}`] | toLocaleStr }}
+            {{ scope.row.data[15][`${forecast_attribute}`] | toLocaleStr }} {{getPercent(forecast_attribute,scope.row.data[15])}}
           </template>
         </el-table-column>
         <el-table-column
@@ -198,7 +198,7 @@
           align="right"
         >
           <template slot-scope="scope">
-            {{ scope.row.data[16][`${forecast_attribute}`] | toLocaleStr }}
+            {{ scope.row.data[16][`${forecast_attribute}`] | toLocaleStr }} {{getPercent(forecast_attribute,scope.row.data[16])}}
           </template>
         </el-table-column>
         <el-table-column
@@ -208,7 +208,7 @@
           align="right"
         >
           <template slot-scope="scope">
-            {{ scope.row.data[17][`${forecast_attribute}`] | toLocaleStr }}
+            {{ scope.row.data[17][`${forecast_attribute}`] | toLocaleStr }} {{getPercent(forecast_attribute,scope.row.data[17])}}
           </template>
         </el-table-column>
         <el-table-column
@@ -218,7 +218,7 @@
           align="right"
         >
           <template slot-scope="scope">
-            {{ scope.row.data[18][`${forecast_attribute}`] | toLocaleStr }}
+            {{ scope.row.data[18][`${forecast_attribute}`] | toLocaleStr }} {{getPercent(forecast_attribute,scope.row.data[18])}}
           </template>
         </el-table-column>
 
@@ -229,7 +229,7 @@
           align="right"
         >
           <template slot-scope="scope">
-            {{ scope.row.data[19][`${forecast_attribute}`] | toLocaleStr }}
+            {{ scope.row.data[19][`${forecast_attribute}`] | toLocaleStr }} {{getPercent(forecast_attribute,scope.row.data[19])}}
           </template>
         </el-table-column>
 
@@ -240,7 +240,7 @@
           align="right"
         >
           <template slot-scope="scope">
-            {{ scope.row.data[20][`${forecast_attribute}`] | toLocaleStr }}
+            {{ scope.row.data[20][`${forecast_attribute}`] | toLocaleStr }} {{getPercent(forecast_attribute,scope.row.data[20])}}
           </template>
         </el-table-column>
         <el-table-column
@@ -250,7 +250,7 @@
           align="right"
         >
           <template slot-scope="scope">
-            {{ scope.row.data[21][`${forecast_attribute}`] | toLocaleStr }}
+            {{ scope.row.data[21][`${forecast_attribute}`] | toLocaleStr }} {{getPercent(forecast_attribute,scope.row.data[21])}}
           </template>
         </el-table-column>
         <el-table-column
@@ -260,7 +260,7 @@
           align="right"
         >
           <template slot-scope="scope">
-            {{ scope.row.data[22][`${forecast_attribute}`] | toLocaleStr }}
+            {{ scope.row.data[22][`${forecast_attribute}`] | toLocaleStr }} {{getPercent(forecast_attribute,scope.row.data[22])}}
           </template>
         </el-table-column>
         <el-table-column
@@ -270,7 +270,7 @@
           align="right"
         >
           <template slot-scope="scope">
-            {{ scope.row.data[23][`${forecast_attribute}`] | toLocaleStr }}
+            {{ scope.row.data[23][`${forecast_attribute}`] | toLocaleStr }} {{getPercent(forecast_attribute,scope.row.data[23])}}
           </template>
         </el-table-column>
         <el-table-column
@@ -280,7 +280,7 @@
           align="right"
         >
           <template slot-scope="scope">
-            {{ scope.row.data[24][`${forecast_attribute}`] | toLocaleStr }}
+            {{ scope.row.data[24][`${forecast_attribute}`] | toLocaleStr }} {{getPercent(forecast_attribute,scope.row.data[24])}}
           </template>
         </el-table-column>
         <el-table-column
@@ -290,7 +290,7 @@
           align="right"
         >
           <template slot-scope="scope">
-            {{ scope.row.data[25][`${forecast_attribute}`] | toLocaleStr }}
+            {{ scope.row.data[25][`${forecast_attribute}`] | toLocaleStr }} {{getPercent(forecast_attribute,scope.row.data[25])}}
           </template>
         </el-table-column>
         <el-table-column
@@ -300,7 +300,7 @@
           align="right"
         >
           <template slot-scope="scope">
-            {{ scope.row.data[26][`${forecast_attribute}`] | toLocaleStr }}
+            {{ scope.row.data[26][`${forecast_attribute}`] | toLocaleStr }} {{getPercent(forecast_attribute,scope.row.data[26])}}
           </template>
         </el-table-column>
         <el-table-column
@@ -310,7 +310,7 @@
           align="right"
         >
           <template slot-scope="scope">
-            {{ scope.row.data[27][`${forecast_attribute}`] | toLocaleStr }}
+            {{ scope.row.data[27][`${forecast_attribute}`] | toLocaleStr }} {{getPercent(forecast_attribute,scope.row.data[27])}}
           </template>
         </el-table-column>
         <el-table-column
@@ -320,7 +320,7 @@
           align="right"
         >
           <template slot-scope="scope">
-            {{ scope.row.data[28][`${forecast_attribute}`] | toLocaleStr }}
+            {{ scope.row.data[28][`${forecast_attribute}`] | toLocaleStr }} {{getPercent(forecast_attribute,scope.row.data[28])}}
           </template>
         </el-table-column>
         <el-table-column
@@ -330,7 +330,7 @@
           align="right"
         >
           <template slot-scope="scope">
-            {{ scope.row.data[29][`${forecast_attribute}`] | toLocaleStr }}
+            {{ scope.row.data[29][`${forecast_attribute}`] | toLocaleStr }} {{getPercent(forecast_attribute,scope.row.data[29])}}
           </template>
         </el-table-column>
         <el-table-column
@@ -340,7 +340,7 @@
           align="right"
         >
           <template slot-scope="scope">
-            {{ scope.row.data[30][`${forecast_attribute}`] | toLocaleStr }}
+            {{ scope.row.data[30][`${forecast_attribute}`] | toLocaleStr }} {{getPercent(forecast_attribute,scope.row.data[30])}}
           </template>
         </el-table-column>
 
@@ -351,7 +351,7 @@
           align="right"
         >
           <template slot-scope="scope">
-            {{ scope.row.data[31][`${forecast_attribute}`] | toLocaleStr }}
+            {{ scope.row.data[31][`${forecast_attribute}`] | toLocaleStr }} {{getPercent(forecast_attribute,scope.row.data[31])}}
           </template>
         </el-table-column>
 
@@ -362,7 +362,7 @@
           align="right"
         >
           <template slot-scope="scope">
-            {{ scope.row.data[32][`${forecast_attribute}`] | toLocaleStr }}
+            {{ scope.row.data[32][`${forecast_attribute}`] | toLocaleStr }} {{getPercent(forecast_attribute,scope.row.data[32])}}
           </template>
         </el-table-column>
         <el-table-column
@@ -372,7 +372,7 @@
           align="right"
         >
           <template slot-scope="scope">
-            {{ scope.row.data[33][`${forecast_attribute}`] | toLocaleStr }}
+            {{ scope.row.data[33][`${forecast_attribute}`] | toLocaleStr }} {{getPercent(forecast_attribute,scope.row.data[33])}}
           </template>
         </el-table-column>
         <el-table-column
@@ -382,7 +382,7 @@
           align="right"
         >
           <template slot-scope="scope">
-            {{ scope.row.data[34][`${forecast_attribute}`] | toLocaleStr }}
+            {{ scope.row.data[34][`${forecast_attribute}`] | toLocaleStr }} {{getPercent(forecast_attribute,scope.row.data[34])}}
           </template>
         </el-table-column>
         <el-table-column
@@ -392,7 +392,7 @@
           align="right"
         >
           <template slot-scope="scope">
-            {{ scope.row.data[35][`${forecast_attribute}`] | toLocaleStr }}
+            {{ scope.row.data[35][`${forecast_attribute}`] | toLocaleStr }} {{getPercent(forecast_attribute,scope.row.data[35])}}
           </template>
         </el-table-column>
         <el-table-column
@@ -402,7 +402,7 @@
           align="right"
         >
           <template slot-scope="scope">
-            {{ scope.row.data[36][`${forecast_attribute}`] | toLocaleStr }}
+            {{ scope.row.data[36][`${forecast_attribute}`] | toLocaleStr }} {{getPercent(forecast_attribute,scope.row.data[36])}}
           </template>
         </el-table-column>
         <el-table-column
@@ -412,7 +412,7 @@
           align="right"
         >
           <template slot-scope="scope">
-            {{ scope.row.data[37][`${forecast_attribute}`] | toLocaleStr }}
+            {{ scope.row.data[37][`${forecast_attribute}`] | toLocaleStr }} {{getPercent(forecast_attribute,scope.row.data[37])}}
           </template>
         </el-table-column>
         <el-table-column
@@ -422,7 +422,7 @@
           align="right"
         >
           <template slot-scope="scope">
-            {{ scope.row.data[38][`${forecast_attribute}`] | toLocaleStr }}
+            {{ scope.row.data[38][`${forecast_attribute}`] | toLocaleStr }} {{getPercent(forecast_attribute,scope.row.data[38])}}
           </template>
         </el-table-column>
         <el-table-column
@@ -432,7 +432,7 @@
           align="right"
         >
           <template slot-scope="scope">
-            {{ scope.row.data[39][`${forecast_attribute}`] | toLocaleStr }}
+            {{ scope.row.data[39][`${forecast_attribute}`] | toLocaleStr }} {{getPercent(forecast_attribute,scope.row.data[39])}}
           </template>
         </el-table-column>
         <el-table-column
@@ -442,7 +442,7 @@
           align="right"
         >
           <template slot-scope="scope">
-            {{ scope.row.data[40][`${forecast_attribute}`] | toLocaleStr }}
+            {{ scope.row.data[40][`${forecast_attribute}`] | toLocaleStr }} {{getPercent(forecast_attribute,scope.row.data[40])}}
           </template>
         </el-table-column>
         <el-table-column
@@ -452,7 +452,7 @@
           align="right"
         >
           <template slot-scope="scope">
-            {{ scope.row.data[41][`${forecast_attribute}`] | toLocaleStr }}
+            {{ scope.row.data[41][`${forecast_attribute}`] | toLocaleStr }} {{getPercent(forecast_attribute,scope.row.data[41])}}
           </template>
         </el-table-column>
         <el-table-column
@@ -462,7 +462,7 @@
           align="right"
         >
           <template slot-scope="scope">
-            {{ scope.row.data[42][`${forecast_attribute}`] | toLocaleStr }}
+            {{ scope.row.data[42][`${forecast_attribute}`] | toLocaleStr }} {{getPercent(forecast_attribute,scope.row.data[42])}}
           </template>
         </el-table-column>
 
@@ -473,7 +473,7 @@
           align="right"
         >
           <template slot-scope="scope">
-            {{ scope.row.data[43][`${forecast_attribute}`] | toLocaleStr }}
+            {{ scope.row.data[43][`${forecast_attribute}`] | toLocaleStr }} {{getPercent(forecast_attribute,scope.row.data[43])}}
           </template>
         </el-table-column>
 
@@ -484,7 +484,7 @@
           align="right"
         >
           <template slot-scope="scope">
-            {{ scope.row.data[44][`${forecast_attribute}`] | toLocaleStr }}
+            {{ scope.row.data[44][`${forecast_attribute}`] | toLocaleStr }} {{getPercent(forecast_attribute,scope.row.data[44])}}
           </template>
         </el-table-column>
         <el-table-column
@@ -494,7 +494,7 @@
           align="right"
         >
           <template slot-scope="scope">
-            {{ scope.row.data[45][`${forecast_attribute}`] | toLocaleStr }}
+            {{ scope.row.data[45][`${forecast_attribute}`] | toLocaleStr }} {{getPercent(forecast_attribute,scope.row.data[45])}}
           </template>
         </el-table-column>
         <el-table-column
@@ -504,7 +504,7 @@
           align="right"
         >
           <template slot-scope="scope">
-            {{ scope.row.data[46][`${forecast_attribute}`] | toLocaleStr }}
+            {{ scope.row.data[46][`${forecast_attribute}`] | toLocaleStr }} {{getPercent(forecast_attribute,scope.row.data[46])}}
           </template>
         </el-table-column>
         <el-table-column
@@ -514,7 +514,7 @@
           align="right"
         >
           <template slot-scope="scope">
-            {{ scope.row.data[47][`${forecast_attribute}`] | toLocaleStr }}
+            {{ scope.row.data[47][`${forecast_attribute}`] | toLocaleStr }} {{getPercent(forecast_attribute,scope.row.data[47])}}
           </template>
         </el-table-column>
 
@@ -525,7 +525,7 @@
           align="right"
         >
           <template slot-scope="scope">
-            {{ scope.row.data[48][`${forecast_attribute}`] | toLocaleStr }}
+            {{ scope.row.data[48][`${forecast_attribute}`] | toLocaleStr }} {{getPercent(forecast_attribute,scope.row.data[48])}}
           </template>
         </el-table-column>
 
@@ -536,7 +536,7 @@
           align="right"
         >
           <template slot-scope="scope">
-            {{ scope.row.data[49][`${forecast_attribute}`] | toLocaleStr }}
+            {{ scope.row.data[49][`${forecast_attribute}`] | toLocaleStr }} {{getPercent(forecast_attribute,scope.row.data[49])}}
           </template>
         </el-table-column>
 
@@ -547,7 +547,7 @@
           align="right"
         >
           <template slot-scope="scope">
-            {{ scope.row.data[50][`${forecast_attribute}`] | toLocaleStr }}
+            {{ scope.row.data[50][`${forecast_attribute}`] | toLocaleStr }} {{getPercent(forecast_attribute,scope.row.data[50])}}
           </template>
         </el-table-column>
 
@@ -558,7 +558,7 @@
           align="right"
         >
           <template slot-scope="scope">
-            {{ scope.row.data[51][`${forecast_attribute}`] | toLocaleStr }}
+            {{ scope.row.data[51][`${forecast_attribute}`] | toLocaleStr }} {{getPercent(forecast_attribute,scope.row.data[51])}}
           </template>
         </el-table-column>
       </template>
@@ -590,6 +590,15 @@ export default {
   },
   computed: {},
   methods: {
+    getPercent(forecast_attribute, rowData) {
+      if(forecast_attribute != "aur") {
+        let percent = (rowData[forecast_attribute]/rowData[`total_${forecast_attribute}`]) * 100;
+        return `(${percent.toFixed(2)}%)`;
+      } else {
+        return '';
+      }
+      console.log(forecast_attribute,"opopopo",rowData);
+    },
     async getFilteredForecastData(forecastYear) {
       const data = await this.$axios.$get(`/get-filtered-forecast-data/${forecastYear}`);
       this.forecastData = data;

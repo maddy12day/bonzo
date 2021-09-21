@@ -3,7 +3,7 @@ import moment from "moment";
 
 const prisma = new PrismaClient();
 
-const weeklyCommonTableDataMapping = (data) => {
+const weeklyCommonTableDataMapping = (data,totalForecastedData) => {
   const skus = data.map((item) => item.sku);
   const titles = data.map((item) => item.title);
   let uniqueSkus = [...new Set(skus)];
@@ -18,6 +18,18 @@ const weeklyCommonTableDataMapping = (data) => {
         item.title &&
         uniqueSkus[i]
     );
+    arr = arr.map((currElement, index) => {
+      return {
+        aur: currElement.aur,
+        retail_sales: currElement.retail_sales,
+        sku: currElement.sku,
+        title: currElement.title,
+        units_sales: currElement.units_sales,
+        weekend: currElement.weekend,
+        total_units_sales: totalForecastedData[index].units_sales,
+        total_retail_sales: totalForecastedData[index].retail_sales,
+      };
+    });
     if (uniqueSkusTitle[i] && arr.length > 0) {
       finalData.push({
         sku: uniqueSkus[i],
@@ -233,9 +245,28 @@ export const getFilteredForecastData = async (req, res) => {
                   dfbwm.weekend
                 ORDER BY
                   dfbwm.sku,
-                  dfbwm.weekend;`;
+                  dfbwm.weekend;`;    
+    let totalForecastedDataQuery = `SELECT
+    ROUND(sum(units_sales), 0) as units_sales,
+    ROUND(sum(retail_sales), 2) as retail_sales
+  from
+    demand_forecast_base_weekly_metrics
+  where
+    demand_forecast_run_log_id = (
+    select
+      id
+    from
+      morphe_staging.demand_forecast_run_log dfrl
+    where
+      is_base_forecast = true
+    limit 1)
+    AND Year(weekend) = ${filterForecastedYear}
+  group by
+    weekend;
+  `; 
     const filteredForecastData = await prisma.$queryRaw(query);
-    let parsedWeeklyData = weeklyCommonTableDataMapping(filteredForecastData);
+    const totalForecastedData = await prisma.$queryRaw(totalForecastedDataQuery);
+    let parsedWeeklyData = weeklyCommonTableDataMapping(filteredForecastData,totalForecastedData);
     res.status(200).json({
       parsedWeeklyData,
     });
@@ -329,9 +360,9 @@ export const downloadAllSkuByMonth = async (req, res) => {
       ORDER BY
         dfbwm.sku,
         dfbwm.monthend ; `;
-        console.log("===========queryquery==========",query);
+        // console.log("===========queryquery==========",query);
     const filteredForecastData = await prisma.$queryRaw(query);
-    console.log(filteredForecastData)
+    // console.log(filteredForecastData)
     /* let parsedWeeklyData = weeklyCommonTableDataMappingForAll(
       filteredForecastData,
       req.body
