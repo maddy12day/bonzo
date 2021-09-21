@@ -407,7 +407,6 @@ export default {
         this.showChannelError ||
         this.showAmountError
       ) {
-        // console.log("invalid form ........");
       } else {
         const createScenarioModel = {
           scenario_name: this.scenarioNameValue,

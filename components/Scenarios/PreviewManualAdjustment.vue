@@ -501,7 +501,6 @@ export default {
       this.status = await this.$axios.$get(
         `/check-adjustment-status/${this.adjustmentId}`
       );
-      // console.log();
     },
     async getAdjustmentSalesSummary() {
       this.adjustmentSalesSummary = await this.$axios.$get(
@@ -524,7 +523,6 @@ export default {
       );
     },
     async activateManualAdjustment() {
-      // console.log("this.adjustmentId--",this.adjustmentId);
       await this.$axios.$post(
         `/activate-adjustments`,
         {   

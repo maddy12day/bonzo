@@ -597,7 +597,6 @@ export default {
       } else {
         return '';
       }
-      console.log(forecast_attribute,"opopopo",rowData);
     },
     async getFilteredForecastData(forecastYear) {
       const data = await this.$axios.$get(`/get-filtered-forecast-data/${forecastYear}`);
