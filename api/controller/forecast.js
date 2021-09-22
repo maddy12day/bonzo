@@ -246,24 +246,34 @@ export const getFilteredForecastData = async (req, res) => {
                 ORDER BY
                   dfbwm.sku,
                   dfbwm.weekend;`;    
-    let totalForecastedDataQuery = `SELECT
-        ROUND(sum(units_sales), 0) as units_sales,
-        ROUND(sum(retail_sales), 2) as retail_sales
-      from
-        demand_forecast_base_weekly_metrics
-      where
-        demand_forecast_run_log_id = (
-        select
-          id
-        from
-          morphe_staging.demand_forecast_run_log dfrl
-        where
-          is_base_forecast = true
-        limit 1)
-        AND Year(weekend) = ${filterForecastedYear}
-      group by
-        weekend;
-      `; 
+    let totalForecastedDataQuery = `select
+    dfbwm.weekend as weekend,
+    ROUND(sum(dfbwm.units_sales), 0) as units_sales,
+    ROUND(sum(dfbwm.retail_sales), 2) as retail_sales
+  from
+    morphe_staging.demand_forecast_base_weekly_metrics dfbwm
+  where
+    dfbwm.demand_forecast_run_log_id = (
+    select
+      id
+    from
+      morphe_staging.demand_forecast_run_log dfrl
+    where
+      is_base_forecast = true
+    limit 1)
+    and dfbwm.sku in (
+    select
+      dp.SKU
+    from
+      morphe_staging.dim_products dp
+    where
+    ${whereQueryString(req.body, "dfbwm").replace(/dp/g, "dp")}
+      AND Year(dfbwm.weekend) = ${filterForecastedYear} )
+  group by
+    1
+  order by
+    2 desc;`; 
+      console.log("++++----",totalForecastedDataQuery);
     const filteredForecastData = await prisma.$queryRaw(query);
     const totalForecastedData = await prisma.$queryRaw(totalForecastedDataQuery);
     let parsedWeeklyData = weeklyCommonTableDataMapping(filteredForecastData,totalForecastedData);
