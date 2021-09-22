@@ -424,7 +424,6 @@ export default {
   },
   methods: {
     setUpdatedSKUsLimit() {
-      console.log("lklklk", this.topSkusLimit);
       let selectedOption = this.options.filter(
         (o) => o.value == this.topSkusLimit
       );
@@ -701,11 +700,6 @@ export default {
       this.topSkusData = topLimitedSkuData;
       this.topLimitedSkuData = topSkusData;
       const csvJsonData = await this.$axios.$post(`/download-all-skus-data-by-month/${this.filteredForecastedYear}`, this.filterPayload);
-     /*  console.log("test", test)
-      const csvJsonData = await this.$axios.$post(
-        `/download-all-skus-data/${this.filteredForecastedYear}`,
-        this.filterPayload
-      ); */
       this.skusJsonData = csvJsonData.parsedWeeklyData;
       this.isDownloadCsvDisbled = false;
     },

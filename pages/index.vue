@@ -197,9 +197,6 @@ export default {
          const CategoryTotalForecast = await this.$axios(
         `/forecast-category-by-total/${this.forecastedYear}`
         );
-           console.log("this is Retail calling",CategoryRetailForecast);
-           console.log("this is Ecomm calling",CategoryEcommForecast);
-            console.log("this is total calling",CategoryTotalForecast);
 
       const collectionForecast = await this.$axios(
         `/collection-forecast/${this.forecastedYear}`
