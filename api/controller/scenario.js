@@ -187,7 +187,7 @@ export const parseCategorySaleComparision = (results) => {
 
 // Function Used to Parse the data into El Table Friendly Format
 const parseUnitSaleComparision = (results) => {
-  const fields = ["Planned Units", "Forecast Units", "Adjusted Units"];
+  const fields = ["Planned Units", "Forecast Units", "Adjusted Units",];
   let parsedData = [];
   for (let field of fields) {
     const newObject = {};
@@ -229,11 +229,12 @@ const parseUnitSaleComparision = (results) => {
 
 // Function Used to Parse the data into El Table Friendly Format
 const parseUnitRevenueComparision = (results) => {
-  const fields = ["Planned Revenue", "Forecast Revenue", "Adjusted Revenue"];
+  console.log("my results-----",results)
+  const fields = ["Planned Revenue", "Forecast Revenue", "Adjusted Revenue","Forecasted GM%","Adjusted GM%"];
   let parsedData = [];
   for (let field of fields) {
     const newObject = {};
-
+console.log("this fields",field)
     newObject["Comparision"] = field;
     if (field == "Planned Revenue") {
       for (let result of results) {
@@ -251,7 +252,7 @@ const parseUnitRevenueComparision = (results) => {
         ] = result.forecasted_revenue;
         parsedData.push(newObject);
       }
-    } else {
+    }else if (field == "Adjusted Revenue"){
       for (let result of results) {
         let currWeek = moment(new Date(result.weekend)).week() - 1;
         newObject[
@@ -260,7 +261,30 @@ const parseUnitRevenueComparision = (results) => {
         parsedData.push(newObject);
       }
     }
+    else if (field == "Forecasted GM%") {
+      for (let result of results) {
+        let currWeek = moment(new Date(result.weekend)).week() - 1;
+        newObject[
+          `W${currWeek} (${moment(result.weekend).format("MM/DD/YYYY")})`
+        ] = result.forecasted_gm_percent;
+        parsedData.push(newObject);
+      }
+    }
+    else {
+      for (let result of results) {
+        console.log("result",result.adjusted_gm_percent);
+        let currWeek = moment(new Date(result.weekend)).week() - 1;
+        newObject[
+          `W${currWeek} (${moment(result.weekend).format("MM/DD/YYYY")})`
+        ] = result.adjusted_gm_percent;
+        parsedData.push(newObject);
+      }
+    }
   }
+
+  
+
+
   parsedData.sort((a, b) => {
     if (a.Comparision == b.Comparision) {
     }
