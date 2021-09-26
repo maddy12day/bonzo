@@ -3,7 +3,30 @@ import moment from "moment";
 
 const prisma = new PrismaClient();
 
-const weeklyCommonTableDataMapping = (data,totalForecastedData) => {
+const getWeekendDates = async (year) => {
+  try {
+    const weekends = await prisma.dim_morphe_retail_weekends.findMany({
+      where: {
+        year: year,
+      },
+      select: {
+        weekend: true,
+      },
+    });
+
+    return weekends.map(
+          (item) => item.weekend.toISOString().split("T")[0]
+        )
+  } catch (error) {
+    return [];
+  }
+}
+
+const getWeekendDateIndex = (weekendDates, currentDate) => {
+   return weekendDates.indexOf(currentDate);
+}
+
+const weeklyCommonTableDataMapping = (data,totalForecastedData,wekendDates) => {  
   const skus = data.map((item) => item.sku);
   const titles = data.map((item) => item.title);
   let uniqueSkus = [...new Set(skus)];
@@ -11,6 +34,17 @@ const weeklyCommonTableDataMapping = (data,totalForecastedData) => {
   let counter = uniqueSkus.length <= 50 ? uniqueSkus.length : 50;
   const finalData = [];
   for (let i = 0; i < counter; i++) {
+    let topSkusData = Array(52).fill({
+      aur: 0,
+      retail_sales: 0,
+      sku: 0,
+      title: 0,
+      units_sales: 0,
+      weekend: 0,
+      total_units_sales: 0,
+      total_retail_sales: 0,
+    });
+
     let arr = data.filter(
       (item) =>
         item.sku == uniqueSkus[i] &&
@@ -18,23 +52,28 @@ const weeklyCommonTableDataMapping = (data,totalForecastedData) => {
         item.title &&
         uniqueSkus[i]
     );
-    arr = arr.map((currElement, index) => {
-      return {
-        aur: currElement.aur,
-        retail_sales: currElement.retail_sales,
-        sku: currElement.sku,
-        title: currElement.title,
-        units_sales: currElement.units_sales,
-        weekend: currElement.weekend,
-        total_units_sales: totalForecastedData[index].units_sales,
-        total_retail_sales: totalForecastedData[index].retail_sales,
-      };
-    });
-    if (uniqueSkusTitle[i] && arr.length > 0) {
+
+    for (let j = 0; j < arr.length; j++) {
+      let index = getWeekendDateIndex(wekendDates, arr[j].weekend.split("T")[0]);
+      console.log(j,"arr[j]--");
+
+      topSkusData[index] = {
+        aur: arr[j].aur,
+        retail_sales: arr[j].retail_sales,
+        sku: arr[j].sku,
+        title: arr[j].title,
+        units_sales: arr[j].units_sales,
+        weekend: arr[j].weekend,
+        total_units_sales: totalForecastedData[j].units_sales,
+        total_retail_sales: totalForecastedData[j].retail_sales,
+      }
+    }
+
+    if (uniqueSkusTitle[i] && topSkusData.length > 0) {
       finalData.push({
         sku: uniqueSkus[i],
         title: uniqueSkusTitle[i],
-        data: arr,
+        data: topSkusData,
       });
     }
   }
@@ -216,7 +255,6 @@ export const getFilteredForecastData = async (req, res) => {
                         )}
                         AND idp.life_cycle <> 'OBSOLETE'
                         AND idp.life_cycle <> 'disco'
-                        AND YEAR(idp.launch_date) <= YEAR(CURRENT_DATE())
                         )
                   group by 1
                   order by 2 desc
@@ -273,10 +311,11 @@ export const getFilteredForecastData = async (req, res) => {
     1
   order by
     2 desc;`; 
-      console.log("++++----",totalForecastedDataQuery);
+
     const filteredForecastData = await prisma.$queryRaw(query);
     const totalForecastedData = await prisma.$queryRaw(totalForecastedDataQuery);
-    let parsedWeeklyData = weeklyCommonTableDataMapping(filteredForecastData,totalForecastedData);
+    const weekendDates =  await getWeekendDates(filterForecastedYear);
+    let parsedWeeklyData = weeklyCommonTableDataMapping(filteredForecastData,totalForecastedData,weekendDates);
     res.status(200).json({
       parsedWeeklyData,
     });
@@ -317,7 +356,7 @@ export const downloadAllSkuByMonth = async (req, res) => {
         ${whereQueryString(req.body, "idfbwm").replace(/dp/g, "idp")}
             AND idp.life_cycle <> 'OBSOLETE'
             AND idp.life_cycle <> 'disco'
-            AND YEAR(idp.launch_date) <= YEAR(CURRENT_DATE()) )
+        )
       group by
         1
       order by
@@ -408,7 +447,6 @@ export const downloadAllSkusData = async (req, res) => {
                         )}
                         AND idp.life_cycle <> 'OBSOLETE'
                         AND idp.life_cycle <> 'disco'
-                        AND YEAR(idp.launch_date) <= YEAR(CURRENT_DATE())
                         )
                   group by 1
                   order by 2 desc )
@@ -510,7 +548,7 @@ const parseFilteredForecastData = (
     let quarterTotal = 0;
     let indexForAvg = 0;
 
-    if (masterMetricData[i]) {
+    if (masterMetricData[i] && filteredForecastData[i]) {
       obj["Metrics Name"] = masterMetricData[i].title;
       obj["Metrics Slug"] = masterMetricData[i].name;
       if (
