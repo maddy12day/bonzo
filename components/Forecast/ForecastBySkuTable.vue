@@ -591,7 +591,7 @@ export default {
   computed: {},
   methods: {
     getPercent(forecast_attribute, rowData) {
-      if(forecast_attribute != "aur") {
+      if(forecast_attribute != "aur" && rowData[forecast_attribute] != 0) {
         let percent = (rowData[forecast_attribute]/rowData[`total_${forecast_attribute}`]) * 100;
         return `(${percent.toFixed(2)}%)`;
       } else {
