@@ -60,8 +60,7 @@ const weeklyCommonTableDataMapping = (
         wekendDates,
         arr[j].weekend.split("T")[0]
       );
-      console.log(j, "arr[j]--");
-
+  
       topSkusData[index] = {
         aur: arr[j].aur,
         retail_sales: arr[j].retail_sales,
