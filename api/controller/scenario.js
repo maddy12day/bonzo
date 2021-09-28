@@ -199,7 +199,7 @@ export const parseCategorySaleComparision = (results) => {
 
 // Function Used to Parse the data into El Table Friendly Format
 const parseUnitSaleComparision = (results) => {
-  const fields = ["Planned Units", "Forecast Units", "Adjusted Units",];
+  const fields = ["Planned Units", "Forecast Units", "Adjusted Units"];
   let parsedData = [];
   for (let field of fields) {
     const newObject = {};
