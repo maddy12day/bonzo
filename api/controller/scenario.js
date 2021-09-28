@@ -169,19 +169,31 @@ export const parseCategorySaleComparision = (results) => {
   const plan = {};
   const forecast = {};
   const adjusted = {};
+  const forecastgm = {};
+  const adjustgm = {};
   for (let result of results) {
     let currWeek = moment(new Date(result.weekend)).week() - 1;
     plan["Comparision"] = "Planned Revenue";
     forecast["Comparision"] = "Forecast Revenue";
     adjusted["Comparision"] = "Adjusted Revenue";
+    forecastgm["Comparision"] = "Forecasted GM%";
+    adjustgm["Comparision"] = "Adjusted GM%";
+
     plan[`W${currWeek} (${moment(result.weekend).format("MM/DD/YYYY")})`] =
       result.planned_revenue;
     forecast[`W${currWeek} (${moment(result.weekend).format("MM/DD/YYYY")})`] =
       result.forecasted_revenue;
     adjusted[`W${currWeek} (${moment(result.weekend).format("MM/DD/YYYY")})`] =
       result.adjusted_revenue;
+      forecastgm[`W${currWeek} (${moment(result.weekend).format("MM/DD/YYYY")})`] =
+      result.forecasted_gm_percent?result.forecasted_gm_percent:0;
+     adjustgm[`W${currWeek} (${moment(result.weekend).format("MM/DD/YYYY")})`] =
+     result.adjusted_gm_percent?result.adjusted_gm_percent:0;
+     console.log("forcast gm values",forecastgm);
+     console.log("adjust gm values",adjustgm);
   }
-  parsedData.push({ ...plan }, { ...forecast }, { ...adjusted });
+  parsedData.push({ ...plan }, { ...forecast }, { ...adjusted}, {...forecastgm}, {...adjustgm});
+
   return parsedData;
 };
 
@@ -229,7 +241,8 @@ const parseUnitSaleComparision = (results) => {
 
 // Function Used to Parse the data into El Table Friendly Format
 const parseUnitRevenueComparision = (results) => {
-  const fields = ["Planned Revenue", "Forecast Revenue", "Adjusted Revenue"];
+
+  const fields = ["Planned Revenue", "Forecast Revenue", "Adjusted Revenue","Forecasted GM%","Adjusted GM%"];
   let parsedData = [];
   for (let field of fields) {
     const newObject = {};
@@ -251,7 +264,7 @@ const parseUnitRevenueComparision = (results) => {
         ] = result.forecasted_revenue;
         parsedData.push(newObject);
       }
-    } else {
+    }else if (field == "Adjusted Revenue"){
       for (let result of results) {
         let currWeek = moment(new Date(result.weekend)).week() - 1;
         newObject[
@@ -260,7 +273,30 @@ const parseUnitRevenueComparision = (results) => {
         parsedData.push(newObject);
       }
     }
+    else if (field == "Forecasted GM%") {
+      for (let result of results) {
+        let currWeek = moment(new Date(result.weekend)).week() - 1;
+        newObject[
+          `W${currWeek} (${moment(result.weekend).format("MM/DD/YYYY")})`
+        ] = result.forecasted_gm_percent?result.forecasted_gm_percent:0;
+        parsedData.push(newObject);
+      }
+    }
+    else {
+      for (let result of results) {
+        console.log("result",result.adjusted_gm_percent);
+        let currWeek = moment(new Date(result.weekend)).week() - 1;
+        newObject[
+          `W${currWeek} (${moment(result.weekend).format("MM/DD/YYYY")})`
+        ] = result.adjusted_gm_percent?result.adjusted_gm_percent:0;
+        parsedData.push(newObject);
+      }
+    }
   }
+
+  
+
+
   parsedData.sort((a, b) => {
     if (a.Comparision == b.Comparision) {
     }
