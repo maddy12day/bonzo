@@ -4,10 +4,8 @@
       <h5 class="text-bold font-weight-bold">Applied Filters</h5>
       <Tags :allAppliedFilters="allAppliedFilters" />
     </div>
-    <div
-      class="row"
-    >
-    <div class="col-md-2">
+    <div class="row">
+      <div class="col-md-2">
         <select
           class="form-control selectpicker"
           data-style="btn btn-link"
@@ -66,7 +64,7 @@
       </div>
       <div class="col-md-4 mt-1">
         <YearlyQuarterlyCard
-          title="This Year"
+          :title="forecastedYear"
           :units="
             `${
               yearlyFilteredStats[1] && yearlyFilteredStats[1][0]
@@ -128,7 +126,7 @@
       </div>
       <div class="col-md-4 mt-1">
         <YearlyQuarterlyCard
-          title="This Year"
+          :title="forecastedYear"
           :units="
             `${
               quarterlyFilteredStats[1] && quarterlyFilteredStats[1][0]
@@ -190,7 +188,7 @@
       </div>
       <div class="col-md-4 mt-1">
         <YearlyQuarterlyCard
-          title="This Year"
+          :title="forecastedYear"
           :units="
             `${
               quarterlyFilteredStats[1] && quarterlyFilteredStats[1][1]
@@ -252,7 +250,7 @@
       </div>
       <div class="col-md-4 mt-1">
         <YearlyQuarterlyCard
-          title="This Year"
+          :title="forecastedYear"
           :units="
             `${
               quarterlyFilteredStats[1] && quarterlyFilteredStats[1][2]
@@ -314,7 +312,7 @@
       </div>
       <div class="col-md-4 mt-1">
         <YearlyQuarterlyCard
-          title="This Year"
+          :title="forecastedYear"
           :units="
             `${
               quarterlyFilteredStats[1] && quarterlyFilteredStats[1][3]
@@ -375,7 +373,7 @@ export default {
       quarterlyFilteredStats: [],
       filterQuarterlyPayload: {},
       isFilteredQuarterlyStatsFetched: false,
-      forecastedYear: "2021"
+      forecastedYear: "2021",
     };
   },
   components: {
@@ -384,11 +382,11 @@ export default {
     Tags,
   },
   methods: {
-     getSelectedYear(evt) {
+    getSelectedYear(evt) {
       this.forecastedYear = evt.target.value;
       this.$emit("getSelectedYear", this.forecastedYear);
-      this.getFilteredStatsWidgetData()
-     },
+      this.getFilteredStatsWidgetData();
+    },
     async calloutByDuration(duration) {
       this.currentYQTab = duration;
       if (duration == "Yearly") {

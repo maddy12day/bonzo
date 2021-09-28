@@ -14,19 +14,21 @@ const getWeekendDates = async (year) => {
       },
     });
 
-    return weekends.map(
-          (item) => item.weekend.toISOString().split("T")[0]
-        )
+    return weekends.map((item) => item.weekend.toISOString().split("T")[0]);
   } catch (error) {
     return [];
   }
-}
+};
 
 const getWeekendDateIndex = (weekendDates, currentDate) => {
-   return weekendDates.indexOf(currentDate);
-}
+  return weekendDates.indexOf(currentDate);
+};
 
-const weeklyCommonTableDataMapping = (data,totalForecastedData,wekendDates) => {  
+const weeklyCommonTableDataMapping = (
+  data,
+  totalForecastedData,
+  wekendDates
+) => {
   const skus = data.map((item) => item.sku);
   const titles = data.map((item) => item.title);
   let uniqueSkus = [...new Set(skus)];
@@ -54,8 +56,11 @@ const weeklyCommonTableDataMapping = (data,totalForecastedData,wekendDates) => {
     );
 
     for (let j = 0; j < arr.length; j++) {
-      let index = getWeekendDateIndex(wekendDates, arr[j].weekend.split("T")[0]);
-      console.log(j,"arr[j]--");
+      let index = getWeekendDateIndex(
+        wekendDates,
+        arr[j].weekend.split("T")[0]
+      );
+      console.log(j, "arr[j]--");
 
       topSkusData[index] = {
         aur: arr[j].aur,
@@ -66,7 +71,7 @@ const weeklyCommonTableDataMapping = (data,totalForecastedData,wekendDates) => {
         weekend: arr[j].weekend,
         total_units_sales: totalForecastedData[j].units_sales,
         total_retail_sales: totalForecastedData[j].retail_sales,
-      }
+      };
     }
 
     if (uniqueSkusTitle[i] && topSkusData.length > 0) {
@@ -283,7 +288,7 @@ export const getFilteredForecastData = async (req, res) => {
                   dfbwm.weekend
                 ORDER BY
                   dfbwm.sku,
-                  dfbwm.weekend;`;    
+                  dfbwm.weekend;`;
     let totalForecastedDataQuery = `select
     dfbwm.weekend as weekend,
     ROUND(sum(dfbwm.units_sales), 0) as units_sales,
@@ -310,12 +315,17 @@ export const getFilteredForecastData = async (req, res) => {
   group by
     1
   order by
-    2 desc;`; 
-
+    2 desc;`;
     const filteredForecastData = await prisma.$queryRaw(query);
-    const totalForecastedData = await prisma.$queryRaw(totalForecastedDataQuery);
-    const weekendDates =  await getWeekendDates(filterForecastedYear);
-    let parsedWeeklyData = weeklyCommonTableDataMapping(filteredForecastData,totalForecastedData,weekendDates);
+    const totalForecastedData = await prisma.$queryRaw(
+      totalForecastedDataQuery
+    );
+    const weekendDates = await getWeekendDates(filterForecastedYear);
+    let parsedWeeklyData = weeklyCommonTableDataMapping(
+      filteredForecastData,
+      totalForecastedData,
+      weekendDates
+    );
     res.status(200).json({
       parsedWeeklyData,
     });
@@ -410,9 +420,9 @@ export const downloadAllSkuByMonth = async (req, res) => {
         dfbwm.sku,
         dfbwm.monthend ; `;
     const filteredForecastData = await prisma.$queryRaw(query);
-     res.status(200).json({
+    res.status(200).json({
       parsedWeeklyData: filteredForecastData,
-    }); 
+    });
   } catch (error) {
     res.status(500).json({
       message: "something went wrong in downloadAllSkusData api",
