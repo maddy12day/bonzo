@@ -169,19 +169,31 @@ export const parseCategorySaleComparision = (results) => {
   const plan = {};
   const forecast = {};
   const adjusted = {};
+  const forecastgm = {};
+  const adjustgm = {};
   for (let result of results) {
     let currWeek = moment(new Date(result.weekend)).week() - 1;
     plan["Comparision"] = "Planned Revenue";
     forecast["Comparision"] = "Forecast Revenue";
     adjusted["Comparision"] = "Adjusted Revenue";
+    forecastgm["Comparision"] = "Forecasted GM%";
+    adjustgm["Comparision"] = "Adjusted GM%";
+
     plan[`W${currWeek} (${moment(result.weekend).format("MM/DD/YYYY")})`] =
       result.planned_revenue;
     forecast[`W${currWeek} (${moment(result.weekend).format("MM/DD/YYYY")})`] =
       result.forecasted_revenue;
     adjusted[`W${currWeek} (${moment(result.weekend).format("MM/DD/YYYY")})`] =
       result.adjusted_revenue;
+      forecastgm[`W${currWeek} (${moment(result.weekend).format("MM/DD/YYYY")})`] =
+      result.forecasted_gm_percent?result.forecasted_gm_percent:0;
+     adjustgm[`W${currWeek} (${moment(result.weekend).format("MM/DD/YYYY")})`] =
+     result.adjusted_gm_percent?result.adjusted_gm_percent:0;
+     console.log("forcast gm values",forecastgm);
+     console.log("adjust gm values",adjustgm);
   }
-  parsedData.push({ ...plan }, { ...forecast }, { ...adjusted });
+  parsedData.push({ ...plan }, { ...forecast }, { ...adjusted}, {...forecastgm}, {...adjustgm});
+
   return parsedData;
 };
 
@@ -229,12 +241,12 @@ const parseUnitSaleComparision = (results) => {
 
 // Function Used to Parse the data into El Table Friendly Format
 const parseUnitRevenueComparision = (results) => {
-  console.log("my results-----",results)
+
   const fields = ["Planned Revenue", "Forecast Revenue", "Adjusted Revenue","Forecasted GM%","Adjusted GM%"];
   let parsedData = [];
   for (let field of fields) {
     const newObject = {};
-console.log("this fields",field)
+
     newObject["Comparision"] = field;
     if (field == "Planned Revenue") {
       for (let result of results) {
@@ -266,7 +278,7 @@ console.log("this fields",field)
         let currWeek = moment(new Date(result.weekend)).week() - 1;
         newObject[
           `W${currWeek} (${moment(result.weekend).format("MM/DD/YYYY")})`
-        ] = result.forecasted_gm_percent;
+        ] = result.forecasted_gm_percent?result.forecasted_gm_percent:0;
         parsedData.push(newObject);
       }
     }
@@ -276,7 +288,7 @@ console.log("this fields",field)
         let currWeek = moment(new Date(result.weekend)).week() - 1;
         newObject[
           `W${currWeek} (${moment(result.weekend).format("MM/DD/YYYY")})`
-        ] = result.adjusted_gm_percent;
+        ] = result.adjusted_gm_percent?result.adjusted_gm_percent:0;
         parsedData.push(newObject);
       }
     }
