@@ -58,7 +58,8 @@
           </button>
         </p>
       </div>
-        
+      <!--   </div>
+      </div> -->
       <card
         card-body-classes="table-full-width"
         v-if="
@@ -396,20 +397,6 @@
               </td>
             </tr>
           </tbody>
-           <tbody v-if="scenarioUnitSalesComparison.parsedData">
-            <tr
-              v-for="(col2, index) in scenarioUnitSalesComparison.parsedData
-                .Revenue"
-              :key="Math.random(index, 100)"
-            >
-              <td
-                v-for="(col2, index) in Object.values(col2)"
-                :key="Math.random(index, 200)"
-              >
-                {{ index > 0 ? col2.toFixed(2) : col2 }}
-              </td>
-            </tr>
-          </tbody> 
         </table>
       </card>
       <card v-if="adjustmentUnitSalesCategoryComparison.parsedData">
@@ -447,11 +434,11 @@
           </tbody>
         </table>
       </card>
-          <span slot="footer" class="dialog-footer"> </span>
+      <!--    <span slot="footer" class="dialog-footer"> </span>
       <span slot="footer" class="dialog-footer">
         <div class="text-right">
         </div>
-      </span> 
+      </span> -->
     </el-dialog>
   </div>
 </template>
