@@ -985,6 +985,7 @@ export const getFilteredForecastMetrics = async (req, res) => {
     let transaction_db = "morphe_staging";
 
     let query = "";
+    console.log("duration---",duration);
     if (duration == "month") {
       query = getMonthlyFilteredForecastMetricsQuery(
         transaction_db,
@@ -1004,7 +1005,7 @@ export const getFilteredForecastMetrics = async (req, res) => {
         filterForecastedYear
       );
     }
-
+    console.log("query--",query);
     const filteredForecastData = await prisma.$queryRaw(query);
     let masterMetricData = await getMasterMetricData();
     let parsedFilteredForecastData = parseFilteredForecastData(
