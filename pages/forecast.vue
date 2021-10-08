@@ -659,7 +659,7 @@ export default {
       this.selectedFilterOptions = [];
     },
     async getFilteredWeeklyMetrics(requestedFilterOption) {
-      requestedFilterOption["filterType"] = "week";
+      requestedFilterOption["filterType"] = "month";
       this.requestedFilterOption = requestedFilterOption;
       const filteredWeeklyforecast = await this.$axios.$post(
         `/get-filtered-forecast-metrics/${this.filteredForecastedYear}`,
