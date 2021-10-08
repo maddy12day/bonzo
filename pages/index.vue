@@ -278,7 +278,7 @@ export default {
   },
   async mounted() {
     this.getTimelineDetails();
-    this.showMetricsByDuration("Monthly");
+    this.showMetricsByDuration("Weekly");
     this.getAllUserData();
     this.getWeekendDates();
     this.comparisonTableDataGenerator();

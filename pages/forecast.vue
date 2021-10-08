@@ -386,7 +386,7 @@ export default {
       isTopSkuDataLoaded: false,
       activeFilterType: "Regular",
       activeTab: "Monthly",
-      filteredActiveTab: "Monthly",
+      filteredActiveTab: "Weekly",
       baseAdjustmentsList: [],
       baseMetricsList: [],
       topSkusData: [],
@@ -646,10 +646,13 @@ export default {
         requestedFilterOption["filterType"] = "month";
         this.filterMonthly = true;
       }
+      this.filteredForecastMetrics = [];
+      console.log("f---ilteredForecastMetrics---",this.filteredForecastMetrics);
       this.filteredForecastMetrics = await this.$axios.$post(
         `/get-filtered-forecast-metrics/${this.filteredForecastedYear}`,
         requestedFilterOption
       );
+      console.log("filteredForecastMetrics---",this.filteredForecastMetrics);
     },
     showFilterType(type) {
       this.activeFilterType = type;
@@ -660,11 +663,14 @@ export default {
     async getFilteredWeeklyMetrics(requestedFilterOption) {
       requestedFilterOption["filterType"] = "week";
       this.requestedFilterOption = requestedFilterOption;
+      // this.filteredForecastMetrics = [];
+      // console.log("filteredForecastMetrics---",this.filteredForecastMetrics);
       const filteredWeeklyforecast = await this.$axios.$post(
         `/get-filtered-forecast-metrics/${this.filteredForecastedYear}`,
         requestedFilterOption
       );
       this.filteredForecastMetrics = filteredWeeklyforecast;
+      // console.log("f---ilteredForecastMetrics---",this.filteredForecastMetrics);
     },
     // retail weeekends
     async getWeekendDates(value) {
@@ -974,7 +980,7 @@ export default {
   },
   mounted() {
     this.getBaseAdjustments();
-    this.showMetricsByDuration("Monthly");
+    this.showMetricsByDuration("Weekly");
    /*  this.comparisonTableDataGenerator(); */
     setInterval(() => {
       this.checkManualAdjustmentStatus();

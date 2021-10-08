@@ -1006,6 +1006,7 @@ export const getFilteredForecastMetrics = async (req, res) => {
     }
 
     const filteredForecastData = await prisma.$queryRaw(query);
+    console.log("filteredForecastData---",query);
     let masterMetricData = await getMasterMetricData();
     let parsedFilteredForecastData = parseFilteredForecastData(
       duration,
