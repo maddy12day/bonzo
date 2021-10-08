@@ -646,6 +646,7 @@ export default {
         requestedFilterOption["filterType"] = "month";
         this.filterMonthly = true;
       }
+      this.filteredForecastMetrics = [];
       this.filteredForecastMetrics = await this.$axios.$post(
         `/get-filtered-forecast-metrics/${this.filteredForecastedYear}`,
         requestedFilterOption
