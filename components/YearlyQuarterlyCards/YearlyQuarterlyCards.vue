@@ -20,7 +20,8 @@
           class="text-info display-4 font-weight-normal"
         >
           <span v-if="units && isAPIFetchComplete">
-            {{ units | toLocaleStr }}
+            <!-- {{ units | toLocaleStr }} -->
+            {{beauty(units)}}
           </span>
           <span
             class=""
@@ -37,7 +38,8 @@
           class="text-info display-4 font-weight-normal"
         >
           <span v-if="units && isAPIFetchComplete">
-            {{ units | toLocaleStr }}
+            <!-- {{ units | toLocaleStr }} -->
+            {{beauty(units)}}
           </span>
           <span
             class="empty-stats"
@@ -55,7 +57,8 @@
           class="text-info display-4 font-weight-normal"
         >
           <span v-if="units && units !== '0' && isAPIFetchComplete">
-            {{ units | toLocaleStr }}
+            <!-- {{ units | toLocaleStr }} -->
+            {{beauty(units)}}
           </span>
           <span
             class="empty-stats"
@@ -82,7 +85,8 @@
           class="text-info display-4 font-weight-normal"
         >
           <span v-if="revenue && isAPIFetchComplete">
-            $ {{ revenue | toLocaleStr }}
+            <!-- $ {{ revenue | toLocaleStr }} -->
+            {{beauty(revenue)}}
           </span>
           <span
             class="empty-stats"
@@ -99,7 +103,8 @@
           class="text-info display-4 font-weight-normal"
         >
           <span v-if="revenue && isAPIFetchComplete">
-            $ {{ revenue | toLocaleStr }}
+            <!-- $ {{ revenue | toLocaleStr }} -->
+            {{beauty(revenue)}}
           </span>
           <span
             class="empty-stats"
@@ -116,7 +121,8 @@
           class="text-info display-4 font-weight-normal"
         >
           <span v-if="revenue && revenue !== '0' && isAPIFetchComplete">
-            $ {{ revenue | toLocaleStr }}
+            <!-- $ {{ revenue | toLocaleStr }} -->
+            {{beauty(revenue)}}
           </span>
           <span
             class="empty-stats"
@@ -133,12 +139,19 @@
   </div>
 </template>
 <script>
+import numberAbbreviate from "number-abbreviate";
 export default {
   name: "yearlyQuarterlyCard",
   props: ["title", "units", "revenue"],
   computed: {
     isAPIFetchComplete() {
       return this.$store.state.isAPIFetchComplete;
+    },
+  },
+    methods: {
+    beauty(payload) {
+      var numabbr = new numberAbbreviate(['K','M','B']);
+      return numabbr.abbreviate(payload, 1);
     },
   },
 };
