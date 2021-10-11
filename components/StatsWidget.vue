@@ -75,15 +75,15 @@
           title="Forecast"
           :units="
             `${
-              forecastYQData[1]
-                ? parseInt(forecastYQData[1].yearly_aggregate)
+              forecastYQData.units
+                ? parseInt(forecastYQData.units[0].yearly_aggregate)
                 : ''
             }`
           "
           :revenue="
             `${
-              forecastYQData[0]
-                ? parseInt(forecastYQData[0].yearly_aggregate)
+              forecastYQData.revenue
+                ? parseInt(forecastYQData.revenue[0].yearly_aggregate)
                 : ''
             }`
           "
@@ -138,12 +138,13 @@
           title="Forecast"
           :units="
             `${
-              forecastYQData[0] ? parseInt(forecastYQData[0].q1_aggregate) : ''
+              forecastYQData.units ? parseInt(forecastYQData.units[0].q1_aggregate) : ''
             }`
           "
           :revenue="
             `${
-              forecastYQData[1] ? parseInt(forecastYQData[1].q1_aggregate) : ''
+              forecastYQData.revenue
+                ? parseInt(forecastYQData.revenue[0].q1_aggregate) : ''
             }`
           "
           class="border border-info"
@@ -197,12 +198,13 @@
           title="Forecast"
           :units="
             `${
-              forecastYQData[1] ? parseInt(forecastYQData[1].q2_aggregate) : ''
+              forecastYQData.units ? parseInt(forecastYQData.units[0].q2_aggregate) : ''
             }`
           "
           :revenue="
             `${
-              forecastYQData[0] ? parseInt(forecastYQData[0].q2_aggregate) : ''
+              forecastYQData.revenue
+                ? parseInt(forecastYQData.revenue[0].q2_aggregate) : ''
             }`
           "
           class="border border-info"
@@ -256,12 +258,14 @@
           title="Forecast"
           :units="
             `${
-              forecastYQData[1] ? parseInt(forecastYQData[1].q3_aggregate) : ''
+              forecastYQData.revenue
+                ? parseInt(forecastYQData.revenue[0].q3_aggregate) : ''
             }`
           "
           :revenue="
             `${
-              forecastYQData[0] ? parseInt(forecastYQData[0].q3_aggregate) : ''
+              forecastYQData.revenue
+                ? parseInt(forecastYQData.revenue[0].q3_aggregate) : ''
             }`
           "
           class="border border-info"
@@ -315,12 +319,13 @@
           title="Forecast"
           :units="
             `${
-              forecastYQData[1] ? parseInt(forecastYQData[1].q4_aggregate) : ''
+              forecastYQData.units ? parseInt(forecastYQData.units[0].q4_aggregate) : ''
             }`
           "
           :revenue="
             `${
-              forecastYQData[0] ? parseInt(forecastYQData[0].q4_aggregate) : ''
+              forecastYQData.revenue
+                ? parseInt(forecastYQData.revenue[0].q4_aggregate) : ''
             }`
           "
           class="border border-info"
@@ -403,6 +408,7 @@ export default {
         }
       );
       this.yearlySaleData = yearly.baseYearlySale;
+      console.log("this.yearlySaleData--",this.yearlySaleData);
       this.$store.commit("toggleStatsAPIResponseState", true);
     },
 
