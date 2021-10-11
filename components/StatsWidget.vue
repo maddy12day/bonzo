@@ -408,7 +408,6 @@ export default {
         }
       );
       this.yearlySaleData = yearly.baseYearlySale;
-      console.log("this.yearlySaleData--",this.yearlySaleData);
       this.$store.commit("toggleStatsAPIResponseState", true);
     },
 
