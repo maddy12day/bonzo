@@ -111,13 +111,13 @@ export const getBaseYearlyQarterlyForecast = async (req, res) => {
         id: true,
       },
     });
-    const forecastedYearlyQuarterlyForecast = await prisma.forecasted_weekly_metrics.findMany(
+    const forecastedYearlyQuarterlyForecastUnits = await prisma.forecasted_weekly_metrics.findMany(
       {
         where: {
           demand_forecast_run_log_id: demandForecastRunLog[0].id,
           forecast_year: forecast_year,
           metrics_name: {
-            in: ["retail_sales", "units_sales"],
+            in: ["units_sales"],
           },
         },
         select: {
@@ -129,6 +129,29 @@ export const getBaseYearlyQarterlyForecast = async (req, res) => {
         },
       }
     );
+
+    const forecastedYearlyQuarterlyForecastRetail = await prisma.forecasted_weekly_metrics.findMany(
+      {
+        where: {
+          demand_forecast_run_log_id: demandForecastRunLog[0].id,
+          forecast_year: forecast_year,
+          metrics_name: {
+            in: ["retail_sales"],
+          },
+        },
+        select: {
+          yearly_aggregate: true,
+          q1_aggregate: true,
+          q2_aggregate: true,
+          q3_aggregate: true,
+          q4_aggregate: true,
+        },
+      }
+    );
+    let forecastedYearlyQuarterlyForecast = {
+      units: forecastedYearlyQuarterlyForecastUnits,
+      revenue: forecastedYearlyQuarterlyForecastRetail
+    }
     const baseYQForecast = JSON.stringify(
       forecastedYearlyQuarterlyForecast,
       (key, value) => (typeof value === "bigint" ? value.toString() : value) // return everything else unchanged
