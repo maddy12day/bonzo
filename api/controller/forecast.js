@@ -985,7 +985,7 @@ export const getFilteredForecastMetrics = async (req, res) => {
     let transaction_db = "morphe_staging";
 
     let query = "";
-    console.log("duration---",duration);
+    // console.log("duration---",duration);
     if (duration == "month") {
       query = getMonthlyFilteredForecastMetricsQuery(
         transaction_db,
@@ -1005,7 +1005,7 @@ export const getFilteredForecastMetrics = async (req, res) => {
         filterForecastedYear
       );
     }
-    console.log("query--",query);
+    // console.log("query--",query);
     const filteredForecastData = await prisma.$queryRaw(query);
     let masterMetricData = await getMasterMetricData();
     let parsedFilteredForecastData = parseFilteredForecastData(
@@ -1092,6 +1092,7 @@ const typlanChartQueryGeneratorByDurations = (
 
   const query = `
               SELECT
+                ${duration}(pwurbcbs.weekend_date)-${dateOffset} AS date,
                 ROUND(SUM(pwurbcbs.units), 0) AS total_units,
                 ROUND(SUM(pwurbcbs.revenue), 0) AS total_revenue
               FROM
@@ -1299,6 +1300,38 @@ export const getFilteredQuarterlyStatsData = async (req, res) => {
   }
 };
 
+const parseChartData = (duration, data) => {
+  console.log("req.body.duration--",data);
+  let chartData;
+  if(duration == 'week') {
+    chartData = Array(52).fill({
+      date: 0,
+        total_revenue: 0,
+        total_units: 0
+    });
+  } else {
+    chartData = Array(12).fill({
+      date: 0,
+      total_revenue: 0,
+      total_units: 0
+    });
+  }
+
+  chartData.forEach(function (item, index) {
+    let dataIndex = data.findIndex(x => x.date === index+1);
+    if(dataIndex >= 0) {
+      chartData[index] = data[dataIndex];
+    } else {
+      chartData[index].date = index + 1;
+    }
+    // console.log("dataIndex--",dataIndex);
+    
+  });
+
+  return chartData;
+}
+
+
 // Filtered Chart data
 export const getFilterChartData = async (req, res) => {
   delete req.body.filterType;
@@ -1334,6 +1367,8 @@ export const getFilterChartData = async (req, res) => {
     "morphe_staging",
     filterForecastedYear
   );
+  console.log("filteredQuarterlyPlannedDataQuery--",filteredQuarterlyPlannedDataQuery);
+
 
   try {
     let quarterlyFilteredStats = await Promise.allSettled([
@@ -1341,8 +1376,10 @@ export const getFilterChartData = async (req, res) => {
       prisma.$queryRaw(filteredQuarterlyThisYearSaleDataQuery),
       prisma.$queryRaw(filteredQuarterlyForecastDataQuery),
     ]);
+    let data = quarterlyFilteredStats.map((item) => parseChartData(req.body.duration, item.value));
+    console.log("------",quarterlyFilteredStats);
     res.status(200).json({
-      chartData: quarterlyFilteredStats.map((item) => item.value),
+      chartData: data,
     });
   } catch (error) {
     res.status(500).json({
