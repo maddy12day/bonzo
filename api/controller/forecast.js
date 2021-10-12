@@ -24,11 +24,7 @@ const getWeekendDateIndex = (weekendDates, currentDate) => {
   return weekendDates.indexOf(currentDate);
 };
 
-const weeklyCommonTableDataMapping = (
-  data,
-  totalForecastedData,
-  wekendDates
-) => {
+const weeklyCommonTableDataMapping = (data, totalForecastedData, wekendDates) => {
   const skus = data.map((item) => item.sku);
   const titles = data.map((item) => item.title);
   let uniqueSkus = [...new Set(skus)];
@@ -47,20 +43,10 @@ const weeklyCommonTableDataMapping = (
       total_retail_sales: 0,
     });
 
-    let arr = data.filter(
-      (item) =>
-        item.sku == uniqueSkus[i] &&
-        item.title == uniqueSkusTitle[i] &&
-        item.title &&
-        uniqueSkus[i]
-    );
+    let arr = data.filter((item) => item.sku == uniqueSkus[i] && item.title == uniqueSkusTitle[i] && item.title && uniqueSkus[i]);
 
     for (let j = 0; j < arr.length; j++) {
-      let index = getWeekendDateIndex(
-        wekendDates,
-        arr[j].weekend.split("T")[0]
-      );
-  
+      let index = getWeekendDateIndex(wekendDates, arr[j].weekend.split("T")[0]);
       topSkusData[index] = {
         aur: arr[j].aur,
         retail_sales: arr[j].retail_sales,
@@ -92,9 +78,7 @@ const weeklyCommonTableDataMappingForAll = (data, filter) => {
   let counter = uniqueSkus.length;
   const finalData = [];
   for (let i = 0; i < counter; i++) {
-    let arr = data.filter(
-      (item) => item.sku == uniqueSkus[i] && item.title == uniqueSkusTitle[i]
-    );
+    let arr = data.filter((item) => item.sku == uniqueSkus[i] && item.title == uniqueSkusTitle[i]);
     const revenueObj = {
       SKU: uniqueSkus[i],
       Title: uniqueSkusTitle[i],
@@ -108,21 +92,13 @@ const weeklyCommonTableDataMappingForAll = (data, filter) => {
     //   revenueObj[jsonKey] = value;
     // }
 
-    const revenueSales = arr.map(
-      (item, index) =>
-        (revenueObj[`${moment(item.weekend).format("YYYY-MM-DD")}`] =
-          item.retail_sales)
-    );
+    const revenueSales = arr.map((item, index) => (revenueObj[`${moment(item.weekend).format("YYYY-MM-DD")}`] = item.retail_sales));
     revenueObj["Forecast"] = "Revenue";
     finalData.push({
       ...revenueObj,
     });
 
-    const unitSales = arr.map(
-      (item, index) =>
-        (revenueObj[`${moment(item.weekend).format("YYYY-MM-DD")}`] =
-          item.units_sales)
-    );
+    const unitSales = arr.map((item, index) => (revenueObj[`${moment(item.weekend).format("YYYY-MM-DD")}`] = item.units_sales));
     delete revenueObj["Title"];
     delete revenueObj["SKU"];
     // for (let [key, value] of Object.entries(filter)) {
@@ -137,10 +113,7 @@ const weeklyCommonTableDataMappingForAll = (data, filter) => {
       ...revenueObj,
     });
 
-    const aurSales = arr.map(
-      (item, index) =>
-        (revenueObj[`${moment(item.weekend).format("YYYY-MM-DD")}`] = item.aur)
-    );
+    const aurSales = arr.map((item, index) => (revenueObj[`${moment(item.weekend).format("YYYY-MM-DD")}`] = item.aur));
     delete revenueObj["Title"];
     delete revenueObj["SKU"];
     // for (let [key, value] of Object.entries(filter)) {
@@ -163,20 +136,14 @@ const whereQueryString = (obj, alias = "fseisbw") => {
   let newnessFlag = false;
   Object.entries(obj).map((item) => {
     if (item[0] == "filter_brands") {
-      str2 += `dp.brand IN (${item[1]
-        .map((str) => `'${str.trim()}'`)
-        .join(",")}) AND `;
+      str2 += `dp.brand IN (${item[1].map((str) => `'${str.trim()}'`).join(",")}) AND `;
     } else if (item[0] == "filter_product_sources") {
-      str2 += `(TRIM(dp.product_third_party)) IN (${item[1]
-        .map((str) => `'${str.trim()}'`)
-        .join(",")}) AND `;
+      str2 += `(TRIM(dp.product_third_party)) IN (${item[1].map((str) => `'${str.trim()}'`).join(",")}) AND `;
     } else if (item[0] == "filter_brand_types") {
       str2 += `TRIM(dp.product_morphe_new_brand_3p) IN (
         ${item[1].map((str) => `'${str.trim()}'`).join(",")}) AND `;
     } else if (item[0] == "filter_life_cycles") {
-      str2 += `dp.life_cycle IN (${item[1]
-        .map((str) => `'${str.trim()}'`)
-        .join(",")}) AND `;
+      str2 += `dp.life_cycle IN (${item[1].map((str) => `'${str.trim()}'`).join(",")}) AND `;
     } else if (item[0] == "filter_newness") {
       item[1].map((str) => {
         if (item[1].length > 1 && !newnessFlag) {
@@ -187,47 +154,28 @@ const whereQueryString = (obj, alias = "fseisbw") => {
           if (str == "New") {
             return (str2 += `YEAR(dp.launch_date) >= YEAR(CURRENT_DATE()) AND `);
           } else {
-            return (str2 +=
-              " YEAR(dp.launch_date) < YEAR(CURRENT_DATE()) AND ");
+            return (str2 += " YEAR(dp.launch_date) < YEAR(CURRENT_DATE()) AND ");
           }
         }
       });
     } else if (item[0] == "filter_sub_channels") {
-      str2 += `${alias}.country IN (${item[1]
-        .map((str) => `'${str.trim()}'`)
-        .join(",")}) AND `;
+      str2 += `${alias}.country IN (${item[1].map((str) => `'${str.trim()}'`).join(",")}) AND `;
     } else if (item[0] == "filter_channels") {
-      str2 += `${alias}.channel IN (${item[1]
-        .map((str) => `'${str.trim()}'`)
-        .join(",")}) AND `;
+      str2 += `${alias}.channel IN (${item[1].map((str) => `'${str.trim()}'`).join(",")}) AND `;
     } else if (item[0] == "filter_programs") {
-      str2 += ` dp.ns_product_subcollection IN (${item[1]
-        .map((str) => `'${str.trim()}'`)
-        .join(",")}) AND `;
+      str2 += ` dp.ns_product_subcollection IN (${item[1].map((str) => `'${str.trim()}'`).join(",")}) AND `;
     } else if (item[0] == "filter_classes") {
-      str2 += ` dp.ns_class IN (${item[1]
-        .map((str) => `'${str.trim()}'`)
-        .join(",")}) AND `;
+      str2 += ` dp.ns_class IN (${item[1].map((str) => `'${str.trim()}'`).join(",")}) AND `;
     } else if (item[0] == "filter_sub_classes") {
-      str2 += ` dp.ns_subclass IN (${item[1]
-        .map((str) => `'${str.trim()}'`)
-        .join(",")}) AND `;
+      str2 += ` dp.ns_subclass IN (${item[1].map((str) => `'${str.trim()}'`).join(",")}) AND `;
     } else if (item[0] == "filter_collections") {
-      str2 += ` dp.ns_collection IN (${item[1]
-        .map((str) => `'${str.trim()}'`)
-        .join(",")}) AND `;
+      str2 += ` dp.ns_collection IN (${item[1].map((str) => `'${str.trim()}'`).join(",")}) AND `;
     } else if (item[0] == "filter_categories") {
-      str2 += ` dp.ns_category IN (${item[1]
-        .map((str) => `'${str.trim()}'`)
-        .join(",")}) AND `;
+      str2 += ` dp.ns_category IN (${item[1].map((str) => `'${str.trim()}'`).join(",")}) AND `;
     } else if (item[0] == "filter_skus") {
-      str2 += `dp.SKU IN (${item[1]
-        .map((str) => `'${str.trim()}'`)
-        .join(",")}) AND `;
+      str2 += `dp.SKU IN (${item[1].map((str) => `'${str.trim()}'`).join(",")}) AND `;
     } else {
-      str2 += `${alias}.${item[0]} IN (${item[1]
-        .map((str) => `'${str.trim()}'`)
-        .join(",")}) AND `;
+      str2 += `${alias}.${item[0]} IN (${item[1].map((str) => `'${str.trim()}'`).join(",")}) AND `;
     }
   });
   return str2.slice(0, str2.length - 4);
@@ -253,10 +201,7 @@ export const getFilteredForecastData = async (req, res) => {
                       from
                         ${transaction_db}.dim_products idp
                       where
-                        ${whereQueryString(req.body, "idfbwm").replace(
-                          /dp/g,
-                          "idp"
-                        )}
+                        ${whereQueryString(req.body, "idfbwm").replace(/dp/g, "idp")}
                         AND idp.life_cycle <> 'OBSOLETE'
                         AND idp.life_cycle <> 'disco'
                         )
@@ -316,15 +261,9 @@ export const getFilteredForecastData = async (req, res) => {
   order by
     2 desc;`;
     const filteredForecastData = await prisma.$queryRaw(query);
-    const totalForecastedData = await prisma.$queryRaw(
-      totalForecastedDataQuery
-    );
+    const totalForecastedData = await prisma.$queryRaw(totalForecastedDataQuery);
     const weekendDates = await getWeekendDates(filterForecastedYear);
-    let parsedWeeklyData = weeklyCommonTableDataMapping(
-      filteredForecastData,
-      totalForecastedData,
-      weekendDates
-    );
+    let parsedWeeklyData = weeklyCommonTableDataMapping(filteredForecastData, totalForecastedData, weekendDates);
     res.status(200).json({
       parsedWeeklyData,
     });
@@ -450,10 +389,7 @@ export const downloadAllSkusData = async (req, res) => {
                       from
                         ${transaction_db}.dim_products idp
                       where
-                        ${whereQueryString(req.body, "idfbwm").replace(
-                          /dp/g,
-                          "idp"
-                        )}
+                        ${whereQueryString(req.body, "idfbwm").replace(/dp/g, "idp")}
                         AND idp.life_cycle <> 'OBSOLETE'
                         AND idp.life_cycle <> 'disco'
                         )
@@ -485,10 +421,7 @@ export const downloadAllSkusData = async (req, res) => {
                   dfbwm.sku,
                   dfbwm.weekend;`;
     const filteredForecastData = await prisma.$queryRaw(query);
-    let parsedWeeklyData = weeklyCommonTableDataMappingForAll(
-      filteredForecastData,
-      req.body
-    );
+    let parsedWeeklyData = weeklyCommonTableDataMappingForAll(filteredForecastData, req.body);
     res.status(200).json({
       parsedWeeklyData,
     });
@@ -533,11 +466,7 @@ export const getMasterMetricData = async () => {
   }
 };
 
-const parseFilteredForecastData = (
-  type,
-  masterMetricData,
-  filteredForecastData
-) => {
+const parseFilteredForecastData = (type, masterMetricData, filteredForecastData) => {
   let parsedData = [];
   let typeIndex = type == "month" ? 12 : 52;
   let revenueTotal = 0;
@@ -572,12 +501,13 @@ const parseFilteredForecastData = (
       ) {
         for (let j = 0; j < typeIndex; j++) {
           let index = j + 1;
-          obj["w" + index] =
-            filteredForecastData[j][`${masterMetricData[i].name}`];
-          sum = sum + filteredForecastData[j][`${masterMetricData[i].name}`];
-          quarterTotal =
-            quarterTotal +
-            filteredForecastData[j][`${masterMetricData[i].name}`];
+          if (filteredForecastData[j]) {
+            obj["w" + index] = filteredForecastData[j][`${masterMetricData[i].name}`];
+            sum = sum + filteredForecastData[j][`${masterMetricData[i].name}`];
+            quarterTotal = quarterTotal + filteredForecastData[j][`${masterMetricData[i].name}`];
+          } else {
+            obj["w" + index] = 0;
+          }
           if (type == "week") {
             if (index == 13) {
               obj["Q1"] = quarterTotal;
@@ -664,14 +594,15 @@ const parseFilteredForecastData = (
       ) {
         for (let j = 0; j < typeIndex; j++) {
           let index = j + 1;
-          obj["w" + index] =
-            filteredForecastData[j][`${masterMetricData[i].name}`];
-          sum = sum + filteredForecastData[j][`${masterMetricData[i].name}`];
+          if (filteredForecastData[j]) {
+            obj["w" + index] = filteredForecastData[j][`${masterMetricData[i].name}`];
+            sum = sum + filteredForecastData[j][`${masterMetricData[i].name}`];
+            quarterTotal = quarterTotal + filteredForecastData[j][`${masterMetricData[i].name}`];
+          } else {
+            obj["w" + index] = 0;
+          }
           indexForAvg = index;
 
-          quarterTotal =
-            quarterTotal +
-            filteredForecastData[j][`${masterMetricData[i].name}`];
           if (type == "week") {
             if (index == 13) {
               obj["Q1"] = (quarterTotal / 13).toFixed(2);
@@ -706,26 +637,14 @@ const parseFilteredForecastData = (
       }
 
       if (obj["Metrics Slug"] == "sell_through") {
-        obj["yearly_aggregate"] = obj["Q1"] = obj["Q2"] = obj["Q3"] = obj[
-          "Q4"
-        ] = "--";
+        obj["yearly_aggregate"] = obj["Q1"] = obj["Q2"] = obj["Q3"] = obj["Q4"] = "--";
       }
       if (obj["Metrics Slug"] == "aur") {
-        obj["yearly_aggregate"] = isNaN(revenueTotal / unitsTotal)
-          ? 0
-          : (revenueTotal / unitsTotal).toFixed(2);
-        obj["Q1"] = isNaN(quarter1RevenueTotal / quarter1UnitsTotal)
-          ? 0
-          : (quarter1RevenueTotal / quarter1UnitsTotal).toFixed(2);
-        obj["Q2"] = isNaN(quarter2RevenueTotal / quarter2UnitsTotal)
-          ? 0
-          : (quarter2RevenueTotal / quarter2UnitsTotal).toFixed(2);
-        obj["Q3"] = isNaN(quarter3RevenueTotal / quarter3UnitsTotal)
-          ? 0
-          : (quarter3RevenueTotal / quarter3UnitsTotal).toFixed(2);
-        obj["Q4"] = isNaN(quarter4RevenueTotal / quarter4UnitsTotal)
-          ? 0
-          : (quarter4RevenueTotal / quarter4UnitsTotal).toFixed(2);
+        obj["yearly_aggregate"] = isNaN(revenueTotal / unitsTotal) ? 0 : (revenueTotal / unitsTotal).toFixed(2);
+        obj["Q1"] = isNaN(quarter1RevenueTotal / quarter1UnitsTotal) ? 0 : (quarter1RevenueTotal / quarter1UnitsTotal).toFixed(2);
+        obj["Q2"] = isNaN(quarter2RevenueTotal / quarter2UnitsTotal) ? 0 : (quarter2RevenueTotal / quarter2UnitsTotal).toFixed(2);
+        obj["Q3"] = isNaN(quarter3RevenueTotal / quarter3UnitsTotal) ? 0 : (quarter3RevenueTotal / quarter3UnitsTotal).toFixed(2);
+        obj["Q4"] = isNaN(quarter4RevenueTotal / quarter4UnitsTotal) ? 0 : (quarter4RevenueTotal / quarter4UnitsTotal).toFixed(2);
       }
       parsedData.push(obj);
     }
@@ -733,14 +652,7 @@ const parseFilteredForecastData = (
   return parsedData;
 };
 
-const getWeeklyFilteredForecastMetricsQuery = (
-  transaction_db,
-  regularQuery,
-  countryQuery1,
-  duration,
-  countryQuery,
-  year
-) => {
+const getWeeklyFilteredForecastMetricsQuery = (transaction_db, regularQuery, countryQuery1, duration, countryQuery, year) => {
   let query = `
                 WITH current_base_forecast_run_log_id AS (
                 select
@@ -761,7 +673,7 @@ const getWeeklyFilteredForecastMetricsQuery = (
                  ${regularQuery}),
                 comp_units_revs AS (
                 SELECT
-                  ${duration}(dfbwm2.weekend)+1 AS cur_date,
+                  dfbwm2.week_of_year+1 AS cur_date,
                   SUM(dfbwm2.units_sales) as cur_unit_sales,
                   SUM(dfbwm2.retail_sales) as cur_retail_sales
                 FROM
@@ -779,7 +691,7 @@ const getWeeklyFilteredForecastMetricsQuery = (
                   from
                     iskus)
                 GROUP BY
-                  ${duration}(dfbwm2.weekend) ),
+                  dfbwm2.week_of_year ),
                 first_weekend AS (
                 SELECT
                   dmrw.weekend as w01
@@ -789,7 +701,7 @@ const getWeeklyFilteredForecastMetricsQuery = (
                   dmrw.year = ${year}
                 LIMIT 1 )
                 SELECT
-                  ${duration}(dfbwm.weekend) AS date,
+                  dfbwm.week_of_year AS date,
                   ROUND(SUM(dfbwm.retail_sales), 0) AS retail_sales,
                   ROUND(SUM(dfbwm.units_sales), 0) AS units_sales,
                   (CASE
@@ -797,7 +709,7 @@ const getWeeklyFilteredForecastMetricsQuery = (
                     select
                       w01
                     from
-                      first_weekend)) THEN ROUND( SUM(dfbwm.units_sales) / (select cur.cur_unit_sales from comp_units_revs cur where cur.cur_date  = ${duration}(dfbwm.weekend)), 2)
+                      first_weekend)) THEN ROUND( SUM(dfbwm.units_sales) / (select cur.cur_unit_sales from comp_units_revs cur where cur.cur_date  = dfbwm.week_of_year), 2)
                     ELSE 1
                   END) AS units_sales_build,
                   (CASE
@@ -805,7 +717,7 @@ const getWeeklyFilteredForecastMetricsQuery = (
                     select
                       w01
                     from
-                      first_weekend)) THEN ROUND( SUM(dfbwm.retail_sales) / (select cur.cur_retail_sales from comp_units_revs cur where cur.cur_date = ${duration}(dfbwm.weekend)), 2)
+                      first_weekend)) THEN ROUND( SUM(dfbwm.retail_sales) / (select cur.cur_retail_sales from comp_units_revs cur where cur.cur_date = dfbwm.week_of_year), 2)
                     ELSE 1
                   END) AS retail_sales_build,
                   ROUND((ROUND(SUM(dfbwm.retail_sales), 0) / ROUND(SUM(dfbwm.units_sales), 0)), 2) AS aur,
@@ -820,7 +732,7 @@ const getWeeklyFilteredForecastMetricsQuery = (
                 FROM
                   ${transaction_db}.demand_forecast_base_weekly_metrics dfbwm
                 WHERE
-                  YEAR(dfbwm.weekend)=${year}
+                  dfbwm.forecast_year=${year}
                   ${countryQuery}
                   AND dfbwm.demand_forecast_run_log_id = (
                   select
@@ -833,19 +745,12 @@ const getWeeklyFilteredForecastMetricsQuery = (
                   from
                     iskus)
                 GROUP BY
-                  ${duration}(dfbwm.weekend);`;
+                  dfbwm.week_of_year;`;
 
   return query;
 };
 
-const getMonthlyFilteredForecastMetricsQuery = (
-  transaction_db,
-  regularQuery,
-  countryQuery1,
-  duration,
-  countryQuery,
-  year
-) => {
+const getMonthlyFilteredForecastMetricsQuery = (transaction_db, regularQuery, countryQuery1, duration, countryQuery, year) => {
   let query = `WITH current_base_forecast_run_log_id AS (
     select
       id
@@ -865,7 +770,7 @@ const getMonthlyFilteredForecastMetricsQuery = (
      ${regularQuery}),
     comp_units_revs AS (
     SELECT
-      ${duration}(dfbwm2.monthend)+1 AS cur_date,
+      dfbwm2.month_of_year+1 AS cur_date,
       SUM(dfbwm2.units_sales) as cur_unit_sales,
       SUM(dfbwm2.retail_sales) as cur_retail_sales
     FROM
@@ -883,7 +788,7 @@ const getMonthlyFilteredForecastMetricsQuery = (
       from
         iskus)
     GROUP BY
-      ${duration}(dfbwm2.monthend) ),
+      dfbwm2.month_of_year ),
     first_weekend AS (
     SELECT
     month(dmrw.weekend) as w01
@@ -893,7 +798,7 @@ const getMonthlyFilteredForecastMetricsQuery = (
       dmrw.year = ${year}
     LIMIT 1 )
     SELECT
-      ${duration}(dfbwm.monthend) AS date,
+      dfbwm.month_of_year AS date,
       ROUND(SUM(dfbwm.retail_sales), 0) AS retail_sales,
       ROUND(SUM(dfbwm.units_sales), 0) AS units_sales,
       (CASE
@@ -901,7 +806,7 @@ const getMonthlyFilteredForecastMetricsQuery = (
         select
           w01
         from
-          first_weekend)) THEN ROUND( SUM(dfbwm.units_sales) / (select cur.cur_unit_sales from comp_units_revs cur where cur.cur_date  = ${duration}(dfbwm.monthend)), 2)
+          first_weekend)) THEN ROUND( SUM(dfbwm.units_sales) / (select cur.cur_unit_sales from comp_units_revs cur where cur.cur_date  = dfbwm.month_of_year), 2)
         ELSE 1
       END) AS units_sales_build,
       (CASE
@@ -909,7 +814,7 @@ const getMonthlyFilteredForecastMetricsQuery = (
         select
           w01
         from
-          first_weekend)) THEN ROUND( SUM(dfbwm.retail_sales) / (select cur.cur_retail_sales from comp_units_revs cur where cur.cur_date = ${duration}(dfbwm.monthend)), 2)
+          first_weekend)) THEN ROUND( SUM(dfbwm.retail_sales) / (select cur.cur_retail_sales from comp_units_revs cur where cur.cur_date = dfbwm.month_of_year), 2)
         ELSE 1
       END) AS retail_sales_build,
       ROUND((ROUND(SUM(dfbwm.retail_sales), 0) / ROUND(SUM(dfbwm.units_sales), 0)), 2) AS aur,
@@ -924,7 +829,7 @@ const getMonthlyFilteredForecastMetricsQuery = (
     FROM
       ${transaction_db}.demand_forecast_base_monthly_metrics dfbwm
     WHERE
-      YEAR(dfbwm.monthend)=${year}
+      dfbwm.forecast_year=${year}
       ${countryQuery}
       AND dfbwm.demand_forecast_run_log_id = (
       select
@@ -937,7 +842,7 @@ const getMonthlyFilteredForecastMetricsQuery = (
       from
         iskus)
     GROUP BY
-      ${duration}(dfbwm.monthend);`;
+      dfbwm.month_of_year;`;
   return query;
 };
 
@@ -953,6 +858,7 @@ export const getFilteredForecastMetrics = async (req, res) => {
   let regularFilter = {};
   let countryFilter = {};
   let countryFilter1 = {};
+
   for (let item in req.body) {
     if (item !== "filter_sub_channels" && item !== "filter_channels") {
       regularFilter[item] = req.body[item];
@@ -960,15 +866,10 @@ export const getFilteredForecastMetrics = async (req, res) => {
       countryFilter[item] = req.body[item];
     }
   }
-  countryFilter != null
-    ? (countryQuery = `AND ${whereQueryString(countryFilter, "dfbwm")}`)
-    : (countryQuery = "");
-  regularFilter != null
-    ? (regularQuery = `AND ${whereQueryString(regularFilter, "dp")}`)
-    : (regularQuery = "");
-  countryFilter1 != null
-    ? (countryQuery1 = `AND ${whereQueryString(countryFilter, "dfbwm2")}`)
-    : (countryQuery1 = "");
+
+  countryFilter != null ? (countryQuery = `AND ${whereQueryString(countryFilter, "dfbwm")}`) : (countryQuery = "");
+  regularFilter != null ? (regularQuery = `AND ${whereQueryString(regularFilter, "dp")}`) : (regularQuery = "");
+  countryFilter1 != null ? (countryQuery1 = `AND ${whereQueryString(countryFilter, "dfbwm2")}`) : (countryQuery1 = "");
 
   if (regularQuery.length == 4) {
     regularQuery = "";
@@ -985,34 +886,16 @@ export const getFilteredForecastMetrics = async (req, res) => {
     let transaction_db = "morphe_staging";
 
     let query = "";
-    console.log("duration---",duration);
+    // console.log("duration---", duration);
     if (duration == "month") {
-      query = getMonthlyFilteredForecastMetricsQuery(
-        transaction_db,
-        regularQuery,
-        countryQuery1,
-        duration,
-        countryQuery,
-        filterForecastedYear
-      );
+      query = getMonthlyFilteredForecastMetricsQuery(transaction_db, regularQuery, countryQuery1, duration, countryQuery, filterForecastedYear);
     } else {
-      query = getWeeklyFilteredForecastMetricsQuery(
-        transaction_db,
-        regularQuery,
-        countryQuery1,
-        duration,
-        countryQuery,
-        filterForecastedYear
-      );
+      query = getWeeklyFilteredForecastMetricsQuery(transaction_db, regularQuery, countryQuery1, duration, countryQuery, filterForecastedYear);
     }
-    console.log("query--",query);
+    // console.log("query--", query);
     const filteredForecastData = await prisma.$queryRaw(query);
     let masterMetricData = await getMasterMetricData();
-    let parsedFilteredForecastData = parseFilteredForecastData(
-      duration,
-      masterMetricData,
-      filteredForecastData
-    );
+    let parsedFilteredForecastData = parseFilteredForecastData(duration, masterMetricData, filteredForecastData);
     res.status(200).json({
       parsedFilteredForecastData,
     });
@@ -1025,23 +908,14 @@ export const getFilteredForecastMetrics = async (req, res) => {
 };
 
 // Planned Query Generator
-const typlanQueryGeneratorByDurations = (
-  duration,
-  whereQueryString,
-  transaction_db,
-  year
-) => {
+const typlanQueryGeneratorByDurations = (duration, whereQueryString, transaction_db, year) => {
   let dateOffset;
   let tableName;
   let groubyCol;
   let whereQueryStr = "";
   duration.toLowerCase() == "week"
-    ? ((dateOffset = 1),
-      (tableName = `planned_weekly_units_revenue_by_channel_by_sku`),
-      (groubyCol = "week"))
-    : ((dateOffset = 0),
-      (tableName = `planned_weekly_units_revenue_by_channel_by_sku`),
-      (groubyCol = "month"));
+    ? ((dateOffset = 1), (tableName = `planned_weekly_units_revenue_by_channel_by_sku`), (groubyCol = "week"))
+    : ((dateOffset = 0), (tableName = `planned_weekly_units_revenue_by_channel_by_sku`), (groubyCol = "month"));
   if (whereQueryString) {
     whereQueryStr = `${whereQueryString.replace(/country/g, "sub_channel")}`;
   }
@@ -1069,23 +943,14 @@ const typlanQueryGeneratorByDurations = (
 };
 
 // Planned Query Generator
-const typlanChartQueryGeneratorByDurations = (
-  duration,
-  whereQueryString,
-  transaction_db,
-  year
-) => {
+const typlanChartQueryGeneratorByDurations = (duration, whereQueryString, transaction_db, year) => {
   let dateOffset;
   let tableName;
   let groubyCol;
   let whereQueryStr = "";
   duration.toLowerCase() == "week"
-    ? ((dateOffset = 1),
-      (tableName = `planned_weekly_units_revenue_by_channel_by_sku`),
-      (groubyCol = "week"))
-    : ((dateOffset = 0),
-      (tableName = `planned_weekly_units_revenue_by_channel_by_sku`),
-      (groubyCol = "month"));
+    ? ((dateOffset = 1), (tableName = `planned_weekly_units_revenue_by_channel_by_sku`), (groubyCol = "week"))
+    : ((dateOffset = 0), (tableName = `planned_weekly_units_revenue_by_channel_by_sku`), (groubyCol = "month"));
   if (whereQueryString) {
     whereQueryStr = `${whereQueryString.replace(/country/g, "sub_channel")}`;
   }
@@ -1111,12 +976,7 @@ const typlanChartQueryGeneratorByDurations = (
   return query;
 };
 // This Year Sale Query Generator
-const thisYearSaleYearlyQuarterly = (
-  duration,
-  whereQueryString,
-  transaction_db,
-  year
-) => {
+const thisYearSaleYearlyQuarterly = (duration, whereQueryString, transaction_db, year) => {
   let dateOffset;
   let whereQueryStr = "";
   if (whereQueryString) {
@@ -1148,12 +1008,7 @@ const thisYearSaleYearlyQuarterly = (
 };
 
 // Forecast Query Generator
-const forecastQueryGenByDuration = (
-  duration,
-  whereQueryString,
-  transaction_db,
-  year
-) => {
+const forecastQueryGenByDuration = (duration, whereQueryString, transaction_db, year) => {
   // let changeAlias = whereQueryString ? `AND ${whereQueryString}` : "";
   const query = `
               SELECT
@@ -1195,30 +1050,15 @@ export const getFilteredYearlyStatsData = async (req, res) => {
 
   // Planned Sales Yearly
   const filteredPlannedWhereQuery = whereQueryString(filter, "pwurbcbs");
-  const filteredPlannedDataQuery = typlanQueryGeneratorByDurations(
-    "YEAR",
-    filteredPlannedWhereQuery,
-    "morphe_staging",
-    filterForecastedYear
-  );
+  const filteredPlannedDataQuery = typlanQueryGeneratorByDurations("YEAR", filteredPlannedWhereQuery, "morphe_staging", filterForecastedYear);
 
   // This Year Sale Yearly
   const filteredThisYearSaleWhereQuery = whereQueryString(filter);
-  const filteredThisYearSaleDataQuery = thisYearSaleYearlyQuarterly(
-    "YEAR",
-    filteredThisYearSaleWhereQuery,
-    "morphe_staging",
-    filterForecastedYear
-  );
+  const filteredThisYearSaleDataQuery = thisYearSaleYearlyQuarterly("YEAR", filteredThisYearSaleWhereQuery, "morphe_staging", filterForecastedYear);
 
   // Forecast Yearly
   const filteredForecastWhereQuery = whereQueryString(filter);
-  const filteredForecastDataQuery = forecastQueryGenByDuration(
-    "YEAR",
-    filteredForecastWhereQuery,
-    "morphe_staging",
-    filterForecastedYear
-  );
+  const filteredForecastDataQuery = forecastQueryGenByDuration("YEAR", filteredForecastWhereQuery, "morphe_staging", filterForecastedYear);
 
   try {
     let yearlyFilteredStats = await Promise.allSettled([
@@ -1248,10 +1088,7 @@ export const getFilteredQuarterlyStatsData = async (req, res) => {
   let filter = req.body;
   const { filterForecastedYear } = req.params;
   // Planned Quarterly
-  const filteredQuarterlyPlannedWhereQuery = whereQueryString(
-    filter,
-    "pwurbcbs"
-  );
+  const filteredQuarterlyPlannedWhereQuery = whereQueryString(filter, "pwurbcbs");
   const filteredQuarterlyPlannedDataQuery = typlanQueryGeneratorByDurations(
     "QUARTER",
     filteredQuarterlyPlannedWhereQuery,
@@ -1270,12 +1107,7 @@ export const getFilteredQuarterlyStatsData = async (req, res) => {
 
   // Forecast Quarterly
   const filteredQuarterlyForecastWhereQuery = whereQueryString(filter);
-  const filteredQuarterlyForecastDataQuery = forecastQueryGenByDuration(
-    "QUARTER",
-    filteredQuarterlyForecastWhereQuery,
-    "morphe_staging",
-    filterForecastedYear
-  );
+  const filteredQuarterlyForecastDataQuery = forecastQueryGenByDuration("QUARTER", filteredQuarterlyForecastWhereQuery, "morphe_staging", filterForecastedYear);
 
   try {
     let quarterlyFilteredStats = await Promise.allSettled([
@@ -1306,10 +1138,7 @@ export const getFilterChartData = async (req, res) => {
   const { filterForecastedYear } = req.params;
 
   // Planned Quarterly
-  const filteredQuarterlyPlannedWhereQuery = whereQueryString(
-    filter,
-    "pwurbcbs"
-  );
+  const filteredQuarterlyPlannedWhereQuery = whereQueryString(filter, "pwurbcbs");
   const filteredQuarterlyPlannedDataQuery = typlanChartQueryGeneratorByDurations(
     req.body.duration,
     filteredQuarterlyPlannedWhereQuery,
