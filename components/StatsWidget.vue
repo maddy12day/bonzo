@@ -258,8 +258,8 @@
           title="Forecast"
           :units="
             `${
-              forecastYQData.revenue
-                ? parseInt(forecastYQData.revenue[0].q3_aggregate) : ''
+              forecastYQData.units
+                ? parseInt(forecastYQData.units[0].q3_aggregate) : ''
             }`
           "
           :revenue="
@@ -358,7 +358,9 @@ export default {
   methods: {
     getSelectedYear(evt) {
       this.forecastedYear = evt.target.value;
-       this.forecastYearlyQuarterly();
+      this.forecastYearlyQuarterly();
+      this.quarterlyPlanned();
+      this.quarterlySale();
       this.yearlySale();
       this.yearlyPlanned()
       this.$emit("getSelectedYear", evt.target.value);

@@ -920,6 +920,7 @@ const typlanQueryGeneratorByDurations = (duration, whereQueryString, transaction
 
   const query = `
               SELECT
+              ${duration}(pwurbcbs.weekend_date)-${dateOffset} AS date,
                 ROUND(SUM(pwurbcbs.units), 0) AS total_units,
                 ROUND(SUM(pwurbcbs.revenue), 0) AS total_revenue
               FROM
@@ -1081,6 +1082,29 @@ export const getFilteredYearlyStatsData = async (req, res) => {
   }
 };
 
+const parseFilteredQuarterlyStatsData  = (data) => {
+  if (data.length > 0) {
+    let statsData = Array(4).fill({
+      date: 0,
+      total_revenue: 0,
+      total_units: 0
+    }).map((currElement, index) => {
+      return {
+        date: index+1,
+        total_revenue:  currElement.total_revenue,
+        total_units:  currElement.total_units
+      }
+    });
+    statsData.forEach(function (item, index) {
+      let dataIndex = data.findIndex(x => x.date === index+1);
+      if(dataIndex >= 0) {
+        statsData[index] = data[dataIndex];
+      }   
+    });
+    return statsData;
+  } else return data;
+}
+
 // Filtered Stats getFilteredYearlyStatsData
 export const getFilteredQuarterlyStatsData = async (req, res) => {
   delete req.body.filterType;
@@ -1114,10 +1138,10 @@ export const getFilteredQuarterlyStatsData = async (req, res) => {
       prisma.$queryRaw(filteredQuarterlyThisYearSaleDataQuery),
       prisma.$queryRaw(filteredQuarterlyForecastDataQuery),
     ]);
-
+    let parsedFilteredQuarterlyStatsData = quarterlyFilteredStats.map((item) => parseFilteredQuarterlyStatsData(item.value));
     let filteredStats = {
       yearlyFilteredStats: {}, //yearlyFilteredStats.map((item) => item.value),
-      quarterlyFilteredStats: quarterlyFilteredStats.map((item) => item.value),
+      quarterlyFilteredStats: parsedFilteredQuarterlyStatsData,
     };
     res.status(200).json({
       filteredStats,
@@ -1131,13 +1155,12 @@ export const getFilteredQuarterlyStatsData = async (req, res) => {
 };
 
 const parseChartData = (duration, data) => {
-  console.log("req.body.duration--",data);
   let chartData;
   if(duration == 'week') {
     chartData = Array(52).fill({
       date: 0,
-        total_revenue: 0,
-        total_units: 0
+      total_revenue: 0,
+      total_units: 0
     });
   } else {
     chartData = Array(12).fill({

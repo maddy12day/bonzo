@@ -240,7 +240,7 @@
           "
           :revenue="
             `${
-              quarterlyFilteredStats[0][2] && quarterlyFilteredStats[0][2]
+              quarterlyFilteredStats[0] && quarterlyFilteredStats[0][2]
                 ? parseInt(quarterlyFilteredStats[0][2].total_revenue)
                 : ''
             }`
