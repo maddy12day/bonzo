@@ -1039,7 +1039,6 @@ const forecastQueryGenByDuration = (duration, whereQueryString, transaction_db, 
                 ${duration}(fseisbw.weekend)
               ORDER BY
                 ${duration}(fseisbw.weekend);`;
-                // console.log("que-ry",query)
   return query;
 };
 
@@ -1140,7 +1139,6 @@ export const getFilteredQuarterlyStatsData = async (req, res) => {
       prisma.$queryRaw(filteredQuarterlyForecastDataQuery),
     ]);
     let parsedFilteredQuarterlyStatsData = quarterlyFilteredStats.map((item) => parseFilteredQuarterlyStatsData(item.value));
-    // console.log("parsedFilteredQuarterlyStatsData--",parsedFilteredQuarterlyStatsData);
     let filteredStats = {
       yearlyFilteredStats: {}, //yearlyFilteredStats.map((item) => item.value),
       quarterlyFilteredStats: parsedFilteredQuarterlyStatsData,
@@ -1157,7 +1155,6 @@ export const getFilteredQuarterlyStatsData = async (req, res) => {
 };
 
 const parseChartData = (duration, data) => {
-  // console.log("req.body.duration--",data);
   let chartData;
   if(duration == 'week') {
     chartData = Array(52).fill({
