@@ -199,7 +199,7 @@ export const getFilteredForecastData = async (req, res) => {
                   from
                     ${transaction_db}.demand_forecast_base_weekly_metrics idfbwm
                   where
-                    idfbwm.demand_forecast_run_log_id = (select id from ${transaction_db}.demand_forecast_run_log dfrl where is_base_forecast = true limit 1)
+                    idfbwm.demand_forecast_run_log_id = ${dfrlId}
                     and idfbwm.sku in (
                       select
                         idp.SKU
@@ -224,7 +224,7 @@ export const getFilteredForecastData = async (req, res) => {
                   ${transaction_db}.demand_forecast_base_weekly_metrics dfbwm,
                   ${transaction_db}.dim_products dp
                 WHERE
-                  demand_forecast_run_log_id = (select id from ${transaction_db}.demand_forecast_run_log dfrl where is_base_forecast = true limit 1)
+                  demand_forecast_run_log_id = ${dfrlId}
                   AND dfbwm.sku = dp.SKU
                   AND YEAR(dfbwm.weekend) = ${filterForecastedYear}
                   AND dfbwm.sku IN (
@@ -238,6 +238,8 @@ export const getFilteredForecastData = async (req, res) => {
                 ORDER BY
                   dfbwm.sku,
                   dfbwm.weekend;`;
+
+                  // console.log("opopo--",query);
     let totalForecastedDataQuery = `select
     dfbwm.weekend as weekend,
     ROUND(sum(dfbwm.units_sales), 0) as units_sales,
@@ -245,14 +247,7 @@ export const getFilteredForecastData = async (req, res) => {
   from
     morphe_staging.demand_forecast_base_weekly_metrics dfbwm
   where
-    dfbwm.demand_forecast_run_log_id = (
-    select
-      id
-    from
-      morphe_staging.demand_forecast_run_log dfrl
-    where
-      is_base_forecast = true
-    limit 1)
+    dfbwm.demand_forecast_run_log_id = ${dfrlId}
     and dfbwm.sku in (
     select
       dp.SKU
@@ -265,9 +260,22 @@ export const getFilteredForecastData = async (req, res) => {
     1
   order by
     2 desc;`;
-    const filteredForecastData = await prisma.$queryRaw(query);
-    const totalForecastedData = await prisma.$queryRaw(totalForecastedDataQuery);
-    const weekendDates = await getWeekendDates(filterForecastedYear);
+
+    console.log("opopo--",totalForecastedDataQuery);
+    // const filteredForecastData = await prisma.$queryRaw(query);
+    // const totalForecastedData = await prisma.$queryRaw(totalForecastedDataQuery);
+    // const weekendDates = await getWeekendDates(filterForecastedYear);
+    
+    let filteredForecastDataPromise = await Promise.allSettled([
+      prisma.$queryRaw(query),
+      prisma.$queryRaw(totalForecastedDataQuery),
+      getWeekendDates(filterForecastedYear),
+    ]);
+    // console.log("filteredForecastDataPromise:",filteredForecastDataPromise);
+    const filteredForecastData = filteredForecastDataPromise[0].value;
+    const totalForecastedData = filteredForecastDataPromise[1].value;
+    const weekendDates = filteredForecastDataPromise[2].value;
+
     let parsedWeeklyData = weeklyCommonTableDataMapping(filteredForecastData, totalForecastedData, weekendDates);
     res.status(200).json({
       parsedWeeklyData,
@@ -659,15 +667,7 @@ const parseFilteredForecastData = (type, masterMetricData, filteredForecastData)
 
 const getWeeklyFilteredForecastMetricsQuery = (transaction_db, regularQuery, countryQuery1, duration, countryQuery, year) => {
   let query = `
-                WITH current_base_forecast_run_log_id AS (
-                select
-                  id
-                from
-                  ${transaction_db}.demand_forecast_run_log dfrl
-                where
-                  is_base_forecast = true
-                limit 1 ),
-                iskus AS (
+                WITH iskus AS (
                 select
                   dp.SKU as sku
                 from
@@ -684,11 +684,7 @@ const getWeeklyFilteredForecastMetricsQuery = (transaction_db, regularQuery, cou
                 FROM
                   ${transaction_db}.demand_forecast_base_weekly_metrics dfbwm2
                 WHERE
-                  dfbwm2.demand_forecast_run_log_id = (
-                  select
-                    id
-                  from
-                    current_base_forecast_run_log_id)
+                  dfbwm2.demand_forecast_run_log_id = ${dfrlId}
                     ${countryQuery1}
                   AND dfbwm2.sku IN (
                   select
@@ -739,11 +735,7 @@ const getWeeklyFilteredForecastMetricsQuery = (transaction_db, regularQuery, cou
                 WHERE
                   dfbwm.forecast_year=${year}
                   ${countryQuery}
-                  AND dfbwm.demand_forecast_run_log_id = (
-                  select
-                    id
-                  from
-                    current_base_forecast_run_log_id)
+                  AND dfbwm.demand_forecast_run_log_id = ${dfrlId}
                   AND dfbwm.sku IN (
                   select
                     sku
@@ -756,15 +748,7 @@ const getWeeklyFilteredForecastMetricsQuery = (transaction_db, regularQuery, cou
 };
 
 const getMonthlyFilteredForecastMetricsQuery = (transaction_db, regularQuery, countryQuery1, duration, countryQuery, year) => {
-  let query = `WITH current_base_forecast_run_log_id AS (
-    select
-      id
-    from
-      ${transaction_db}.demand_forecast_run_log dfrl
-    where
-      is_base_forecast = true
-    limit 1 ),
-    iskus AS (
+  let query = `WITH iskus AS (
     select
       dp.SKU as sku
     from
@@ -781,11 +765,7 @@ const getMonthlyFilteredForecastMetricsQuery = (transaction_db, regularQuery, co
     FROM
       ${transaction_db}.demand_forecast_base_monthly_metrics dfbwm2
     WHERE
-      dfbwm2.demand_forecast_run_log_id = (
-      select
-        id
-      from
-        current_base_forecast_run_log_id)
+      dfbwm2.demand_forecast_run_log_id = ${dfrlId}
         ${countryQuery1}
       AND dfbwm2.sku IN (
       select
@@ -836,11 +816,7 @@ const getMonthlyFilteredForecastMetricsQuery = (transaction_db, regularQuery, co
     WHERE
       dfbwm.forecast_year=${year}
       ${countryQuery}
-      AND dfbwm.demand_forecast_run_log_id = (
-      select
-        id
-      from
-        current_base_forecast_run_log_id)
+      AND dfbwm.demand_forecast_run_log_id = ${dfrlId}
       AND dfbwm.sku IN (
       select
         sku
@@ -896,8 +872,20 @@ export const getFilteredForecastMetrics = async (req, res) => {
     } else {
       query = getWeeklyFilteredForecastMetricsQuery(transaction_db, regularQuery, countryQuery1, duration, countryQuery, filterForecastedYear);
     }
-    const filteredForecastData = await prisma.$queryRaw(query);
-    let masterMetricData = await getMasterMetricData();
+    // const filteredForecastData = await prisma.$queryRaw(query);
+    // let masterMetricData = await getMasterMetricData();
+
+
+    let filteredForecastMetricsPromise = await Promise.allSettled([
+      prisma.$queryRaw(query),
+      getMasterMetricData(),
+    ]);
+
+    // console.log("filteredForecastMetricsPromise+",filteredForecastMetricsPromise);
+
+    let filteredForecastData = filteredForecastMetricsPromise[0].value;
+    let masterMetricData = filteredForecastMetricsPromise[1].value;
+
     let parsedFilteredForecastData = parseFilteredForecastData(duration, masterMetricData, filteredForecastData);
     res.status(200).json({
       parsedFilteredForecastData,
@@ -1058,7 +1046,7 @@ export const getFilteredYearlyStatsData = async (req, res) => {
 
   const filteredForecastDataQuery = forecastQueryGenByDuration("YEAR", allFilteredSkus, whereQueryWithChannel, "morphe_staging", filterForecastedYear);
 
-  console.log("filteredForecastDataQuery)_",filteredForecastDataQuery);
+  // console.log("filteredForecastDataQuery)_",filteredForecastDataQuery);
 
   try {
     let yearlyFilteredStats = await Promise.allSettled([
@@ -1362,7 +1350,7 @@ export const setFilteredSKUsAndWhereQuery = async (req, res) => {
   whereQueryWithDP = whereQueryStringForDP(filter);
   whereQueryWithChannel = whereQueryStringForChannel(filter);
   // whereQueryRegular = whereQueryString
-  console.log("whereQueryWithDP--",whereQueryWithDP);
+  // console.log("whereQueryWithDP--",whereQueryWithDP);
   // console.log("whereQueryWithChannel--",whereQueryWithChannel);
   // if(whereQueryWithDP) {
     allFilteredSkus = await getFilteredSkus("morphe_staging",whereQueryWithDP)
