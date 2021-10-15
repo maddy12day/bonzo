@@ -2,7 +2,7 @@
   <div class="card mb-0">
     <div class="card-header card-chart card-header-success">
       <div class="ct-chart font-weight-bold" id="completedTasksChart">
-        {{ title | capitalize }}
+        {{ title | capitalize }} {{isAPIFetchComplete}}
       </div>
     </div>
     <div class="card-body">
@@ -25,7 +25,7 @@
           </span>
           <span
             class=""
-            v-else-if="!units || (units == '0' && isAPIFetchComplete)"
+            v-else-if="!units && isAPIFetchComplete"
           >
             &nbsp; -
           </span>
@@ -43,7 +43,7 @@
           </span>
           <span
             class="empty-stats"
-            v-else-if="!units || (units == '0' && isAPIFetchComplete)"
+            v-else-if="!units && isAPIFetchComplete"
           >
             &nbsp; -
           </span>
@@ -62,7 +62,7 @@
           </span>
           <span
             class="empty-stats"
-            v-else-if="!units || (units == '0' && isAPIFetchComplete)"
+            v-else-if="!units && isAPIFetchComplete"
           >
             &nbsp; -
           </span>
@@ -90,7 +90,7 @@
           </span>
           <span
             class="empty-stats"
-            v-else-if="!revenue || (revenue == '0' && isAPIFetchComplete)"
+            v-else-if="!revenue && isAPIFetchComplete"
           >
             &nbsp; -
           </span>
@@ -108,7 +108,7 @@
           </span>
           <span
             class="empty-stats"
-            v-else-if="!revenue || (revenue == '0' && isAPIFetchComplete)"
+            v-else-if="!revenue && isAPIFetchComplete"
           >
             &nbsp; -
           </span>
@@ -126,7 +126,7 @@
           </span>
           <span
             class="empty-stats"
-            v-else-if="!revenue || (revenue == '0' && isAPIFetchComplete)"
+            v-else-if="!revenue && isAPIFetchComplete"
           >
             &nbsp; -
           </span>
