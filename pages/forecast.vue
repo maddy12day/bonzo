@@ -830,7 +830,7 @@ export default {
       this.filter_programs = [];
     },
     async appliedFilters() {
-      this.isFilteredForecast = true;
+      
       this.isFilteredPageDataLoading = true;
       this.filterPayload = {
         filter_product_sources: this.productSourceValues,
@@ -872,16 +872,27 @@ export default {
       }
 
       this.requestedFilterOption = requestedFilterOption;
-      this.filterChartComponentKey += 1;
+      
       delete this.requestedFilterOption["filterType"];
       // await this.getFilteredForecastData(requestedFilterOption);
+      
+      await this.setFilteredSKUsAndWhereQuery();
+      this.isFilteredForecast = true;
       this.filteredStatsComponentKey += 1;
+      this.filterChartComponentKey += 1;
       this.getFilteredTopSkus();
       await this.getFilteredWeeklyMetrics(requestedFilterOption);
       this.isFilteredPageDataLoading = false;
       this.$store.commit("toggleCTAState");
       this.$store.commit("toggleProgramFilterCTAState");
       // this.filteredStatsComponentKey += 1;
+    },
+    async setFilteredSKUsAndWhereQuery () {
+      await this.$axios.$post(
+        `/set-filtered-sku-and-where-query`,
+        this.filterPayload
+      );
+      console.log("this.filterPayload00=--",this.filterPayload);
     },
     notifyVue(verticalAlign, horizontalAlign, message, type) {
       this.$notify({
