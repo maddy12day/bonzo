@@ -119,7 +119,7 @@ export default {
       this.showMetricsByDuration("Weekly");
       this.getWeekendDates();
       this.$refs.chartWidget.chartInit(value);
-      this.comparisonTableDataGenerator();
+      // this.comparisonTableDataGenerator();
     },
     // timeline api call
     async getTimelineDetails() {
@@ -281,7 +281,7 @@ export default {
     this.showMetricsByDuration("Monthly");
     this.getAllUserData();
     this.getWeekendDates();
-    this.comparisonTableDataGenerator();
+    // this.comparisonTableDataGenerator();
     setTimeout(() => {
       this.checkMergeScenarioStatus();
     }, 10000);

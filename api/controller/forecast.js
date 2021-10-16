@@ -2,11 +2,11 @@ import { PrismaClient } from "@prisma/client";
 import moment from "moment";
 
 const prisma = new PrismaClient();
-let whereQueryWithDP = "";
-let whereQueryWithChannel = "";
-let whereQueryRegular = "";
-let dfrlId = "";
-let allFilteredSkus = "";
+// let whereQueryWithDP = "";
+// let whereQueryWithChannel = "";
+// let whereQueryRegular = "";
+// let dfrlId = "";
+// let allFilteredSkus = "";
 
 const getWeekendDates = async (year) => {
   try {
@@ -188,7 +188,10 @@ const whereQueryString = (obj, alias = "fseisbw") => {
 //top 10 skus
 export const getFilteredForecastData = async (req, res) => {
   let transaction_db = "morphe_staging";
+  let filteredQuerySetterData = req.body.filteredQuerySetterData;
   delete req.body.filterType;
+  delete req.body.filteredQuerySetterData;
+
   try {
     const { filterForecastedYear } = req.params;
     let query = `
@@ -199,7 +202,7 @@ export const getFilteredForecastData = async (req, res) => {
                   from
                     ${transaction_db}.demand_forecast_base_weekly_metrics idfbwm
                   where
-                    idfbwm.demand_forecast_run_log_id = ${dfrlId}
+                    idfbwm.demand_forecast_run_log_id = ${filteredQuerySetterData.dfrlId}
                     and idfbwm.sku in (
                       select
                         idp.SKU
@@ -224,7 +227,7 @@ export const getFilteredForecastData = async (req, res) => {
                   ${transaction_db}.demand_forecast_base_weekly_metrics dfbwm,
                   ${transaction_db}.dim_products dp
                 WHERE
-                  demand_forecast_run_log_id = ${dfrlId}
+                  demand_forecast_run_log_id = ${filteredQuerySetterData.dfrlId}
                   AND dfbwm.sku = dp.SKU
                   AND YEAR(dfbwm.weekend) = ${filterForecastedYear}
                   AND dfbwm.sku IN (
@@ -239,9 +242,8 @@ export const getFilteredForecastData = async (req, res) => {
                   dfbwm.sku,
                   dfbwm.weekend;`;
 
-                  // console.log("-=-=-=opopo--",query);
 
-    let updatedWhereQueryString = whereQueryWithChannel.replace(/fseisbw/g, 'dfbwm');
+    let updatedWhereQueryString = filteredQuerySetterData.whereQueryWithChannel.replace(/fseisbw/g, 'dfbwm');
     let totalForecastedDataQuery = `select
       dfbwm.weekend as weekend,
       ROUND(sum(dfbwm.units_sales), 0) as units_sales,
@@ -249,24 +251,22 @@ export const getFilteredForecastData = async (req, res) => {
       from
         morphe_staging.demand_forecast_base_weekly_metrics dfbwm
       where
-        dfbwm.demand_forecast_run_log_id = ${dfrlId}
-        AND Year(dfbwm.weekend) = ${filterForecastedYear} ${updatedWhereQueryString ? " AND " + updatedWhereQueryString : ""} ${whereQueryWithDP ? " AND dfbwm.sku in (" + allFilteredSkus +")": ""}
+        dfbwm.demand_forecast_run_log_id = ${filteredQuerySetterData.dfrlId}
+        AND Year(dfbwm.weekend) = ${filterForecastedYear} ${updatedWhereQueryString ? " AND " + updatedWhereQueryString : ""} ${filteredQuerySetterData.whereQueryWithDP ? " AND dfbwm.sku in (" + filteredQuerySetterData.allFilteredSkus +")": ""}
       group by
         1
       order by
         2 desc;`;
-      // console.log("whereQueryWithChannel++",whereQueryWithChannel);
-    // console.log("opopo--",totalForecastedDataQuery);
-    // const filteredForecastData = await prisma.$queryRaw(query);
-    // const totalForecastedData = await prisma.$queryRaw(totalForecastedDataQuery);
-    // const weekendDates = await getWeekendDates(filterForecastedYear);
-    
+
+        console.log("req.body+",totalForecastedDataQuery);
+
+  
     let filteredForecastDataPromise = await Promise.allSettled([
       prisma.$queryRaw(query),
       prisma.$queryRaw(totalForecastedDataQuery),
       getWeekendDates(filterForecastedYear),
     ]);
-    // console.log("filteredForecastDataPromise:",filteredForecastDataPromise);
+
     const filteredForecastData = filteredForecastDataPromise[0].value;
     const totalForecastedData = filteredForecastDataPromise[1].value;
     const weekendDates = filteredForecastDataPromise[2].value;
@@ -286,6 +286,7 @@ export const downloadAllSkuByMonth = async (req, res) => {
   try {
     let transaction_db = "morphe_staging";
     delete req.body.filterType;
+    delete req.body.filteredQuerySetterData;
     const { filterForecastedYear } = req.params;
     const query = `
     WITH iskus AS (
@@ -660,7 +661,7 @@ const parseFilteredForecastData = (type, masterMetricData, filteredForecastData)
   return parsedData;
 };
 
-const getWeeklyFilteredForecastMetricsQuery = (transaction_db, regularQuery, countryQuery1, duration, countryQuery, year) => {
+const getWeeklyFilteredForecastMetricsQuery = (transaction_db, filteredQuerySetterData, countryQuery1, duration, countryQuery, year) => {
   let query = `
                 WITH comp_units_revs AS (
                 SELECT
@@ -670,8 +671,8 @@ const getWeeklyFilteredForecastMetricsQuery = (transaction_db, regularQuery, cou
                 FROM
                   ${transaction_db}.demand_forecast_base_weekly_metrics dfbwm2
                 WHERE
-                  dfbwm2.demand_forecast_run_log_id = ${dfrlId}
-                    ${countryQuery1} ${whereQueryWithDP ? " AND dfbwm2.sku in (" + allFilteredSkus +")": ""}
+                  dfbwm2.demand_forecast_run_log_id = ${filteredQuerySetterData.dfrlId}
+                    ${countryQuery1} ${filteredQuerySetterData.whereQueryWithDP ? " AND dfbwm2.sku in (" + filteredQuerySetterData.allFilteredSkus +")": ""}
                 GROUP BY
                   dfbwm2.week_of_year ),
                 first_weekend AS (
@@ -716,15 +717,15 @@ const getWeeklyFilteredForecastMetricsQuery = (transaction_db, regularQuery, cou
                 WHERE
                   dfbwm.forecast_year=${year}
                   ${countryQuery}
-                  AND dfbwm.demand_forecast_run_log_id = ${dfrlId} ${whereQueryWithDP ? " AND dfbwm.sku in (" + allFilteredSkus +")": ""}
+                  AND dfbwm.demand_forecast_run_log_id = ${filteredQuerySetterData.dfrlId} ${filteredQuerySetterData.whereQueryWithDP ? " AND dfbwm.sku in (" + filteredQuerySetterData.allFilteredSkus +")": ""}
                 GROUP BY
                   dfbwm.week_of_year;`;
-                  // console.log("---Metrix:", query);
+                  console.log("---Metrix:", query);
 
   return query;
 };
 
-const getMonthlyFilteredForecastMetricsQuery = (transaction_db, regularQuery, countryQuery1, duration, countryQuery, year) => {
+const getMonthlyFilteredForecastMetricsQuery = (transaction_db, filteredQuerySetterData, countryQuery1, duration, countryQuery, year) => {
   let query = `WITH
     comp_units_revs AS (
     SELECT
@@ -734,8 +735,8 @@ const getMonthlyFilteredForecastMetricsQuery = (transaction_db, regularQuery, co
     FROM
       ${transaction_db}.demand_forecast_base_monthly_metrics dfbwm2
     WHERE
-      dfbwm2.demand_forecast_run_log_id = ${dfrlId}
-        ${countryQuery1} ${whereQueryWithDP ? " AND dfbwm.sku in (" + allFilteredSkus +")": ""}
+      dfbwm2.demand_forecast_run_log_id = ${filteredQuerySetterData.dfrlId}
+        ${countryQuery1} ${filteredQuerySetterData.whereQueryWithDP ? " AND dfbwm2.sku in (" + filteredQuerySetterData.allFilteredSkus +")": ""}
     GROUP BY
       dfbwm2.month_of_year ),
     first_weekend AS (
@@ -780,18 +781,21 @@ const getMonthlyFilteredForecastMetricsQuery = (transaction_db, regularQuery, co
     WHERE
       dfbwm.forecast_year=${year}
       ${countryQuery}
-      AND dfbwm.demand_forecast_run_log_id = ${dfrlId} ${whereQueryWithDP ? " AND dfbwm.sku in (" + allFilteredSkus +")": ""}
+      AND dfbwm.demand_forecast_run_log_id = ${filteredQuerySetterData.dfrlId} ${filteredQuerySetterData.whereQueryWithDP ? " AND dfbwm.sku in (" + filteredQuerySetterData.allFilteredSkus +")": ""}
     GROUP BY
       dfbwm.month_of_year;`;
 
-      // console.log("Metrix:", query);
+      console.log("Metrix:", query);
   return query;
 };
 
 export const getFilteredForecastMetrics = async (req, res) => {
   const { filterForecastedYear } = req.params;
   let duration = req.body.filterType;
+  let filteredQuerySetterData = req.body.filteredQuerySetterData;
   delete req.body.filterType;
+  delete req.body.filteredQuerySetterData;
+  // console.log("popopop-",req.body);
 
   let countryQuery;
   let regularQuery;
@@ -829,9 +833,9 @@ export const getFilteredForecastMetrics = async (req, res) => {
 
     let query = "";
     if (duration == "month") {
-      query = getMonthlyFilteredForecastMetricsQuery(transaction_db, regularQuery, countryQuery1, duration, countryQuery, filterForecastedYear);
+      query = getMonthlyFilteredForecastMetricsQuery(transaction_db, filteredQuerySetterData, countryQuery1, duration, countryQuery, filterForecastedYear);
     } else {
-      query = getWeeklyFilteredForecastMetricsQuery(transaction_db, regularQuery, countryQuery1, duration, countryQuery, filterForecastedYear);
+      query = getWeeklyFilteredForecastMetricsQuery(transaction_db, filteredQuerySetterData, countryQuery1, duration, countryQuery, filterForecastedYear);
     }
     // const filteredForecastData = await prisma.$queryRaw(query);
     // let masterMetricData = await getMasterMetricData();
@@ -842,7 +846,7 @@ export const getFilteredForecastMetrics = async (req, res) => {
       getMasterMetricData(),
     ]);
 
-    // console.log("filteredForecastMetricsPromise+",filteredForecastMetricsPromise);
+    // console.log("filteredForecastMetricsPromise+",query);
 
     let filteredForecastData = filteredForecastMetricsPromise[0].value;
     let masterMetricData = filteredForecastMetricsPromise[1].value;
@@ -860,7 +864,7 @@ export const getFilteredForecastMetrics = async (req, res) => {
 };
 
 // Planned Query Generator
-const typlanQueryGeneratorByDurations = (duration, filteredSkus, whereQueryStringWithChannel, transaction_db, year) => {
+const typlanQueryGeneratorByDurations = (duration, filteredSkus, whereQueryStringWithChannel, transaction_db, year, whereQueryWithDP) => {
 
 // const typlanQueryGeneratorByDurations = (duration, whereQueryString, transaction_db, year) => {
   let dateOffset;
@@ -874,7 +878,7 @@ const typlanQueryGeneratorByDurations = (duration, filteredSkus, whereQueryStrin
   //   whereQueryStr = `${whereQueryString.replace(/country/g, "sub_channel")}`;
   // }
 
-  // console.log("whereQueryStringWithChannel--",filteredSkus);
+  console.log("whereQueryStringWithChannel--",filteredSkus);
   let updatedChannelQueryString = whereQueryStringWithChannel.replace(/fseisbw/g, 'pwurbcbs');
   updatedChannelQueryString = updatedChannelQueryString.replace(/country/g, 'sub_channel');
   // console.log("updatedChannelQueryString---+",updatedChannelQueryString);
@@ -927,15 +931,17 @@ const typlanChartQueryGeneratorByDurations = (duration, whereQueryString, transa
                   ${whereQueryStr})
               GROUP BY
                 ${duration}(weekend_date)`;
+
+                console.log("query=",query);
   return query;
 };
 // This Year Sale Query Generator
-const thisYearSaleYearlyQuarterly = (duration, filteredSkus, whereQueryStringWithChannel, transaction_db, year) => {
+const thisYearSaleYearlyQuarterly = (duration, filteredSkus, whereQueryStringWithChannel, transaction_db, year, whereQueryWithDP) => {
   let dateOffset;
-  let whereQueryStr = "";
-  if (whereQueryString) {
-    whereQueryStr = ` ${whereQueryString}`;
-  }
+  // let whereQueryStr = "";
+  // if (whereQueryString) {
+  //   whereQueryStr = ` ${whereQueryString}`;
+  // }
   duration.toLowerCase() == "week" ? (dateOffset = 1) : (dateOffset = 0);
   const query = `
                 SELECT
@@ -956,7 +962,7 @@ const thisYearSaleYearlyQuarterly = (duration, filteredSkus, whereQueryStringWit
 };
 
 // Forecast Query Generator
-const forecastQueryGenByDuration = (duration, filteredSkus, whereQueryStringWithChannel, transaction_db, year) => {
+const forecastQueryGenByDuration = (duration, filteredSkus, whereQueryStringWithChannel, transaction_db, year, whereQueryWithDP,dfrlId) => {
   // let changeAlias = whereQueryString ? `AND ${whereQueryString}` : "";
   const query = `
               SELECT
@@ -980,12 +986,19 @@ const forecastQueryGenByDuration = (duration, filteredSkus, whereQueryStringWith
 export const getFilteredYearlyStatsData = async (req, res) => {
   let filter = req.body;
   delete filter.filterType;
+
+  let filteredQuerySetterData = req.body.filteredQuerySetterData;
+  // delete req.body.filterType;
+  // delete req.body.filteredQuerySetterData;
+
+
+
   const { filterForecastedYear } = req.params;
 
   // Planned Sales Yearly
   // const filteredPlannedWhereQuery = whereQueryString(filter, "pwurbcbs");
   // const filteredPlannedDataQuery = typlanQueryGeneratorByDurations("YEAR", filteredPlannedWhereQuery, "morphe_staging", filterForecastedYear);
-  const filteredPlannedDataQuery = typlanQueryGeneratorByDurations("YEAR", allFilteredSkus, whereQueryWithChannel, "morphe_staging", filterForecastedYear);
+  const filteredPlannedDataQuery = typlanQueryGeneratorByDurations("YEAR", filteredQuerySetterData.allFilteredSkus, filteredQuerySetterData.whereQueryWithChannel, "morphe_staging", filterForecastedYear, filteredQuerySetterData.whereQueryWithDP);
 
 
   // console.log("filteredPlannedDataQuery--",filteredPlannedDataQuery);
@@ -995,7 +1008,7 @@ export const getFilteredYearlyStatsData = async (req, res) => {
   // const filteredThisYearSaleDataQuery = thisYearSaleYearlyQuarterly("YEAR", filteredThisYearSaleWhereQuery, "morphe_staging", filterForecastedYear);
 
 
-  const filteredThisYearSaleDataQuery = thisYearSaleYearlyQuarterly("YEAR", allFilteredSkus, whereQueryWithChannel, "morphe_staging", filterForecastedYear);
+  const filteredThisYearSaleDataQuery = thisYearSaleYearlyQuarterly("YEAR", filteredQuerySetterData.allFilteredSkus, filteredQuerySetterData.whereQueryWithChannel, "morphe_staging", filterForecastedYear, filteredQuerySetterData.whereQueryWithDP);
 
     // console.log("filteredPlannedDataQuery--",filteredPlannedDataQuery);
 
@@ -1004,7 +1017,7 @@ export const getFilteredYearlyStatsData = async (req, res) => {
   // const filteredForecastWhereQuery = whereQueryString(filter);
   // const filteredForecastDataQuery = forecastQueryGenByDuration("YEAR", filteredForecastWhereQuery, "morphe_staging", filterForecastedYear);
 
-  const filteredForecastDataQuery = forecastQueryGenByDuration("YEAR", allFilteredSkus, whereQueryWithChannel, "morphe_staging", filterForecastedYear);
+  const filteredForecastDataQuery = forecastQueryGenByDuration("YEAR", filteredQuerySetterData.allFilteredSkus, filteredQuerySetterData.whereQueryWithChannel, "morphe_staging", filterForecastedYear, filteredQuerySetterData.whereQueryWithDP, filteredQuerySetterData.dfrlId);
 
   // console.log("filteredForecastDataQuery)_",filteredForecastDataQuery);
 
@@ -1056,7 +1069,8 @@ const parseFilteredQuarterlyStatsData  = (data) => {
 // Filtered Stats getFilteredYearlyStatsData
 export const getFilteredQuarterlyStatsData = async (req, res) => {
   delete req.body.filterType;
-  let filter = req.body;
+  // let filter = req.body;
+  let filteredQuerySetterData = req.body.filteredQuerySetterData;
   const { filterForecastedYear } = req.params;
   // Planned Quarterly
   // const filteredQuarterlyPlannedWhereQuery = whereQueryString(filter, "pwurbcbs");
@@ -1069,24 +1083,28 @@ export const getFilteredQuarterlyStatsData = async (req, res) => {
 
   const filteredQuarterlyPlannedDataQuery = typlanQueryGeneratorByDurations(
     "QUARTER",
-    allFilteredSkus,
-    whereQueryWithChannel,
+    filteredQuerySetterData.allFilteredSkus,
+    filteredQuerySetterData.whereQueryWithChannel,
     "morphe_staging",
-    filterForecastedYear
+    filterForecastedYear,
+    filteredQuerySetterData.whereQueryWithDP
   );
-
+    
   // This Year Quarterly
-  const filteredQuarterlyThisYearSaleWhereQuery = whereQueryString(filter);
+  // const filteredQuarterlyThisYearSaleWhereQuery = whereQueryString(filter);
   const filteredQuarterlyThisYearSaleDataQuery = thisYearSaleYearlyQuarterly(
     "QUARTER",
-    allFilteredSkus, whereQueryWithChannel,
+    filteredQuerySetterData.allFilteredSkus, filteredQuerySetterData.whereQueryWithChannel,
     "morphe_staging",
-    filterForecastedYear
+    filterForecastedYear,
+    filteredQuerySetterData.whereQueryWithDP
   );
 
+
   // Forecast Quarterly
-  const filteredQuarterlyForecastWhereQuery = whereQueryString(filter);
-  const filteredQuarterlyForecastDataQuery = forecastQueryGenByDuration("QUARTER", allFilteredSkus, whereQueryWithChannel, "morphe_staging", filterForecastedYear);
+  // const filteredQuarterlyForecastWhereQuery = whereQueryString(filter);
+  const filteredQuarterlyForecastDataQuery = forecastQueryGenByDuration("QUARTER", filteredQuerySetterData.allFilteredSkus, filteredQuerySetterData.whereQueryWithChannel, "morphe_staging", filterForecastedYear, filteredQuerySetterData.whereQueryWithDP, filteredQuerySetterData.dfrlId);
+  console.log("filteredQuarterlyPlannedDataQuery---",filteredQuarterlyForecastDataQuery);
 
   try {
     let quarterlyFilteredStats = await Promise.allSettled([
@@ -1142,7 +1160,12 @@ const parseChartData = (duration, data) => {
 // Filtered Chart data
 export const getFilterChartData = async (req, res) => {
   delete req.body.filterType;
+  let filteredQuerySetterData = req.body.filters.filteredQuerySetterData;
+  delete req.body.filters.filteredQuerySetterData;
+
   let filter = req.body.filters;
+  console.log("req.body--",req.body);
+
   const { filterForecastedYear } = req.params;
 
   // Planned Quarterly
@@ -1155,21 +1178,24 @@ export const getFilterChartData = async (req, res) => {
   );
 
   // This Year Quarterly
-  const filteredQuarterlyThisYearSaleWhereQuery = whereQueryString(filter);
+  // const filteredQuarterlyThisYearSaleWhereQuery = whereQueryString(filter);
   const filteredQuarterlyThisYearSaleDataQuery = thisYearSaleYearlyQuarterly(
     req.body.duration,
-    allFilteredSkus, whereQueryWithChannel,
+    filteredQuerySetterData.allFilteredSkus, filteredQuerySetterData.whereQueryWithChannel,
     "morphe_staging",
-    filterForecastedYear
+    filterForecastedYear,
+    filteredQuerySetterData.whereQueryWithDP
   );
 
   // Forecast Quarterly
-  const filteredQuarterlyForecastWhereQuery = whereQueryString(filter);
+  // const filteredQuarterlyForecastWhereQuery = whereQueryString(filter);
   const filteredQuarterlyForecastDataQuery = forecastQueryGenByDuration(
     req.body.duration,
-    allFilteredSkus, whereQueryWithChannel,
+    filteredQuerySetterData.allFilteredSkus, filteredQuerySetterData.whereQueryWithChannel,
     "morphe_staging",
-    filterForecastedYear
+    filterForecastedYear,
+    filteredQuerySetterData.whereQueryWithDP,
+    filteredQuerySetterData.dfrlId
   );
 
 
@@ -1306,21 +1332,39 @@ const getRunLogID = async (transaction_db) => {
 export const setFilteredSKUsAndWhereQuery = async (req, res) => {
   let filter = req.body;
   delete filter.filterType;
+  let whereQueryWithDP = "";
+let whereQueryWithChannel = "";
+let dfrlId = "";
+let allFilteredSkus = "";
 
   whereQueryWithDP = whereQueryStringForDP(filter);
   whereQueryWithChannel = whereQueryStringForChannel(filter);
   // whereQueryRegular = whereQueryString(filter);
-  console.log("whereQueryWithDP--",whereQueryWithDP);
+  // console.log("whereQueryWithDP--",whereQueryWithDP);
   // console.log("whereQueryWithChannel--",whereQueryWithChannel);
   if(whereQueryWithDP) {
-    allFilteredSkus = await getFilteredSkus("morphe_staging",whereQueryWithDP)
+    // allFilteredSkus = await getFilteredSkus("morphe_staging",whereQueryWithDP)
+    let filteredQuerySetterPromise = await Promise.allSettled([
+      getFilteredSkus("morphe_staging",whereQueryWithDP),
+      getRunLogID("morphe_staging")
+    ]);
+    allFilteredSkus = filteredQuerySetterPromise[0].value
+    dfrlId = filteredQuerySetterPromise[1].value
+  } else {
+    allFilteredSkus = "";
+    dfrlId = await getRunLogID("morphe_staging");
   }
-  dfrlId = await getRunLogID("morphe_staging");
+  // dfrlId = await getRunLogID("morphe_staging");
+
+  
 
   // console.log(dfrlId,"allFilteredSkus---",allFilteredSkus);
   try {
     res.status(200).json({
-      JJ: 0,
+      whereQueryWithDP,
+      whereQueryWithChannel,
+      allFilteredSkus,
+      dfrlId
     });
   } catch (error) {
     res.status(500).json({

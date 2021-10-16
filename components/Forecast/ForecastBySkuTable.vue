@@ -599,8 +599,8 @@ export default {
       }
     },
     async getFilteredForecastData(forecastYear) {
-      const data = await this.$axios.$get(`/get-filtered-forecast-data/${forecastYear}`);
-      this.forecastData = data;
+      // const data = await this.$axios.$get(`/get-filtered-forecast-data/${forecastYear}`);
+      // this.forecastData = data;
     },
     getWeekendDates(index) {
       return JSON.parse(window.localStorage.getItem("weekendDates"))

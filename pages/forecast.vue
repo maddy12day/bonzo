@@ -420,6 +420,7 @@ export default {
         "YYYY-MM-DD HH:MM:SS"
       )}.xlsx`,
       comparisonCollnData: [],
+      filteredQuerySetterData: {},
     };
   },
   methods: {
@@ -888,11 +889,12 @@ export default {
       // this.filteredStatsComponentKey += 1;
     },
     async setFilteredSKUsAndWhereQuery () {
-      await this.$axios.$post(
+      this.filteredQuerySetterData = await this.$axios.$post(
         `/set-filtered-sku-and-where-query`,
         this.filterPayload
       );
-      console.log("this.filterPayload00=--",this.filterPayload);
+      this.filterPayload.filteredQuerySetterData = this.filteredQuerySetterData;
+      // console.log("this.filterPayload00=--",this.filterPayload);
     },
     notifyVue(verticalAlign, horizontalAlign, message, type) {
       this.$notify({
