@@ -349,6 +349,7 @@ export default {
       yearlySaleData: [],
       currentYQTab: "Yearly",
       forecastedYear: "2021",
+      isQuarterlyDataLoaded: false
     };
   },
   components: {
@@ -368,16 +369,18 @@ export default {
     },
     async calloutByDuration(duration) {
       this.currentYQTab = duration;
-      const booleanDuration = ["Q1", "Q2", "Q3", "Q4"].find(
-        (vendor) => vendor === duration
-      );
-      if (booleanDuration) {
-        this.quarterlySale();
-        this.quarterlyPlanned();
-      }
+      // const booleanDuration = ["Q1", "Q2", "Q3", "Q4"].find(
+      //   (vendor) => vendor === duration
+      // );
+      // if (booleanDuration && !this.isQuarterlyDataLoaded) {
+      //   // this.quarterlySale();
+      //   // this.quarterlyPlanned();
+      //   this.isQuarterlyDataLoaded = true
+      // }
     },
 
     async quarterlySale() {
+      console.log("quarterlySale");
       this.$store.commit("toggleStatsAPIResponseState", false);
       const quaterly = await this.$axios.$get(
         `/based-quarterly-sale-this-year/${this.forecastedYear}`,
@@ -439,6 +442,8 @@ export default {
   },
   watch: {},
   async mounted() {
+    this.quarterlySale();
+    this.quarterlyPlanned();
     this.forecastYearlyQuarterly();
     this.yearlySale();
     this.yearlyPlanned();
