@@ -235,8 +235,9 @@ export default {
   methods: {
     initChart(year) {
       this.forecastedYear = year;
-      this.baseWeeklyChart();
       this.baseMonthlyChart();
+      this.baseWeeklyChart();
+      
   },
      dataMappingWeekly(data, duration) {
       if (duration == "Weekly") {
@@ -546,8 +547,8 @@ export default {
   created() {},
   
   mounted() {
-    this.baseWeeklyChart();
     this.baseMonthlyChart();
+    this.baseWeeklyChart();
   },
 };
 </script>

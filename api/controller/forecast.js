@@ -239,29 +239,24 @@ export const getFilteredForecastData = async (req, res) => {
                   dfbwm.sku,
                   dfbwm.weekend;`;
 
-                  // console.log("opopo--",query);
-    let totalForecastedDataQuery = `select
-    dfbwm.weekend as weekend,
-    ROUND(sum(dfbwm.units_sales), 0) as units_sales,
-    ROUND(sum(dfbwm.retail_sales), 2) as retail_sales
-  from
-    morphe_staging.demand_forecast_base_weekly_metrics dfbwm
-  where
-    dfbwm.demand_forecast_run_log_id = ${dfrlId}
-    and dfbwm.sku in (
-    select
-      dp.SKU
-    from
-      morphe_staging.dim_products dp
-    where
-    ${whereQueryString(req.body, "dfbwm").replace(/dp/g, "dp")}
-      AND Year(dfbwm.weekend) = ${filterForecastedYear} )
-  group by
-    1
-  order by
-    2 desc;`;
+                  // console.log("-=-=-=opopo--",query);
 
-    console.log("opopo--",totalForecastedDataQuery);
+    let updatedWhereQueryString = whereQueryWithChannel.replace(/fseisbw/g, 'dfbwm');
+    let totalForecastedDataQuery = `select
+      dfbwm.weekend as weekend,
+      ROUND(sum(dfbwm.units_sales), 0) as units_sales,
+      ROUND(sum(dfbwm.retail_sales), 2) as retail_sales
+      from
+        morphe_staging.demand_forecast_base_weekly_metrics dfbwm
+      where
+        dfbwm.demand_forecast_run_log_id = ${dfrlId}
+        AND Year(dfbwm.weekend) = ${filterForecastedYear} ${updatedWhereQueryString ? " AND " + updatedWhereQueryString : ""} ${whereQueryWithDP ? " AND dfbwm.sku in (" + allFilteredSkus +")": ""}
+      group by
+        1
+      order by
+        2 desc;`;
+      // console.log("whereQueryWithChannel++",whereQueryWithChannel);
+    // console.log("opopo--",totalForecastedDataQuery);
     // const filteredForecastData = await prisma.$queryRaw(query);
     // const totalForecastedData = await prisma.$queryRaw(totalForecastedDataQuery);
     // const weekendDates = await getWeekendDates(filterForecastedYear);
@@ -667,16 +662,7 @@ const parseFilteredForecastData = (type, masterMetricData, filteredForecastData)
 
 const getWeeklyFilteredForecastMetricsQuery = (transaction_db, regularQuery, countryQuery1, duration, countryQuery, year) => {
   let query = `
-                WITH iskus AS (
-                select
-                  dp.SKU as sku
-                from
-                  ${transaction_db}.dim_products dp
-                where
-                  dp.id > 0
-
-                 ${regularQuery}),
-                comp_units_revs AS (
+                WITH comp_units_revs AS (
                 SELECT
                   dfbwm2.week_of_year+1 AS cur_date,
                   SUM(dfbwm2.units_sales) as cur_unit_sales,
@@ -685,12 +671,7 @@ const getWeeklyFilteredForecastMetricsQuery = (transaction_db, regularQuery, cou
                   ${transaction_db}.demand_forecast_base_weekly_metrics dfbwm2
                 WHERE
                   dfbwm2.demand_forecast_run_log_id = ${dfrlId}
-                    ${countryQuery1}
-                  AND dfbwm2.sku IN (
-                  select
-                    sku
-                  from
-                    iskus)
+                    ${countryQuery1} ${whereQueryWithDP ? " AND dfbwm2.sku in (" + allFilteredSkus +")": ""}
                 GROUP BY
                   dfbwm2.week_of_year ),
                 first_weekend AS (
@@ -735,28 +716,16 @@ const getWeeklyFilteredForecastMetricsQuery = (transaction_db, regularQuery, cou
                 WHERE
                   dfbwm.forecast_year=${year}
                   ${countryQuery}
-                  AND dfbwm.demand_forecast_run_log_id = ${dfrlId}
-                  AND dfbwm.sku IN (
-                  select
-                    sku
-                  from
-                    iskus)
+                  AND dfbwm.demand_forecast_run_log_id = ${dfrlId} ${whereQueryWithDP ? " AND dfbwm.sku in (" + allFilteredSkus +")": ""}
                 GROUP BY
                   dfbwm.week_of_year;`;
+                  // console.log("---Metrix:", query);
 
   return query;
 };
 
 const getMonthlyFilteredForecastMetricsQuery = (transaction_db, regularQuery, countryQuery1, duration, countryQuery, year) => {
-  let query = `WITH iskus AS (
-    select
-      dp.SKU as sku
-    from
-      ${transaction_db}.dim_products dp
-    where
-      dp.id > 0
-
-     ${regularQuery}),
+  let query = `WITH
     comp_units_revs AS (
     SELECT
       dfbwm2.month_of_year+1 AS cur_date,
@@ -766,12 +735,7 @@ const getMonthlyFilteredForecastMetricsQuery = (transaction_db, regularQuery, co
       ${transaction_db}.demand_forecast_base_monthly_metrics dfbwm2
     WHERE
       dfbwm2.demand_forecast_run_log_id = ${dfrlId}
-        ${countryQuery1}
-      AND dfbwm2.sku IN (
-      select
-        sku
-      from
-        iskus)
+        ${countryQuery1} ${whereQueryWithDP ? " AND dfbwm.sku in (" + allFilteredSkus +")": ""}
     GROUP BY
       dfbwm2.month_of_year ),
     first_weekend AS (
@@ -816,14 +780,11 @@ const getMonthlyFilteredForecastMetricsQuery = (transaction_db, regularQuery, co
     WHERE
       dfbwm.forecast_year=${year}
       ${countryQuery}
-      AND dfbwm.demand_forecast_run_log_id = ${dfrlId}
-      AND dfbwm.sku IN (
-      select
-        sku
-      from
-        iskus)
+      AND dfbwm.demand_forecast_run_log_id = ${dfrlId} ${whereQueryWithDP ? " AND dfbwm.sku in (" + allFilteredSkus +")": ""}
     GROUP BY
       dfbwm.month_of_year;`;
+
+      // console.log("Metrix:", query);
   return query;
 };
 
@@ -926,11 +887,9 @@ const typlanQueryGeneratorByDurations = (duration, filteredSkus, whereQueryStrin
                 ${transaction_db}.${tableName} pwurbcbs
               WHERE
                 pwurbcbs.channel <> 'Wholesale'
-                AND pwurbcbs.plan_year =  ${year} ${updatedChannelQueryString ? " AND " + updatedChannelQueryString : ""}
-                AND pwurbcbs.sku in (${filteredSkus})
+                AND pwurbcbs.plan_year =  ${year} ${updatedChannelQueryString ? " AND " + updatedChannelQueryString : ""} ${whereQueryWithDP ? " AND pwurbcbs.sku in (" + filteredSkus +")": ""}
               GROUP BY
               ${duration}(pwurbcbs.weekend_date)`;
-
               // console.log("popopopo---",query);
 
   return query;
@@ -987,8 +946,7 @@ const thisYearSaleYearlyQuarterly = (duration, filteredSkus, whereQueryStringWit
                   ${transaction_db}.fact_sales_ending_inventory_sku_by_week fseisbw
                 WHERE
                   YEAR(fseisbw.weekend)= ${year}
-                  AND fseisbw.channel <> 'Wholesale' ${whereQueryStringWithChannel ? " AND " + whereQueryStringWithChannel : ""}
-                  AND fseisbw.sku IN (${filteredSkus})
+                  AND fseisbw.channel <> 'Wholesale' ${whereQueryStringWithChannel ? " AND " + whereQueryStringWithChannel : ""} ${whereQueryWithDP ? " AND fseisbw.sku in (" + filteredSkus +")": ""}
                 GROUP BY
                   ${duration}(fseisbw.weekend)
                 ORDER BY
@@ -1010,8 +968,7 @@ const forecastQueryGenByDuration = (duration, filteredSkus, whereQueryStringWith
               WHERE
                 YEAR(fseisbw.weekend)= ${year}
                 AND fseisbw.channel <> 'Wholesale' ${whereQueryStringWithChannel ? " AND " + whereQueryStringWithChannel : ""}
-                AND fseisbw.demand_forecast_run_log_id = ${dfrlId}
-                AND fseisbw.sku IN (${filteredSkus})
+                AND fseisbw.demand_forecast_run_log_id = ${dfrlId} ${whereQueryWithDP ? " AND fseisbw.sku in (" + filteredSkus +")": ""}
               GROUP BY
                 ${duration}(fseisbw.weekend)
               ORDER BY
@@ -1039,6 +996,9 @@ export const getFilteredYearlyStatsData = async (req, res) => {
 
 
   const filteredThisYearSaleDataQuery = thisYearSaleYearlyQuarterly("YEAR", allFilteredSkus, whereQueryWithChannel, "morphe_staging", filterForecastedYear);
+
+    // console.log("filteredPlannedDataQuery--",filteredPlannedDataQuery);
+
 
   // Forecast Yearly
   // const filteredForecastWhereQuery = whereQueryString(filter);
@@ -1349,12 +1309,12 @@ export const setFilteredSKUsAndWhereQuery = async (req, res) => {
 
   whereQueryWithDP = whereQueryStringForDP(filter);
   whereQueryWithChannel = whereQueryStringForChannel(filter);
-  // whereQueryRegular = whereQueryString
-  // console.log("whereQueryWithDP--",whereQueryWithDP);
+  // whereQueryRegular = whereQueryString(filter);
+  console.log("whereQueryWithDP--",whereQueryWithDP);
   // console.log("whereQueryWithChannel--",whereQueryWithChannel);
-  // if(whereQueryWithDP) {
+  if(whereQueryWithDP) {
     allFilteredSkus = await getFilteredSkus("morphe_staging",whereQueryWithDP)
-  // }
+  }
   dfrlId = await getRunLogID("morphe_staging");
 
   // console.log(dfrlId,"allFilteredSkus---",allFilteredSkus);
