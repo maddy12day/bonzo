@@ -785,11 +785,11 @@ const getWeeklyFilteredForecastMetricsQuery = (
                       first_weekend)) THEN ROUND( SUM(dfbwm.retail_sales) / (select cur.cur_retail_sales from comp_units_revs cur where cur.cur_date = dfbwm.week_of_year), 2)
                     ELSE 1
                   END) AS retail_sales_build,
-                  ROUND((ROUND(SUM(dfbwm.retail_sales), 0) / ROUND(SUM(dfbwm.units_sales), 0)), 2) AS aur,
+                  ROUND((SUM(dfbwm.retail_sales) / SUM(dfbwm.units_sales)), 2) AS aur,
                   ROUND(SUM(dfbwm.gm), 0) AS gm,
-                  ROUND(((ROUND(SUM(dfbwm.gm), 2) / ROUND(SUM(dfbwm.retail_sales), 2))* 100), 2) AS gm_percent,
+                  ROUND(((SUM(dfbwm.gm) / SUM(dfbwm.retail_sales))* 100), 2) AS gm_percent,
                   ROUND(AVG(dfbwm.wos), 2) AS wos,
-                  ROUND(((ROUND(SUM(dfbwm.units_sales), 0) / ROUND(SUM(dfbwm.receipt_units), 0))* 100), 2) AS sell_through,
+                  ROUND(((SUM(dfbwm.units_sales) / SUM(dfbwm.receipt_units))* 100), 2) AS sell_through,
                   ROUND(SUM(dfbwm.inventory_ins_units), 0) AS inventory_ins_units,
                   ROUND(SUM(dfbwm.inventory_ins_cost), 0) AS inventory_ins_cost,
                   ROUND(SUM(dfbwm.receipt_units), 0) AS receipt_units,
@@ -864,11 +864,11 @@ const getMonthlyFilteredForecastMetricsQuery = (
           first_weekend)) THEN ROUND( SUM(dfbwm.retail_sales) / (select cur.cur_retail_sales from comp_units_revs cur where cur.cur_date = dfbwm.month_of_year), 2)
         ELSE 1
       END) AS retail_sales_build,
-      ROUND((ROUND(SUM(dfbwm.retail_sales), 0) / ROUND(SUM(dfbwm.units_sales), 0)), 2) AS aur,
+      ROUND((SUM(dfbwm.retail_sales) / SUM(dfbwm.units_sales)), 2) AS aur,
       ROUND(SUM(dfbwm.gm), 0) AS gm,
-      ROUND(((ROUND(SUM(dfbwm.gm), 2) / ROUND(SUM(dfbwm.retail_sales), 2))* 100), 2) AS gm_percent,
+      ROUND(((SUM(dfbwm.gm) / SUM(dfbwm.retail_sales))* 100), 2) AS gm_percent,
       ROUND(AVG(dfbwm.wos), 2) AS wos,
-      ROUND(((ROUND(SUM(dfbwm.units_sales), 0) / ROUND(SUM(dfbwm.receipt_units), 0))* 100), 2) AS sell_through,
+      ROUND(((SUM(dfbwm.units_sales) / SUM(dfbwm.receipt_units))* 100), 2) AS sell_through,
       ROUND(SUM(dfbwm.inventory_ins_units), 0) AS inventory_ins_units,
       ROUND(SUM(dfbwm.inventory_ins_cost), 0) AS inventory_ins_cost,
       ROUND(SUM(dfbwm.receipt_units), 0) AS receipt_units,
