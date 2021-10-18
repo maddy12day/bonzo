@@ -106,7 +106,7 @@
           </tbody>
         </table>
         <span slot="footer" class="dialog-footer">
-          <div class="text-right">
+          <div class="text-right" v-if="!isSystemLocked">
             <button
               class="btn btn-primary"
               @click="shareScenario"
@@ -659,7 +659,11 @@ export default {
       this.showDialog = false;
     },
   },
-  computed: {},
+  computed: {
+    isSystemLocked(){
+      return this.$store.state.isSystemLocked;
+    },  
+  },
   watch: {
     showDialog: function() {
       if (!this.showDialog) {

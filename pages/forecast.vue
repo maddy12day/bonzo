@@ -169,7 +169,8 @@
         :metricsTableData="baseMetricsListCom"
         tableHeading="Base Monthly Forecast Metrics"
       />
-      <div class="col-md-12 text-right">
+      <div class="col-md-12 text-right" v-if="!isSystemLocked">
+        
         <button
           :class="
             `btn btn-primary btn-sm text-left ${
@@ -177,7 +178,7 @@
             }`
           "
           @click="switchToManualAdj"
-          :disabled="disbledCom || showManualAdj"
+          :disabled="disbledCom || showManualAdj "
           v-if="!changeMABtnText && activeTab == 'Weekly'"
         >
           Manual Adjustment
@@ -334,6 +335,7 @@ import moment from "moment";
 import XLSX from "xlsx";
 import { mapState } from "vuex";
 import ComparisonTable from "../components/ComparisionTables/ComparisonTable.vue";
+import Timeline from "../components/Timeline/Timeline.vue";
 
 export default {
   name: "Forecast",
@@ -347,6 +349,7 @@ export default {
     ProgramFilters,
     ForecastBySkuTable,
     Card,
+    Timeline,
     FilteredWeeklyMetricsTable,
     FilteredMonthlyMetricsTable,
     FilteredStatsWidget,
@@ -422,6 +425,7 @@ export default {
       comparisonCollnData: [],
     };
   },
+
   methods: {
     setUpdatedSKUsLimit() {
       let selectedOption = this.options.filter(
@@ -913,6 +917,9 @@ export default {
     },
   },
   computed: {
+    isSystemLocked(){
+      return this.$store.state.isSystemLocked;
+    },
     getTopSkusCount() {
       return this.topSKUsCountLable;
     },

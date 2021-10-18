@@ -5,7 +5,8 @@ export const state = () => ({
   appliedRegularFilter: [],
   isDataLoading: false,
   isAPIFetchComplete: false,
-  key: 1
+  key: 1,
+  isSystemLocked : false
 });
 
 export const mutations = {
@@ -29,5 +30,8 @@ export const mutations = {
   },
   toggleStatsAPIResponseState(state, payload) {
     state.isAPIFetchComplete = payload
+  },
+  toggleSystemLockState(state) {
+    state.isSystemLocked = !state.isSystemLocked
   }
 };

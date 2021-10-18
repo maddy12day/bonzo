@@ -1,8 +1,8 @@
 <template>
   <div>
-    <div md="12" class="pl-2 ">
+    <div md="12" class="pl-2">
       <div
-        style="display:inline-block;width:100%;overflow: auto;"
+        style="display: inline-block; width: 100%; overflow: auto"
         class="pt-5 custom-timeline-container"
       >
         <ul class="timeline timeline-horizontal pb-0 mb-0">
@@ -15,8 +15,8 @@
                 <h4 class="timeline-title">Genesis Node</h4>
                 <p>
                   <small class="text-muted"
-                    ><i class="glyphicon glyphicon-time"></i>
-                   Created At: {{ formatData(genesisTimeLineNode.genesis_time) }}</small
+                    ><i class="glyphicon glyphicon-time"></i> Created At:
+                    {{ formatData(genesisTimeLineNode.genesis_time) }}</small
                   >
                 </p>
               </div>
@@ -24,8 +24,14 @@
                 <p>Run ID: {{ genesisTimeLineNode.genesis_id }}</p>
                 <p>Created By: {{ genesisTimeLineNode.god_user }}</p>
                 <p>
-                  <el-badge  :value="genesisTimeLineNode.adjustment_count">
+                  <el-badge :value="genesisTimeLineNode.adjustment_count">
                     <span class="badge badge-primary">Adjustments</span>
+                    <button
+                      class="badge badge-primary custom-badge"
+                      @click="() => handleLockSystem(data)"
+                    >
+                      {{ text }}
+                    </button>
                   </el-badge>
                   <!--  @click="() => getGenesisData(genesisTimeLineNode)" -->
                   <!--  <base-button
@@ -70,8 +76,13 @@
                 <p>Start Date: {{ dateFormat(data.start_date) }}</p>
                 <p>End Date: {{ dateFormat(data.end_date) }}</p>
                 <p>
-                   <span class="badge badge-primary custom-badge"  @click="() => handleScenarioClick(data)">View Details</span>
-                 <!--  <button
+                  <span
+                    class="badge badge-primary custom-badge"
+                    @click="() => handleScenarioClick(data)"
+                    >View Details</span
+                  >
+                  <!-- <span  class="badge badge-primary custom-badge"  @click="() =>  handleLockSystem(data)">Lock System </span> -->
+                  <!--  <button
                     v-if="data.adjustment_count > 0"
                     class="btn btn-info btn-sm mr-1"
                     @click="() => showAdjustments(data)"
@@ -126,6 +137,8 @@ export default {
       scenarioDetails: {},
       currentScenarioStatus: {},
       typeColor: ["", "info", "success", "warning", "danger"],
+      seen: false,
+      text: "Lock System",
     };
   },
   props: [
@@ -152,14 +165,51 @@ export default {
       this.scenarioCategoryComparison = await this.$axios.$get(
         `/get-scenario-category-comparison/${data.id}`
       );
-         const scenarioDetails = await this.$axios.$get(
+      const scenarioDetails = await this.$axios.$get(
         `/get-scenario-detail-by-id/${data.id}`
       );
-       this.scenarioDetails = scenarioDetails.scenario;
+      this.scenarioDetails = scenarioDetails.scenario;
       this.currentScenarioStatus = scenarioDetails.scenario;
       this.dialogVisible = true;
     },
-
+    handleLockSystem() {
+  //     $.ajax({
+  //   url: '/scenarioTableDataForTable',
+  //   method: 'GET',
+  //   success: function(data) {
+  //     this.comments = data;
+  //   }
+  // });
+      this.$store.commit("toggleSystemLockState");
+     
+      this.seen = !this.seen;
+      if (this.seen) {
+        this.text = "Unlock System";
+            this.notifyVue(
+        "top",
+        "right",
+        'System Locked'
+      );
+      } else {
+        this.text = "Lock System";
+          this.notifyVue(
+        "top",
+        "right",
+        'System Unlocked'
+      );
+  
+      }
+    },
+    notifyVue(verticalAlign, horizontalAlign, message, type) {
+      this.$notify({
+        message: message,
+        timeout: 12000,
+        icon: "tim-icons icon-bell-55",
+        horizontalAlign: horizontalAlign,
+        verticalAlign: verticalAlign,
+        type: this.typeColor[type],
+      });
+    },
     sendCurrentObject(data) {
       this.$emit("customTimelineEvent", data);
     },
@@ -320,7 +370,7 @@ export default {
 }
 .timeline-horizontal .timeline-item .timeline-panel {
   top: auto;
-  bottom: 48px;;
+  bottom: 48px;
   display: inline-block;
   float: none !important;
   left: 0 !important;
@@ -348,7 +398,7 @@ export default {
   left: 39px;
 }
 .custom-badge {
- cursor: pointer;
+  cursor: pointer;
 }
 /* ================================================== */
 </style>
