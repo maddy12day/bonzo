@@ -890,6 +890,53 @@ const getMonthlyFilteredForecastMetricsQuery = (
   return query;
 };
 
+const parseMetricsData = (duration,data) => {
+  if (data.length > 0) {
+    let statsData = Array(duration)
+      .fill({
+        date:0,
+        retail_sales:0,
+        units_sales:0,
+        units_sales_build:0,
+        retail_sales_build:0,
+        aur:0,
+        gm:0,
+        gm_percent:0,
+        wos:0,
+        sell_through:null,
+        inventory_ins_units:0,
+        inventory_ins_cost:0,
+        reciept_units:0,
+        reciept_cost:0
+      })
+      .map((currElement, index) => {
+        return {
+          date: index+1,
+          retail_sales:0,
+          units_sales:0,
+          units_sales_build:0,
+          retail_sales_build:0,
+          aur:0,
+          gm:0,
+          gm_percent:0,
+          wos:0,
+          sell_through:null,
+          inventory_ins_units:0,
+          inventory_ins_cost:0,
+          reciept_units:0,
+          reciept_cost:0
+        };
+      });
+    statsData.forEach(function(item, index) {
+      let dataIndex = data.findIndex((x) => x.date === index + 1);
+      if (dataIndex >= 0) {
+        statsData[index] = data[dataIndex];
+      }
+    });
+    return statsData;
+  } else return data;
+};
+
 export const getFilteredForecastMetrics = async (req, res) => {
   const { filterForecastedYear } = req.params;
   let duration = req.body.filterType;
@@ -965,7 +1012,8 @@ export const getFilteredForecastMetrics = async (req, res) => {
 
     let filteredForecastData = filteredForecastMetricsPromise[0].value;
     let masterMetricData = filteredForecastMetricsPromise[1].value;
-
+    let durationIndex = duration == "week" ? 52 : 12;
+    filteredForecastData = parseMetricsData(durationIndex,filteredForecastData);
     let parsedFilteredForecastData = parseFilteredForecastData(
       duration,
       masterMetricData,
@@ -1070,7 +1118,7 @@ const typlanChartQueryGeneratorByDurations = (
                 } ${filteredQuerySetterData.whereQueryWithDP ? " AND pwurbcbs.sku in (" + filteredQuerySetterData.allFilteredSkus + ")" : ""}
               GROUP BY
                 ${duration}(weekend_date)`;
-  console.log("query++", query);
+  // console.log("query++", query);
 
   return query;
 };
@@ -1268,6 +1316,9 @@ export const getFilteredQuarterlyStatsData = async (req, res) => {
     filteredQuerySetterData.whereQueryWithDP,
     filteredQuerySetterData.dfrlId
   );
+
+
+  console.log("parseMetricsData",filteredQuarterlyForecastDataQuery);
 
   try {
     let quarterlyFilteredStats = await Promise.allSettled([
