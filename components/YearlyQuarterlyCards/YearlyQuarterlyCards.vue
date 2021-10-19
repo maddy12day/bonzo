@@ -2,7 +2,7 @@
   <div class="card mb-0">
     <div class="card-header card-chart card-header-success">
       <div class="ct-chart font-weight-bold" id="completedTasksChart">
-        {{ title | capitalize }} {{isAPIFetchComplete}}
+        {{ title | capitalize }}
       </div>
     </div>
     <div class="card-body">
