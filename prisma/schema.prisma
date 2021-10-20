@@ -1366,7 +1366,6 @@ model scenarios {
   created_at             DateTime?      @default(now()) @db.DateTime(0)
   base_run_id            Int?
   original_scenario_id   Int?
-  is_deprecated          Boolean?
   scenario_types         scenario_types @relation(fields: [scenario_type_id], references: [id])
   scenario_type_id       Int
 }
