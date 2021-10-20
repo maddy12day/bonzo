@@ -65,8 +65,8 @@
         tableHeading="Monthly Forecast Metrics"
       />
     </card>
-    <ComparisonTable :tableData="comparisonCollnData" jsonkey="collection"/>
-    <ComparisonTable :tableData="ComparisonCategoryData"  jsonkey="category"/>
+    <!-- <ComparisonTable :tableData="comparisonCollnData" jsonkey="collection"/>
+    <ComparisonTable :tableData="ComparisonCategoryData"  jsonkey="category"/> -->
   </div>
 </template>
 
@@ -78,12 +78,11 @@ import WeeklyMetricsTable from "../components/Metrics/WeeklyMetricsTable.vue";
 import MonthlyMetricsTable from "../components/Metrics/MonthlyMetricsTable.vue";
 import Card from "~/components/Cards/Card.vue";
 import Timeline from "../components/Timeline/Timeline.vue";
-import ComparisonTable from "../components/ComparisionTables/ComparisonTable.vue";
-import CategoryTable from "../components/ComparisionTables/ComparisonTable.vue";
+// import ComparisonTable from "../components/ComparisionTables/ComparisonTable.vue";
+// import CategoryTable from "../components/ComparisionTables/ComparisonTable.vue";
 
 export default {
   data() {
-    
     return {
       sharedScenariosList: [],
       baseMetricsList: [],
@@ -93,8 +92,8 @@ export default {
       genesisNodeTimeline: [],
       mergedScenariosTimeLine: [],
       forecastedYear: "2021",
-      comparisonCollnData: [],
-      ComparisonCategoryData:[],
+      // comparisonCollnData: [],
+      // ComparisonCategoryData:[],
     };
   },
   components: {
@@ -105,8 +104,8 @@ export default {
     MonthlyMetricsTable,
     Card,
     Timeline,
-    ComparisonTable,
-    CategoryTable
+    // ComparisonTable,
+    // CategoryTable
   },
   methods: {
     async scenarioMergeStatusUpdate() {
@@ -187,73 +186,73 @@ export default {
         );
       }
     },
-    async comparisonTableDataGenerator() {
-      const CategoryRetailForecast = await this.$axios(
-        `/forecast-category-by-retail/${this.forecastedYear}`
-        );
-         const CategoryEcommForecast = await this.$axios(
-        `/forecast-category-by-ecomm/${this.forecastedYear}`
-        );
-         const CategoryTotalForecast = await this.$axios(
-        `/forecast-category-by-total/${this.forecastedYear}`
-        );
+    // async comparisonTableDataGenerator() {
+    //   const CategoryRetailForecast = await this.$axios(
+    //     `/forecast-category-by-retail/${this.forecastedYear}`
+    //     );
+    //      const CategoryEcommForecast = await this.$axios(
+    //     `/forecast-category-by-ecomm/${this.forecastedYear}`
+    //     );
+    //      const CategoryTotalForecast = await this.$axios(
+    //     `/forecast-category-by-total/${this.forecastedYear}`
+    //     );
 
-      const collectionForecast = await this.$axios(
-        `/collection-forecast/${this.forecastedYear}`
-      );
-      const collectionForecastByEcomm = await this.$axios(
-        `/collection-forecast-by-ecomm/${this.forecastedYear}`
-      );
-      const collectionForecastByRetail = await this.$axios(
-        `/collection-forecast-by-retail/${this.forecastedYear}`
-      );
-      this.comparisonCollnData = [];
-      this.ComparisonCategoryData=[];
-       for (let category of CategoryTotalForecast.data.category) {
-        for (let ecategory of CategoryEcommForecast.data.category) {
-          for (let rcategory of CategoryRetailForecast.data.category) {
-            if (
-              category.category == ecategory.category &&
-              category.category == rcategory.category
-            ) {
-              this.ComparisonCategoryData.push({
-                total: {
-                  ...category,
-                },
-                ecomm: {
-                  ...ecategory,
-                },
-                retail: {
-                  ...rcategory,
-                },
-              });
-            }
-          }
-        }
-      }
-      for (let collection of collectionForecast.data.collections) {
-        for (let ecolln of collectionForecastByEcomm.data.collections) {
-          for (let rcolln of collectionForecastByRetail.data.collections) {
-            if (
-              collection.collection == ecolln.collection &&
-              collection.collection == rcolln.collection
-            ) {
-              this.comparisonCollnData.push({
-                total: {
-                  ...collection,
-                },
-                ecomm: {
-                  ...ecolln,
-                },
-                retail: {
-                  ...rcolln,
-                },
-              });
-            }
-          }
-        }
-      }
-    },
+    //   const collectionForecast = await this.$axios(
+    //     `/collection-forecast/${this.forecastedYear}`
+    //   );
+    //   const collectionForecastByEcomm = await this.$axios(
+    //     `/collection-forecast-by-ecomm/${this.forecastedYear}`
+    //   );
+    //   const collectionForecastByRetail = await this.$axios(
+    //     `/collection-forecast-by-retail/${this.forecastedYear}`
+    //   );
+    //   this.comparisonCollnData = [];
+    //   this.ComparisonCategoryData=[];
+    //    for (let category of CategoryTotalForecast.data.category) {
+    //     for (let ecategory of CategoryEcommForecast.data.category) {
+    //       for (let rcategory of CategoryRetailForecast.data.category) {
+    //         if (
+    //           category.category == ecategory.category &&
+    //           category.category == rcategory.category
+    //         ) {
+    //           this.ComparisonCategoryData.push({
+    //             total: {
+    //               ...category,
+    //             },
+    //             ecomm: {
+    //               ...ecategory,
+    //             },
+    //             retail: {
+    //               ...rcategory,
+    //             },
+    //           });
+    //         }
+    //       }
+    //     }
+    //   }
+    //   for (let collection of collectionForecast.data.collections) {
+    //     for (let ecolln of collectionForecastByEcomm.data.collections) {
+    //       for (let rcolln of collectionForecastByRetail.data.collections) {
+    //         if (
+    //           collection.collection == ecolln.collection &&
+    //           collection.collection == rcolln.collection
+    //         ) {
+    //           this.comparisonCollnData.push({
+    //             total: {
+    //               ...collection,
+    //             },
+    //             ecomm: {
+    //               ...ecolln,
+    //             },
+    //             retail: {
+    //               ...rcolln,
+    //             },
+    //           });
+    //         }
+    //       }
+    //     }
+    //   }
+    // },
     async getAllUserData() {
       this.userInfo = await this.$axios.$get("/get-all-users");
       window.localStorage.setItem(
