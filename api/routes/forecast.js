@@ -10,6 +10,7 @@ import {
   collectionFilteredForecastByEcomm,
   collectionFilteredForecastByRetail,
   downloadAllSkuByMonth,
+  setFilteredSKUsAndWhereQuery,
 } from "../controller/forecast";
 const router = Router();
 
@@ -46,6 +47,10 @@ router.post(
 router.post(
   "/collection-forecast-by-retail/:forecast_year",
   collectionFilteredForecastByRetail
+);
+router.post(
+  "/set-filtered-sku-and-where-query",
+  setFilteredSKUsAndWhereQuery
 );
 
 export default router;

@@ -215,6 +215,7 @@ export const getBaseQuarterlyPlanned = async (req, res) => {
 };
 
 export const getBaseThisQuarterlySale = async (req, res) => {
+  // console.log("baseQuarterlySale--");
   try {
     const { forecast_year } = req.params;
     const baseQuarterlySale = await prisma.$queryRaw(`SELECT 
@@ -228,6 +229,7 @@ export const getBaseThisQuarterlySale = async (req, res) => {
                                                         AND fseisbw.sku IN (select sku from morphe_staging.planned_weekly_units_revenue_by_channel_by_sku)
                                                       GROUP BY 
                                                         QUARTER(weekend);`);
+                                                        // console.log("baseQuarterlySale--",baseQuarterlySale);
 
     res.status(200).json({
       baseQuarterlySale,

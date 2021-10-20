@@ -279,31 +279,33 @@ export default {
       return `Filtered Monthly Metrics Table ${moment().format("MM-DD-YYYY")}.xlsx`;
     },
     createExportCSV() {
-      this.metricTableDataExportData = this.filteredForecastMetrics.parsedFilteredForecastData.map(
-        (data) => {
-          let metricTableRow = {
-            "Metrics Name": data["Metrics Name"],
-            Yearly: data.yearly_aggregate,
-            Q1: data.Q1,
-            Q2: data.Q2,
-            Q3: data.Q3,
-            Q4: data.Q4,
-            January: data.w1,
-            February: data.w2,
-            March: data.w3,
-            April: data.w4,
-            May: data.w5,
-            June: data.w6,
-            July: data.w7,
-            August: data.w8,
-            September: data.w9,
-            October: data.w10,
-            November: data.w11,
-            December: data.w12,
-          };
-          return metricTableRow;
-        }
-      );
+      if(this.filteredForecastMetrics && this.filteredForecastMetrics.parsedFilteredForecastData) {
+        this.metricTableDataExportData = this.filteredForecastMetrics.parsedFilteredForecastData.map(
+          (data) => {
+            let metricTableRow = {
+              "Metrics Name": data["Metrics Name"],
+              Yearly: data.yearly_aggregate,
+              Q1: data.Q1,
+              Q2: data.Q2,
+              Q3: data.Q3,
+              Q4: data.Q4,
+              January: data.w1,
+              February: data.w2,
+              March: data.w3,
+              April: data.w4,
+              May: data.w5,
+              June: data.w6,
+              July: data.w7,
+              August: data.w8,
+              September: data.w9,
+              October: data.w10,
+              November: data.w11,
+              December: data.w12,
+            };
+            return metricTableRow;
+          }
+        );
+      }
     },
   },
 };
