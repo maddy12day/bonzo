@@ -30,7 +30,7 @@
                       class="badge badge-primary custom-badge"
                       @click="() => handleLockSystem(data)"
                     >
-                      {{ text }}
+                      {{lockSystem ? "unlock-system" : "lock-system"}}
                     </button>
                   </el-badge>
                   <!--  @click="() => getGenesisData(genesisTimeLineNode)" -->
@@ -81,7 +81,12 @@
                     @click="() => handleScenarioClick(data)"
                     >View Details</span
                   >
-                  <!-- <span  class="badge badge-primary custom-badge"  @click="() =>  handleLockSystem(data)">Lock System </span> -->
+                   <button
+                      class="badge badge-primary custom-badge"
+                      @click="() => handleLockSystem(data)"
+                    >
+                      {{ text }}
+                    </button>
                   <!--  <button
                     v-if="data.adjustment_count > 0"
                     class="btn btn-info btn-sm mr-1"
@@ -139,6 +144,7 @@ export default {
       typeColor: ["", "info", "success", "warning", "danger"],
       seen: false,
       text: "Lock System",
+      lockSystem: false,
     };
   },
   props: [
@@ -147,6 +153,9 @@ export default {
     "showUnmergeBtn",
     "showAdjustmentsEvt",
   ],
+  mounted(){
+    localStorage.getItem("isSystemLock") =="true"?  this.lockSystem = JSON.parse(localStorage.getItem("isSystemLock")) : (localStorage.setItem("isSystemLock",false), this.lockSystem = JSON.parse(localStorage.getItem("isSystemLock")))
+  },
   methods: {
     closeDialog() {
       this.dialogVisible = false;
@@ -172,33 +181,29 @@ export default {
       this.currentScenarioStatus = scenarioDetails.scenario;
       this.dialogVisible = true;
     },
-    handleLockSystem() {
-  //     $.ajax({
-  //   url: '/scenarioTableDataForTable',
-  //   method: 'GET',
-  //   success: function(data) {
-  //     this.comments = data;
-  //   }
-  // });
-      this.$store.commit("toggleSystemLockState");
-     
-      this.seen = !this.seen;
-      if (this.seen) {
-        this.text = "Unlock System";
-            this.notifyVue(
-        "top",
-        "right",
-        'System Locked'
+    async handleLockSystem() {
+      this.lockSystem=JSON.parse(localStorage.getItem("isSystemLock"));
+    const LockSystem = await this.$axios.$post(
+        `/lock-system`,{demand_forecast_run_log_id: JSON.parse(localStorage.getItem("baseVersionId")), is_locked: this.lockSystem}
       );
-      } else {
-        this.text = "Lock System";
+      if(LockSystem.hasOwnProperty("lockedSystem") && !JSON.parse(localStorage.getItem("isSystemLock"))){
+        localStorage.setItem("isSystemLock",true);
+        this.text = "Unlock System";
+      }
+      else{
+         localStorage.setItem("isSystemLock",false);
+         this.text = "lock System";
+      }
+      this.lockSystem=JSON.parse(localStorage.getItem("isSystemLock"));
+      this.text = "Lock System";
           this.notifyVue(
         "top",
         "right",
-        'System Unlocked'
+       this.text
       );
-  
-      }
+      this.$store.commit("toggleSystemLockState");
+     
+      this.seen = !this.seen;
     },
     notifyVue(verticalAlign, horizontalAlign, message, type) {
       this.$notify({

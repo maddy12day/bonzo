@@ -21,6 +21,7 @@
         sharedScenariosList.scenarios &&
           sharedScenariosListCom.scenarios.length > 0
       "
+      
       tableHeading="Shared Scenarios"
       :scenarioTableData="sharedScenariosListCom.scenarios"
       :type="'sharedScenarios'"
@@ -280,6 +281,8 @@ export default {
     this.showMetricsByDuration("Monthly");
     this.getAllUserData();
     this.getWeekendDates();
+    
+    
     // this.comparisonTableDataGenerator();
     setTimeout(() => {
       this.checkMergeScenarioStatus();
