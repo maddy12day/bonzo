@@ -1,5 +1,21 @@
 <template>
   <div class="row filteredForecastMetrics">
+    <select name="weekOfYear" id="weekOfYear" v-on:change="valueOfWeek()">
+      <option value="0" selected disabled>FROM</option>
+      <option v-for="weekdate in 52" :key="weekdate" :value="weekdate">
+        W{{ weekdate }} {{ getWeekendDates(weekdate) }}
+      </option>
+    </select>
+    <select
+      name="weekOfYear"
+      id="weekOfYearTill"
+      v-on:change="valueOfWeekTill()"
+    >
+      <option value="0" selected disabled>TILL</option>
+      <option v-for="weekdate in 52" :key="weekdate" :value="weekdate">
+        W{{ weekdate }} {{ getWeekendDates(weekdate) }}
+      </option>
+    </select>
     <div class="col-lg-12">
       <div class="col-md-12 text-right p-0">
         <br />
@@ -669,6 +685,7 @@
   </div>
 </template>
 <script>
+import $ from "jQuery";
 import { Table, TableColumn } from "element-ui";
 import Tags from "../../components/Tags.vue";
 import moment from "moment";
@@ -684,6 +701,8 @@ export default {
   data() {
     return {
       metricTableDataExportData: [],
+      weekIndex: null,
+      weekIndexTill: 52,
     };
   },
   props: ["tableHeading", "filteredForecastMetrics", "allAppliedFilters", "filterArray"],
@@ -790,12 +809,28 @@ export default {
           ).format("MM/DD/YYYY")})`
         : "";
     },
+        valueOfWeek() {
+      this.weekIndex = $("#weekOfYear").val();
+      console.log(this.weekIndex);
+    },
+    valueOfWeekTill() {
+      this.weekIndexTill = $("#weekOfYearTill").val();
+      console.log(this.weekIndexTill);
+    },
     checkIfPastWeek(index) {
       let className = "";
+      let className1 = "";
+      let className2 = "";
+      if (this.weekIndex > index) {
+        className1 = "disappearWeek";
+      }
+      if (this.weekIndexTill < index) {
+        className2 = "disappearWeek";
+      }
       if (moment(new Date()).week() > index) {
         className = "disableWeek";
       }
-      return className;
+      return `${className} ${className1} ${className2}`;
     },
   },
 };
@@ -808,5 +843,26 @@ export default {
 
 .filteredForecastMetrics .el-table__empty-block {
   display: none!important;
+}
+.disappearWeek{
+  display: none;
+}
+#weekOfYear{
+  border: none;
+  border: 1px solid rgb(168 156 156);
+  width: 150px;
+  height: 35px;
+  border-radius: 6px;
+  margin-left: 15px;
+  text-align: justify;
+}
+#weekOfYearTill{
+  border: none;
+  border: 1px solid rgb(168 156 156);
+  width: 150px;
+  height: 35px;
+  border-radius: 6px;
+  margin-left: 15px;
+  text-align: justify;
 }
 </style>

@@ -1,5 +1,35 @@
 <template>
   <div class="row filteredForecastMetrics">
+     <select name="monthName" id="monthName" v-on:change="valueChange()">
+      <option value="0" selected disabled>FROM</option>
+      <option value="1">Jan</option>
+      <option value="2">Feb</option>
+      <option value="3">Mar</option>
+      <option value="4">Apr</option>
+      <option value="5">May</option>
+      <option value="6">Jun</option>
+      <option value="7">Jul</option>
+      <option value="8">Aug</option>
+      <option value="9">Sep</option>
+      <option value="10">Oct</option>
+      <option value="11">Nov</option>
+      <option value="12">Dec</option>
+    </select>
+    <select name="monthName" id="monthNameTill" v-on:change="valueChangeTill()">
+      <option value="0" selected disabled>TILL</option>
+      <option value="1">Jan</option>
+      <option value="2">Feb</option>
+      <option value="3">Mar</option>
+      <option value="4">Apr</option>
+      <option value="5">May</option>
+      <option value="6">Jun</option>
+      <option value="7">Jul</option>
+      <option value="8">Aug</option>
+      <option value="9">Sep</option>
+      <option value="10">Oct</option>
+      <option value="11">Nov</option>
+      <option value="12">Dec</option>
+    </select>
     <div class="col-lg-12">
       <div class="col-md-12 text-right p-0">
         <br />
@@ -98,6 +128,8 @@
               label="Jan"
               property="w1"
               align="right"
+              class="monthOfYear"
+              :class-name="checkIfPastMonth(0)"
             >
               <template slot-scope="scope">{{
                 scope.row.w1 | toLocaleStr
@@ -109,6 +141,8 @@
               label="Feb"
               property="w2"
               align="right"
+              class="monthOfYear"
+              :class-name="checkIfPastMonth(1)"
             >
               <template slot-scope="scope">{{
                 scope.row.w2 | toLocaleStr
@@ -120,6 +154,8 @@
               label="Mar"
               property="w3"
               align="right"
+              class="monthOfYear"
+              :class-name="checkIfPastMonth(2)"
             >
               <template slot-scope="scope">{{
                 scope.row.w3 | toLocaleStr
@@ -131,6 +167,8 @@
               label="Apr"
               property="w4"
               align="right"
+              class="monthOfYear"
+              :class-name="checkIfPastMonth(3)"
             >
               <template slot-scope="scope">{{
                 scope.row.w4 | toLocaleStr
@@ -142,6 +180,8 @@
               label="May"
               property="w5"
               align="right"
+              class="monthOfYear"
+              :class-name="checkIfPastMonth(4)"
             >
               <template slot-scope="scope">{{
                 scope.row.w5 | toLocaleStr
@@ -153,6 +193,8 @@
               label="Jun"
               property="w6"
               align="right"
+              class="monthOfYear"
+              :class-name="checkIfPastMonth(5)"
             >
               <template slot-scope="scope">{{
                 scope.row.w6 | toLocaleStr
@@ -164,6 +206,8 @@
               label="Jul"
               property="w7"
               align="right"
+              class="monthOfYear"
+              :class-name="checkIfPastMonth(6)"
             >
               <template slot-scope="scope">{{
                 scope.row.w7 | toLocaleStr
@@ -175,6 +219,8 @@
               label="Aug"
               property="w8"
               align="right"
+              class="monthOfYear"
+              :class-name="checkIfPastMonth(7)"
             >
               <template slot-scope="scope">{{
                 scope.row.w8 | toLocaleStr
@@ -186,6 +232,8 @@
               label="Sep"
               property="w9"
               align="right"
+              class="monthOfYear"
+              :class-name="checkIfPastMonth(8)"
             >
               <template slot-scope="scope">{{
                 scope.row.w9 | toLocaleStr
@@ -197,6 +245,8 @@
               label="Oct"
               property="w10"
               align="right"
+              class="monthOfYear"
+              :class-name="checkIfPastMonth(9)"
             >
               <template slot-scope="scope">{{
                 scope.row.w10 | toLocaleStr
@@ -208,6 +258,8 @@
               label="Nov"
               property="w11"
               align="right"
+              class="monthOfYear"
+              :class-name="checkIfPastMonth(10)"
             >
               <template slot-scope="scope">{{
                 scope.row.w11 | toLocaleStr
@@ -219,6 +271,8 @@
               label="Dec"
               property="w12"
               align="right"
+              class="monthOfYear"
+              :class-name="checkIfPastMonth(11)"
             >
               <template slot-scope="scope">{{
                 scope.row.w12 | toLocaleStr
@@ -231,6 +285,7 @@
   </div>
 </template>
 <script>
+import $ from "jQuery";
 import { Table, TableColumn } from "element-ui";
 import Tags from "../../components/Tags.vue";
 import moment from "moment";
@@ -247,6 +302,8 @@ export default {
   data() {
     return {
       metricTableDataExportData: [],
+      monthIndex: null,
+      monthIndexTill: 12,
     };
   },
   computed: {
@@ -274,6 +331,32 @@ export default {
 
       // export Excel file
       XLSX.writeFile(wb, this.getCSVName()) // name of the file is 'book.xlsx'
+    },
+        valueChange() {
+      this.monthIndex = $("#monthName").val();
+      console.log(this.monthIndex);
+    },
+    valueChangeTill() {
+      this.monthIndexTill = $("#monthNameTill").val();
+      console.log(this.monthIndexTill);
+    },
+    checkIfPastMonth(index) {
+      let className = "";
+      let className1 = "";
+      let className2 = "";
+      if (this.monthIndex - 1 > index) {
+        // document.getElementsByClassName("monthOfYear")[0].classList.add("disappearMonth");
+        className1 = "disappearMonth";
+        console.log("num");
+      }
+      if (this.monthIndexTill - 1 < index) {
+        className2 = "disappearMonth";
+        console.log("num");
+      }
+      if (new Date().getMonth() > index) {
+        className = "disablemonth ";
+      }
+      return `${className} ${className1} ${className2}`;
     },
     getCSVName() {
       return `Filtered Monthly Metrics Table ${moment().format("MM-DD-YYYY")}.xlsx`;
@@ -313,5 +396,29 @@ export default {
 <style>
 .filteredForecastMetrics .el-table__empty-block {
   display: none!important;
+}
+.disablemonth {
+  background: #e8e8e8;
+}
+.disappearMonth {
+  display: none;
+}
+#monthName {
+  border: none;
+  border: 1px solid rgb(168 156 156);
+  width: 150px;
+  height: 35px;
+  border-radius: 6px;
+  margin-left: 15px;
+  text-align: justify;
+}
+#monthNameTill {
+  border: none;
+  border: 1px solid rgb(168 156 156);
+  width: 150px;
+  height: 35px;
+  border-radius: 6px;
+  margin-left: 15px;
+  text-align: justify;
 }
 </style>
