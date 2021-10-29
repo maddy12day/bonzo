@@ -889,7 +889,7 @@ export default {
   border-radius: 6px;
   margin-left: 15px;
   text-align: center;
-  background-color:#5e72ea;
+  background-color:#0098f0;
   color: white;
 }
 </style>
