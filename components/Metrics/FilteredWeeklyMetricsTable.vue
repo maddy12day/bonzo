@@ -685,7 +685,7 @@
   </div>
 </template>
 <script>
-import $ from "jQuery";
+// import $ from "jQuery";
 import { Table, TableColumn } from "element-ui";
 import Tags from "../../components/Tags.vue";
 import moment from "moment";

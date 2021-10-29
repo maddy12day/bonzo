@@ -274,7 +274,7 @@
   </div>
 </template>
 <script>
-import $ from "jQuery";
+// import $ from "jQuery";
 import { Table, TableColumn } from "element-ui";
 import moment from "moment";
 import XLSX from "xlsx";
