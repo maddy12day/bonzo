@@ -7,7 +7,7 @@
           <button
             v-if="metricTableDataExportDataProp.length > 0"
             class="mt-1 btn btn-sm"
-            style="line-height:1;"
+            style="line-height: 1"
             @click="exportToExcel"
           >
             Download Excel
@@ -26,70 +26,75 @@
           <Tags :allAppliedFilters="allAppliedFilters" />
         </div>
         <el-table :data="filteredForecastMetrics.parsedFilteredForecastData">
-          <template v-if="filteredForecastMetrics && !filteredForecastMetrics.parsedFilteredForecastData">
+          <template
+            v-if="
+              filteredForecastMetrics &&
+              !filteredForecastMetrics.parsedFilteredForecastData
+            "
+          >
             <div slot="append" :style="'text-align: center;'">
               Loading {{ tableHeading }} ...
             </div>
           </template>
-            <el-table-column
-              min-width="185"
-              label="Metrics Name"
-              property="Metrics Name"
-              class-name="metrics-fix-header"
-              fixed
-            >
-            </el-table-column>
-            <el-table-column
-              min-width="185"
-              label="Yearly"
-              property="yearly_aggregate"
-              align="right"
-            >
-              <template slot-scope="scope"
-                >{{ parseInt(scope.row.yearly_aggregate) | toLocaleStr }}
-              </template>
-            </el-table-column>
-            <el-table-column
-              min-width="185"
-              label="Q1"
-              property="Q1"
-              align="right"
-            >
-              <template slot-scope="scope"
-                >{{ parseInt(scope.row.Q1 ) | toLocaleStr }}
-              </template>
-            </el-table-column>
-            <el-table-column
-              min-width="185"
-              label="Q2"
-              property="Q2"
-              align="right"
-            >
-              <template slot-scope="scope"
-                >{{ scope.row.Q2 | toLocaleStr }}
-              </template>
-            </el-table-column>
-            <el-table-column
-              min-width="185"
-              label="Q3"
-              property="Q3"
-              align="right"
-            >
-              <template slot-scope="scope"
-                >{{ parseInt(scope.row.Q3) | toLocaleStr }}
-              </template>
-            </el-table-column>
-            <el-table-column
-              min-width="185"
-              label="Q4"
-              property="Q4"
-              align="right"
-            >
-              <template slot-scope="scope"
-                >{{ parseInt(scope.row.Q4) | toLocaleStr }}
-              </template>
-            </el-table-column>
-            <el-table-column
+          <el-table-column
+            min-width="185"
+            label="Metrics Name"
+            property="Metrics Name"
+            class-name="metrics-fix-header"
+            fixed
+          >
+          </el-table-column>
+          <el-table-column
+            min-width="185"
+            label="Yearly"
+            property="yearly_aggregate"
+            align="right"
+          >
+            <template slot-scope="scope"
+              >{{ parseInt(scope.row.yearly_aggregate) | toLocaleStr }}
+            </template>
+          </el-table-column>
+          <el-table-column
+            min-width="185"
+            label="Q1"
+            property="Q1"
+            align="right"
+          >
+            <template slot-scope="scope"
+              >{{ parseInt(scope.row.Q1) | toLocaleStr }}
+            </template>
+          </el-table-column>
+          <el-table-column
+            min-width="185"
+            label="Q2"
+            property="Q2"
+            align="right"
+          >
+            <template slot-scope="scope"
+              >{{ scope.row.Q2 | toLocaleStr }}
+            </template>
+          </el-table-column>
+          <el-table-column
+            min-width="185"
+            label="Q3"
+            property="Q3"
+            align="right"
+          >
+            <template slot-scope="scope"
+              >{{ parseInt(scope.row.Q3) | toLocaleStr }}
+            </template>
+          </el-table-column>
+          <el-table-column
+            min-width="185"
+            label="Q4"
+            property="Q4"
+            align="right"
+          >
+            <template slot-scope="scope"
+              >{{ parseInt(scope.row.Q4) | toLocaleStr }}
+            </template>
+          </el-table-column>
+          <el-table-column
             min-width="150"
             sortable
             label="w01"
@@ -103,13 +108,13 @@
                 type="number"
                 v-if="
                   weekNo() < 1 &&
-                    !isDisble &&
-                    [
-                      'Sales',
-                      'Sales Build',
-                      'Units Sales',
-                      'Units Sales Build',
-                    ].includes('Sales')
+                  !isDisble &&
+                  [
+                    'Sales',
+                    'Sales Build',
+                    'Units Sales',
+                    'Units Sales Build',
+                  ].includes(scope.row['Metrics Name'])
                 "
                 v-model="scope.row.w01"
                 :disabled="isDisble"
@@ -134,13 +139,13 @@
                 type="number"
                 v-if="
                   weekNo() < 2 &&
-                    !isDisble &&
-                    [
-                      'Sales',
-                      'Sales Build',
-                      'Units Sales',
-                      'Units Sales Build',
-                    ].includes('Sales')
+                  !isDisble &&
+                  [
+                    'Sales',
+                    'Sales Build',
+                    'Units Sales',
+                    'Units Sales Build',
+                  ].includes(scope.row['Metrics Name'])
                 "
                 v-model="scope.row.w02"
                 :disabled="isDisble"
@@ -165,13 +170,13 @@
                 type="number"
                 v-if="
                   weekNo() < 3 &&
-                    !isDisble &&
-                    [
-                      'Sales',
-                      'Sales Build',
-                      'Units Sales',
-                      'Units Sales Build',
-                    ].includes('Sales')
+                  !isDisble &&
+                  [
+                    'Sales',
+                    'Sales Build',
+                    'Units Sales',
+                    'Units Sales Build',
+                  ].includes(scope.row['Metrics Name'])
                 "
                 v-model="scope.row.w03"
                 :disabled="isDisble"
@@ -196,13 +201,13 @@
                 type="number"
                 v-if="
                   weekNo() < 4 &&
-                    !isDisble &&
-                    [
-                      'Sales',
-                      'Sales Build',
-                      'Units Sales',
-                      'Units Sales Build',
-                    ].includes('Sales')
+                  !isDisble &&
+                  [
+                    'Sales',
+                    'Sales Build',
+                    'Units Sales',
+                    'Units Sales Build',
+                  ].includes(scope.row['Metrics Name'])
                 "
                 v-model="scope.row.w04"
                 :disabled="isDisble"
@@ -227,13 +232,13 @@
                 type="number"
                 v-if="
                   weekNo() < 5 &&
-                    !isDisble &&
-                    [
-                      'Sales',
-                      'Sales Build',
-                      'Units Sales',
-                      'Units Sales Build',
-                    ].includes('Sales')
+                  !isDisble &&
+                  [
+                    'Sales',
+                    'Sales Build',
+                    'Units Sales',
+                    'Units Sales Build',
+                  ].includes(scope.row['Metrics Name'])
                 "
                 v-model="scope.row.w05"
                 :disabled="isDisble"
@@ -258,13 +263,13 @@
                 type="number"
                 v-if="
                   weekNo() < 6 &&
-                    !isDisble &&
-                    [
-                      'Sales',
-                      'Sales Build',
-                      'Units Sales',
-                      'Units Sales Build',
-                    ].includes('Sales')
+                  !isDisble &&
+                  [
+                    'Sales',
+                    'Sales Build',
+                    'Units Sales',
+                    'Units Sales Build',
+                  ].includes(scope.row['Metrics Name'])
                 "
                 v-model="scope.row.w06"
                 :disabled="isDisble"
@@ -289,13 +294,13 @@
                 type="number"
                 v-if="
                   weekNo() < 7 &&
-                    !isDisble &&
-                    [
-                      'Sales',
-                      'Sales Build',
-                      'Units Sales',
-                      'Units Sales Build',
-                    ].includes('Sales')
+                  !isDisble &&
+                  [
+                    'Sales',
+                    'Sales Build',
+                    'Units Sales',
+                    'Units Sales Build',
+                  ].includes(scope.row['Metrics Name'])
                 "
                 v-model="scope.row.w07"
                 :disabled="isDisble"
@@ -320,13 +325,13 @@
                 type="number"
                 v-if="
                   weekNo() < 8 &&
-                    !isDisble &&
-                    [
-                      'Sales',
-                      'Sales Build',
-                      'Units Sales',
-                      'Units Sales Build',
-                    ].includes('Sales')
+                  !isDisble &&
+                  [
+                    'Sales',
+                    'Sales Build',
+                    'Units Sales',
+                    'Units Sales Build',
+                  ].includes(scope.row['Metrics Name'])
                 "
                 v-model="scope.row.w08"
                 :disabled="isDisble"
@@ -351,13 +356,13 @@
                 type="number"
                 v-if="
                   weekNo() < 9 &&
-                    !isDisble &&
-                    [
-                      'Sales',
-                      'Sales Build',
-                      'Units Sales',
-                      'Units Sales Build',
-                    ].includes('Sales')
+                  !isDisble &&
+                  [
+                    'Sales',
+                    'Sales Build',
+                    'Units Sales',
+                    'Units Sales Build',
+                  ].includes(scope.row['Metrics Name'])
                 "
                 v-model="scope.row.w09"
                 :disabled="isDisble"
@@ -381,13 +386,13 @@
                 type="number"
                 v-if="
                   weekNo() < 10 &&
-                    !isDisble &&
-                    [
-                      'Sales',
-                      'Sales Build',
-                      'Units Sales',
-                      'Units Sales Build',
-                    ].includes('Sales')
+                  !isDisble &&
+                  [
+                    'Sales',
+                    'Sales Build',
+                    'Units Sales',
+                    'Units Sales Build',
+                  ].includes(scope.row['Metrics Name'])
                 "
                 v-model="scope.row.w10"
                 :disabled="isDisble"
@@ -412,13 +417,13 @@
                 type="number"
                 v-if="
                   weekNo() < 11 &&
-                    !isDisble &&
-                    [
-                      'Sales',
-                      'Sales Build',
-                      'Units Sales',
-                      'Units Sales Build',
-                    ].includes('Sales')
+                  !isDisble &&
+                  [
+                    'Sales',
+                    'Sales Build',
+                    'Units Sales',
+                    'Units Sales Build',
+                  ].includes(scope.row['Metrics Name'])
                 "
                 v-model="scope.row.w11"
                 :disabled="isDisble"
@@ -443,13 +448,13 @@
                 type="number"
                 v-if="
                   weekNo() < 12 &&
-                    !isDisble &&
-                    [
-                      'Sales',
-                      'Sales Build',
-                      'Units Sales',
-                      'Units Sales Build',
-                    ].includes('Sales')
+                  !isDisble &&
+                  [
+                    'Sales',
+                    'Sales Build',
+                    'Units Sales',
+                    'Units Sales Build',
+                  ].includes(scope.row['Metrics Name'])
                 "
                 v-model="scope.row.w12"
                 :disabled="isDisble"
@@ -474,13 +479,13 @@
                 type="number"
                 v-if="
                   weekNo() < 13 &&
-                    !isDisble &&
-                    [
-                      'Sales',
-                      'Sales Build',
-                      'Units Sales',
-                      'Units Sales Build',
-                    ].includes('Sales')
+                  !isDisble &&
+                  [
+                    'Sales',
+                    'Sales Build',
+                    'Units Sales',
+                    'Units Sales Build',
+                  ].includes(scope.row['Metrics Name'])
                 "
                 v-model="scope.row.w13"
                 :disabled="isDisble"
@@ -505,13 +510,13 @@
                 type="number"
                 v-if="
                   weekNo() < 14 &&
-                    !isDisble &&
-                    [
-                      'Sales',
-                      'Sales Build',
-                      'Units Sales',
-                      'Units Sales Build',
-                    ].includes('Sales')
+                  !isDisble &&
+                  [
+                    'Sales',
+                    'Sales Build',
+                    'Units Sales',
+                    'Units Sales Build',
+                  ].includes(scope.row['Metrics Name'])
                 "
                 v-model="scope.row.w14"
                 :disabled="isDisble"
@@ -536,13 +541,13 @@
                 type="number"
                 v-if="
                   weekNo() < 15 &&
-                    !isDisble &&
-                    [
-                      'Sales',
-                      'Sales Build',
-                      'Units Sales',
-                      'Units Sales Build',
-                    ].includes('Sales')
+                  !isDisble &&
+                  [
+                    'Sales',
+                    'Sales Build',
+                    'Units Sales',
+                    'Units Sales Build',
+                  ].includes(scope.row['Metrics Name'])
                 "
                 v-model="scope.row.w15"
                 :disabled="isDisble"
@@ -567,13 +572,13 @@
                 type="number"
                 v-if="
                   weekNo() < 16 &&
-                    !isDisble &&
-                    [
-                      'Sales',
-                      'Sales Build',
-                      'Units Sales',
-                      'Units Sales Build',
-                    ].includes('Sales')
+                  !isDisble &&
+                  [
+                    'Sales',
+                    'Sales Build',
+                    'Units Sales',
+                    'Units Sales Build',
+                  ].includes(scope.row['Metrics Name'])
                 "
                 v-model="scope.row.w16"
                 :disabled="isDisble"
@@ -598,13 +603,13 @@
                 type="number"
                 v-if="
                   weekNo() < 17 &&
-                    !isDisble &&
-                    [
-                      'Sales',
-                      'Sales Build',
-                      'Units Sales',
-                      'Units Sales Build',
-                    ].includes('Sales')
+                  !isDisble &&
+                  [
+                    'Sales',
+                    'Sales Build',
+                    'Units Sales',
+                    'Units Sales Build',
+                  ].includes(scope.row['Metrics Name'])
                 "
                 v-model="scope.row.w17"
                 :disabled="isDisble"
@@ -629,13 +634,13 @@
                 type="number"
                 v-if="
                   weekNo() < 18 &&
-                    !isDisble &&
-                    [
-                      'Sales',
-                      'Sales Build',
-                      'Units Sales',
-                      'Units Sales Build',
-                    ].includes('Sales')
+                  !isDisble &&
+                  [
+                    'Sales',
+                    'Sales Build',
+                    'Units Sales',
+                    'Units Sales Build',
+                  ].includes(scope.row['Metrics Name'])
                 "
                 v-model="scope.row.w18"
                 :disabled="isDisble"
@@ -660,13 +665,13 @@
                 type="number"
                 v-if="
                   weekNo() < 19 &&
-                    !isDisble &&
-                    [
-                      'Sales',
-                      'Sales Build',
-                      'Units Sales',
-                      'Units Sales Build',
-                    ].includes('Sales')
+                  !isDisble &&
+                  [
+                    'Sales',
+                    'Sales Build',
+                    'Units Sales',
+                    'Units Sales Build',
+                  ].includes(scope.row['Metrics Name'])
                 "
                 v-model="scope.row.w19"
                 :disabled="isDisble"
@@ -691,13 +696,13 @@
                 type="number"
                 v-if="
                   weekNo() < 20 &&
-                    !isDisble &&
-                    [
-                      'Sales',
-                      'Sales Build',
-                      'Units Sales',
-                      'Units Sales Build',
-                    ].includes('Sales')
+                  !isDisble &&
+                  [
+                    'Sales',
+                    'Sales Build',
+                    'Units Sales',
+                    'Units Sales Build',
+                  ].includes(scope.row['Metrics Name'])
                 "
                 v-model="scope.row.w20"
                 :disabled="isDisble"
@@ -722,13 +727,13 @@
                 type="number"
                 v-if="
                   weekNo() < 21 &&
-                    !isDisble &&
-                    [
-                      'Sales',
-                      'Sales Build',
-                      'Units Sales',
-                      'Units Sales Build',
-                    ].includes('Sales')
+                  !isDisble &&
+                  [
+                    'Sales',
+                    'Sales Build',
+                    'Units Sales',
+                    'Units Sales Build',
+                  ].includes(scope.row['Metrics Name'])
                 "
                 v-model="scope.row.w21"
                 :disabled="isDisble"
@@ -753,13 +758,13 @@
                 type="number"
                 v-if="
                   weekNo() < 22 &&
-                    !isDisble &&
-                    [
-                      'Sales',
-                      'Sales Build',
-                      'Units Sales',
-                      'Units Sales Build',
-                    ].includes('Sales')
+                  !isDisble &&
+                  [
+                    'Sales',
+                    'Sales Build',
+                    'Units Sales',
+                    'Units Sales Build',
+                  ].includes(scope.row['Metrics Name'])
                 "
                 v-model="scope.row.w22"
                 :disabled="isDisble"
@@ -784,13 +789,13 @@
                 type="number"
                 v-if="
                   weekNo() < 23 &&
-                    !isDisble &&
-                    [
-                      'Sales',
-                      'Sales Build',
-                      'Units Sales',
-                      'Units Sales Build',
-                    ].includes('Sales')
+                  !isDisble &&
+                  [
+                    'Sales',
+                    'Sales Build',
+                    'Units Sales',
+                    'Units Sales Build',
+                  ].includes(scope.row['Metrics Name'])
                 "
                 v-model="scope.row.w23"
                 :disabled="isDisble"
@@ -815,13 +820,13 @@
                 type="number"
                 v-if="
                   weekNo() < 24 &&
-                    !isDisble &&
-                    [
-                      'Sales',
-                      'Sales Build',
-                      'Units Sales',
-                      'Units Sales Build',
-                    ].includes('Sales')
+                  !isDisble &&
+                  [
+                    'Sales',
+                    'Sales Build',
+                    'Units Sales',
+                    'Units Sales Build',
+                  ].includes(scope.row['Metrics Name'])
                 "
                 v-model="scope.row.w24"
                 :disabled="isDisble"
@@ -846,13 +851,13 @@
                 type="number"
                 v-if="
                   weekNo() < 25 &&
-                    !isDisble &&
-                    [
-                      'Sales',
-                      'Sales Build',
-                      'Units Sales',
-                      'Units Sales Build',
-                    ].includes('Sales')
+                  !isDisble &&
+                  [
+                    'Sales',
+                    'Sales Build',
+                    'Units Sales',
+                    'Units Sales Build',
+                  ].includes(scope.row['Metrics Name'])
                 "
                 v-model="scope.row.w25"
                 :disabled="isDisble"
@@ -877,13 +882,13 @@
                 type="number"
                 v-if="
                   weekNo() < 26 &&
-                    !isDisble &&
-                    [
-                      'Sales',
-                      'Sales Build',
-                      'Units Sales',
-                      'Units Sales Build',
-                    ].includes('Sales')
+                  !isDisble &&
+                  [
+                    'Sales',
+                    'Sales Build',
+                    'Units Sales',
+                    'Units Sales Build',
+                  ].includes(scope.row['Metrics Name'])
                 "
                 v-model="scope.row.w26"
                 :disabled="isDisble"
@@ -908,13 +913,13 @@
                 type="number"
                 v-if="
                   weekNo() < 27 &&
-                    !isDisble &&
-                    [
-                      'Sales',
-                      'Sales Build',
-                      'Units Sales',
-                      'Units Sales Build',
-                    ].includes('Sales')
+                  !isDisble &&
+                  [
+                    'Sales',
+                    'Sales Build',
+                    'Units Sales',
+                    'Units Sales Build',
+                  ].includes(scope.row['Metrics Name'])
                 "
                 v-model="scope.row.w27"
                 :disabled="isDisble"
@@ -939,13 +944,13 @@
                 type="number"
                 v-if="
                   weekNo() < 28 &&
-                    !isDisble &&
-                    [
-                      'Sales',
-                      'Sales Build',
-                      'Units Sales',
-                      'Units Sales Build',
-                    ].includes('Sales')
+                  !isDisble &&
+                  [
+                    'Sales',
+                    'Sales Build',
+                    'Units Sales',
+                    'Units Sales Build',
+                  ].includes(scope.row['Metrics Name'])
                 "
                 v-model="scope.row.w28"
                 :disabled="isDisble"
@@ -970,13 +975,13 @@
                 type="number"
                 v-if="
                   weekNo() < 29 &&
-                    !isDisble &&
-                    [
-                      'Sales',
-                      'Sales Build',
-                      'Units Sales',
-                      'Units Sales Build',
-                    ].includes('Sales')
+                  !isDisble &&
+                  [
+                    'Sales',
+                    'Sales Build',
+                    'Units Sales',
+                    'Units Sales Build',
+                  ].includes(scope.row['Metrics Name'])
                 "
                 v-model="scope.row.w29"
                 :disabled="isDisble"
@@ -1001,13 +1006,13 @@
                 type="number"
                 v-if="
                   weekNo() < 30 &&
-                    !isDisble &&
-                    [
-                      'Sales',
-                      'Sales Build',
-                      'Units Sales',
-                      'Units Sales Build',
-                    ].includes('Sales')
+                  !isDisble &&
+                  [
+                    'Sales',
+                    'Sales Build',
+                    'Units Sales',
+                    'Units Sales Build',
+                  ].includes(scope.row['Metrics Name'])
                 "
                 v-model="scope.row.w30"
                 :disabled="isDisble"
@@ -1032,13 +1037,13 @@
                 type="number"
                 v-if="
                   weekNo() < 31 &&
-                    !isDisble &&
-                    [
-                      'Sales',
-                      'Sales Build',
-                      'Units Sales',
-                      'Units Sales Build',
-                    ].includes('Sales')
+                  !isDisble &&
+                  [
+                    'Sales',
+                    'Sales Build',
+                    'Units Sales',
+                    'Units Sales Build',
+                  ].includes(scope.row['Metrics Name'])
                 "
                 v-model="scope.row.w31"
                 :disabled="isDisble"
@@ -1058,18 +1063,18 @@
           >
             <template slot-scope="scope">
               <el-input
-               autofocus
+                autofocus
                 :class="`weekend-${weekNo()}`"
                 type="number"
                 v-if="
                   !isDisble &&
-                    weekNo() < 32 &&
-                    [
-                      'Sales',
-                      'Sales Build',
-                      'Units Sales',
-                      'Units Sales Build',
-                    ].includes('Sales')
+                  weekNo() < 32 &&
+                  [
+                    'Sales',
+                    'Sales Build',
+                    'Units Sales',
+                    'Units Sales Build',
+                  ].includes(scope.row['Metrics Name'])
                 "
                 v-model="scope.row.w32"
                 :disabled="isDisble"
@@ -1094,13 +1099,13 @@
                 type="number"
                 v-if="
                   weekNo() < 33 &&
-                    !isDisble &&
-                    [
-                      'Sales',
-                      'Sales Build',
-                      'Units Sales',
-                      'Units Sales Build',
-                    ].includes('Sales')
+                  !isDisble &&
+                  [
+                    'Sales',
+                    'Sales Build',
+                    'Units Sales',
+                    'Units Sales Build',
+                  ].includes(scope.row['Metrics Name'])
                 "
                 v-model="scope.row.w33"
                 :disabled="isDisble"
@@ -1125,13 +1130,13 @@
                 type="number"
                 v-if="
                   weekNo() < 34 &&
-                    !isDisble &&
-                    [
-                      'Sales',
-                      'Sales Build',
-                      'Units Sales',
-                      'Units Sales Build',
-                    ].includes('Sales')
+                  !isDisble &&
+                  [
+                    'Sales',
+                    'Sales Build',
+                    'Units Sales',
+                    'Units Sales Build',
+                  ].includes(scope.row['Metrics Name'])
                 "
                 v-model="scope.row.w34"
                 :disabled="isDisble"
@@ -1156,13 +1161,13 @@
                 type="number"
                 v-if="
                   weekNo() < 35 &&
-                    !isDisble &&
-                    [
-                      'Sales',
-                      'Sales Build',
-                      'Units Sales',
-                      'Units Sales Build',
-                    ].includes('Sales')
+                  !isDisble &&
+                  [
+                    'Sales',
+                    'Sales Build',
+                    'Units Sales',
+                    'Units Sales Build',
+                  ].includes(scope.row['Metrics Name'])
                 "
                 v-model="scope.row.w35"
                 :disabled="isDisble"
@@ -1187,13 +1192,13 @@
                 type="number"
                 v-if="
                   weekNo() < 36 &&
-                    !isDisble &&
-                    [
-                      'Sales',
-                      'Sales Build',
-                      'Units Sales',
-                      'Units Sales Build',
-                    ].includes('Sales')
+                  !isDisble &&
+                  [
+                    'Sales',
+                    'Sales Build',
+                    'Units Sales',
+                    'Units Sales Build',
+                  ].includes(scope.row['Metrics Name'])
                 "
                 v-model="scope.row.w36"
                 :disabled="isDisble"
@@ -1218,13 +1223,13 @@
                 type="number"
                 v-if="
                   weekNo() < 37 &&
-                    !isDisble &&
-                    [
-                      'Sales',
-                      'Sales Build',
-                      'Units Sales',
-                      'Units Sales Build',
-                    ].includes('Sales')
+                  !isDisble &&
+                  [
+                    'Sales',
+                    'Sales Build',
+                    'Units Sales',
+                    'Units Sales Build',
+                  ].includes(scope.row['Metrics Name'])
                 "
                 v-model="scope.row.w37"
                 :disabled="isDisble"
@@ -1249,13 +1254,13 @@
                 type="number"
                 v-if="
                   weekNo() < 38 &&
-                    !isDisble &&
-                    [
-                      'Sales',
-                      'Sales Build',
-                      'Units Sales',
-                      'Units Sales Build',
-                    ].includes('Sales')
+                  !isDisble &&
+                  [
+                    'Sales',
+                    'Sales Build',
+                    'Units Sales',
+                    'Units Sales Build',
+                  ].includes(scope.row['Metrics Name'])
                 "
                 v-model="scope.row.w38"
                 :disabled="isDisble"
@@ -1280,13 +1285,13 @@
                 type="number"
                 v-if="
                   weekNo() < 39 &&
-                    !isDisble &&
-                    [
-                      'Sales',
-                      'Sales Build',
-                      'Units Sales',
-                      'Units Sales Build',
-                    ].includes('Sales')
+                  !isDisble &&
+                  [
+                    'Sales',
+                    'Sales Build',
+                    'Units Sales',
+                    'Units Sales Build',
+                  ].includes(scope.row['Metrics Name'])
                 "
                 v-model="scope.row.w39"
                 :disabled="isDisble"
@@ -1311,13 +1316,13 @@
                 type="number"
                 v-if="
                   weekNo() < 40 &&
-                    !isDisble &&
-                    [
-                      'Sales',
-                      'Sales Build',
-                      'Units Sales',
-                      'Units Sales Build',
-                    ].includes('Sales')
+                  !isDisble &&
+                  [
+                    'Sales',
+                    'Sales Build',
+                    'Units Sales',
+                    'Units Sales Build',
+                  ].includes(scope.row['Metrics Name'])
                 "
                 v-model="scope.row.w40"
                 :disabled="isDisble"
@@ -1342,13 +1347,13 @@
                 type="number"
                 v-if="
                   weekNo() < 41 &&
-                    !isDisble &&
-                    [
-                      'Sales',
-                      'Sales Build',
-                      'Units Sales',
-                      'Units Sales Build',
-                    ].includes('Sales')
+                  !isDisble &&
+                  [
+                    'Sales',
+                    'Sales Build',
+                    'Units Sales',
+                    'Units Sales Build',
+                  ].includes(scope.row['Metrics Name'])
                 "
                 v-model="scope.row.w41"
                 :disabled="isDisble"
@@ -1373,13 +1378,13 @@
                 type="number"
                 v-if="
                   weekNo() < 42 &&
-                    !isDisble &&
-                    [
-                      'Sales',
-                      'Sales Build',
-                      'Units Sales',
-                      'Units Sales Build',
-                    ].includes('Sales')
+                  !isDisble &&
+                  [
+                    'Sales',
+                    'Sales Build',
+                    'Units Sales',
+                    'Units Sales Build',
+                  ].includes(scope.row['Metrics Name'])
                 "
                 v-model="scope.row.w42"
                 :disabled="isDisble"
@@ -1404,13 +1409,13 @@
                 type="number"
                 v-if="
                   weekNo() < 43 &&
-                    !isDisble &&
-                    [
-                      'Sales',
-                      'Sales Build',
-                      'Units Sales',
-                      'Units Sales Build',
-                    ].includes('Sales')
+                  !isDisble &&
+                  [
+                    'Sales',
+                    'Sales Build',
+                    'Units Sales',
+                    'Units Sales Build',
+                  ].includes(scope.row['Metrics Name'])
                 "
                 v-model="scope.row.w43"
                 :disabled="isDisble"
@@ -1435,13 +1440,13 @@
                 type="number"
                 v-if="
                   weekNo() < 44 &&
-                    !isDisble &&
-                    [
-                      'Sales',
-                      'Sales Build',
-                      'Units Sales',
-                      'Units Sales Build',
-                    ].includes('Sales')
+                  !isDisble &&
+                  [
+                    'Sales',
+                    'Sales Build',
+                    'Units Sales',
+                    'Units Sales Build',
+                  ].includes(scope.row['Metrics Name'])
                 "
                 v-model="scope.row.w44"
                 :disabled="isDisble"
@@ -1466,13 +1471,13 @@
                 type="number"
                 v-if="
                   weekNo() < 45 &&
-                    !isDisble &&
-                    [
-                      'Sales',
-                      'Sales Build',
-                      'Units Sales',
-                      'Units Sales Build',
-                    ].includes('Sales')
+                  !isDisble &&
+                  [
+                    'Sales',
+                    'Sales Build',
+                    'Units Sales',
+                    'Units Sales Build',
+                  ].includes(scope.row['Metrics Name'])
                 "
                 v-model="scope.row.w45"
                 :disabled="isDisble"
@@ -1497,13 +1502,13 @@
                 type="number"
                 v-if="
                   weekNo() < 46 &&
-                    !isDisble &&
-                    [
-                      'Sales',
-                      'Sales Build',
-                      'Units Sales',
-                      'Units Sales Build',
-                    ].includes('Sales')
+                  !isDisble &&
+                  [
+                    'Sales',
+                    'Sales Build',
+                    'Units Sales',
+                    'Units Sales Build',
+                  ].includes(scope.row['Metrics Name'])
                 "
                 v-model="scope.row.w46"
                 :disabled="isDisble"
@@ -1528,13 +1533,13 @@
                 type="number"
                 v-if="
                   weekNo() < 47 &&
-                    !isDisble &&
-                    [
-                      'Sales',
-                      'Sales Build',
-                      'Units Sales',
-                      'Units Sales Build',
-                    ].includes('Sales')
+                  !isDisble &&
+                  [
+                    'Sales',
+                    'Sales Build',
+                    'Units Sales',
+                    'Units Sales Build',
+                  ].includes(scope.row['Metrics Name'])
                 "
                 v-model="scope.row.w47"
                 :disabled="isDisble"
@@ -1559,13 +1564,13 @@
                 type="number"
                 v-if="
                   weekNo() < 48 &&
-                    !isDisble &&
-                    [
-                      'Sales',
-                      'Sales Build',
-                      'Units Sales',
-                      'Units Sales Build',
-                    ].includes('Sales')
+                  !isDisble &&
+                  [
+                    'Sales',
+                    'Sales Build',
+                    'Units Sales',
+                    'Units Sales Build',
+                  ].includes(scope.row['Metrics Name'])
                 "
                 v-model="scope.row.w48"
                 :disabled="isDisble"
@@ -1590,13 +1595,13 @@
                 type="number"
                 v-if="
                   weekNo() < 49 &&
-                    !isDisble &&
-                    [
-                      'Sales',
-                      'Sales Build',
-                      'Units Sales',
-                      'Units Sales Build',
-                    ].includes('Sales')
+                  !isDisble &&
+                  [
+                    'Sales',
+                    'Sales Build',
+                    'Units Sales',
+                    'Units Sales Build',
+                  ].includes(scope.row['Metrics Name'])
                 "
                 v-model="scope.row.w49"
                 :disabled="isDisble"
@@ -1621,13 +1626,13 @@
                 type="number"
                 v-if="
                   weekNo() < 50 &&
-                    !isDisble &&
-                    [
-                      'Sales',
-                      'Sales Build',
-                      'Units Sales',
-                      'Units Sales Build',
-                    ].includes('Sales')
+                  !isDisble &&
+                  [
+                    'Sales',
+                    'Sales Build',
+                    'Units Sales',
+                    'Units Sales Build',
+                  ].includes(scope.row['Metrics Name'])
                 "
                 v-model="scope.row.w50"
                 :disabled="isDisble"
@@ -1652,13 +1657,13 @@
                 type="number"
                 v-if="
                   weekNo() < 51 &&
-                    !isDisble &&
-                    [
-                      'Sales',
-                      'Sales Build',
-                      'Units Sales',
-                      'Units Sales Build',
-                    ].includes('Sales')
+                  !isDisble &&
+                  [
+                    'Sales',
+                    'Sales Build',
+                    'Units Sales',
+                    'Units Sales Build',
+                  ].includes(scope.row['Metrics Name'])
                 "
                 v-model="scope.row.w51"
                 :disabled="isDisble"
@@ -1683,13 +1688,13 @@
                 type="number"
                 v-if="
                   weekNo() < 52 &&
-                    !isDisble &&
-                    [
-                      'Sales',
-                      'Sales Build',
-                      'Units Sales',
-                      'Units Sales Build',
-                    ].includes('Sales')
+                  !isDisble &&
+                  [
+                    'Sales',
+                    'Sales Build',
+                    'Units Sales',
+                    'Units Sales Build',
+                  ].includes(scope.row['Metrics Name'])
                 "
                 v-model="scope.row.w52"
                 :disabled="isDisble"
@@ -1723,29 +1728,34 @@ export default {
       metricTableDataExportData: [],
       weekIndex: null,
       weekIndexTill: 52,
-       isDisble: false,
+      isDisble: false,
     };
   },
-  props: ["tableHeading", "filteredForecastMetrics", "allAppliedFilters", "filterArray"],
+  props: [
+    "tableHeading",
+    "filteredForecastMetrics",
+    "allAppliedFilters",
+    "filterArray",
+  ],
   computed: {
     metricTableDataExportDataProp() {
       return this.metricTableDataExportData;
     },
   },
   watch: {
-    filteredForecastMetrics: function() {
+    filteredForecastMetrics: function () {
       this.createExportCSV();
     },
   },
-    updated() {
+  updated() {
     this.onFocus();
   },
   methods: {
-      onFocus() {
+    onFocus() {
       document.querySelector(`.weekend-${this.weekNo()}`).focus();
     },
     weekNo() {
-      return moment(new Date()).week()-1;
+      return moment(new Date()).week() - 1;
     },
     onDataChange(e, value, index, innerIndex) {
       const oldTableData = JSON.parse(
@@ -1756,6 +1766,18 @@ export default {
           `${innerIndex < 10 ? `w0${innerIndex}` : `w${innerIndex}`}`
         ] !== value
       ) {
+        console.log({
+          new_value: value,
+          weekend_date: JSON.parse(localStorage.getItem("weekendDates"))[
+            innerIndex - 1
+          ],
+          old_value:
+            oldTableData[index][
+              `${innerIndex < 10 ? `w0${innerIndex}` : `w${innerIndex}`}`
+            ],
+          metrics_name: oldTableData[index]["metrics_name"],
+          ele: e.target.parentNode.parentNode.parentNode,
+        });
         this.$emit("EvtAdjValues", {
           new_value: value,
           weekend_date: JSON.parse(localStorage.getItem("weekendDates"))[
@@ -1774,27 +1796,34 @@ export default {
         this.isDisble = false;
       }
     },
-    exportToExcel() { 
-      
-      let metricTableDataExportData = XLSX.utils.json_to_sheet(this.metricTableDataExportData);
+    exportToExcel() {
+      let metricTableDataExportData = XLSX.utils.json_to_sheet(
+        this.metricTableDataExportData
+      );
       let filterArray = XLSX.utils.json_to_sheet(this.filterArray);
 
-      let wb = XLSX.utils.book_new() // make Workbook of Excel
+      let wb = XLSX.utils.book_new(); // make Workbook of Excel
 
       // add Worksheet to Workbook
       // Workbook contains one or more worksheets
       XLSX.utils.book_append_sheet(wb, filterArray, "Applied Filters");
-      XLSX.utils.book_append_sheet(wb, metricTableDataExportData, 'Filtered Weekly Metrics') // sheetAName is name of Worksheet
+      XLSX.utils.book_append_sheet(
+        wb,
+        metricTableDataExportData,
+        "Filtered Weekly Metrics"
+      ); // sheetAName is name of Worksheet
 
       // export Excel file
-      XLSX.writeFile(wb, this.getCSVName()) // name of the file is 'book.xlsx'
+      XLSX.writeFile(wb, this.getCSVName()); // name of the file is 'book.xlsx'
     },
     getCSVName() {
-      return `Filtered Weekly Metrics Table ${moment().format("MM-DD-YYYY")}.xlsx`;
+      return `Filtered Weekly Metrics Table ${moment().format(
+        "MM-DD-YYYY"
+      )}.xlsx`;
     },
     createExportCSV() {
-      this.metricTableDataExportData = this.filteredForecastMetrics.parsedFilteredForecastData.map(
-        (data) => {
+      this.metricTableDataExportData =
+        this.filteredForecastMetrics.parsedFilteredForecastData.map((data) => {
           let metricTableRow = {
             "Metrics Name": data["Metrics Name"],
             Yearly: data.yearly_aggregate,
@@ -1856,8 +1885,7 @@ export default {
           metricTableRow[`W51 ${this.getWeekendDates(51)}`] = data.w51;
           metricTableRow[`W52 ${this.getWeekendDates(52)}`] = data.w52;
           return metricTableRow;
-        }
-      );
+        });
     },
     getWeekendDates(index) {
       return JSON.parse(window.localStorage.getItem("weekendDates"))
@@ -1866,7 +1894,7 @@ export default {
           ).format("MM/DD/YYYY")})`
         : "";
     },
-        valueOfWeek() {
+    valueOfWeek() {
       this.weekIndex = $("#weekOfYear").val();
       console.log(this.weekIndex);
     },
@@ -1899,12 +1927,12 @@ export default {
 }
 
 .filteredForecastMetrics .el-table__empty-block {
-  display: none!important;
+  display: none !important;
 }
-.disappearWeek{
+.disappearWeek {
   display: none;
 }
-#weekOfYear{
+#weekOfYear {
   border: none;
   border: 1px solid rgb(168 156 156);
   width: 150px;
@@ -1913,7 +1941,7 @@ export default {
   margin-left: 15px;
   text-align: justify;
 }
-#weekOfYearTill{
+#weekOfYearTill {
   border: none;
   border: 1px solid rgb(168 156 156);
   width: 150px;
