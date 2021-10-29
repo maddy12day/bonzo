@@ -16,6 +16,7 @@
         W{{ weekdate }} {{ getWeekendDates(weekdate) }}
       </option>
     </select>
+    <button class="resetbtn" @click="resetVal()">Reset Filter</button>
     <div class="col-lg-12">
       <div class="col-md-12 text-right p-0">
         <br />
@@ -720,12 +721,24 @@ export default {
     },
     valueOfWeek() {
       this.weekIndex = $("#weekOfYear").val();
-      console.log(this.weekIndex);
+      let option =  document.getElementById("weekOfYearTill").getElementsByTagName("option");
+      for (let index = 1; index < this.weekIndex; index++) {
+      if (true) {
+        option[index].disabled = true;
+      }
+      }
     },
     valueOfWeekTill() {
       this.weekIndexTill = $("#weekOfYearTill").val();
-      console.log(this.weekIndexTill);
     },
+    resetVal(){
+      this.weekIndex=0;
+      this.weekIndexTill=52;
+      let dropdown1 = $("#weekOfYear")[0];
+      let dropdown2 = $("#weekOfYearTill")[0];
+      dropdown1.selectedIndex = 0; 
+      dropdown2.selectedIndex = 0; 
+      },
     checkIfPastWeek(index) {
       let className = "";
             let className1 = "";
@@ -817,6 +830,7 @@ export default {
   display: none;
 }
 #weekOfYear{
+  margin-top: -28px;
   border: none;
   border: 1px solid rgb(168 156 156);
   width: 150px;
@@ -826,6 +840,7 @@ export default {
   text-align: justify;
 }
 #weekOfYearTill{
+  margin-top: -28px;
   border: none;
   border: 1px solid rgb(168 156 156);
   width: 150px;
@@ -833,5 +848,16 @@ export default {
   border-radius: 6px;
   margin-left: 15px;
   text-align: justify;
+}
+.resetbtn{
+  margin-top: -25px;
+  border: 1px solid rgb(168 156 156);
+  width: 100px;
+  height: 28px;
+  border-radius: 6px;
+  margin-left: 15px;
+  text-align: center;
+  background-color:#5e72ea;
+  color: white;
 }
 </style>
