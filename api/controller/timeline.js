@@ -68,3 +68,17 @@ export const getMergeScenarioTimeLineNodes = async (req, res) => {
     });
   }
 };
+export const lockSystem = async (req, res) => {
+  try {
+    const { demand_forecast_run_log_id, is_locked } = req.body;
+    const lockedSystem = await prisma.$queryRaw(`UPDATE
+  morphe_staging.demand_forecast_run_log
+  SET is_locked = ${is_locked}
+  WHERE id = ${demand_forecast_run_log_id}`);
+    res.status(200).json({
+      lockedSystem,
+    });
+  } catch (error) {
+    res.status(500).json(error);
+  }
+};

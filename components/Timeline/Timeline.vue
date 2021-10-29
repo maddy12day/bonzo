@@ -27,10 +27,11 @@
                   <el-badge :value="genesisTimeLineNode.adjustment_count">
                     <span class="badge badge-primary">Adjustments</span>
                     <button
+                    v-if="timeLineData.length==0"
                       class="badge badge-primary custom-badge"
                       @click="() => handleLockSystem(data)"
                     >
-                      {{ text }}
+                      {{lockSystem ? "unlock-system" : "lock-system"}}
                     </button>
                   </el-badge>
                   <!--  @click="() => getGenesisData(genesisTimeLineNode)" -->
@@ -81,7 +82,13 @@
                     @click="() => handleScenarioClick(data)"
                     >View Details</span
                   >
-                  <!-- <span  class="badge badge-primary custom-badge"  @click="() =>  handleLockSystem(data)">Lock System </span> -->
+                   <button
+                      class="badge badge-primary custom-badge"
+                      @click="() => handleLockSystemId(data)"
+                      v-if="timeLineData.length-1==index"
+                    >
+                      {{ lockSystem ? "unlock-system" : "lock-system" }}
+                    </button>
                   <!--  <button
                     v-if="data.adjustment_count > 0"
                     class="btn btn-info btn-sm mr-1"
@@ -137,8 +144,10 @@ export default {
       scenarioDetails: {},
       currentScenarioStatus: {},
       typeColor: ["", "info", "success", "warning", "danger"],
-      seen: false,
+      
       text: "Lock System",
+      text2:"Unlock System",
+      lockSystem: false,
     };
   },
   props: [
@@ -147,6 +156,9 @@ export default {
     "showUnmergeBtn",
     "showAdjustmentsEvt",
   ],
+  mounted(){
+    localStorage.getItem("isSystemLock") =="true"?  this.lockSystem = JSON.parse(localStorage.getItem("isSystemLock")) : (localStorage.setItem("isSystemLock",false), this.lockSystem = JSON.parse(localStorage.getItem("isSystemLock")))
+  },
   methods: {
     closeDialog() {
       this.dialogVisible = false;
@@ -172,33 +184,47 @@ export default {
       this.currentScenarioStatus = scenarioDetails.scenario;
       this.dialogVisible = true;
     },
-    handleLockSystem() {
-  //     $.ajax({
-  //   url: '/scenarioTableDataForTable',
-  //   method: 'GET',
-  //   success: function(data) {
-  //     this.comments = data;
-  //   }
-  // });
-      this.$store.commit("toggleSystemLockState");
-     
-      this.seen = !this.seen;
-      if (this.seen) {
-        this.text = "Unlock System";
-            this.notifyVue(
+    customNotify(text,text2){
+        this.notifyVue(
         "top",
         "right",
-        'System Locked'
+       text,
+       text2
       );
-      } else {
-        this.text = "Lock System";
-          this.notifyVue(
-        "top",
-        "right",
-        'System Unlocked'
+    },
+    async handleLockSystem() {
+      this.lockSystem=JSON.parse(localStorage.getItem("isSystemLock"));
+    const LockSystem = await this.$axios.$post(
+        `/lock-system`,{demand_forecast_run_log_id: JSON.parse(localStorage.getItem("baseVersionId")), is_locked: this.lockSystem}
       );
-  
+      if(LockSystem.hasOwnProperty("lockedSystem") && !JSON.parse(localStorage.getItem("isSystemLock"))){
+        localStorage.setItem("isSystemLock",true);
+        this.customNotify(this.text);
       }
+      else{
+         localStorage.setItem("isSystemLock",false);
+         this.customNotify(this.text2);
+      }
+      this.lockSystem=JSON.parse(localStorage.getItem("isSystemLock"));
+        
+      this.$store.commit("toggleSystemLockState");
+    },
+    async handleLockSystemId(){
+       this.lockSystem=JSON.parse(localStorage.getItem("isSystemLock"));
+    const LockSystem = await this.$axios.$post(
+        `/lock-system`,{demand_forecast_run_log_id: JSON.parse(localStorage.getItem("baseVersionId")), is_locked: this.lockSystem}
+      );
+      if(LockSystem.hasOwnProperty("lockedSystem") && !JSON.parse(localStorage.getItem("isSystemLock"))){
+        localStorage.setItem("isSystemLock",true);
+        this.customNotify(this.text);
+      }
+      else{
+         localStorage.setItem("isSystemLock",false);
+         this.customNotify(this.text2);
+      }
+      this.lockSystem=JSON.parse(localStorage.getItem("isSystemLock"));
+        
+      this.$store.commit("toggleSystemLockState");
     },
     notifyVue(verticalAlign, horizontalAlign, message, type) {
       this.$notify({

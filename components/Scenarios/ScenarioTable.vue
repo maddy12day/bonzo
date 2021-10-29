@@ -258,6 +258,7 @@
       :previewBtnText="previewBtnText"
       :scenarioDetails="scenarioDetails"
       :currentScenarioStatus="currentScenarioStatus"
+      :lockSystem="lockSystem"
       @unshareScenarioEvt="unshareScenario"
     />
   </div>
@@ -296,6 +297,7 @@ export default {
       page: 1,
       pageSize: 3,
       typeColor: ["", "info", "success", "warning", "danger"],
+      lockSystem:false,
     };
   },
   computed: {
@@ -424,6 +426,7 @@ export default {
       this.scenarioDetails = scenarioDetails.scenario;
       this.currentScenarioStatus = scenarioDetails.scenario;
       this.dialogVisible = true;
+      this.lockSystem=JSON.parse(localStorage.getItem("isSystemLock"));
     },
     emptyFieldCleaner(reqBody) {
       for (let key in reqBody) {
