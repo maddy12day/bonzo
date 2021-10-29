@@ -32,6 +32,9 @@ export default {
     bodyAttrs: {
       class: "white-content", // Add `white-content` class here to enable "white" mode.
     },
+    script: [
+      {src: '//code.jquery.com/jquery-3.6.0.min.js', body: false, defer: true},
+    ],
   },
   router: {
     linkExactActiveClass: "active",
