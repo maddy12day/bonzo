@@ -329,6 +329,12 @@ export default {
     },
     valueChangeTill() {
       this.monthIndexTill = $("#monthNameTill").val();
+      let option =  document.getElementById("monthName").getElementsByTagName("option");
+      for (let index = this.monthIndexTill; index < 13 ; index++) {
+      if (true) {
+        option[index].disabled = true;
+      }
+      }
     },
       resetVal(){
         this.monthIndex = 0;
@@ -337,6 +343,14 @@ export default {
         let dropdown2 = $("#monthNameTill")[0];
         dropdown1.selectedIndex = 0; 
         dropdown2.selectedIndex = 0; 
+      let option =  document.getElementById("monthNameTill").getElementsByTagName("option");
+        for (let index = 1; index < 13; index++) {
+        option[index].disabled = false;
+      }
+      let option1 =  document.getElementById("monthName").getElementsByTagName("option");
+        for (let index = 1; index < 13; index++) {
+        option1[index].disabled = false;
+      }
       },
     checkIfPastMonth(index) {
       let className = "";

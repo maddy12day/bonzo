@@ -730,6 +730,12 @@ export default {
     },
     valueOfWeekTill() {
       this.weekIndexTill = $("#weekOfYearTill").val();
+      let option =  document.getElementById("weekOfYear").getElementsByTagName("option");
+      for (let index = this.weekIndexTill; index < 53 ; index++) {
+      if (true) {
+        option[index].disabled = true;
+      }
+      }
     },
     resetVal(){
       this.weekIndex=0;
@@ -738,6 +744,14 @@ export default {
       let dropdown2 = $("#weekOfYearTill")[0];
       dropdown1.selectedIndex = 0; 
       dropdown2.selectedIndex = 0; 
+      let option =  document.getElementById("weekOfYearTill").getElementsByTagName("option");
+        for (let index = 1; index < 53; index++) {
+        option[index].disabled = false;
+      }
+      let option1 =  document.getElementById("weekOfYear").getElementsByTagName("option");
+        for (let index = 1; index < 53; index++) {
+        option1[index].disabled = false;
+      }
       },
     checkIfPastWeek(index) {
       let className = "";
