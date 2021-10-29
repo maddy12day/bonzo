@@ -27,6 +27,7 @@
                   <el-badge :value="genesisTimeLineNode.adjustment_count">
                     <span class="badge badge-primary">Adjustments</span>
                     <button
+                    v-if="timeLineData.length==0"
                       class="badge badge-primary custom-badge"
                       @click="() => handleLockSystem(data)"
                     >
@@ -83,10 +84,10 @@
                   >
                    <button
                       class="badge badge-primary custom-badge"
-                      @click="() => handleLockSystem(data)"
+                      @click="() => handleLockSystemId(data)"
                       v-if="timeLineData.length-1==index"
                     >
-                      {{ text }}
+                      {{ lockSystem ? "unlock-system" : "lock-system" }}
                     </button>
                   <!--  <button
                     v-if="data.adjustment_count > 0"
@@ -193,6 +194,23 @@ export default {
     },
     async handleLockSystem() {
       this.lockSystem=JSON.parse(localStorage.getItem("isSystemLock"));
+    const LockSystem = await this.$axios.$post(
+        `/lock-system`,{demand_forecast_run_log_id: JSON.parse(localStorage.getItem("baseVersionId")), is_locked: this.lockSystem}
+      );
+      if(LockSystem.hasOwnProperty("lockedSystem") && !JSON.parse(localStorage.getItem("isSystemLock"))){
+        localStorage.setItem("isSystemLock",true);
+        this.customNotify(this.text);
+      }
+      else{
+         localStorage.setItem("isSystemLock",false);
+         this.customNotify(this.text2);
+      }
+      this.lockSystem=JSON.parse(localStorage.getItem("isSystemLock"));
+        
+      this.$store.commit("toggleSystemLockState");
+    },
+    async handleLockSystemId(){
+       this.lockSystem=JSON.parse(localStorage.getItem("isSystemLock"));
     const LockSystem = await this.$axios.$post(
         `/lock-system`,{demand_forecast_run_log_id: JSON.parse(localStorage.getItem("baseVersionId")), is_locked: this.lockSystem}
       );
