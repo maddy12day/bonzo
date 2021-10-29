@@ -233,7 +233,7 @@ export default {
 
       regularFiltersComponentKey: Math.random(),
       programFiltersComponentKey: Math.random(),
-     
+
     };
   },
   components: {

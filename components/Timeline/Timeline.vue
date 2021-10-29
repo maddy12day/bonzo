@@ -84,6 +84,7 @@
                    <button
                       class="badge badge-primary custom-badge"
                       @click="() => handleLockSystem(data)"
+                      v-if="timeLineData.length-1==index"
                     >
                       {{ text }}
                     </button>
@@ -142,8 +143,9 @@ export default {
       scenarioDetails: {},
       currentScenarioStatus: {},
       typeColor: ["", "info", "success", "warning", "danger"],
-      seen: false,
+      
       text: "Lock System",
+      text2:"Unlock System",
       lockSystem: false,
     };
   },
@@ -181,6 +183,14 @@ export default {
       this.currentScenarioStatus = scenarioDetails.scenario;
       this.dialogVisible = true;
     },
+    customNotify(text,text2){
+        this.notifyVue(
+        "top",
+        "right",
+       text,
+       text2
+      );
+    },
     async handleLockSystem() {
       this.lockSystem=JSON.parse(localStorage.getItem("isSystemLock"));
     const LockSystem = await this.$axios.$post(
@@ -188,22 +198,15 @@ export default {
       );
       if(LockSystem.hasOwnProperty("lockedSystem") && !JSON.parse(localStorage.getItem("isSystemLock"))){
         localStorage.setItem("isSystemLock",true);
-        this.text = "Unlock System";
+        this.customNotify(this.text);
       }
       else{
          localStorage.setItem("isSystemLock",false);
-         this.text = "lock System";
+         this.customNotify(this.text2);
       }
       this.lockSystem=JSON.parse(localStorage.getItem("isSystemLock"));
-      this.text = "Lock System";
-          this.notifyVue(
-        "top",
-        "right",
-       this.text
-      );
+        
       this.$store.commit("toggleSystemLockState");
-     
-      this.seen = !this.seen;
     },
     notifyVue(verticalAlign, horizontalAlign, message, type) {
       this.$notify({

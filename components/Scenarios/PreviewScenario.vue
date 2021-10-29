@@ -111,7 +111,7 @@
               class="btn btn-primary"
               @click="shareScenario"
               v-if="
-               !isSystemLock &&
+               !lockSystem &&
                 !currentScenarioStatus.is_shared &&
                   currentScenarioStatus.status == 'Completed'
               "
@@ -122,7 +122,7 @@
               class="btn btn-primary"
               @click="unshareScenario"
               v-if="
-              !isSystemLock &&
+              !lockSystem &&
                 currentScenarioStatus.is_shared &&
                   currentScenarioStatus.status == 'Completed' &&
                   previewBtnText == 'Share Scenario'
@@ -135,7 +135,7 @@
               class="btn btn-primary"
               @click="shareScenario"
               v-if="
-              !isSystemLock &&
+              !lockSystem &&
                 currentScenarioStatus.is_shared &&
                   currentScenarioStatus.status == 'Completed' &&
                   previewBtnText == 'Merge Scenario'
@@ -147,7 +147,7 @@
               class="btn btn-primary"
               @click="activateMergedScenario"
               v-if="
-              !isSystemLock &&
+              !lockSystem &&
                 currentScenarioStatus.is_shared &&
                   currentScenarioStatus.status == 'Merge Completed' &&
                   previewBtnText == 'Merge Scenario' &&
@@ -625,7 +625,7 @@ export default {
     };
   },
   mounted(){
-    this.lockSystem=JSON.parse(localStorage.getItem("isSystemLock"));
+   this.lockSystem=JSON.parse(localStorage.getItem("isSystemLock"));
     console.log(typeof(this.lockSystem));
   },
 
