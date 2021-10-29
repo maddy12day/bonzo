@@ -157,6 +157,7 @@
         tableHeading="Edit Forecast Metrics"
         @EvtAdjValues="getAdjustedValues"
       />
+
       <client-only>
         <WeeklyMetricsTable
           v-if="activeTab == 'Weekly' && !showManualAdj"
@@ -164,13 +165,13 @@
           tableHeading="Base Weekly Forecast Metrics"
         />
       </client-only>
+
       <MonthlyMetricsTable
         v-if="activeTab == 'Monthly'"
         :metricsTableData="baseMetricsListCom"
         tableHeading="Base Monthly Forecast Metrics"
       />
       <div class="col-md-12 text-right" v-if="!isSystemLocked">
-        
         <button
           :class="
             `btn btn-primary btn-sm text-left ${
@@ -231,13 +232,21 @@
       </div>
 
       <FilteredWeeklyMetricsTable
-        v-if="filteredActiveTab == 'Weekly'"
+        v-if="filteredActiveTab == 'Weekly' && !showManualAdj"
         :filteredForecastMetrics="filteredForecastMetrics"
         tableHeading="Filtered Weekly Forecast Metrics"
         :allAppliedFilters="allAppliedFilters"
         :filterArray="filterArray"
       />
-
+        <client-only>
+      <FilterWeeklyManualAdjustment
+        v-if="filteredActiveTab == 'Weekly' && showManualAdj && isFilteredForecast"
+         :filteredForecastMetrics="filteredForecastMetrics"
+        tableHeading="Filtered Weekly Forecast Metrics"
+        :allAppliedFilters="allAppliedFilters"
+        :filterArray="filterArray"
+      />
+        </client-only>
       <FilteredMonthlyMetricsTable
         v-if="filteredActiveTab == 'Monthly'"
         :filteredForecastMetrics="filteredForecastMetrics"
@@ -245,8 +254,41 @@
         :allAppliedFilters="allAppliedFilters"
         :filterArray="filterArray"
       />
+      <!-- v-if="!isSystemLocked" -->
+      <div class="col-md-12 text-right" >
+        <button
+          :class="
+            `btn btn-primary btn-sm text-left ${
+              disbledCom || showManualAdj ? 'disabled' : ''
+            }`
+          "
+          @click="switchToManualAdj"
+          :disabled="disbledCom || showManualAdj "
+          v-if="!changeMABtnText && filteredActiveTab == 'Weekly'"
+        >
+          Manual Adjustment
+        </button>
+        <button
+          :class="
+            `btn btn-primary btn-sm text-left ${disbledCom ? 'disabled' : ''}`
+          "
+          @click="createManualAdjustment"
+          v-if="changeMABtnText"
+          :disabled="disbledCom"
+        >
+          Submit Adjustment
+        </button>
+        <button
+          :class="`btn btn-primary btn-sm ${disbledCom ? 'disabled' : ''}`"
+          @click="discardChanges"
+          v-if="showDiscardBtn"
+          :disabled="disbledCom"
+        >
+          Discard
+        </button>
+      </div>
     </card>
-   <!--  <ComparisonTable
+    <!--  <ComparisonTable
       :tableData="comparisonCollnData"
       v-if="!isFilteredForecast"
     /> -->
@@ -333,9 +375,9 @@ import ChartWidget from "../components/ChartWidget.vue";
 import FilteredChartWidget from "../components/FilterChartWidget.vue";
 import moment from "moment";
 import XLSX from "xlsx";
-import { mapState } from "vuex";
 import ComparisonTable from "../components/ComparisionTables/ComparisonTable.vue";
 import Timeline from "../components/Timeline/Timeline.vue";
+import FilterWeeklyManualAdjustment from '../components/Metrics/FilterWeeklyManualAdjustment.vue';
 
 export default {
   name: "Forecast",
@@ -348,6 +390,7 @@ export default {
     RegularFilters,
     ProgramFilters,
     ForecastBySkuTable,
+    FilterWeeklyManualAdjustment,
     Card,
     Timeline,
     FilteredWeeklyMetricsTable,
@@ -835,7 +878,7 @@ export default {
       this.filter_programs = [];
     },
     async appliedFilters() {
-      
+
       this.isFilteredPageDataLoading = true;
       this.filterPayload = {
         filter_product_sources: this.productSourceValues,
@@ -877,10 +920,10 @@ export default {
       }
 
       this.requestedFilterOption = requestedFilterOption;
-      
+
       delete this.requestedFilterOption["filterType"];
       // await this.getFilteredForecastData(requestedFilterOption);
-      
+
       await this.setFilteredSKUsAndWhereQuery();
       this.isFilteredForecast = true;
       this.filteredStatsComponentKey += 1;
