@@ -26,8 +26,8 @@
           class="btn-custom-div"
           v-if="
             !isFilteredPageDataLoading &&
-              showRegularResetFilter &&
-              activeFilterType == 'Regular'
+            showRegularResetFilter &&
+            activeFilterType == 'Regular'
           "
           @click="resetFilter"
         >
@@ -39,8 +39,8 @@
           class="btn-custom-div"
           v-if="
             !isFilteredPageDataLoading &&
-              showProgramResetFilter &&
-              activeFilterType == 'Program'
+            showProgramResetFilter &&
+            activeFilterType == 'Program'
           "
           @click="resetFilter"
         >
@@ -173,21 +173,19 @@
       />
       <div class="col-md-12 text-right" v-if="!isSystemLocked">
         <button
-          :class="
-            `btn btn-primary btn-sm text-left ${
-              disbledCom || showManualAdj ? 'disabled' : ''
-            }`
-          "
+          :class="`btn btn-primary btn-sm text-left ${
+            disbledCom || showManualAdj ? 'disabled' : ''
+          }`"
           @click="switchToManualAdj"
-          :disabled="disbledCom || showManualAdj "
+          :disabled="disbledCom || showManualAdj"
           v-if="!changeMABtnText && activeTab == 'Weekly'"
         >
           Manual Adjustment
         </button>
         <button
-          :class="
-            `btn btn-primary btn-sm text-left ${disbledCom ? 'disabled' : ''}`
-          "
+          :class="`btn btn-primary btn-sm text-left ${
+            disbledCom ? 'disabled' : ''
+          }`"
           @click="createManualAdjustment"
           v-if="changeMABtnText"
           :disabled="disbledCom"
@@ -238,15 +236,17 @@
         :allAppliedFilters="allAppliedFilters"
         :filterArray="filterArray"
       />
-        <client-only>
-      <FilterWeeklyManualAdjustment
-        v-if="filteredActiveTab == 'Weekly' && showManualAdj && isFilteredForecast"
-         :filteredForecastMetrics="filteredForecastMetrics"
-        tableHeading="Filtered Weekly Forecast Metrics"
-        :allAppliedFilters="allAppliedFilters"
-        :filterArray="filterArray"
-      />
-        </client-only>
+      <client-only>
+        <FilterWeeklyManualAdjustment
+          v-if="
+            filteredActiveTab == 'Weekly' && showManualAdj && isFilteredForecast
+          "
+          :filteredForecastMetrics="filteredForecastMetrics"
+          tableHeading="Filtered Weekly Forecast Metrics"
+          :allAppliedFilters="allAppliedFilters"
+          :filterArray="filterArray"
+        />
+      </client-only>
       <FilteredMonthlyMetricsTable
         v-if="filteredActiveTab == 'Monthly'"
         :filteredForecastMetrics="filteredForecastMetrics"
@@ -255,23 +255,21 @@
         :filterArray="filterArray"
       />
       <!-- v-if="!isSystemLocked" -->
-      <div class="col-md-12 text-right" >
+      <div class="col-md-12 text-right">
         <button
-          :class="
-            `btn btn-primary btn-sm text-left ${
-              disbledCom || showManualAdj ? 'disabled' : ''
-            }`
-          "
+          :class="`btn btn-primary btn-sm text-left ${
+            disbledCom || showManualAdj ? 'disabled' : ''
+          }`"
           @click="switchToManualAdj"
-          :disabled="disbledCom || showManualAdj "
+          :disabled="disbledCom || showManualAdj"
           v-if="!changeMABtnText && filteredActiveTab == 'Weekly'"
         >
           Manual Adjustment
         </button>
         <button
-          :class="
-            `btn btn-primary btn-sm text-left ${disbledCom ? 'disabled' : ''}`
-          "
+          :class="`btn btn-primary btn-sm text-left ${
+            disbledCom ? 'disabled' : ''
+          }`"
           @click="createManualAdjustment"
           v-if="changeMABtnText"
           :disabled="disbledCom"
@@ -303,7 +301,7 @@
           <button
             v-if="isFilteredForecast"
             class="mt-1 btn btn-sm"
-            style="line-height:1;"
+            style="line-height: 1"
             @click="exportToExcel"
             :disabled="isDownloadCsvDisbled"
           >
@@ -377,7 +375,7 @@ import moment from "moment";
 import XLSX from "xlsx";
 import ComparisonTable from "../components/ComparisionTables/ComparisonTable.vue";
 import Timeline from "../components/Timeline/Timeline.vue";
-import FilterWeeklyManualAdjustment from '../components/Metrics/FilterWeeklyManualAdjustment.vue';
+import FilterWeeklyManualAdjustment from "../components/Metrics/FilterWeeklyManualAdjustment.vue";
 
 export default {
   name: "Forecast",
@@ -748,7 +746,10 @@ export default {
       }
       this.topSkusData = topLimitedSkuData;
       this.topLimitedSkuData = topSkusData;
-      const csvJsonData = await this.$axios.$post(`/download-all-skus-data-by-month/${this.filteredForecastedYear}`, this.filterPayload);
+      const csvJsonData = await this.$axios.$post(
+        `/download-all-skus-data-by-month/${this.filteredForecastedYear}`,
+        this.filterPayload
+      );
       this.skusJsonData = csvJsonData.parsedWeeklyData;
       this.isDownloadCsvDisbled = false;
     },
@@ -787,6 +788,7 @@ export default {
         before_adjustment_value: parseFloat(this.adustments.old_value),
         new_adjusted_value: parseFloat(this.adustments.new_value),
         status: "Pending",
+        ...filterPayload,
       });
       this.baseAdjustmentsList.adjustmentsResponse.unshift(res.manualAjustment);
       this.baseMetricsList = JSON.parse(
@@ -878,7 +880,6 @@ export default {
       this.filter_programs = [];
     },
     async appliedFilters() {
-
       this.isFilteredPageDataLoading = true;
       this.filterPayload = {
         filter_product_sources: this.productSourceValues,
@@ -935,7 +936,7 @@ export default {
       this.$store.commit("toggleProgramFilterCTAState");
       // this.filteredStatsComponentKey += 1;
     },
-    async setFilteredSKUsAndWhereQuery () {
+    async setFilteredSKUsAndWhereQuery() {
       this.filteredQuerySetterData = await this.$axios.$post(
         `/set-filtered-sku-and-where-query`,
         this.filterPayload
@@ -973,7 +974,7 @@ export default {
     },
   },
   computed: {
-    isSystemLocked(){
+    isSystemLocked() {
       return this.$store.state.isSystemLocked;
     },
     getTopSkusCount() {
@@ -1039,7 +1040,7 @@ export default {
   mounted() {
     this.getBaseAdjustments();
     this.showMetricsByDuration("Monthly");
-   /*  this.comparisonTableDataGenerator(); */
+    /*  this.comparisonTableDataGenerator(); */
     setInterval(() => {
       this.checkManualAdjustmentStatus();
     }, 10000);
