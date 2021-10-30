@@ -1774,7 +1774,7 @@ export default {
           ],
           old_value:
             oldTableData[index][`W${innerIndex}`],
-          metrics_name: oldTableData[index]["Metrics Name"],
+          metrics_name: oldTableData[index]["Metrics Slug"],
           ele: e.target.parentNode.parentNode.parentNode,
         });
         e.target.parentNode.parentNode.parentNode.style.background = "#ffeacb";

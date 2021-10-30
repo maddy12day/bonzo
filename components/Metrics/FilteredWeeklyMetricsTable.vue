@@ -757,6 +757,7 @@ export default {
         (data) => {
           let metricTableRow = {
             "Metrics Name": data["Metrics Name"],
+            "Metrics Slug": data["Metrics Slug"],
             Yearly: data.yearly_aggregate,
             Q1: data.Q1,
             Q2: data.Q2,
@@ -827,6 +828,7 @@ export default {
           const metricsFormatedObject = {};
           let customIndex = 1;
           for (const [key, value] of Object.entries(item)) {
+            console.log(key, value);
             if (key.includes("(") || key.includes(")")) {
               metricsFormatedObject[`W${customIndex}`] = value;
             } else {
