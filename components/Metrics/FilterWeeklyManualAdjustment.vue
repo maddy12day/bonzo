@@ -1765,7 +1765,7 @@ export default {
       console.log(oldTableData);
       console.log(oldTableData[index][`W${innerIndex}`]);
       if (
-        oldTableData[index][`W${innerIndex}`] !== value
+        Number(oldTableData[index][`W${innerIndex}`]) !== Number(value)
       ) { 
          this.$emit("EvtAdjValues", {
           new_value: value,

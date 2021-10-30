@@ -826,20 +826,20 @@ export default {
       const manualAdjustmentLSObj = metricsTableData.map(
         (item) => {
           const metricsFormatedObject = {};
-          let customIndex = 1;
+           let customIndex = 1;
           for (const [key, value] of Object.entries(item)) {
-            console.log(key, value);
             if (key.includes("(") || key.includes(")")) {
+             
               metricsFormatedObject[`W${customIndex}`] = value;
+               customIndex++;
             } else {
               metricsFormatedObject[key] = value;
             }
-            customIndex++;
+           
           }
           return metricsFormatedObject;
         }
       );
-      console.log(manualAdjustmentLSObj);
       localStorage.setItem(
         "adjustmentTableData",
         JSON.stringify(manualAdjustmentLSObj)
@@ -854,11 +854,9 @@ export default {
     },
     valueOfWeek() {
       this.weekIndex = $("#weekOfYear").val();
-      console.log(this.weekIndex);
     },
     valueOfWeekTill() {
       this.weekIndexTill = $("#weekOfYearTill").val();
-      console.log(this.weekIndexTill);
     },
     checkIfPastWeek(index) {
       let className = "";
@@ -876,6 +874,9 @@ export default {
       return `${className} ${className1} ${className2}`;
     },
   },
+  mounted() {
+    console.log("upodated value *")
+  }
 };
 </script>
 

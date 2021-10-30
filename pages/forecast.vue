@@ -230,7 +230,10 @@
       </div>
 
       <FilteredWeeklyMetricsTable
-        v-if="filteredActiveTab == 'Weekly' && !showManualAdj"
+        :key="filterMetricsCompKey"
+        v-if="
+          filteredActiveTab == 'Weekly' && !showManualAdj && !showDiscardBtn
+        "
         :filteredForecastMetrics="filteredForecastMetrics"
         tableHeading="Filtered Weekly Forecast Metrics"
         :allAppliedFilters="allAppliedFilters"
@@ -239,7 +242,7 @@
       <client-only>
         <FilterWeeklyManualAdjustment
           v-if="
-            filteredActiveTab == 'Weekly' && showManualAdj
+            filteredActiveTab == 'Weekly' && showManualAdj && showDiscardBtn
           "
           :filteredForecastMetrics="filteredForecastMetrics"
           tableHeading="Filtered Weekly Forecast Metrics"
@@ -458,9 +461,11 @@ export default {
       selectedFilterOptions: [],
       skusJsonData: [],
       isDownloadCsvDisbled: true,
+      filterMetricsCompKey: Math.random(),
       forecastedYear: "2021",
       filteredForecastedYear: "2021",
       filterArray: [],
+      oldFilterMetricsData: [],
       csvFileName: `Filtered SKUs - ${moment().format(
         "YYYY-MM-DD HH:MM:SS"
       )}.xlsx`,
@@ -635,6 +640,9 @@ export default {
       this.showManualAdj = false;
       this.showDiscardBtn = false;
       this.changeMABtnText = false;
+      this.filteredForecastMetrics = JSON.parse(
+        localStorage.getItem("filterMetricsOldTableData")
+      );
     },
     getAdjustedValues(values) {
       if (values) {
@@ -694,10 +702,12 @@ export default {
         this.filterMonthly = true;
       }
       this.filteredForecastMetrics = [];
-      this.filteredForecastMetrics = await this.$axios.$post(
+      const result = await this.$axios.$post(
         `/get-filtered-forecast-metrics/${this.filteredForecastedYear}`,
         requestedFilterOption
       );
+      this.filteredForecastMetrics = result;
+      localStorage.setItem("filterMetricsOldTableData", JSON.stringify(result));
     },
     showFilterType(type) {
       this.activeFilterType = type;
@@ -777,7 +787,7 @@ export default {
     },
     // create manual adjustments
     async createManualAdjustment() {
-      const filterObject = {
+      let filterObject = {
         filter_product_sources:
           this.productSourceValues && this.productSourceValues.length > 0
             ? this.productSourceValues.join(",")
@@ -870,6 +880,7 @@ export default {
             '"Adjustment" submitted for processing with model. Please check "Base Model Adjustments" section for updates'
           )
         : "";
+      filterObject = {};
       this.showDiscardBtn = false;
       this.showManualAdj = false;
       this.callToIntervalAjax = true;
