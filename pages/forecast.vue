@@ -239,7 +239,7 @@
       <client-only>
         <FilterWeeklyManualAdjustment
           v-if="
-            filteredActiveTab == 'Weekly' && showManualAdj && isFilteredForecast
+            filteredActiveTab == 'Weekly' && showManualAdj
           "
           :filteredForecastMetrics="filteredForecastMetrics"
           tableHeading="Filtered Weekly Forecast Metrics"
