@@ -1758,43 +1758,30 @@ export default {
       return moment(new Date()).week() - 1;
     },
     onDataChange(e, value, index, innerIndex) {
+      console.log(e, value, index, innerIndex)
       const oldTableData = JSON.parse(
         localStorage.getItem("adjustmentTableData")
       );
+      console.log(oldTableData);
+      console.log(oldTableData[index][`W${innerIndex}`]);
       if (
-        oldTableData[index][
-          `${innerIndex < 10 ? `w0${innerIndex}` : `w${innerIndex}`}`
-        ] !== value
-      ) {
-        console.log({
+        oldTableData[index][`W${innerIndex}`] !== value
+      ) { 
+         this.$emit("EvtAdjValues", {
           new_value: value,
           weekend_date: JSON.parse(localStorage.getItem("weekendDates"))[
             innerIndex - 1
           ],
           old_value:
-            oldTableData[index][
-              `${innerIndex < 10 ? `w0${innerIndex}` : `w${innerIndex}`}`
-            ],
-          metrics_name: oldTableData[index]["metrics_name"],
-          ele: e.target.parentNode.parentNode.parentNode,
-        });
-        this.$emit("EvtAdjValues", {
-          new_value: value,
-          weekend_date: JSON.parse(localStorage.getItem("weekendDates"))[
-            innerIndex - 1
-          ],
-          old_value:
-            oldTableData[index][
-              `${innerIndex < 10 ? `w0${innerIndex}` : `w${innerIndex}`}`
-            ],
-          metrics_name: oldTableData[index]["metrics_name"],
+            oldTableData[index][`W${innerIndex}`],
+          metrics_name: oldTableData[index]["Metrics Name"],
           ele: e.target.parentNode.parentNode.parentNode,
         });
         e.target.parentNode.parentNode.parentNode.style.background = "#ffeacb";
         this.isDisble = true;
       } else {
         this.isDisble = false;
-      }
+      } 
     },
     exportToExcel() {
       let metricTableDataExportData = XLSX.utils.json_to_sheet(

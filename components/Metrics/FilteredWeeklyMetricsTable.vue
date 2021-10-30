@@ -23,7 +23,7 @@
           <button
             v-if="metricTableDataExportDataProp.length > 0"
             class="mt-1 btn btn-sm"
-            style="line-height:1;"
+            style="line-height: 1"
             @click="exportToExcel"
           >
             Download Excel
@@ -42,7 +42,12 @@
           <Tags :allAppliedFilters="allAppliedFilters" />
         </div>
         <el-table :data="filteredForecastMetrics.parsedFilteredForecastData">
-          <template v-if="filteredForecastMetrics && !filteredForecastMetrics.parsedFilteredForecastData">
+          <template
+            v-if="
+              filteredForecastMetrics &&
+              !filteredForecastMetrics.parsedFilteredForecastData
+            "
+          >
             <div slot="append" :style="'text-align: center;'">
               Loading {{ tableHeading }} ...
             </div>
@@ -705,38 +710,50 @@ export default {
       weekIndexTill: 52,
     };
   },
-  props: ["tableHeading", "filteredForecastMetrics", "allAppliedFilters", "filterArray"],
+  props: [
+    "tableHeading",
+    "filteredForecastMetrics",
+    "allAppliedFilters",
+    "filterArray",
+  ],
   computed: {
     metricTableDataExportDataProp() {
       return this.metricTableDataExportData;
     },
   },
   watch: {
-    filteredForecastMetrics: function() {
+    filteredForecastMetrics: function () {
       this.createExportCSV();
     },
   },
   methods: {
-    exportToExcel() { 
-      
-      let metricTableDataExportData = XLSX.utils.json_to_sheet(this.metricTableDataExportData);
+    exportToExcel() {
+      let metricTableDataExportData = XLSX.utils.json_to_sheet(
+        this.metricTableDataExportData
+      );
       let filterArray = XLSX.utils.json_to_sheet(this.filterArray);
 
-      let wb = XLSX.utils.book_new() // make Workbook of Excel
+      let wb = XLSX.utils.book_new(); // make Workbook of Excel
 
       // add Worksheet to Workbook
       // Workbook contains one or more worksheets
       XLSX.utils.book_append_sheet(wb, filterArray, "Applied Filters");
-      XLSX.utils.book_append_sheet(wb, metricTableDataExportData, 'Filtered Weekly Metrics') // sheetAName is name of Worksheet
+      XLSX.utils.book_append_sheet(
+        wb,
+        metricTableDataExportData,
+        "Filtered Weekly Metrics"
+      ); // sheetAName is name of Worksheet
 
       // export Excel file
-      XLSX.writeFile(wb, this.getCSVName()) // name of the file is 'book.xlsx'
+      XLSX.writeFile(wb, this.getCSVName()); // name of the file is 'book.xlsx'
     },
     getCSVName() {
-      return `Filtered Weekly Metrics Table ${moment().format("MM-DD-YYYY")}.xlsx`;
+      return `Filtered Weekly Metrics Table ${moment().format(
+        "MM-DD-YYYY"
+      )}.xlsx`;
     },
-    createExportCSV() {
-      this.metricTableDataExportData = this.filteredForecastMetrics.parsedFilteredForecastData.map(
+    createCsvFormat() {
+      return this.filteredForecastMetrics.parsedFilteredForecastData.map(
         (data) => {
           let metricTableRow = {
             "Metrics Name": data["Metrics Name"],
@@ -802,6 +819,30 @@ export default {
         }
       );
     },
+    createExportCSV() {
+      this.metricTableDataExportData = this.createCsvFormat();
+      const metricsTableData = this.createCsvFormat();
+      const manualAdjustmentLSObj = metricsTableData.map(
+        (item) => {
+          const metricsFormatedObject = {};
+          let customIndex = 1;
+          for (const [key, value] of Object.entries(item)) {
+            if (key.includes("(") || key.includes(")")) {
+              metricsFormatedObject[`W${customIndex}`] = value;
+            } else {
+              metricsFormatedObject[key] = value;
+            }
+            customIndex++;
+          }
+          return metricsFormatedObject;
+        }
+      );
+      console.log(manualAdjustmentLSObj);
+      localStorage.setItem(
+        "adjustmentTableData",
+        JSON.stringify(manualAdjustmentLSObj)
+      );
+    },
     getWeekendDates(index) {
       return JSON.parse(window.localStorage.getItem("weekendDates"))
         ? `(${moment(
@@ -809,7 +850,7 @@ export default {
           ).format("MM/DD/YYYY")})`
         : "";
     },
-        valueOfWeek() {
+    valueOfWeek() {
       this.weekIndex = $("#weekOfYear").val();
       console.log(this.weekIndex);
     },
@@ -842,12 +883,12 @@ export default {
 }
 
 .filteredForecastMetrics .el-table__empty-block {
-  display: none!important;
+  display: none !important;
 }
-.disappearWeek{
+.disappearWeek {
   display: none;
 }
-#weekOfYear{
+#weekOfYear {
   border: none;
   border: 1px solid rgb(168 156 156);
   width: 150px;
@@ -856,7 +897,7 @@ export default {
   margin-left: 15px;
   text-align: justify;
 }
-#weekOfYearTill{
+#weekOfYearTill {
   border: none;
   border: 1px solid rgb(168 156 156);
   width: 150px;
