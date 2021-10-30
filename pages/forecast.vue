@@ -777,6 +777,74 @@ export default {
     },
     // create manual adjustments
     async createManualAdjustment() {
+      const filterObject = {
+        filter_product_sources:
+          this.productSourceValues && this.productSourceValues.length > 0
+            ? this.productSourceValues.join(",")
+            : "",
+        filter_brand_types:
+          this.brandTypeValues && this.brandTypeValues > 0
+            ? this.brandTypeValues.join(",")
+            : "",
+        filter_life_cycles:
+          this.lifeCycleValues && this.lifeCycleValues.length > 0
+            ? this.lifeCycleValues.join(",")
+            : "",
+        filter_newness:
+          this.newNessValues && this.newNessValues.length > 0
+            ? this.newNessValues.join(",")
+            : "",
+        filter_brands:
+          this.brandValues && this.brandValues.length > 0
+            ? this.brandValues.join(",")
+            : "",
+        filter_channels:
+          this.channelValues && this.channelValues.length > 0
+            ? this.channelValues.join(",")
+            : "",
+        filter_sub_channels:
+          this.subChannelsValues && this.subChannelsValues.length > 0
+            ? this.subChannelsValues.join(",")
+            : "",
+        filter_categories:
+          this.categoriesValues && this.categoriesValues.length > 0
+            ? this.categoriesValues.join(",")
+            : "",
+        filter_collections:
+          this.collectionValues && this.collectionValues.length > 0
+            ? this.collectionValues.join(",")
+            : "",
+        filter_skus:
+          this.skuValues && this.skuValues.length > 0
+            ? this.skuValues.join(",")
+            : "",
+        filter_classes:
+          this.classesValues && this.classesValues.length > 0
+            ? this.classesValues.join(",")
+            : "",
+        filter_sub_classes:
+          this.subClassesValues && this.subClassesValues.length > 0
+            ? this.subClassesValues.join(",")
+            : "",
+        filter_programs:
+          this.programValues && this.programValues.length > 0
+            ? this.programValues.join(",")
+            : "",
+      };
+      console.log({
+        adjusted_by_user_id: parseInt(this.$auth.user.user_id),
+        demand_forecast_run_log_id: parseInt(
+          localStorage.getItem("baseVersionId")
+        ),
+        filter_level: "baseVersion",
+        is_active: false,
+        adjusted_metrics_name: this.adustments.metrics_name,
+        adjusted_metrics_cell_date: new Date(this.adustments.weekend_date),
+        before_adjustment_value: parseFloat(this.adustments.old_value),
+        new_adjusted_value: parseFloat(this.adustments.new_value),
+        status: "Pending",
+        ...filterObject,
+      });
       const res = await this.$axios.$post(`/create-manualadjustment`, {
         adjusted_by_user_id: parseInt(this.$auth.user.user_id),
         demand_forecast_run_log_id: parseInt(
@@ -789,7 +857,7 @@ export default {
         before_adjustment_value: parseFloat(this.adustments.old_value),
         new_adjusted_value: parseFloat(this.adustments.new_value),
         status: "Pending",
-        ...this.filterPayload,
+        ...filterObject,
       });
       this.baseAdjustmentsList.adjustmentsResponse.unshift(res.manualAjustment);
       this.baseMetricsList = JSON.parse(
