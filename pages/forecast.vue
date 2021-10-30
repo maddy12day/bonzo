@@ -864,8 +864,8 @@ export default {
         is_active: false,
         adjusted_metrics_name: this.adustments.metrics_name,
         adjusted_metrics_cell_date: new Date(this.adustments.weekend_date),
-        before_adjustment_value: parseFloat(this.adustments.old_value),
-        new_adjusted_value: parseFloat(this.adustments.new_value),
+        before_adjustment_value: Number(this.adustments.old_value),
+        new_adjusted_value: Number(this.adustments.new_value),
         status: "Pending",
         ...filterObject,
       });

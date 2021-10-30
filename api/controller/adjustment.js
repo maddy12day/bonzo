@@ -100,7 +100,7 @@ export const createManualAdjustment = async (req, res) => {
     });
   } catch (error) {
     res.status(500).json({
-      message: "something went wrong in getWeekendDates api",
+      message: `something went wrong in createManualAdjustment api ${error}`,
     });
   }
 };
