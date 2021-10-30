@@ -245,6 +245,7 @@
           tableHeading="Filtered Weekly Forecast Metrics"
           :allAppliedFilters="allAppliedFilters"
           :filterArray="filterArray"
+          @EvtAdjValues="getAdjustedValues"
         />
       </client-only>
       <FilteredMonthlyMetricsTable
@@ -788,7 +789,7 @@ export default {
         before_adjustment_value: parseFloat(this.adustments.old_value),
         new_adjusted_value: parseFloat(this.adustments.new_value),
         status: "Pending",
-        ...filterPayload,
+        ...this.filterPayload,
       });
       this.baseAdjustmentsList.adjustmentsResponse.unshift(res.manualAjustment);
       this.baseMetricsList = JSON.parse(
