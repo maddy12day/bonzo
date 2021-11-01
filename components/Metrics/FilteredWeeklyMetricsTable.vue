@@ -16,6 +16,7 @@
         W{{ weekdate }} {{ getWeekendDates(weekdate) }}
       </option>
     </select>
+    <button class="resetbtn" @click="resetVal()">Reset Filter</button>
     <div class="col-lg-12">
       <div class="col-md-12 text-right p-0">
         <br />
@@ -854,10 +855,34 @@ export default {
     },
     valueOfWeek() {
       this.weekIndex = $("#weekOfYear").val();
+      let option =  document.getElementById("weekOfYearTill").getElementsByTagName("option");
+      for (let index = 1; index < this.weekIndex; index++) {
+        option[index].disabled = true;
+      }
     },
     valueOfWeekTill() {
       this.weekIndexTill = $("#weekOfYearTill").val();
+      let option =  document.getElementById("weekOfYear").getElementsByTagName("option");
+      for (let index = this.weekIndexTill; index < 53 ; index++) {
+        option[index].disabled = true;
+      }
     },
+    resetVal(){
+      this.weekIndex=0;
+      this.weekIndexTill=52;
+      let dropdown1 = $("#weekOfYear")[0];
+      let dropdown2 = $("#weekOfYearTill")[0];
+      dropdown1.selectedIndex = 0; 
+      dropdown2.selectedIndex = 0; 
+      let option =  document.getElementById("weekOfYearTill").getElementsByTagName("option");
+        for (let index = 1; index < 53; index++) {
+        option[index].disabled = false;
+      }
+      let option1 =  document.getElementById("weekOfYear").getElementsByTagName("option");
+        for (let index = 1; index < 53; index++) {
+        option1[index].disabled = false;
+      }
+      },
     checkIfPastWeek(index) {
       let className = "";
       let className1 = "";
@@ -891,8 +916,9 @@ export default {
 .disappearWeek {
   display: none;
 }
-#weekOfYear {
-  border: none;
+#weekOfYear{
+  position: absolute;
+  top: 9px;
   border: 1px solid rgb(168 156 156);
   width: 150px;
   height: 35px;
@@ -900,13 +926,28 @@ export default {
   margin-left: 15px;
   text-align: justify;
 }
-#weekOfYearTill {
-  border: none;
+#weekOfYearTill{
+  position: absolute;
+  top: 9px;
+  left: 157px;
   border: 1px solid rgb(168 156 156);
   width: 150px;
   height: 35px;
   border-radius: 6px;
   margin-left: 15px;
   text-align: justify;
+}
+.resetbtn{
+  position: absolute;
+  top: 12px;
+  left: 315px;
+  border: 1px solid rgb(168 156 156);
+  width: 100px;
+  height: 28px;
+  border-radius: 6px;
+  margin-left: 15px;
+  text-align: center;
+  background-color:#0098f0;
+  color: white;
 }
 </style>
