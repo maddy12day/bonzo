@@ -155,13 +155,13 @@ export default {
     },
     async handleAdjustmentClick(data) {
       this.adjustmentId = data.id;
-      this.dialogVisible = true;
        const adjustmentData = await this.$axios.$get(
-          `/get-adjustment/${data.id}`,
+         `/get-adjustment/${data.id}`,
        {
          progress: true,
        }
      );
+         this.dialogVisible = true;
      this.adjustmentDetails = adjustmentData.adjustment;
       // alert("Get Adjustment influenced metrics and show modal popup.");
     },

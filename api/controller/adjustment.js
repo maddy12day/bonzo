@@ -384,7 +384,7 @@ export const AdjustmentStatus = async (req, res) => {
     });
   } catch (error) {
     res.status(500).json({
-      error: `something went wrong in check scenario status api. ${error}`,
+      error: `something went wrong in check AdjustmentStatus status api. ${error}`,
     });
   }
 };
