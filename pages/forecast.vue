@@ -791,55 +791,55 @@ export default {
         filter_product_sources:
           this.productSourceValues && this.productSourceValues.length > 0
             ? this.productSourceValues.join(",")
-            : "",
+            : null,
         filter_brand_types:
           this.brandTypeValues && this.brandTypeValues > 0
             ? this.brandTypeValues.join(",")
-            : "",
+            : null,
         filter_life_cycles:
           this.lifeCycleValues && this.lifeCycleValues.length > 0
             ? this.lifeCycleValues.join(",")
-            : "",
+            : null,
         filter_newness:
           this.newNessValues && this.newNessValues.length > 0
             ? this.newNessValues.join(",")
-            : "",
+            : null,
         filter_brands:
           this.brandValues && this.brandValues.length > 0
             ? this.brandValues.join(",")
-            : "",
+            : null,
         filter_channels:
           this.channelValues && this.channelValues.length > 0
             ? this.channelValues.join(",")
-            : "",
+            : null,
         filter_sub_channels:
           this.subChannelsValues && this.subChannelsValues.length > 0
             ? this.subChannelsValues.join(",")
-            : "",
+            : null,
         filter_categories:
           this.categoriesValues && this.categoriesValues.length > 0
             ? this.categoriesValues.join(",")
-            : "",
+            : null,
         filter_collections:
           this.collectionValues && this.collectionValues.length > 0
             ? this.collectionValues.join(",")
-            : "",
+            : null,
         filter_skus:
           this.skuValues && this.skuValues.length > 0
             ? this.skuValues.join(",")
-            : "",
+            : null,
         filter_classes:
           this.classesValues && this.classesValues.length > 0
             ? this.classesValues.join(",")
-            : "",
+            : null,
         filter_sub_classes:
           this.subClassesValues && this.subClassesValues.length > 0
             ? this.subClassesValues.join(",")
-            : "",
+            : null,
         filter_programs:
           this.programValues && this.programValues.length > 0
             ? this.programValues.join(",")
-            : "",
+            : null,
       };
       console.log({
         adjusted_by_user_id: parseInt(this.$auth.user.user_id),
