@@ -52,7 +52,7 @@
           <button
             class="btn btn-primary"
             @click="(showDialog = false), activateAjustment()"
-            v-if="Object.keys(status).length == 0"
+            v-if="status && Object.keys(status).length == 0"
           >
             Activate
           </button>
@@ -369,7 +369,7 @@
           class="bg-danger table table-bordered bg-white preview-table overflow-scroll"
           style="overflow-x: scroll"
         >
-          <thead v-if="adjustmentUnitSalesCategoryComparison.parsedData">
+          <thead v-if="adjustmentUnitSalesCategoryComparison && adjustmentUnitSalesCategoryComparison.parsedData">
             <tr>
               <th
                 v-for="(col, index2) in Object.keys(
@@ -465,6 +465,7 @@ export default {
       adjustmentUnitSalesCategoryComparison: {},
       categoriesCol: [],
       categorySummery: [],
+      status: {}
     };
   },
   computed: {},

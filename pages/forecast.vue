@@ -26,8 +26,8 @@
           class="btn-custom-div"
           v-if="
             !isFilteredPageDataLoading &&
-              showRegularResetFilter &&
-              activeFilterType == 'Regular'
+            showRegularResetFilter &&
+            activeFilterType == 'Regular'
           "
           @click="resetFilter"
         >
@@ -39,8 +39,8 @@
           class="btn-custom-div"
           v-if="
             !isFilteredPageDataLoading &&
-              showProgramResetFilter &&
-              activeFilterType == 'Program'
+            showProgramResetFilter &&
+            activeFilterType == 'Program'
           "
           @click="resetFilter"
         >
@@ -157,6 +157,7 @@
         tableHeading="Edit Forecast Metrics"
         @EvtAdjValues="getAdjustedValues"
       />
+
       <client-only>
         <WeeklyMetricsTable
           v-if="activeTab == 'Weekly' && !showManualAdj"
@@ -164,29 +165,27 @@
           tableHeading="Base Weekly Forecast Metrics"
         />
       </client-only>
+
       <MonthlyMetricsTable
         v-if="activeTab == 'Monthly'"
         :metricsTableData="baseMetricsListCom"
         tableHeading="Base Monthly Forecast Metrics"
       />
       <div class="col-md-12 text-right" v-if="!isSystemLocked">
-        
         <button
-          :class="
-            `btn btn-primary btn-sm text-left ${
-              disbledCom || showManualAdj ? 'disabled' : ''
-            }`
-          "
+          :class="`btn btn-primary btn-sm text-left ${
+            disbledCom || showManualAdj ? 'disabled' : ''
+          }`"
           @click="switchToManualAdj"
-          :disabled="disbledCom || showManualAdj "
+          :disabled="disbledCom || showManualAdj"
           v-if="!changeMABtnText && activeTab == 'Weekly'"
         >
           Manual Adjustment
         </button>
         <button
-          :class="
-            `btn btn-primary btn-sm text-left ${disbledCom ? 'disabled' : ''}`
-          "
+          :class="`btn btn-primary btn-sm text-left ${
+            disbledCom ? 'disabled' : ''
+          }`"
           @click="createManualAdjustment"
           v-if="changeMABtnText"
           :disabled="disbledCom"
@@ -231,13 +230,27 @@
       </div>
 
       <FilteredWeeklyMetricsTable
-        v-if="filteredActiveTab == 'Weekly'"
+        :key="filterMetricsCompKey"
+        v-if="
+          filteredActiveTab == 'Weekly' && !showManualAdj && !showDiscardBtn
+        "
         :filteredForecastMetrics="filteredForecastMetrics"
         tableHeading="Filtered Weekly Forecast Metrics"
         :allAppliedFilters="allAppliedFilters"
         :filterArray="filterArray"
       />
-
+      <client-only>
+        <FilterWeeklyManualAdjustment
+          v-if="
+            filteredActiveTab == 'Weekly' && showManualAdj && showDiscardBtn
+          "
+          :filteredForecastMetrics="filteredForecastMetrics"
+          tableHeading="Filtered Weekly Forecast Metrics"
+          :allAppliedFilters="allAppliedFilters"
+          :filterArray="filterArray"
+          @EvtAdjValues="getAdjustedValues"
+        />
+      </client-only>
       <FilteredMonthlyMetricsTable
         v-if="filteredActiveTab == 'Monthly'"
         :filteredForecastMetrics="filteredForecastMetrics"
@@ -245,8 +258,39 @@
         :allAppliedFilters="allAppliedFilters"
         :filterArray="filterArray"
       />
+      <!-- v-if="!isSystemLocked" -->
+      <div class="col-md-12 text-right">
+        <button
+          :class="`btn btn-primary btn-sm text-left ${
+            disbledCom || showManualAdj ? 'disabled' : ''
+          }`"
+          @click="switchToManualAdj"
+          :disabled="disbledCom || showManualAdj"
+          v-if="!changeMABtnText && filteredActiveTab == 'Weekly'"
+        >
+          Manual Adjustment
+        </button>
+        <button
+          :class="`btn btn-primary btn-sm text-left ${
+            disbledCom ? 'disabled' : ''
+          }`"
+          @click="createManualAdjustment"
+          v-if="changeMABtnText"
+          :disabled="disbledCom"
+        >
+          Submit Adjustment
+        </button>
+        <button
+          :class="`btn btn-primary btn-sm ${disbledCom ? 'disabled' : ''}`"
+          @click="discardChanges"
+          v-if="showDiscardBtn"
+          :disabled="disbledCom"
+        >
+          Discard
+        </button>
+      </div>
     </card>
-   <!--  <ComparisonTable
+    <!--  <ComparisonTable
       :tableData="comparisonCollnData"
       v-if="!isFilteredForecast"
     /> -->
@@ -261,7 +305,7 @@
           <button
             v-if="isFilteredForecast"
             class="mt-1 btn btn-sm"
-            style="line-height:1;"
+            style="line-height: 1"
             @click="exportToExcel"
             :disabled="isDownloadCsvDisbled"
           >
@@ -333,9 +377,9 @@ import ChartWidget from "../components/ChartWidget.vue";
 import FilteredChartWidget from "../components/FilterChartWidget.vue";
 import moment from "moment";
 import XLSX from "xlsx";
-import { mapState } from "vuex";
 import ComparisonTable from "../components/ComparisionTables/ComparisonTable.vue";
 import Timeline from "../components/Timeline/Timeline.vue";
+import FilterWeeklyManualAdjustment from "../components/Metrics/FilterWeeklyManualAdjustment.vue";
 
 export default {
   name: "Forecast",
@@ -348,6 +392,7 @@ export default {
     RegularFilters,
     ProgramFilters,
     ForecastBySkuTable,
+    FilterWeeklyManualAdjustment,
     Card,
     Timeline,
     FilteredWeeklyMetricsTable,
@@ -416,9 +461,11 @@ export default {
       selectedFilterOptions: [],
       skusJsonData: [],
       isDownloadCsvDisbled: true,
+      filterMetricsCompKey: Math.random(),
       forecastedYear: "2021",
       filteredForecastedYear: "2021",
       filterArray: [],
+      oldFilterMetricsData: [],
       csvFileName: `Filtered SKUs - ${moment().format(
         "YYYY-MM-DD HH:MM:SS"
       )}.xlsx`,
@@ -593,6 +640,9 @@ export default {
       this.showManualAdj = false;
       this.showDiscardBtn = false;
       this.changeMABtnText = false;
+      this.filteredForecastMetrics = JSON.parse(
+        localStorage.getItem("filterMetricsOldTableData")
+      );
     },
     getAdjustedValues(values) {
       if (values) {
@@ -652,10 +702,12 @@ export default {
         this.filterMonthly = true;
       }
       this.filteredForecastMetrics = [];
-      this.filteredForecastMetrics = await this.$axios.$post(
+      const result = await this.$axios.$post(
         `/get-filtered-forecast-metrics/${this.filteredForecastedYear}`,
         requestedFilterOption
       );
+      this.filteredForecastMetrics = result;
+      localStorage.setItem("filterMetricsOldTableData", JSON.stringify(result));
     },
     showFilterType(type) {
       this.activeFilterType = type;
@@ -705,7 +757,10 @@ export default {
       }
       this.topSkusData = topLimitedSkuData;
       this.topLimitedSkuData = topSkusData;
-      const csvJsonData = await this.$axios.$post(`/download-all-skus-data-by-month/${this.filteredForecastedYear}`, this.filterPayload);
+      const csvJsonData = await this.$axios.$post(
+        `/download-all-skus-data-by-month/${this.filteredForecastedYear}`,
+        this.filterPayload
+      );
       this.skusJsonData = csvJsonData.parsedWeeklyData;
       this.isDownloadCsvDisbled = false;
     },
@@ -732,7 +787,61 @@ export default {
     },
     // create manual adjustments
     async createManualAdjustment() {
-      const res = await this.$axios.$post(`/create-manualadjustment`, {
+      let filterObject = {
+        filter_product_sources:
+          this.productSourceValues && this.productSourceValues.length > 0
+            ? this.productSourceValues.join(",")
+            : "",
+        filter_brand_types:
+          this.brandTypeValues && this.brandTypeValues > 0
+            ? this.brandTypeValues.join(",")
+            : "",
+        filter_life_cycles:
+          this.lifeCycleValues && this.lifeCycleValues.length > 0
+            ? this.lifeCycleValues.join(",")
+            : "",
+        filter_newness:
+          this.newNessValues && this.newNessValues.length > 0
+            ? this.newNessValues.join(",")
+            : "",
+        filter_brands:
+          this.brandValues && this.brandValues.length > 0
+            ? this.brandValues.join(",")
+            : "",
+        filter_channels:
+          this.channelValues && this.channelValues.length > 0
+            ? this.channelValues.join(",")
+            : "",
+        filter_sub_channels:
+          this.subChannelsValues && this.subChannelsValues.length > 0
+            ? this.subChannelsValues.join(",")
+            : "",
+        filter_categories:
+          this.categoriesValues && this.categoriesValues.length > 0
+            ? this.categoriesValues.join(",")
+            : "",
+        filter_collections:
+          this.collectionValues && this.collectionValues.length > 0
+            ? this.collectionValues.join(",")
+            : "",
+        filter_skus:
+          this.skuValues && this.skuValues.length > 0
+            ? this.skuValues.join(",")
+            : "",
+        filter_classes:
+          this.classesValues && this.classesValues.length > 0
+            ? this.classesValues.join(",")
+            : "",
+        filter_sub_classes:
+          this.subClassesValues && this.subClassesValues.length > 0
+            ? this.subClassesValues.join(",")
+            : "",
+        filter_programs:
+          this.programValues && this.programValues.length > 0
+            ? this.programValues.join(",")
+            : "",
+      };
+      console.log({
         adjusted_by_user_id: parseInt(this.$auth.user.user_id),
         demand_forecast_run_log_id: parseInt(
           localStorage.getItem("baseVersionId")
@@ -744,6 +853,21 @@ export default {
         before_adjustment_value: parseFloat(this.adustments.old_value),
         new_adjusted_value: parseFloat(this.adustments.new_value),
         status: "Pending",
+        ...filterObject,
+      });
+      const res = await this.$axios.$post(`/create-manualadjustment`, {
+        adjusted_by_user_id: parseInt(this.$auth.user.user_id),
+        demand_forecast_run_log_id: parseInt(
+          localStorage.getItem("baseVersionId")
+        ),
+        filter_level: "baseVersion",
+        is_active: false,
+        adjusted_metrics_name: this.adustments.metrics_name,
+        adjusted_metrics_cell_date: new Date(this.adustments.weekend_date),
+        before_adjustment_value: Number(this.adustments.old_value),
+        new_adjusted_value: Number(this.adustments.new_value),
+        status: "Pending",
+        ...filterObject,
       });
       this.baseAdjustmentsList.adjustmentsResponse.unshift(res.manualAjustment);
       this.baseMetricsList = JSON.parse(
@@ -756,6 +880,7 @@ export default {
             '"Adjustment" submitted for processing with model. Please check "Base Model Adjustments" section for updates'
           )
         : "";
+      filterObject = {};
       this.showDiscardBtn = false;
       this.showManualAdj = false;
       this.callToIntervalAjax = true;
@@ -835,7 +960,6 @@ export default {
       this.filter_programs = [];
     },
     async appliedFilters() {
-      
       this.isFilteredPageDataLoading = true;
       this.filterPayload = {
         filter_product_sources: this.productSourceValues,
@@ -877,10 +1001,10 @@ export default {
       }
 
       this.requestedFilterOption = requestedFilterOption;
-      
+
       delete this.requestedFilterOption["filterType"];
       // await this.getFilteredForecastData(requestedFilterOption);
-      
+
       await this.setFilteredSKUsAndWhereQuery();
       this.isFilteredForecast = true;
       this.filteredStatsComponentKey += 1;
@@ -892,7 +1016,7 @@ export default {
       this.$store.commit("toggleProgramFilterCTAState");
       // this.filteredStatsComponentKey += 1;
     },
-    async setFilteredSKUsAndWhereQuery () {
+    async setFilteredSKUsAndWhereQuery() {
       this.filteredQuerySetterData = await this.$axios.$post(
         `/set-filtered-sku-and-where-query`,
         this.filterPayload
@@ -930,7 +1054,7 @@ export default {
     },
   },
   computed: {
-    isSystemLocked(){
+    isSystemLocked() {
       return this.$store.state.isSystemLocked;
     },
     getTopSkusCount() {
@@ -996,7 +1120,7 @@ export default {
   mounted() {
     this.getBaseAdjustments();
     this.showMetricsByDuration("Monthly");
-   /*  this.comparisonTableDataGenerator(); */
+    /*  this.comparisonTableDataGenerator(); */
     setInterval(() => {
       this.checkManualAdjustmentStatus();
     }, 10000);

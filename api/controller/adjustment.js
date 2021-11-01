@@ -100,7 +100,7 @@ export const createManualAdjustment = async (req, res) => {
     });
   } catch (error) {
     res.status(500).json({
-      message: "something went wrong in getWeekendDates api",
+      message: `something went wrong in createManualAdjustment api ${error}`,
     });
   }
 };
@@ -384,7 +384,7 @@ export const AdjustmentStatus = async (req, res) => {
     });
   } catch (error) {
     res.status(500).json({
-      error: `something went wrong in check scenario status api. ${error}`,
+      error: `something went wrong in check AdjustmentStatus status api. ${error}`,
     });
   }
 };
