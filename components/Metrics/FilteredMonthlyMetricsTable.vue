@@ -334,6 +334,10 @@ export default {
       XLSX.writeFile(wb, this.getCSVName()) // name of the file is 'book.xlsx'
     },
         valueChange() {
+      let option1 =  document.getElementById("monthNameTill").getElementsByTagName("option");
+        for (let index = 1; index < 13; index++) {
+        option1[index].disabled = false;
+      }
       this.monthIndex = $("#monthName").val();
       let option =  document.getElementById("monthNameTill").getElementsByTagName("option");
       for (let index = 1; index < this.monthIndex; index++) {
