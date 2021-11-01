@@ -320,7 +320,6 @@ export default {
     },
     valueChange() {
       this.monthIndex = $("#monthName").val();
-      console.log(this.monthIndex)
       let option1 =  document.getElementById("monthNameTill").getElementsByTagName("option");
         for (let index = 1; index < 13; index++) {
         option1[index].disabled = false;
