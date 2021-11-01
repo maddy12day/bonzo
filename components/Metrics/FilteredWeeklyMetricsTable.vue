@@ -814,18 +814,14 @@ export default {
       this.weekIndex = $("#weekOfYear").val();
       let option =  document.getElementById("weekOfYearTill").getElementsByTagName("option");
       for (let index = 1; index < this.weekIndex; index++) {
-      if (true) {
         option[index].disabled = true;
-      }
       }
     },
     valueOfWeekTill() {
       this.weekIndexTill = $("#weekOfYearTill").val();
       let option =  document.getElementById("weekOfYear").getElementsByTagName("option");
       for (let index = this.weekIndexTill; index < 53 ; index++) {
-      if (true) {
         option[index].disabled = true;
-      }
       }
     },
     resetVal(){
@@ -875,8 +871,8 @@ export default {
   display: none;
 }
 #weekOfYear{
-  margin-top: -28px;
-  border: none;
+  position: absolute;
+  top: 9px;
   border: 1px solid rgb(168 156 156);
   width: 150px;
   height: 35px;
@@ -885,8 +881,9 @@ export default {
   text-align: justify;
 }
 #weekOfYearTill{
-  margin-top: -28px;
-  border: none;
+  position: absolute;
+  top: 9px;
+  left: 157px;
   border: 1px solid rgb(168 156 156);
   width: 150px;
   height: 35px;
@@ -895,7 +892,9 @@ export default {
   text-align: justify;
 }
 .resetbtn{
-  margin-top: -25px;
+  position: absolute;
+  top: 12px;
+  left: 315px;
   border: 1px solid rgb(168 156 156);
   width: 100px;
   height: 28px;

@@ -322,18 +322,14 @@ export default {
       this.monthIndex = $("#monthName").val();
       let option =  document.getElementById("monthNameTill").getElementsByTagName("option");
       for (let index = 1; index < this.monthIndex; index++) {
-      if (true) {
         option[index].disabled = true;
-      }
       }
     },
     valueChangeTill() {
       this.monthIndexTill = $("#monthNameTill").val();
       let option =  document.getElementById("monthName").getElementsByTagName("option");
       for (let index = this.monthIndexTill; index < 13 ; index++) {
-      if (true) {
         option[index].disabled = true;
-      }
       }
     },
       resetVal(){
@@ -416,8 +412,8 @@ export default {
   display: none;
 }
 #monthName {
-  margin-top: -28px;
-  border: none;
+  position: absolute;
+  top: 9px;
   border: 1px solid rgb(168 156 156);
   width: 150px;
   height: 35px;
@@ -426,8 +422,9 @@ export default {
   text-align: justify;
 }
 #monthNameTill {
-  margin-top: -28px;
-  border: none;
+  position: absolute;
+  top: 9px;
+  left: 157px;
   border: 1px solid rgb(168 156 156);
   width: 150px;
   height: 35px;
@@ -436,7 +433,9 @@ export default {
   text-align: justify;
 }
 .resetbtn{
-  margin-top: -25px;
+  position: absolute;
+  top: 12px;
+  left: 315px;
   border: 1px solid rgb(168 156 156);
   width: 100px;
   height: 28px;
