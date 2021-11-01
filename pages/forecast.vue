@@ -907,7 +907,7 @@ export default {
           if (adjustmentsJson.adjustment) {
             if (
               adjustmentsJson &&
-              ["Completed", "Failed", "Error"].includes(
+              ["Completed", "Failed", "Error", "Deprecated"].includes(
                 adjustmentsJson.adjustment.status
               )
             ) {

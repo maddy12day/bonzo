@@ -49,10 +49,11 @@
           </tbody>
         </table>
         <p class="text-right">
-          <button
+          <button 
+          
             class="btn btn-primary"
             @click="(showDialog = false), activateAjustment()"
-            v-if="status && Object.keys(status).length == 0"
+            v-if="!lockSystem && status && Object.keys(status).length == 0"
           >
             Activate
           </button>
@@ -465,7 +466,8 @@ export default {
       adjustmentUnitSalesCategoryComparison: {},
       categoriesCol: [],
       categorySummery: [],
-      status: {}
+      status: {},
+      lockSystem: false
     };
   },
   computed: {},
@@ -546,6 +548,8 @@ export default {
     this.getAdjustmentUnitSalesCategoryComparison();
     this.getCategorySummery();
     this.adjustmentStatus();
+       this.lockSystem=JSON.parse(localStorage.getItem("isSystemLock"));
+  
   },
 };
 </script>
