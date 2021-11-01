@@ -722,6 +722,10 @@ export default {
     valueOfWeek() {
       this.weekIndex = $("#weekOfYear").val();
       let option =  document.getElementById("weekOfYearTill").getElementsByTagName("option");
+      let option1 =  document.getElementById("weekOfYearTill").getElementsByTagName("option");
+        for (let index = 1; index < 53; index++) {
+        option1[index].disabled = false;
+      }
       for (let index = 1; index < this.weekIndex; index++) {
         option[index].disabled = true;
       }
