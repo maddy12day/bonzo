@@ -185,6 +185,10 @@ export default {
         this.baseMetricsList = JSON.parse(
           baseMonthlyMetricsListString.baseMonthlyMetrics
         );
+         localStorage.setItem(
+          "baseVersionId",
+          this.baseMetricsList[0].demand_forecast_run_log_id
+        );
       }
     },
     // async comparisonTableDataGenerator() {

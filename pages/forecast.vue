@@ -186,7 +186,7 @@
           :class="`btn btn-primary btn-sm text-left ${
             disbledCom ? 'disabled' : ''
           }`"
-          @click="createManualAdjustment"
+          @click="() => createManualAdjustment('base')"
           v-if="changeMABtnText"
           :disabled="disbledCom"
         >
@@ -274,7 +274,7 @@
           :class="`btn btn-primary btn-sm text-left ${
             disbledCom ? 'disabled' : ''
           }`"
-          @click="createManualAdjustment"
+          @click="() => createManualAdjustment('base')"
           v-if="changeMABtnText"
           :disabled="disbledCom"
         >
@@ -471,6 +471,7 @@ export default {
       )}.xlsx`,
       comparisonCollnData: [],
       filteredQuerySetterData: {},
+      skuLevelAdjustmentObj: []
     };
   },
 
@@ -687,6 +688,10 @@ export default {
         this.baseMetricsList = JSON.parse(
           baseMonthlyMetricsListString.baseMonthlyMetrics
         );
+          localStorage.setItem(
+          "baseVersionId",
+          this.baseMetricsList[0].demand_forecast_run_log_id
+        );
       }
     },
     async showFilteredMetricsByDuration(activeTab) {
@@ -786,7 +791,7 @@ export default {
       return reqBody;
     },
     // create manual adjustments
-    async createManualAdjustment() {
+    async createManualAdjustment(level) {
       let filterObject = {
         filter_product_sources:
           this.productSourceValues && this.productSourceValues.length > 0
@@ -841,34 +846,38 @@ export default {
             ? this.programValues.join(",")
             : null,
       };
-      console.log({
-        adjusted_by_user_id: parseInt(this.$auth.user.user_id),
-        demand_forecast_run_log_id: parseInt(
-          localStorage.getItem("baseVersionId")
-        ),
-        filter_level: "baseVersion",
-        is_active: false,
-        adjusted_metrics_name: this.adustments.metrics_name,
-        adjusted_metrics_cell_date: new Date(this.adustments.weekend_date),
-        before_adjustment_value: parseFloat(this.adustments.old_value),
-        new_adjusted_value: parseFloat(this.adustments.new_value),
-        status: "Pending",
-        ...filterObject,
-      });
-      const res = await this.$axios.$post(`/create-manualadjustment`, {
-        adjusted_by_user_id: parseInt(this.$auth.user.user_id),
-        demand_forecast_run_log_id: parseInt(
-          localStorage.getItem("baseVersionId")
-        ),
-        filter_level: "baseVersion",
-        is_active: false,
-        adjusted_metrics_name: this.adustments.metrics_name,
-        adjusted_metrics_cell_date: new Date(this.adustments.weekend_date),
-        before_adjustment_value: Number(this.adustments.old_value),
-        new_adjusted_value: Number(this.adustments.new_value),
-        status: "Pending",
-        ...filterObject,
-      });
+      let res;
+      if (level == "sku") {
+        res = await this.$axios.$post(`/create-manualadjustment`, {
+          adjusted_by_user_id: parseInt(this.$auth.user.user_id),
+          demand_forecast_run_log_id: parseInt(
+            localStorage.getItem("baseVersionId")
+          ),
+          filter_level: "baseVersion",
+          is_active: false,
+          adjusted_metrics_name: this.adustments.metrics_name,
+          adjusted_metrics_cell_date: new Date(this.adustments.weekend_date),
+          before_adjustment_value: Number(this.adustments.old_value),
+          new_adjusted_value: Number(this.adustments.new_value),
+          status: "Pending",
+          ...filterObject,
+        });
+      } else {
+        res = await this.$axios.$post(`/create-manualadjustment`, {
+          adjusted_by_user_id: parseInt(this.$auth.user.user_id),
+          demand_forecast_run_log_id: parseInt(
+            localStorage.getItem("baseVersionId")
+          ),
+          filter_level: "baseVersion",
+          is_active: false,
+          adjusted_metrics_name: this.adustments.metrics_name,
+          adjusted_metrics_cell_date: new Date(this.adustments.weekend_date),
+          before_adjustment_value: Number(this.adustments.old_value),
+          new_adjusted_value: Number(this.adustments.new_value),
+          status: "Pending",
+          ...filterObject,
+        });
+      }
       this.baseAdjustmentsList.adjustmentsResponse.unshift(res.manualAjustment);
       this.baseMetricsList = JSON.parse(
         localStorage.getItem("adjustmentTableData")
