@@ -26,8 +26,8 @@
           class="btn-custom-div"
           v-if="
             !isFilteredPageDataLoading &&
-            showRegularResetFilter &&
-            activeFilterType == 'Regular'
+              showRegularResetFilter &&
+              activeFilterType == 'Regular'
           "
           @click="resetFilter"
         >
@@ -39,8 +39,8 @@
           class="btn-custom-div"
           v-if="
             !isFilteredPageDataLoading &&
-            showProgramResetFilter &&
-            activeFilterType == 'Program'
+              showProgramResetFilter &&
+              activeFilterType == 'Program'
           "
           @click="resetFilter"
         >
@@ -173,9 +173,11 @@
       />
       <div class="col-md-12 text-right" v-if="!isSystemLocked">
         <button
-          :class="`btn btn-primary btn-sm text-left ${
-            disbledCom || showManualAdj ? 'disabled' : ''
-          }`"
+          :class="
+            `btn btn-primary btn-sm text-left ${
+              disbledCom || showManualAdj ? 'disabled' : ''
+            }`
+          "
           @click="switchToManualAdj"
           :disabled="disbledCom || showManualAdj"
           v-if="!changeMABtnText && activeTab == 'Weekly'"
@@ -183,9 +185,9 @@
           Manual Adjustment
         </button>
         <button
-          :class="`btn btn-primary btn-sm text-left ${
-            disbledCom ? 'disabled' : ''
-          }`"
+          :class="
+            `btn btn-primary btn-sm text-left ${disbledCom ? 'disabled' : ''}`
+          "
           @click="() => createManualAdjustment('base')"
           v-if="changeMABtnText"
           :disabled="disbledCom"
@@ -261,9 +263,11 @@
       <!-- v-if="!isSystemLocked" -->
       <div class="col-md-12 text-right">
         <button
-          :class="`btn btn-primary btn-sm text-left ${
-            disbledCom || showManualAdj ? 'disabled' : ''
-          }`"
+          :class="
+            `btn btn-primary btn-sm text-left ${
+              disbledCom || showManualAdj ? 'disabled' : ''
+            }`
+          "
           @click="switchToManualAdj"
           :disabled="disbledCom || showManualAdj"
           v-if="!changeMABtnText && filteredActiveTab == 'Weekly'"
@@ -271,9 +275,9 @@
           Manual Adjustment
         </button>
         <button
-          :class="`btn btn-primary btn-sm text-left ${
-            disbledCom ? 'disabled' : ''
-          }`"
+          :class="
+            `btn btn-primary btn-sm text-left ${disbledCom ? 'disabled' : ''}`
+          "
           @click="() => createManualAdjustment('base')"
           v-if="changeMABtnText"
           :disabled="disbledCom"
@@ -471,7 +475,7 @@ export default {
       )}.xlsx`,
       comparisonCollnData: [],
       filteredQuerySetterData: {},
-      skuLevelAdjustmentObj: []
+      skuLevelAdjustmentObj: [],
     };
   },
 
@@ -688,7 +692,7 @@ export default {
         this.baseMetricsList = JSON.parse(
           baseMonthlyMetricsListString.baseMonthlyMetrics
         );
-          localStorage.setItem(
+        localStorage.setItem(
           "baseVersionId",
           this.baseMetricsList[0].demand_forecast_run_log_id
         );
@@ -751,6 +755,7 @@ export default {
         `/get-filtered-forecast-data/${this.filteredForecastedYear}`,
         this.filterPayload
       );
+      localStorage.setItem("topSkuLevelData", JSON.stringify(topSkusData.parsedWeeklyData));
       let topLimitedSkuData = {};
       topLimitedSkuData["parsedWeeklyData"] = [];
       for (let i = 0; i < this.topSKUsCountLable; i++) {

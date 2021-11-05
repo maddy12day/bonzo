@@ -764,6 +764,14 @@ model manual_adjustments {
   base_run_id                Int?
 }
 
+model manual_adjustments_sku_level {
+  id                      Int     @id @default(autoincrement())
+  before_adjustment_value Float?  @db.Float
+  adjustment_id           Int
+  new_adjusted_value      Float?  @db.Float
+  filter_skus             String? @db.VarChar(1000)
+}
+
 model metrics_master {
   id                      BigInt    @id @default(autoincrement())
   name                    String    @db.VarChar(50)
