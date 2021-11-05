@@ -341,6 +341,7 @@
       :forecast_attribute="'retail_sales'"
       :topSkusData="topSkusData"
       :allAppliedFilters="allAppliedFilters"
+      @descardChanges="descardFilterChanges"
     />
     <ForecastBySkuTable
       v-if="isFilteredForecast"
@@ -349,6 +350,7 @@
       :forecast_attribute="'units_sales'"
       :topSkusData="topSkusData"
       :allAppliedFilters="allAppliedFilters"
+      @descardChanges="descardFilterChanges"
     />
     <ForecastBySkuTable
       ref="filterChartWidget"
@@ -357,6 +359,7 @@
       :forecast_attribute="'aur'"
       :topSkusData="topSkusData"
       :allAppliedFilters="allAppliedFilters"
+      @descardChanges="descardFilterChanges"
     />
     <!-- </div> -->
   </div>
@@ -480,6 +483,9 @@ export default {
   },
 
   methods: {
+    descardFilterChanges() {
+
+    },
     setUpdatedSKUsLimit() {
       let selectedOption = this.options.filter(
         (o) => o.value == this.topSkusLimit

@@ -53,7 +53,7 @@
                   forecast_attribute,
                   scope.row.data[0][`${forecast_attribute}`],
                   scope.$index,
-                  1
+                  0
                 )
             "
           >
@@ -83,7 +83,7 @@
                   forecast_attribute,
                   scope.row.data[1][`${forecast_attribute}`],
                   scope.$index,
-                  1
+                  2
                 )
             "
           >
@@ -113,7 +113,7 @@
                   forecast_attribute,
                   scope.row.data[2][`${forecast_attribute}`],
                   scope.$index,
-                  2
+                  3
                 )
             "
           >
@@ -143,7 +143,7 @@
                   forecast_attribute,
                   scope.row.data[3][`${forecast_attribute}`],
                   scope.$index,
-                  3
+                  4
                 )
             "
           >
@@ -173,7 +173,7 @@
                   forecast_attribute,
                   scope.row.data[4][`${forecast_attribute}`],
                   scope.$index,
-                  4
+                  5
                 )
             "
           >
@@ -203,7 +203,7 @@
                   forecast_attribute,
                   scope.row.data[5][`${forecast_attribute}`],
                   scope.$index,
-                  5
+                  6
                 )
             "
           >
@@ -233,7 +233,7 @@
                   forecast_attribute,
                   scope.row.data[6][`${forecast_attribute}`],
                   scope.$index,
-                  6
+                  7
                 )
             "
           >
@@ -263,7 +263,7 @@
                   forecast_attribute,
                   scope.row.data[7][`${forecast_attribute}`],
                   scope.$index,
-                  7
+                  8
                 )
             "
           >
@@ -293,7 +293,7 @@
                   forecast_attribute,
                   scope.row.data[8][`${forecast_attribute}`],
                   scope.$index,
-                  8
+                  9
                 )
             "
           >
@@ -323,7 +323,7 @@
                   forecast_attribute,
                   scope.row.data[9][`${forecast_attribute}`],
                   scope.$index,
-                  9
+                  10
                 )
             "
           >
@@ -353,7 +353,7 @@
                   forecast_attribute,
                   scope.row.data[10][`${forecast_attribute}`],
                   scope.$index,
-                  10
+                  11
                 )
             "
           >
@@ -383,7 +383,7 @@
                   forecast_attribute,
                   scope.row.data[11][`${forecast_attribute}`],
                   scope.$index,
-                  11
+                  12
                 )
             "
           >
@@ -413,7 +413,7 @@
                   forecast_attribute,
                   scope.row.data[12][`${forecast_attribute}`],
                   scope.$index,
-                  12
+                  13
                 )
             "
           >
@@ -443,7 +443,7 @@
                   forecast_attribute,
                   scope.row.data[13][`${forecast_attribute}`],
                   scope.$index,
-                  13
+                  14
                 )
             "
           >
@@ -473,7 +473,7 @@
                   forecast_attribute,
                   scope.row.data[14][`${forecast_attribute}`],
                   scope.$index,
-                  14
+                  15
                 )
             "
           >
@@ -503,7 +503,7 @@
                   forecast_attribute,
                   scope.row.data[15][`${forecast_attribute}`],
                   scope.$index,
-                  15
+                  16
                 )
             "
           >
@@ -533,7 +533,7 @@
                   forecast_attribute,
                   scope.row.data[16][`${forecast_attribute}`],
                   scope.$index,
-                  16
+                  17
                 )
             "
           >
@@ -563,7 +563,7 @@
                   forecast_attribute,
                   scope.row.data[17][`${forecast_attribute}`],
                   scope.$index,
-                  17
+                  18
                 )
             "
           >
@@ -593,7 +593,7 @@
                   forecast_attribute,
                   scope.row.data[18][`${forecast_attribute}`],
                   scope.$index,
-                  18
+                  19
                 )
             "
           >
@@ -623,7 +623,7 @@
                   forecast_attribute,
                   scope.row.data[19][`${forecast_attribute}`],
                   scope.$index,
-                  19
+                  20
                 )
             "
           >
@@ -653,7 +653,7 @@
                   forecast_attribute,
                   scope.row.data[20][`${forecast_attribute}`],
                   scope.$index,
-                  20
+                  21
                 )
             "
           >
@@ -683,7 +683,7 @@
                   forecast_attribute,
                   scope.row.data[21][`${forecast_attribute}`],
                   scope.$index,
-                  21
+                  22
                 )
             "
           >
@@ -713,7 +713,7 @@
                   forecast_attribute,
                   scope.row.data[22][`${forecast_attribute}`],
                   scope.$index,
-                  22
+                  23
                 )
             "
           >
@@ -743,7 +743,7 @@
                   forecast_attribute,
                   scope.row.data[23][`${forecast_attribute}`],
                   scope.$index,
-                  23
+                  24
                 )
             "
           >
@@ -773,7 +773,7 @@
                   forecast_attribute,
                   scope.row.data[24][`${forecast_attribute}`],
                   scope.$index,
-                  24
+                  25
                 )
             "
           >
@@ -803,7 +803,7 @@
                   forecast_attribute,
                   scope.row.data[25][`${forecast_attribute}`],
                   scope.$index,
-                  25
+                  26
                 )
             "
           >
@@ -833,7 +833,7 @@
                   forecast_attribute,
                   scope.row.data[26][`${forecast_attribute}`],
                   scope.$index,
-                  26
+                  27
                 )
             "
           >
@@ -863,7 +863,7 @@
                   forecast_attribute,
                   scope.row.data[27][`${forecast_attribute}`],
                   scope.$index,
-                  27
+                  28
                 )
             "
           >
@@ -893,7 +893,7 @@
                   forecast_attribute,
                   scope.row.data[28][`${forecast_attribute}`],
                   scope.$index,
-                  28
+                  29
                 )
             "
           >
@@ -923,7 +923,7 @@
                   forecast_attribute,
                   scope.row.data[29][`${forecast_attribute}`],
                   scope.$index,
-                  29
+                  30
                 )
             "
           >
@@ -953,7 +953,7 @@
                   forecast_attribute,
                   scope.row.data[30][`${forecast_attribute}`],
                   scope.$index,
-                  30
+                  31
                 )
             "
           >
@@ -983,7 +983,7 @@
                   forecast_attribute,
                   scope.row.data[31][`${forecast_attribute}`],
                   scope.$index,
-                  31
+                  32
                 )
             "
           >
@@ -1013,7 +1013,7 @@
                   forecast_attribute,
                   scope.row.data[32][`${forecast_attribute}`],
                   scope.$index,
-                  32
+                  33
                 )
             "
           >
@@ -1043,7 +1043,7 @@
                   forecast_attribute,
                   scope.row.data[33][`${forecast_attribute}`],
                   scope.$index,
-                  33
+                  34
                 )
             "
           >
@@ -1073,7 +1073,7 @@
                   forecast_attribute,
                   scope.row.data[34][`${forecast_attribute}`],
                   scope.$index,
-                  34
+                  35
                 )
             "
           >
@@ -1103,7 +1103,7 @@
                   forecast_attribute,
                   scope.row.data[35][`${forecast_attribute}`],
                   scope.$index,
-                  35
+                  36
                 )
             "
           >
@@ -1133,7 +1133,7 @@
                   forecast_attribute,
                   scope.row.data[36][`${forecast_attribute}`],
                   scope.$index,
-                  36
+                  37
                 )
             "
           >
@@ -1163,7 +1163,7 @@
                   forecast_attribute,
                   scope.row.data[37][`${forecast_attribute}`],
                   scope.$index,
-                  37
+                  38
                 )
             "
           >
@@ -1193,7 +1193,7 @@
                   forecast_attribute,
                   scope.row.data[38][`${forecast_attribute}`],
                   scope.$index,
-                  38
+                  39
                 )
             "
           >
@@ -1223,7 +1223,7 @@
                   forecast_attribute,
                   scope.row.data[39][`${forecast_attribute}`],
                   scope.$index,
-                  39
+                  40
                 )
             "
           >
@@ -1253,7 +1253,7 @@
                   forecast_attribute,
                   scope.row.data[40][`${forecast_attribute}`],
                   scope.$index,
-                  40
+                  41
                 )
             "
           >
@@ -1283,7 +1283,7 @@
                   forecast_attribute,
                   scope.row.data[41][`${forecast_attribute}`],
                   scope.$index,
-                  41
+                  42
                 )
             "
           >
@@ -1313,7 +1313,7 @@
                   forecast_attribute,
                   scope.row.data[42][`${forecast_attribute}`],
                   scope.$index,
-                  42
+                  43
                 )
             "
           >
@@ -1343,7 +1343,7 @@
                   forecast_attribute,
                   scope.row.data[43][`${forecast_attribute}`],
                   scope.$index,
-                  43
+                  44
                 )
             "
           >
@@ -1373,7 +1373,7 @@
                   forecast_attribute,
                   scope.row.data[44][`${forecast_attribute}`],
                   scope.$index,
-                  44
+                  45
                 )
             "
           >
@@ -1403,7 +1403,7 @@
                   forecast_attribute,
                   scope.row.data[45][`${forecast_attribute}`],
                   scope.$index,
-                  45
+                  46
                 )
             "
           >
@@ -1433,7 +1433,7 @@
                   forecast_attribute,
                   scope.row.data[46][`${forecast_attribute}`],
                   scope.$index,
-                  46
+                  47
                 )
             "
           >
@@ -1463,7 +1463,7 @@
                   forecast_attribute,
                   scope.row.data[47][`${forecast_attribute}`],
                   scope.$index,
-                  47
+                  48
                 )
             "
           >
@@ -1493,7 +1493,7 @@
                   forecast_attribute,
                   scope.row.data[48][`${forecast_attribute}`],
                   scope.$index,
-                  48
+                  49
                 )
             "
           >
@@ -1523,7 +1523,7 @@
                   forecast_attribute,
                   scope.row.data[49][`${forecast_attribute}`],
                   scope.$index,
-                  49
+                  50
                 )
             "
           >
@@ -1553,7 +1553,7 @@
                   forecast_attribute,
                   scope.row.data[50][`${forecast_attribute}`],
                   scope.$index,
-                  50
+                  51
                 )
             "
           >
@@ -1583,7 +1583,7 @@
                   forecast_attribute,
                   scope.row.data[51][`${forecast_attribute}`],
                   scope.$index,
-                  51
+                  52
                 )
             "
           >
@@ -1636,22 +1636,28 @@ export default {
       forecastData: [],
       isManualAdjustment: false,
       isDisble: false,
+      topSkusDataState: localStorage.getItem('topSkuLevelData')
     };
   },
   methods: {
     handleManualAdjustment() {
       this.isManualAdjustment = true;
+      const elements = document.querySelectorAll('.filter-changed');
+      elements.forEach(function(item) {
+        item.classList.remove('filter-changed');
+      })
     },
     descardChanges() {
+      this.$emit('descardChanges');
       this.isManualAdjustment = false;
     },
     handleDataChange(e, forecast_attribute, data, index, innerIndex) {
-      const oldData = JSON.parse(localStorage.getItem('topSkuLevelData'))[index].data[innerIndex];
-      if(data == oldData) {
-        console.log(oldData);
+      const idx = innerIndex - 1;
+      const oldData = JSON.parse(localStorage.getItem('topSkuLevelData'))[index].data[idx];
+      if(Number(data) !== Number(oldData[`${forecast_attribute}`])) {
+      e.target.classList.add("filter-changed");
       }
-      console.log('oldata',oldData)
-      e.target.style.backgroundColor="green";
+      console.log('oldata', oldData,oldData[`${forecast_attribute}`], data)
       console.log(e, forecast_attribute, data, index, innerIndex);
     },
     getPercent(forecast_attribute, rowData) {
@@ -1697,5 +1703,8 @@ export default {
 }
 .disableWeek {
   background: #e8e8e8;
+}
+.filter-changed {
+  background-color: rgb(233, 206, 140);
 }
 </style>
