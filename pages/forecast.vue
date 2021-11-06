@@ -343,6 +343,7 @@
       :allAppliedFilters="allAppliedFilters"
       @descardChanges="descardFilterChanges"
       @getAdjustmentChanges="getFilterAdjustmentValues"
+      @createFilterAdjustment="createManualAdjustment('sku')"
     />
     <ForecastBySkuTable
       v-if="isFilteredForecast"
@@ -353,6 +354,7 @@
       :allAppliedFilters="allAppliedFilters"
       @descardChanges="descardFilterChanges"
       @getAdjustmentChanges="getFilterAdjustmentValues"
+      @createFilterAdjustment="createManualAdjustment('sku')"
     />
     <ForecastBySkuTable
       ref="filterChartWidget"
@@ -363,6 +365,7 @@
       :allAppliedFilters="allAppliedFilters"
       @descardChanges="descardFilterChanges"
       @getAdjustmentChanges="getFilterAdjustmentValues"
+      @createFilterAdjustment="createManualAdjustment('sku')"
     />
     <!-- </div> -->
   </div>
@@ -769,7 +772,10 @@ export default {
         `/get-filtered-forecast-data/${this.filteredForecastedYear}`,
         this.filterPayload
       );
-      localStorage.setItem("topSkuLevelData", JSON.stringify(topSkusData.parsedWeeklyData));
+      localStorage.setItem(
+        "topSkuLevelData",
+        JSON.stringify(topSkusData.parsedWeeklyData)
+      );
       let topLimitedSkuData = {};
       topLimitedSkuData["parsedWeeklyData"] = [];
       for (let i = 0; i < this.topSKUsCountLable; i++) {
@@ -867,20 +873,27 @@ export default {
       };
       let res;
       if (level == "sku") {
-        res = await this.$axios.$post(`/create-manualadjustment`, {
+        console.log({
           adjusted_by_user_id: parseInt(this.$auth.user.user_id),
           demand_forecast_run_log_id: parseInt(
             localStorage.getItem("baseVersionId")
           ),
           filter_level: "baseVersion",
           is_active: false,
-          adjusted_metrics_name: this.adustments.metrics_name,
-          adjusted_metrics_cell_date: new Date(this.adustments.weekend_date),
-          before_adjustment_value: Number(this.adustments.old_value),
-          new_adjusted_value: Number(this.adustments.new_value),
-          status: "Pending",
           ...filterObject,
+          filterSkuObject: this.skuLevelAdjustmentObj,
         });
+        this.skuLevelAdjustmentObj = [];
+        /*         res = await this.$axios.$post(`/create-manualadjustment`, {
+          adjusted_by_user_id: parseInt(this.$auth.user.user_id),
+          demand_forecast_run_log_id: parseInt(
+            localStorage.getItem("baseVersionId")
+          ),
+          filter_level: "baseVersion",
+          is_active: false,
+          ...filterObject,
+          filterSkuObject: this.skuLevelAdjustmentObj
+        }); */
       } else {
         res = await this.$axios.$post(`/create-manualadjustment`, {
           adjusted_by_user_id: parseInt(this.$auth.user.user_id),
