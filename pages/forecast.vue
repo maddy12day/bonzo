@@ -342,6 +342,7 @@
       :topSkusData="topSkusData"
       :allAppliedFilters="allAppliedFilters"
       @descardChanges="descardFilterChanges"
+      @getAdjustmentChanges="getFilterAdjustmentValues"
     />
     <ForecastBySkuTable
       v-if="isFilteredForecast"
@@ -351,6 +352,7 @@
       :topSkusData="topSkusData"
       :allAppliedFilters="allAppliedFilters"
       @descardChanges="descardFilterChanges"
+      @getAdjustmentChanges="getFilterAdjustmentValues"
     />
     <ForecastBySkuTable
       ref="filterChartWidget"
@@ -360,6 +362,7 @@
       :topSkusData="topSkusData"
       :allAppliedFilters="allAppliedFilters"
       @descardChanges="descardFilterChanges"
+      @getAdjustmentChanges="getFilterAdjustmentValues"
     />
     <!-- </div> -->
   </div>
@@ -484,7 +487,12 @@ export default {
 
   methods: {
     descardFilterChanges() {
-
+      console.log("descard changes are working");
+    },
+    getFilterAdjustmentValues(data) {
+      this.skuLevelAdjustmentObj.push(data);
+      console.log("adjustment data", data);
+      console.log(this.skuLevelAdjustmentObj);
     },
     setUpdatedSKUsLimit() {
       let selectedOption = this.options.filter(

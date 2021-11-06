@@ -1652,10 +1652,17 @@ export default {
       this.isManualAdjustment = false;
     },
     handleDataChange(e, forecast_attribute, data, index, innerIndex) {
-      const idx = innerIndex - 1;
+      const idx = innerIndex;
       const oldData = JSON.parse(localStorage.getItem('topSkuLevelData'))[index].data[idx];
+      console.log(oldData?.weekend)
       if(Number(data) !== Number(oldData[`${forecast_attribute}`])) {
       e.target.classList.add("filter-changed");
+      this.$emit('getAdjustmentChanges', {
+         adjusted_metrics_name: forecast_attribute,
+          adjusted_metrics_cell_date: moment(oldData?.weekend).format('DD-MM-YYYY'),
+          before_adjustment_value: Number(oldData[`${forecast_attribute}`]),
+          new_adjusted_value: Number(data),
+      })
       }
       console.log('oldata', oldData,oldData[`${forecast_attribute}`], data)
       console.log(e, forecast_attribute, data, index, innerIndex);
