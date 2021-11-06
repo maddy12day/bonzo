@@ -873,7 +873,7 @@ export default {
       };
       let res;
       if (level == "sku") {
-        console.log({
+        console.log(JSON.stringify({
           adjusted_by_user_id: parseInt(this.$auth.user.user_id),
           demand_forecast_run_log_id: parseInt(
             localStorage.getItem("baseVersionId")
@@ -882,7 +882,7 @@ export default {
           is_active: false,
           ...filterObject,
           filterSkuObject: this.skuLevelAdjustmentObj,
-        });
+        }));
         this.skuLevelAdjustmentObj = [];
         /*         res = await this.$axios.$post(`/create-manualadjustment`, {
           adjusted_by_user_id: parseInt(this.$auth.user.user_id),
@@ -910,7 +910,7 @@ export default {
           ...filterObject,
         });
       }
-      this.baseAdjustmentsList.adjustmentsResponse.unshift(res.manualAjustment);
+      /* this.baseAdjustmentsList.adjustmentsResponse.unshift(res.manualAjustment);
       this.baseMetricsList = JSON.parse(
         localStorage.getItem("adjustmentTableData")
       );
@@ -932,7 +932,7 @@ export default {
       } else {
         this.disbleAdjustment = false;
         this.changeMABtnText = false;
-      }
+      } */
     },
 
     // check status after every 10 sec for user scenarios
