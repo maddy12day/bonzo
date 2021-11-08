@@ -53,7 +53,7 @@
                     forecast_attribute,
                     scope.row.data[0][`${forecast_attribute}`],
                     scope.$index,
-                    0
+                    1
                   )
               "
             >
@@ -1670,7 +1670,8 @@ export default {
     },
 
     handleDataChange(e, forecast_attribute, data, index, innerIndex) {
-      const idx = innerIndex;
+      console.log("inner", innerIndex);
+      const idx = innerIndex - 1;
       const oldData = JSON.parse(localStorage.getItem("topSkuLevelData"))[index]
         .data[idx];
       console.log(oldData?.weekend);
@@ -1685,8 +1686,6 @@ export default {
           filter_skus: oldData?.sku,
         });
       }
-      console.log("oldata", oldData, oldData[`${forecast_attribute}`], data);
-      console.log(e, forecast_attribute, data, index, innerIndex);
     },
 
     getPercent(forecast_attribute, rowData) {
