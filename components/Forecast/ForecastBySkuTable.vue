@@ -42,7 +42,7 @@
         >
           <template slot-scope="scope">
             <el-input
-              v-if="isManualAdjustment"
+              v-if="isManualAdjustment && weekNo() < 1"
               autofocus
               v-model="scope.row.data[0][`${forecast_attribute}`]"
               :disabled="isDisble"
@@ -53,7 +53,7 @@
                     forecast_attribute,
                     scope.row.data[0][`${forecast_attribute}`],
                     scope.$index,
-                    1
+                    0
                   )
               "
             >
@@ -72,7 +72,7 @@
         >
           <template slot-scope="scope">
             <el-input
-              v-if="isManualAdjustment"
+              v-if="isManualAdjustment && weekNo() < 2"
               autofocus
               v-model="scope.row.data[1][`${forecast_attribute}`]"
               :disabled="isDisble"
@@ -102,7 +102,7 @@
         >
           <template slot-scope="scope">
             <el-input
-              v-if="isManualAdjustment"
+              v-if="isManualAdjustment && weekNo() < 3"
               autofocus
               v-model="scope.row.data[2][`${forecast_attribute}`]"
               :disabled="isDisble"
@@ -132,7 +132,7 @@
         >
           <template slot-scope="scope">
             <el-input
-              v-if="isManualAdjustment"
+              v-if="isManualAdjustment && weekNo() < 4"
               autofocus
               v-model="scope.row.data[3][`${forecast_attribute}`]"
               :disabled="isDisble"
@@ -162,7 +162,7 @@
         >
           <template slot-scope="scope">
             <el-input
-              v-if="isManualAdjustment"
+              v-if="isManualAdjustment && weekNo() < 5"
               autofocus
               v-model="scope.row.data[4][`${forecast_attribute}`]"
               :disabled="isDisble"
@@ -192,7 +192,7 @@
         >
           <template slot-scope="scope">
             <el-input
-              v-if="isManualAdjustment"
+              v-if="isManualAdjustment && weekNo() < 6"
               autofocus
               v-model="scope.row.data[5][`${forecast_attribute}`]"
               :disabled="isDisble"
@@ -222,7 +222,7 @@
         >
           <template slot-scope="scope">
             <el-input
-              v-if="isManualAdjustment"
+              v-if="isManualAdjustment && weekNo() < 7"
               autofocus
               v-model="scope.row.data[6][`${forecast_attribute}`]"
               :disabled="isDisble"
@@ -252,7 +252,7 @@
         >
           <template slot-scope="scope">
             <el-input
-              v-if="isManualAdjustment"
+              v-if="isManualAdjustment && weekNo() < 8"
               autofocus
               v-model="scope.row.data[7][`${forecast_attribute}`]"
               :disabled="isDisble"
@@ -282,7 +282,7 @@
         >
           <template slot-scope="scope">
             <el-input
-              v-if="isManualAdjustment"
+              v-if="isManualAdjustment && weekNo() < 9"
               autofocus
               v-model="scope.row.data[8][`${forecast_attribute}`]"
               :disabled="isDisble"
@@ -312,7 +312,7 @@
         >
           <template slot-scope="scope">
             <el-input
-              v-if="isManualAdjustment"
+              v-if="isManualAdjustment && weekNo() < 10"
               autofocus
               v-model="scope.row.data[9][`${forecast_attribute}`]"
               :disabled="isDisble"
@@ -342,7 +342,7 @@
         >
           <template slot-scope="scope">
             <el-input
-              v-if="isManualAdjustment"
+              v-if="isManualAdjustment && weekNo() < 11"
               autofocus
               v-model="scope.row.data[10][`${forecast_attribute}`]"
               :disabled="isDisble"
@@ -366,13 +366,13 @@
         </el-table-column>
         <el-table-column
           min-width="150"
-          :label="`w11 ${getWeekendDates(12)}`"
+          :label="`w12 ${getWeekendDates(12)}`"
           :class-name="checkIfPastWeek(12)"
           align="right"
         >
           <template slot-scope="scope">
             <el-input
-              v-if="isManualAdjustment"
+              v-if="isManualAdjustment && weekNo() < 12"
               autofocus
               v-model="scope.row.data[11][`${forecast_attribute}`]"
               :disabled="isDisble"
@@ -402,7 +402,7 @@
         >
           <template slot-scope="scope">
             <el-input
-              v-if="isManualAdjustment"
+              v-if="isManualAdjustment && weekNo() < 13"
               autofocus
               v-model="scope.row.data[12][`${forecast_attribute}`]"
               :disabled="isDisble"
@@ -432,7 +432,7 @@
         >
           <template slot-scope="scope">
             <el-input
-              v-if="isManualAdjustment"
+              v-if="isManualAdjustment && weekNo() < 14"
               autofocus
               v-model="scope.row.data[13][`${forecast_attribute}`]"
               :disabled="isDisble"
@@ -462,7 +462,7 @@
         >
           <template slot-scope="scope">
             <el-input
-              v-if="isManualAdjustment"
+              v-if="isManualAdjustment && weekNo() < 15"
               autofocus
               v-model="scope.row.data[14][`${forecast_attribute}`]"
               :disabled="isDisble"
@@ -492,7 +492,7 @@
         >
           <template slot-scope="scope">
             <el-input
-              v-if="isManualAdjustment"
+              v-if="isManualAdjustment && weekNo() < 16"
               autofocus
               v-model="scope.row.data[15][`${forecast_attribute}`]"
               :disabled="isDisble"
@@ -522,7 +522,7 @@
         >
           <template slot-scope="scope">
             <el-input
-              v-if="isManualAdjustment"
+              v-if="isManualAdjustment && weekNo() < 17"
               autofocus
               v-model="scope.row.data[16][`${forecast_attribute}`]"
               :disabled="isDisble"
@@ -552,7 +552,7 @@
         >
           <template slot-scope="scope">
             <el-input
-              v-if="isManualAdjustment"
+              v-if="isManualAdjustment && weekNo() < 18"
               autofocus
               v-model="scope.row.data[17][`${forecast_attribute}`]"
               :disabled="isDisble"
@@ -582,7 +582,7 @@
         >
           <template slot-scope="scope">
             <el-input
-              v-if="isManualAdjustment"
+              v-if="isManualAdjustment && weekNo() < 19"
               autofocus
               v-model="scope.row.data[18][`${forecast_attribute}`]"
               :disabled="isDisble"
@@ -612,7 +612,7 @@
         >
           <template slot-scope="scope">
             <el-input
-              v-if="isManualAdjustment"
+              v-if="isManualAdjustment && weekNo() < 20"
               autofocus
               v-model="scope.row.data[19][`${forecast_attribute}`]"
               :disabled="isDisble"
@@ -642,7 +642,7 @@
         >
           <template slot-scope="scope">
             <el-input
-              v-if="isManualAdjustment"
+              v-if="isManualAdjustment && weekNo() < 21"
               autofocus
               v-model="scope.row.data[20][`${forecast_attribute}`]"
               :disabled="isDisble"
@@ -672,7 +672,7 @@
         >
           <template slot-scope="scope">
             <el-input
-              v-if="isManualAdjustment"
+              v-if="isManualAdjustment && weekNo() < 22"
               autofocus
               v-model="scope.row.data[21][`${forecast_attribute}`]"
               :disabled="isDisble"
@@ -702,7 +702,7 @@
         >
           <template slot-scope="scope">
             <el-input
-              v-if="isManualAdjustment"
+              v-if="isManualAdjustment && weekNo() < 23"
               autofocus
               v-model="scope.row.data[22][`${forecast_attribute}`]"
               :disabled="isDisble"
@@ -732,7 +732,7 @@
         >
           <template slot-scope="scope">
             <el-input
-              v-if="isManualAdjustment"
+              v-if="isManualAdjustment && weekNo() < 24"
               autofocus
               v-model="scope.row.data[23][`${forecast_attribute}`]"
               :disabled="isDisble"
@@ -762,7 +762,7 @@
         >
           <template slot-scope="scope">
             <el-input
-              v-if="isManualAdjustment"
+              v-if="isManualAdjustment && weekNo() < 25"
               autofocus
               v-model="scope.row.data[24][`${forecast_attribute}`]"
               :disabled="isDisble"
@@ -792,7 +792,7 @@
         >
           <template slot-scope="scope">
             <el-input
-              v-if="isManualAdjustment"
+              v-if="isManualAdjustment && weekNo() < 26"
               autofocus
               v-model="scope.row.data[25][`${forecast_attribute}`]"
               :disabled="isDisble"
@@ -822,7 +822,7 @@
         >
           <template slot-scope="scope">
             <el-input
-              v-if="isManualAdjustment"
+              v-if="isManualAdjustment && weekNo() < 27"
               autofocus
               v-model="scope.row.data[26][`${forecast_attribute}`]"
               :disabled="isDisble"
@@ -852,7 +852,7 @@
         >
           <template slot-scope="scope">
             <el-input
-              v-if="isManualAdjustment"
+              v-if="isManualAdjustment && weekNo() < 28"
               autofocus
               v-model="scope.row.data[27][`${forecast_attribute}`]"
               :disabled="isDisble"
@@ -882,7 +882,7 @@
         >
           <template slot-scope="scope">
             <el-input
-              v-if="isManualAdjustment"
+              v-if="isManualAdjustment && weekNo() < 29"
               autofocus
               v-model="scope.row.data[28][`${forecast_attribute}`]"
               :disabled="isDisble"
@@ -912,7 +912,7 @@
         >
           <template slot-scope="scope">
             <el-input
-              v-if="isManualAdjustment"
+              v-if="isManualAdjustment && weekNo() < 30"
               autofocus
               v-model="scope.row.data[29][`${forecast_attribute}`]"
               :disabled="isDisble"
@@ -942,7 +942,7 @@
         >
           <template slot-scope="scope">
             <el-input
-              v-if="isManualAdjustment"
+              v-if="isManualAdjustment && weekNo() < 31"
               autofocus
               v-model="scope.row.data[30][`${forecast_attribute}`]"
               :disabled="isDisble"
@@ -972,7 +972,7 @@
         >
           <template slot-scope="scope">
             <el-input
-              v-if="isManualAdjustment"
+              v-if="isManualAdjustment && weekNo() < 32"
               autofocus
               v-model="scope.row.data[31][`${forecast_attribute}`]"
               :disabled="isDisble"
@@ -1002,7 +1002,7 @@
         >
           <template slot-scope="scope">
             <el-input
-              v-if="isManualAdjustment"
+              v-if="isManualAdjustment && weekNo() < 33"
               autofocus
               v-model="scope.row.data[32][`${forecast_attribute}`]"
               :disabled="isDisble"
@@ -1032,7 +1032,7 @@
         >
           <template slot-scope="scope">
             <el-input
-              v-if="isManualAdjustment"
+              v-if="isManualAdjustment && weekNo() < 34"
               autofocus
               v-model="scope.row.data[33][`${forecast_attribute}`]"
               :disabled="isDisble"
@@ -1062,7 +1062,7 @@
         >
           <template slot-scope="scope">
             <el-input
-              v-if="isManualAdjustment"
+              v-if="isManualAdjustment && weekNo() < 35"
               autofocus
               v-model="scope.row.data[34][`${forecast_attribute}`]"
               :disabled="isDisble"
@@ -1092,7 +1092,7 @@
         >
           <template slot-scope="scope">
             <el-input
-              v-if="isManualAdjustment"
+              v-if="isManualAdjustment && weekNo() < 36"
               autofocus
               v-model="scope.row.data[35][`${forecast_attribute}`]"
               :disabled="isDisble"
@@ -1122,7 +1122,7 @@
         >
           <template slot-scope="scope">
             <el-input
-              v-if="isManualAdjustment"
+              v-if="isManualAdjustment && weekNo() < 37"
               autofocus
               v-model="scope.row.data[36][`${forecast_attribute}`]"
               :disabled="isDisble"
@@ -1152,7 +1152,7 @@
         >
           <template slot-scope="scope">
             <el-input
-              v-if="isManualAdjustment"
+              v-if="isManualAdjustment && weekNo() < 38"
               autofocus
               v-model="scope.row.data[37][`${forecast_attribute}`]"
               :disabled="isDisble"
@@ -1182,7 +1182,7 @@
         >
           <template slot-scope="scope">
             <el-input
-              v-if="isManualAdjustment"
+              v-if="isManualAdjustment && weekNo() < 39"
               autofocus
               v-model="scope.row.data[38][`${forecast_attribute}`]"
               :disabled="isDisble"
@@ -1212,7 +1212,7 @@
         >
           <template slot-scope="scope">
             <el-input
-              v-if="isManualAdjustment"
+              v-if="isManualAdjustment && weekNo() < 40"
               autofocus
               v-model="scope.row.data[39][`${forecast_attribute}`]"
               :disabled="isDisble"
@@ -1242,7 +1242,7 @@
         >
           <template slot-scope="scope">
             <el-input
-              v-if="isManualAdjustment"
+              v-if="isManualAdjustment && weekNo() < 41"
               autofocus
               v-model="scope.row.data[40][`${forecast_attribute}`]"
               :disabled="isDisble"
@@ -1272,7 +1272,7 @@
         >
           <template slot-scope="scope">
             <el-input
-              v-if="isManualAdjustment"
+              v-if="isManualAdjustment && weekNo() < 42"
               autofocus
               v-model="scope.row.data[41][`${forecast_attribute}`]"
               :disabled="isDisble"
@@ -1302,7 +1302,7 @@
         >
           <template slot-scope="scope">
             <el-input
-              v-if="isManualAdjustment"
+              v-if="isManualAdjustment && weekNo() < 43"
               autofocus
               v-model="scope.row.data[42][`${forecast_attribute}`]"
               :disabled="isDisble"
@@ -1332,7 +1332,7 @@
         >
           <template slot-scope="scope">
             <el-input
-              v-if="isManualAdjustment"
+              v-if="isManualAdjustment && weekNo() < 44"
               autofocus
               v-model="scope.row.data[43][`${forecast_attribute}`]"
               :disabled="isDisble"
@@ -1362,7 +1362,7 @@
         >
           <template slot-scope="scope">
             <el-input
-              v-if="isManualAdjustment"
+              v-if="isManualAdjustment && weekNo() < 45"
               autofocus
               v-model="scope.row.data[44][`${forecast_attribute}`]"
               :disabled="isDisble"
@@ -1392,7 +1392,7 @@
         >
           <template slot-scope="scope">
             <el-input
-              v-if="isManualAdjustment"
+              v-if="isManualAdjustment && weekNo() < 46"
               autofocus
               v-model="scope.row.data[45][`${forecast_attribute}`]"
               :disabled="isDisble"
@@ -1422,7 +1422,7 @@
         >
           <template slot-scope="scope">
             <el-input
-              v-if="isManualAdjustment"
+              v-if="isManualAdjustment && weekNo() < 47"
               autofocus
               v-model="scope.row.data[46][`${forecast_attribute}`]"
               :disabled="isDisble"
@@ -1452,7 +1452,7 @@
         >
           <template slot-scope="scope">
             <el-input
-              v-if="isManualAdjustment"
+              v-if="isManualAdjustment && weekNo() < 48"
               autofocus
               v-model="scope.row.data[47][`${forecast_attribute}`]"
               :disabled="isDisble"
@@ -1482,7 +1482,7 @@
         >
           <template slot-scope="scope">
             <el-input
-              v-if="isManualAdjustment"
+              v-if="isManualAdjustment && weekNo() < 49"
               autofocus
               v-model="scope.row.data[48][`${forecast_attribute}`]"
               :disabled="isDisble"
@@ -1512,7 +1512,7 @@
         >
           <template slot-scope="scope">
             <el-input
-              v-if="isManualAdjustment"
+              v-if="isManualAdjustment && weekNo() < 50"
               autofocus
               v-model="scope.row.data[49][`${forecast_attribute}`]"
               :disabled="isDisble"
@@ -1542,7 +1542,7 @@
         >
           <template slot-scope="scope">
             <el-input
-              v-if="isManualAdjustment"
+              v-if="isManualAdjustment && weekNo() < 51"
               autofocus
               v-model="scope.row.data[50][`${forecast_attribute}`]"
               :disabled="isDisble"
@@ -1572,7 +1572,7 @@
         >
           <template slot-scope="scope">
             <el-input
-              v-if="isManualAdjustment"
+              v-if="isManualAdjustment && weekNo() < 52"
               autofocus
               v-model="scope.row.data[51][`${forecast_attribute}`]"
               :disabled="isDisble"
@@ -1648,7 +1648,10 @@ export default {
   },
   methods: {
     submitManualAdjustment() {
+      this.isManualAdjustment = false;
+      this.isDisble = true;
       this.$emit("createFilterAdjustment");
+      this.isValueChanged = false;
     },
 
     handleManualAdjustment() {
@@ -1678,6 +1681,10 @@ export default {
       if (Number(data) !== Number(oldData[`${forecast_attribute}`])) {
         this.isValueChanged = true;
         e.target.classList.add("filter-changed");
+        e.target.style.border = "none";
+        e.target.parentNode.parentNode.classList.add(
+          "filter-changed"
+        );
         this.$emit("getAdjustmentChanges", {
           adjusted_metrics_name: forecast_attribute,
           weekend: oldData?.weekend ? new Date(oldData?.weekend) : new Date(),

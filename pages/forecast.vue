@@ -885,6 +885,7 @@ export default {
             adjusted_metrics_name: this.skuLevelAdjustmentObj[0]
               .adjusted_metrics_name,
             filterSkuObject: this.skuLevelAdjustmentObj,
+            adjustment_level: "sku"
           })
         );
         res = await this.$axios.$post(`/create-manualadjustment`, {
@@ -893,26 +894,18 @@ export default {
             localStorage.getItem("baseVersionId")
           ),
           filter_level: "baseVersion",
-          adjusted_metrics_cell_date: new Date(this.skuLevelAdjustmentObj[0]
-            .weekend),
+          adjusted_metrics_cell_date: new Date(
+            this.skuLevelAdjustmentObj[0].weekend
+          ),
           is_active: false,
           ...filterObject,
-           status: "Pending",
+          status: "Pending",
           adjusted_metrics_name: this.skuLevelAdjustmentObj[0]
             .adjusted_metrics_name,
           filterSkuObject: this.skuLevelAdjustmentObj,
+          adjustment_level: "sku"
         });
         this.skuLevelAdjustmentObj = [];
-        /*         res = await this.$axios.$post(`/create-manualadjustment`, {
-          adjusted_by_user_id: parseInt(this.$auth.user.user_id),
-          demand_forecast_run_log_id: parseInt(
-            localStorage.getItem("baseVersionId")
-          ),
-          filter_level: "baseVersion",
-          is_active: false,
-          ...filterObject,
-          filterSkuObject: this.skuLevelAdjustmentObj
-        }); */
       } else {
         res = await this.$axios.$post(`/create-manualadjustment`, {
           adjusted_by_user_id: parseInt(this.$auth.user.user_id),
@@ -929,7 +922,7 @@ export default {
           ...filterObject,
         });
       }
-      /* this.baseAdjustmentsList.adjustmentsResponse.unshift(res.manualAjustment);
+      this.baseAdjustmentsList.adjustmentsResponse.unshift(res.manualAjustment);
       this.baseMetricsList = JSON.parse(
         localStorage.getItem("adjustmentTableData")
       );
@@ -951,7 +944,7 @@ export default {
       } else {
         this.disbleAdjustment = false;
         this.changeMABtnText = false;
-      } */
+      }
     },
 
     // check status after every 10 sec for user scenarios
