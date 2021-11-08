@@ -1650,10 +1650,15 @@ export default {
     submitManualAdjustment() {
       this.$emit("createFilterAdjustment");
     },
+
     handleManualAdjustment() {
       this.isManualAdjustment = true;
-      
     },
+
+    weekNo() {
+      return moment(new Date()).week() - 1;
+    },
+
     descardChanges() {
       this.$emit("descardChanges");
       this.isManualAdjustment = false;
@@ -1663,6 +1668,7 @@ export default {
         item.classList.remove("filter-changed");
       });
     },
+
     handleDataChange(e, forecast_attribute, data, index, innerIndex) {
       const idx = innerIndex;
       const oldData = JSON.parse(localStorage.getItem("topSkuLevelData"))[index]
@@ -1673,17 +1679,16 @@ export default {
         e.target.classList.add("filter-changed");
         this.$emit("getAdjustmentChanges", {
           adjusted_metrics_name: forecast_attribute,
-          adjusted_metrics_cell_date: moment(oldData?.weekend).format(
-            "DD-MM-YYYY"
-          ),
-          before_adjustment_value: Number(oldData[`${forecast_attribute}`]),
-          new_adjusted_value: Number(data),
+          weekend: oldData?.weekend ? new Date(oldData?.weekend) : new Date(),
+          before_adjustment_value: parseFloat(oldData[`${forecast_attribute}`]),
+          new_adjusted_value: parseFloat(data),
           filter_skus: oldData?.sku,
         });
       }
       console.log("oldata", oldData, oldData[`${forecast_attribute}`], data);
       console.log(e, forecast_attribute, data, index, innerIndex);
     },
+
     getPercent(forecast_attribute, rowData) {
       if (forecast_attribute != "aur" && rowData[forecast_attribute] != 0) {
         let percent =
@@ -1695,10 +1700,12 @@ export default {
         return "";
       }
     },
+
     async getFilteredForecastData(forecastYear) {
       // const data = await this.$axios.$get(`/get-filtered-forecast-data/${forecastYear}`);
       // this.forecastData = data;
     },
+
     getWeekendDates(index) {
       return JSON.parse(window.localStorage.getItem("weekendDates"))
         ? `(${moment(
@@ -1706,6 +1713,7 @@ export default {
           ).format("MM/DD/YYYY")})`
         : "";
     },
+
     checkIfPastWeek(index) {
       let className = "";
       if (moment(new Date()).week() > index) {

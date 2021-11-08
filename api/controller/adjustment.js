@@ -71,11 +71,33 @@ export const getWeekendDates = async (req, res) => {
 // create manual adjustment
 export const createManualAdjustment = async (req, res) => {
   try {
+    const reqObject = { ...req.body };
+    if (req.body.hasOwnProperty("filterSkuObject")) {
+      delete req.body.filterSkuObject;
+    }
     const manualAjustment = await prisma.manual_adjustments.create({
       data: {
         ...req.body,
       },
     });
+    console.log("data=0=0", manualAjustment);
+    if (reqObject.hasOwnProperty("filterSkuObject")) {
+      const reqObjSkuLevel = reqObject.filterSkuObject.map((item) => {
+        delete item["adjusted_metrics_name"];
+        return {
+          ...item,
+          adjustment_id: manualAjustment.id,
+        };
+      });
+      console.log(reqObjSkuLevel);
+      const skuLevelAdjustment = await prisma.manual_adjustments_sku_level.createMany(
+        {
+          data: reqObjSkuLevel,
+          skipDuplicates: true,
+        },
+      );
+      console.log(skuLevelAdjustment);
+    }
     const executed_by = await prisma.users.findUnique({
       where: {
         id: req.body.adjusted_by_user_id,
@@ -125,8 +147,6 @@ export const activateManualAdjustment = async (req, res) => {
     });
   }
 };
-
-
 
 // check user created adjustments status
 export const checkAdjustmentStatus = async (req, res) => {
@@ -338,7 +358,6 @@ export const getAdjustmentUnitSalesComparison = async (req, res) => {
 
 export const activateAdjustmentAsBase = async (req, res) => {
   try {
-  
     const isPartOfBase = await prisma.manual_adjustments.update({
       where: {
         id: parseInt(req.params.id),
@@ -346,7 +365,7 @@ export const activateAdjustmentAsBase = async (req, res) => {
       data: {
         is_active: true,
       },
-    }); 
+    });
     const whereIsbaseForecstFalse = await prisma.$queryRaw(
       `update morphe_staging.demand_forecast_run_log set is_base_forecast=false where is_base_forecast= true`
     );
@@ -357,7 +376,7 @@ export const activateAdjustmentAsBase = async (req, res) => {
     );
     res.json({
       whereIsbaseForecstTrue,
-      isPartOfBase
+      isPartOfBase,
     });
   } catch (error) {
     res.json({
@@ -372,7 +391,7 @@ export const AdjustmentStatus = async (req, res) => {
       where: {
         manual_adjustment_id: parseInt(req.params.id),
         is_base_forecast: true,
-        forecast_type: 'Adjustment'
+        forecast_type: "Adjustment",
       },
       select: {
         status: true,

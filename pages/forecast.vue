@@ -873,16 +873,35 @@ export default {
       };
       let res;
       if (level == "sku") {
-        console.log(JSON.stringify({
+        console.log(
+          JSON.stringify({
+            adjusted_by_user_id: parseInt(this.$auth.user.user_id),
+            demand_forecast_run_log_id: parseInt(
+              localStorage.getItem("baseVersionId")
+            ),
+            filter_level: "baseVersion",
+            is_active: false,
+            ...filterObject,
+            adjusted_metrics_name: this.skuLevelAdjustmentObj[0]
+              .adjusted_metrics_name,
+            filterSkuObject: this.skuLevelAdjustmentObj,
+          })
+        );
+        res = await this.$axios.$post(`/create-manualadjustment`, {
           adjusted_by_user_id: parseInt(this.$auth.user.user_id),
           demand_forecast_run_log_id: parseInt(
             localStorage.getItem("baseVersionId")
           ),
           filter_level: "baseVersion",
+          adjusted_metrics_cell_date: new Date(this.skuLevelAdjustmentObj[0]
+            .weekend),
           is_active: false,
           ...filterObject,
+           status: "Pending",
+          adjusted_metrics_name: this.skuLevelAdjustmentObj[0]
+            .adjusted_metrics_name,
           filterSkuObject: this.skuLevelAdjustmentObj,
-        }));
+        });
         this.skuLevelAdjustmentObj = [];
         /*         res = await this.$axios.$post(`/create-manualadjustment`, {
           adjusted_by_user_id: parseInt(this.$auth.user.user_id),
