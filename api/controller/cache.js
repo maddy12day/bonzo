@@ -22,6 +22,11 @@ export const programFiltersData = async (req, res) => {
     let customIndex = index + 1;
     const program = await newCache.get(`globalProgramDataSet${customIndex}`);
     responseArray.push(...program);
+    if( cacheSlicesLengthMap.get("globalProgramDataSet") == customIndex) {
+      res.json({
+        response: responseArray,
+      });
+    }
   }
   res.json({
     response: responseArray,
@@ -37,10 +42,14 @@ export const regularFiltersData = async (req, res) => {
     let customIndex = index + 1;
     const regular = await newCache.get(`globalRegularDataSet${customIndex}`);
     responseArray.push(...regular);
+    if( cacheSlicesLengthMap.get("globalRegularDataSet") == customIndex) {
+      res.json({
+        response: responseArray,
+      });
+    }
+  
   }
-  res.json({
-    response: responseArray,
-  });
+  
 };
 export const regularFilterDropdownData = async (req, res) => {
   try {
