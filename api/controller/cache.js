@@ -35,7 +35,7 @@ export const regularFiltersData = async (req, res) => {
   const responseArray = [];
 
   for (let [index, pcount] of Array(
-    cacheSlicesLengthMap.get("globalRegularDataSet")
+    cacheSlicesLengthMap.get("globalRegularDataSetMap")
   )
     .fill(0)
     .entries()) {
@@ -44,7 +44,7 @@ export const regularFiltersData = async (req, res) => {
     const regular = await newCache.get(`globalRegularDataSet${customIndex}`);
     responseArray.push(...regular);
     if (
-      Array(cacheSlicesLengthMap.get("globalRegularDataSet")).length ==
+      Array(cacheSlicesLengthMap.get("globalRegularDataSetMap")).length ==
       customIndex
     ) {
       res.json({
@@ -275,11 +275,11 @@ export const setProgramFilterCache = async (req, res) => {
                 10;`);
 
     cacheSlicesLengthMap.set(
-      "globalRegularDataSet",
+      "globalRegularDataSetMap",
       Math.ceil(regular.length / 2000)
     );
     for (let [rindex, pcount] of Array(
-      cacheSlicesLengthMap.get("globalRegularDataSet")
+      cacheSlicesLengthMap.get("globalRegularDataSetMap")
     )
       .fill(0)
       .entries()) {
