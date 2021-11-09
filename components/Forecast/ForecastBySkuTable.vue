@@ -1600,7 +1600,7 @@
       class="btn btn-primary pull-right btn-sm"
       @click="handleManualAdjustment"
       v-if="!isManualAdjustment"
-      :disabled="getDisabledAdjustment()"
+      :disabled="getDisabledAdjustment"
     >
       Manual Adjustment
     </button>
@@ -1637,6 +1637,7 @@ export default {
     "forecast_attribute",
     "topSkusData",
     "allAppliedFilters",
+    "disbleAdjustment"
   ],
   data() {
     return {
@@ -1647,6 +1648,11 @@ export default {
       topSkusDataState: localStorage.getItem("topSkuLevelData"),
       
     };
+  },
+  computed: {
+    getDisabledAdjustment() {
+      return this.disbleAdjustment
+    }
   },
   methods: {
     getDisabledAdjustment() {

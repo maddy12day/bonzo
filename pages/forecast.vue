@@ -344,6 +344,7 @@
       @descardChanges="descardFilterChanges"
       @getAdjustmentChanges="getFilterAdjustmentValues"
       @createFilterAdjustment="createManualAdjustment('sku')"
+      :disbleAdjustment="isDisbleAdjustment"
     />
     <ForecastBySkuTable
       v-if="isFilteredForecast"
@@ -355,6 +356,7 @@
       @descardChanges="descardFilterChanges"
       @getAdjustmentChanges="getFilterAdjustmentValues"
       @createFilterAdjustment="createManualAdjustment('sku')"
+      :disbleAdjustment="isDisbleAdjustment"
     />
     <ForecastBySkuTable
       ref="filterChartWidget"
@@ -366,6 +368,7 @@
       @descardChanges="descardFilterChanges"
       @getAdjustmentChanges="getFilterAdjustmentValues"
       @createFilterAdjustment="createManualAdjustment('sku')"
+      :disbleAdjustment="isDisbleAdjustment"
     />
     <!-- </div> -->
   </div>
@@ -1108,6 +1111,9 @@ export default {
     },
   },
   computed: {
+    isDisbleAdjustment() {
+      return this.disbleAdjustment;
+    },
     isSystemLocked() {
       return this.$store.state.isSystemLocked;
     },
