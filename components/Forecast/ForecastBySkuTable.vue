@@ -1613,10 +1613,10 @@
     </button>
     <button
       class="btn btn-primary pull-right btn-sm"
-      @click="descardChanges"
+      @click="discardChanges"
       v-if="isManualAdjustment"
     >
-      Descard
+      Discard
     </button>
   </card>
 </template>
@@ -1673,8 +1673,8 @@ export default {
       return moment(new Date()).week() - 1;
     },
 
-    descardChanges() {
-      this.$emit("descardChanges");
+    discardChanges() {
+      this.$emit("discardChanges");
       this.isManualAdjustment = false;
       this.isValueChanged = false;
       const elements = document.querySelectorAll(".filter-changed");

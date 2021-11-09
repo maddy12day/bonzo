@@ -341,7 +341,7 @@
       :forecast_attribute="'retail_sales'"
       :topSkusData="topSkusData"
       :allAppliedFilters="allAppliedFilters"
-      @descardChanges="descardFilterChanges"
+      @discardChanges="discardFilterChanges"
       @getAdjustmentChanges="getFilterAdjustmentValues"
       @createFilterAdjustment="createManualAdjustment('sku')"
       :disbleAdjustment="isDisbleAdjustment"
@@ -353,7 +353,7 @@
       :forecast_attribute="'units_sales'"
       :topSkusData="topSkusData"
       :allAppliedFilters="allAppliedFilters"
-      @descardChanges="descardFilterChanges"
+      @discardChanges="discardFilterChanges"
       @getAdjustmentChanges="getFilterAdjustmentValues"
       @createFilterAdjustment="createManualAdjustment('sku')"
       :disbleAdjustment="isDisbleAdjustment"
@@ -365,7 +365,7 @@
       :forecast_attribute="'aur'"
       :topSkusData="topSkusData"
       :allAppliedFilters="allAppliedFilters"
-      @descardChanges="descardFilterChanges"
+      @discardChanges="discardFilterChanges"
       @getAdjustmentChanges="getFilterAdjustmentValues"
       @createFilterAdjustment="createManualAdjustment('sku')"
       :disbleAdjustment="isDisbleAdjustment"
@@ -492,8 +492,8 @@ export default {
   },
 
   methods: {
-    descardFilterChanges() {
-      console.log("descard changes are working");
+    discardFilterChanges() {
+      console.log("discard changes are working");
     },
     getFilterAdjustmentValues(data) {
       this.skuLevelAdjustmentObj.push(data);
