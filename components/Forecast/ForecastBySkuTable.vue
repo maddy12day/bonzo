@@ -1600,6 +1600,7 @@
       class="btn btn-primary pull-right btn-sm"
       @click="handleManualAdjustment"
       v-if="!isManualAdjustment"
+      :disabled="getDisabledAdjustment()"
     >
       Manual Adjustment
     </button>
@@ -1644,9 +1645,13 @@ export default {
       isDisble: false,
       isValueChanged: false,
       topSkusDataState: localStorage.getItem("topSkuLevelData"),
+      
     };
   },
   methods: {
+    getDisabledAdjustment() {
+      return localStorage.getItem('disabledAdjustment');
+    },
     submitManualAdjustment() {
       this.isManualAdjustment = false;
       this.isDisble = true;

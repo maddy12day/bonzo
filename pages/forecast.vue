@@ -957,6 +957,7 @@ export default {
           }
         );
         if (adjustmentsJson) {
+          localStorage.setItem('disabledAdjustment', this.disbleAdjustment);
           if (adjustmentsJson.adjustment) {
             if (
               adjustmentsJson &&
