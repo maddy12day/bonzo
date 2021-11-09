@@ -12,36 +12,46 @@ const memcachedConnection = new memcached("localhost:11211", {
 });
 const newCache = new MemcachePlus();
 export const programFiltersData = async (req, res) => {
-  console.log(cacheSlicesLengthMap.get("globalProgramDataSet"));
   const responseArray = [];
   for (let [index, pcount] of Array(
-    cacheSlicesLengthMap.get("globalProgramDataSet")
+    cacheSlicesLengthMap.get("globalProgramDataSetMap")
   )
     .fill(0)
     .entries()) {
     let customIndex = index + 1;
     const program = await newCache.get(`globalProgramDataSet${customIndex}`);
     responseArray.push(...program);
+    if (
+      Array(cacheSlicesLengthMap.get("globalProgramDataSetMap")).length ==
+      customIndex
+    ) {
+      res.json({
+        response: responseArray,
+      });
+    }
   }
-  res.json({
-    response: responseArray,
-  });
 };
 export const regularFiltersData = async (req, res) => {
   const responseArray = [];
+
   for (let [index, pcount] of Array(
     cacheSlicesLengthMap.get("globalRegularDataSet")
   )
     .fill(0)
     .entries()) {
     let customIndex = index + 1;
+
     const regular = await newCache.get(`globalRegularDataSet${customIndex}`);
     responseArray.push(...regular);
-    res.json({
-      response: responseArray,
-    });
+    if (
+      Array(cacheSlicesLengthMap.get("globalRegularDataSet")).length ==
+      customIndex
+    ) {
+      res.json({
+        response: responseArray,
+      });
+    }
   }
-  
 };
 export const regularFilterDropdownData = async (req, res) => {
   try {
@@ -202,13 +212,12 @@ export const setProgramFilterCache = async (req, res) => {
       "globalProgramDataSetMap",
       Math.ceil(program.length / 2000)
     );
-    console.log(Math.ceil(program.length / 2000));
-    for (let [index, pcount] of Array(
+    for (let [pindex, pcount] of Array(
       cacheSlicesLengthMap.get("globalProgramDataSetMap")
     )
       .fill(0)
       .entries()) {
-      let customIndex = index + 1;
+      let customIndex = pindex + 1;
       let previousSlice = (customIndex - 1) * 2000;
       let nextSlice = customIndex * 2000;
       await newCache.set(
@@ -269,12 +278,12 @@ export const setProgramFilterCache = async (req, res) => {
       "globalRegularDataSet",
       Math.ceil(regular.length / 2000)
     );
-    for (let [index, pcount] of Array(
+    for (let [rindex, pcount] of Array(
       cacheSlicesLengthMap.get("globalRegularDataSet")
     )
       .fill(0)
       .entries()) {
-      let customIndex = index + 1;
+      let customIndex = rindex + 1;
       let previousSlice = (customIndex - 1) * 2000;
       let nextSlice = customIndex * 2000;
       await newCache.set(
