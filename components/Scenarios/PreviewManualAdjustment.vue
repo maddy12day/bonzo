@@ -81,7 +81,7 @@
             <template slot-scope="scope">
               {{
                 scope.row.planned_revenue
-                  ? scope.row.planned_revenue.toFixed(2)
+                  ? scope.row.planned_revenue.toFixed()
                   : 0 | toLocaleStr
               }}
             </template>
@@ -95,7 +95,7 @@
             <template slot-scope="scope">
               {{
                 scope.row.forecasted_revenue
-                  ? scope.row.forecasted_revenue.toFixed(2)
+                  ? scope.row.forecasted_revenue.toFixed()
                   : 0 | toLocaleStr
               }}
             </template>
@@ -109,7 +109,7 @@
             <template slot-scope="scope">
               {{
                 scope.row.adjusted_revenue
-                  ? scope.row.adjusted_revenue.toFixed(2)
+                  ? scope.row.adjusted_revenue.toFixed()
                   : 0 | toLocaleStr
               }}
             </template>
@@ -300,21 +300,21 @@
               <td>
                 {{
                   col2.planned_revenue
-                    ? parseInt(col2.planned_revenue)
+                    ? parseInt(col2.planned_revenue.toFixed())
                     : 0 | toLocaleStr
                 }}
               </td>
               <td>
                 {{
                   col2.forecasted_revenue
-                    ? parseInt(col2.forecasted_revenue)
+                    ? parseInt(col2.forecasted_revenue.toFixed())
                     : 0 | toLocaleStr
                 }}
               </td>
               <td>
                 {{
                   col2.adjusted_revenue
-                    ? parseInt(col2.adjusted_revenue)
+                    ? parseInt(col2.adjusted_revenue.toFixed())
                     : 0 | toLocaleStr
                 }}
               </td>
@@ -394,7 +394,7 @@
                 v-for="(col2, index) in Object.values(col2)"
                 :key="Math.random(index, 200)"
               >
-                {{ index > 0 ? col2.toFixed(2) : col2 }}
+                {{ index > 0 ? col2.toFixed() : col2 }}
               </td>
             </tr>
           </tbody>
