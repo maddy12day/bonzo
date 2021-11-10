@@ -59,8 +59,8 @@
             >
             </el-input>
             <p v-else>
-              {{ scope.row.data[1][`${forecast_attribute}`] | toLocaleStr }}
-              {{ getPercent(forecast_attribute, scope.row.data[1]) }}
+              {{ scope.row.data[0][`${forecast_attribute}`] | toLocaleStr }}
+              {{ getPercent(forecast_attribute, scope.row.data[0]) }}
             </p>
           </template>
         </el-table-column>
@@ -1655,9 +1655,6 @@ export default {
     }
   },
   methods: {
-    getDisabledAdjustment() {
-      return localStorage.getItem('disabledAdjustment');
-    },
     submitManualAdjustment() {
       this.isManualAdjustment = false;
       this.isDisble = true;
