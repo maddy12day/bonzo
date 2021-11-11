@@ -808,6 +808,7 @@ const getWeeklyFilteredForecastMetricsQuery = (
   }
                 GROUP BY
                   dfbwm.week_of_year;`;
+                  console.log(query)
   return query;
 };
 
@@ -887,6 +888,7 @@ const getMonthlyFilteredForecastMetricsQuery = (
   }
     GROUP BY
       dfbwm.month_of_year;`;
+      console.log(query)
   return query;
 };
 
@@ -994,6 +996,7 @@ export const getFilteredForecastMetrics = async (req, res) => {
         countryQuery,
         filterForecastedYear
       );
+      console.log("monthlyquery------",query);
     } else {
       query = getWeeklyFilteredForecastMetricsQuery(
         transaction_db,
@@ -1003,6 +1006,8 @@ export const getFilteredForecastMetrics = async (req, res) => {
         countryQuery,
         filterForecastedYear
       );
+      console.log("Weeklyquery------",query);
+
     }
 
     let filteredForecastMetricsPromise = await Promise.allSettled([
@@ -1420,6 +1425,7 @@ export const getFilterChartData = async (req, res) => {
       prisma.$queryRaw(filteredQuarterlyPlannedDataQuery),
       prisma.$queryRaw(filteredQuarterlyThisYearSaleDataQuery),
       prisma.$queryRaw(filteredQuarterlyForecastDataQuery),
+      console.log(filteredQuarterlyForecastDataQuery)
     ]);
     let data = quarterlyFilteredStats.map((item) =>
       parseChartData(req.body.duration, item.value)

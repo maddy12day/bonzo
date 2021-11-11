@@ -279,7 +279,7 @@
             `btn btn-primary btn-sm text-left ${disbledCom ? 'disabled' : ''}`
           "
           @click="() => createManualAdjustment('base')"
-          v-if="changeMABtnText"
+          v-if="changeMABtnText && filteredActiveTab == 'Weekly'"
           :disabled="disbledCom"
         >
           Submit Adjustment
@@ -287,7 +287,7 @@
         <button
           :class="`btn btn-primary btn-sm ${disbledCom ? 'disabled' : ''}`"
           @click="discardChanges"
-          v-if="showDiscardBtn"
+          v-if="showDiscardBtn && filteredActiveTab == 'Weekly'"
           :disabled="disbledCom"
         >
           Discard
