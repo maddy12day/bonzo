@@ -674,13 +674,54 @@ const parseFilteredForecastData = (
               obj["Q1"] = (quarterTotal / 13).toFixed(2);
               quarterTotal = 0;
             } else if (index == 26) {
-              obj["Q2"] = (quarterTotal / 13).toFixed(2);
+              switch (obj["Metrics Slug"]) {
+                case "retail_sales_build":
+                  obj["Q2"] = (
+                    quarter2RevenueTotal / quarter1RevenueTotal
+                  ).toFixed(2);
+                  break;
+                case "units_sales_build":
+                  obj["Q2"] = (quarter2UnitsTotal / quarter1UnitsTotal).toFixed(
+                    2
+                  );
+                  break;
+                default:
+                  obj["Q2"] = (quarterTotal / 13).toFixed(2);
+                
+              }
               quarterTotal = 0;
             } else if (index == 39) {
-              obj["Q3"] = (quarterTotal / 13).toFixed(2);
+              switch (obj["Metrics Slug"]) {
+                case "retail_sales_build":
+                  obj["Q3"] = (
+                    quarter3RevenueTotal / quarter2RevenueTotal
+                  ).toFixed(2);
+                  break;
+                case "units_sales_build":
+                  obj["Q3"] = (quarter3UnitsTotal / quarter2UnitsTotal).toFixed(
+                    2
+                  );
+                  break;
+                default:
+                  obj["Q3"] = (quarterTotal / 13).toFixed(2);
+                 
+              }
               quarterTotal = 0;
             } else if (index == 52) {
-              obj["Q4"] = (quarterTotal / 13).toFixed(2);
+              switch (obj["Metrics Slug"]) {
+                case "retail_sales_build":
+                  obj["Q4"] = (
+                    quarter4RevenueTotal / quarter3RevenueTotal
+                  ).toFixed(2);
+                  break;
+                case "units_sales_build":
+                  obj["Q4"] = (quarter4UnitsTotal / quarter3UnitsTotal).toFixed(
+                    2
+                  );
+                  break;
+                default:
+                  obj["Q4"] = (quarterTotal / 13).toFixed(2);
+              }
               quarterTotal = 0;
             }
           } else {
@@ -688,13 +729,53 @@ const parseFilteredForecastData = (
               obj["Q1"] = (quarterTotal / 3).toFixed(2);
               quarterTotal = 0;
             } else if (index == 6) {
-              obj["Q2"] = (quarterTotal / 3).toFixed(2);
+              switch (obj["Metrics Slug"]) {
+                case "retail_sales_build":
+                  obj["Q2"] = (
+                    quarter2RevenueTotal / quarter1RevenueTotal
+                  ).toFixed(2);
+                  break;
+                case "units_sales_build":
+                  obj["Q2"] = (quarter2UnitsTotal / quarter1UnitsTotal).toFixed(
+                    2
+                  );
+                  break;
+                default:
+                  obj["Q2"] = (quarterTotal / 3).toFixed(2);
+                  
+              }
               quarterTotal = 0;
             } else if (index == 9) {
-              obj["Q3"] = (quarterTotal / 3).toFixed(2);
+              switch (obj["Metrics Slug"]) {
+                case "retail_sales_build":
+                  obj["Q3"] = (
+                    quarter3RevenueTotal / quarter2RevenueTotal
+                  ).toFixed(2);
+                  break;
+                case "units_sales_build":
+                  obj["Q3"] = (quarter3UnitsTotal / quarter2UnitsTotal).toFixed(
+                    2
+                  );
+                  break;
+                default:
+                  obj["Q3"] = (quarterTotal / 3).toFixed(2);
+              }
               quarterTotal = 0;
             } else if (index == 12) {
-              obj["Q4"] = (quarterTotal / 3).toFixed(2);
+              switch (obj["Metrics Slug"]) {
+                case "retail_sales_build":
+                  obj["Q4"] = (
+                    quarter4RevenueTotal / quarter3RevenueTotal
+                  ).toFixed(2);
+                  break;
+                case "units_sales_build":
+                  obj["Q4"] = (quarter4UnitsTotal / quarter3UnitsTotal).toFixed(
+                    2
+                  );
+                  break;
+                default:
+                  obj["Q4"] = (quarterTotal / 3).toFixed(2);
+              }
               quarterTotal = 0;
             }
           }
