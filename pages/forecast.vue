@@ -152,7 +152,7 @@
       </div>
 
       <ManualAdjustmentTable
-        v-if="activeTab == 'Weekly' && showManualAdj"
+        v-if="activeTab == 'Weekly' && showManualAdj && !isFilteredForecast"
         :metricsTableData="baseMetricsListCom"
         tableHeading="Edit Forecast Metrics"
         @EvtAdjValues="getAdjustedValues"
@@ -160,14 +160,14 @@
 
       <client-only>
         <WeeklyMetricsTable
-          v-if="activeTab == 'Weekly' && !showManualAdj"
+          v-if="activeTab == 'Weekly' && !showManualAdj && !isFilteredForecast"
           :metricsTableData="baseMetricsListCom"
           tableHeading="Base Weekly Forecast Metrics"
         />
       </client-only>
 
       <MonthlyMetricsTable
-        v-if="activeTab == 'Monthly'"
+        v-if="activeTab == 'Monthly' && !isFilteredForecast"
         :metricsTableData="baseMetricsListCom"
         tableHeading="Base Monthly Forecast Metrics"
       />
@@ -234,7 +234,10 @@
       <FilteredWeeklyMetricsTable
         :key="filterMetricsCompKey"
         v-if="
-          filteredActiveTab == 'Weekly' && !showManualAdj && !showDiscardBtn
+          filteredActiveTab == 'Weekly' &&
+            !showManualAdj &&
+            !showDiscardBtn &&
+            isFilteredForecast
         "
         :filteredForecastMetrics="filteredForecastMetrics"
         tableHeading="Filtered Weekly Forecast Metrics"
@@ -244,7 +247,10 @@
       <client-only>
         <FilterWeeklyManualAdjustment
           v-if="
-            filteredActiveTab == 'Weekly' && showManualAdj && showDiscardBtn
+            filteredActiveTab == 'Weekly' &&
+              showManualAdj &&
+              showDiscardBtn &&
+              isFilteredForecast
           "
           :filteredForecastMetrics="filteredForecastMetrics"
           tableHeading="Filtered Weekly Forecast Metrics"
@@ -254,7 +260,12 @@
         />
       </client-only>
       <FilteredMonthlyMetricsTable
-        v-if="filteredActiveTab == 'Monthly'"
+        v-if="
+          filteredActiveTab == 'Monthly' &&
+            !showManualAdj &&
+            !showDiscardBtn &&
+            isFilteredForecast
+        "
         :filteredForecastMetrics="filteredForecastMetrics"
         tableHeading="Filtered Monthly Forecast Metrics"
         :allAppliedFilters="allAppliedFilters"
@@ -722,7 +733,6 @@ export default {
       this.filteredActiveTab = activeTab;
 
       let requestedFilterOption = this.emptyFieldCleaner(this.filterPayload);
-
       if (this.filteredActiveTab == "Weekly") {
         requestedFilterOption["filterType"] = "week";
         this.filterWeekly = true;
@@ -745,7 +755,13 @@ export default {
       this.selectedFilterOptions = [];
     },
     async getFilteredWeeklyMetrics(requestedFilterOption) {
-      requestedFilterOption["filterType"] = "month";
+      if (this.filteredActiveTab == "Weekly") {
+        requestedFilterOption["filterType"] = "week";
+        this.filterWeekly = true;
+      } else {
+        requestedFilterOption["filterType"] = "month";
+        this.filterMonthly = true;
+      }
       this.requestedFilterOption = requestedFilterOption;
       const filteredWeeklyforecast = await this.$axios.$post(
         `/get-filtered-forecast-metrics/${this.filteredForecastedYear}`,
@@ -888,7 +904,7 @@ export default {
             adjusted_metrics_name: this.skuLevelAdjustmentObj[0]
               .adjusted_metrics_name,
             filterSkuObject: this.skuLevelAdjustmentObj,
-            adjustment_level: "sku"
+            adjustment_level: "sku",
           })
         );
         res = await this.$axios.$post(`/create-manualadjustment`, {
@@ -906,7 +922,7 @@ export default {
           adjusted_metrics_name: this.skuLevelAdjustmentObj[0]
             .adjusted_metrics_name,
           filterSkuObject: this.skuLevelAdjustmentObj,
-          adjustment_level: "sku"
+          adjustment_level: "sku",
         });
         this.skuLevelAdjustmentObj = [];
       } else {
@@ -960,7 +976,7 @@ export default {
           }
         );
         if (adjustmentsJson) {
-          localStorage.setItem('disabledAdjustment', this.disbleAdjustment);
+          localStorage.setItem("disabledAdjustment", this.disbleAdjustment);
           if (adjustmentsJson.adjustment) {
             if (
               adjustmentsJson &&
