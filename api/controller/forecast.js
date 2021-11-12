@@ -747,6 +747,8 @@ const getWeeklyFilteredForecastMetricsQuery = (
                 FROM
                   ${transaction_db}.demand_forecast_base_weekly_metrics dfbwm2
                 WHERE
+                dfbwm2.forecast_year = ${year}
+                AND
                   dfbwm2.demand_forecast_run_log_id = ${
                     filteredQuerySetterData.dfrlId
                   }
@@ -828,6 +830,8 @@ const getMonthlyFilteredForecastMetricsQuery = (
     FROM
       ${transaction_db}.demand_forecast_base_monthly_metrics dfbwm2
     WHERE
+     dfbwm2.forecast_year = ${year}
+     AND
       dfbwm2.demand_forecast_run_log_id = ${filteredQuerySetterData.dfrlId}
         ${countryQuery1} ${
     filteredQuerySetterData.whereQueryWithDP
@@ -890,41 +894,41 @@ const getMonthlyFilteredForecastMetricsQuery = (
   return query;
 };
 
-const parseMetricsData = (duration,data) => {
+const parseMetricsData = (duration, data) => {
   if (data.length > 0) {
     let statsData = Array(duration)
       .fill({
-        date:0,
-        retail_sales:0,
-        units_sales:0,
-        units_sales_build:0,
-        retail_sales_build:0,
-        aur:0,
-        gm:0,
-        gm_percent:0,
-        wos:0,
-        sell_through:null,
-        inventory_ins_units:0,
-        inventory_ins_cost:0,
-        reciept_units:0,
-        reciept_cost:0
+        date: 0,
+        retail_sales: 0,
+        units_sales: 0,
+        units_sales_build: 0,
+        retail_sales_build: 0,
+        aur: 0,
+        gm: 0,
+        gm_percent: 0,
+        wos: 0,
+        sell_through: null,
+        inventory_ins_units: 0,
+        inventory_ins_cost: 0,
+        reciept_units: 0,
+        reciept_cost: 0,
       })
       .map((currElement, index) => {
         return {
-          date: index+1,
-          retail_sales:0,
-          units_sales:0,
-          units_sales_build:0,
-          retail_sales_build:0,
-          aur:0,
-          gm:0,
-          gm_percent:0,
-          wos:0,
-          sell_through:null,
-          inventory_ins_units:0,
-          inventory_ins_cost:0,
-          reciept_units:0,
-          reciept_cost:0
+          date: index + 1,
+          retail_sales: 0,
+          units_sales: 0,
+          units_sales_build: 0,
+          retail_sales_build: 0,
+          aur: 0,
+          gm: 0,
+          gm_percent: 0,
+          wos: 0,
+          sell_through: null,
+          inventory_ins_units: 0,
+          inventory_ins_cost: 0,
+          reciept_units: 0,
+          reciept_cost: 0,
         };
       });
     statsData.forEach(function(item, index) {
@@ -1013,7 +1017,10 @@ export const getFilteredForecastMetrics = async (req, res) => {
     let filteredForecastData = filteredForecastMetricsPromise[0].value;
     let masterMetricData = filteredForecastMetricsPromise[1].value;
     let durationIndex = duration == "week" ? 52 : 12;
-    filteredForecastData = parseMetricsData(durationIndex,filteredForecastData);
+    filteredForecastData = parseMetricsData(
+      durationIndex,
+      filteredForecastData
+    );
     let parsedFilteredForecastData = parseFilteredForecastData(
       duration,
       masterMetricData,
@@ -1101,9 +1108,15 @@ const typlanChartQueryGeneratorByDurations = (
     whereQueryStr = `${whereQueryString.replace(/country/g, "sub_channel")}`;
   }
 
-  let updatedChannelQueryString = filteredQuerySetterData.whereQueryWithChannel.replace(/country/g, "sub_channel")
-  updatedChannelQueryString = updatedChannelQueryString.replace(/fseisbw/g, "pwurbcbs");
-  
+  let updatedChannelQueryString = filteredQuerySetterData.whereQueryWithChannel.replace(
+    /country/g,
+    "sub_channel"
+  );
+  updatedChannelQueryString = updatedChannelQueryString.replace(
+    /fseisbw/g,
+    "pwurbcbs"
+  );
+
   const query = `
               SELECT
                 ${duration}(pwurbcbs.weekend_date)-${dateOffset} AS date,
@@ -1114,8 +1127,12 @@ const typlanChartQueryGeneratorByDurations = (
               WHERE
                 pwurbcbs.channel <> 'Wholesale'
                 AND pwurbcbs.plan_year = ${year}  ${
-                  updatedChannelQueryString ? " AND " + updatedChannelQueryString : ""
-                } ${filteredQuerySetterData.whereQueryWithDP ? " AND pwurbcbs.sku in (" + filteredQuerySetterData.allFilteredSkus + ")" : ""}
+    updatedChannelQueryString ? " AND " + updatedChannelQueryString : ""
+  } ${
+    filteredQuerySetterData.whereQueryWithDP
+      ? " AND pwurbcbs.sku in (" + filteredQuerySetterData.allFilteredSkus + ")"
+      : ""
+  }
               GROUP BY
                 ${duration}(weekend_date)`;
   // console.log("query++", query);
@@ -1317,8 +1334,7 @@ export const getFilteredQuarterlyStatsData = async (req, res) => {
     filteredQuerySetterData.dfrlId
   );
 
-
-  console.log("parseMetricsData",filteredQuarterlyForecastDataQuery);
+  console.log("parseMetricsData", filteredQuarterlyForecastDataQuery);
 
   try {
     let quarterlyFilteredStats = await Promise.allSettled([
