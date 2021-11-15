@@ -51,7 +51,7 @@
             align="right"
           >
             <template slot-scope="scope"
-              >{{ parseInt(scope.row.yearly_aggregate) | toLocaleStr }}
+              >{{ scope.row.yearly_aggregate | toLocaleStr }}
             </template>
           </el-table-column>
           <el-table-column
@@ -61,7 +61,7 @@
             align="right"
           >
             <template slot-scope="scope"
-              >{{ parseInt(scope.row.Q1) | toLocaleStr }}
+              >{{ scope.row.Q1 | toLocaleStr }}
             </template>
           </el-table-column>
           <el-table-column
@@ -81,7 +81,7 @@
             align="right"
           >
             <template slot-scope="scope"
-              >{{ parseInt(scope.row.Q3) | toLocaleStr }}
+              >{{ scope.row.Q3 | toLocaleStr }}
             </template>
           </el-table-column>
           <el-table-column
@@ -91,7 +91,7 @@
             align="right"
           >
             <template slot-scope="scope"
-              >{{ parseInt(scope.row.Q4) | toLocaleStr }}
+              >{{ scope.row.Q4 | toLocaleStr }}
             </template>
           </el-table-column>
           <el-table-column
@@ -116,12 +116,12 @@
                     'Units Sales Build',
                   ].includes(scope.row['Metrics Name'])
                 "
-                v-model="scope.row.w01"
+                v-model="scope.row.w1"
                 :disabled="isDisble"
-                @blur="(e) => onDataChange(e, scope.row.w01, scope.$index, 1)"
+                @blur="(e) => onDataChange(e, scope.row.w1, scope.$index, 1)"
               >
               </el-input>
-              <p v-else>{{ scope.row.w01 | toLocaleStr }}</p>
+              <p v-else>{{ scope.row.w1 | toLocaleStr }}</p>
             </template>
           </el-table-column>
 
@@ -147,12 +147,12 @@
                     'Units Sales Build',
                   ].includes(scope.row['Metrics Name'])
                 "
-                v-model="scope.row.w02"
+                v-model="scope.row.w2"
                 :disabled="isDisble"
-                @blur="(e) => onDataChange(e, scope.row.w02, scope.$index, 2)"
+                @blur="(e) => onDataChange(e, scope.row.w2, scope.$index, 2)"
               >
               </el-input>
-              <p v-else>{{ scope.row.w02 | toLocaleStr }}</p>
+              <p v-else>{{ scope.row.w2 | toLocaleStr }}</p>
             </template>
           </el-table-column>
 
@@ -178,12 +178,12 @@
                     'Units Sales Build',
                   ].includes(scope.row['Metrics Name'])
                 "
-                v-model="scope.row.w03"
+                v-model="scope.row.w3"
                 :disabled="isDisble"
-                @blur="(e) => onDataChange(e, scope.row.w03, scope.$index, 3)"
+                @blur="(e) => onDataChange(e, scope.row.w3, scope.$index, 3)"
               >
               </el-input>
-              <p v-else>{{ scope.row.w03 | toLocaleStr }}</p>
+              <p v-else>{{ scope.row.w3 | toLocaleStr }}</p>
             </template>
           </el-table-column>
 
@@ -209,12 +209,12 @@
                     'Units Sales Build',
                   ].includes(scope.row['Metrics Name'])
                 "
-                v-model="scope.row.w04"
+                v-model="scope.row.w4"
                 :disabled="isDisble"
-                @blur="(e) => onDataChange(e, scope.row.w04, scope.$index, 4)"
+                @blur="(e) => onDataChange(e, scope.row.w4, scope.$index, 4)"
               >
               </el-input>
-              <p v-else>{{ scope.row.w04 | toLocaleStr }}</p>
+              <p v-else>{{ scope.row.w4 | toLocaleStr }}</p>
             </template>
           </el-table-column>
 
@@ -240,12 +240,12 @@
                     'Units Sales Build',
                   ].includes(scope.row['Metrics Name'])
                 "
-                v-model="scope.row.w05"
+                v-model="scope.row.w5"
                 :disabled="isDisble"
-                @blur="(e) => onDataChange(e, scope.row.w05, scope.$index, 5)"
+                @blur="(e) => onDataChange(e, scope.row.w5, scope.$index, 5)"
               >
               </el-input>
-              <p v-else>{{ scope.row.w05 | toLocaleStr }}</p>
+              <p v-else>{{ scope.row.w5 | toLocaleStr }}</p>
             </template>
           </el-table-column>
 
@@ -271,12 +271,12 @@
                     'Units Sales Build',
                   ].includes(scope.row['Metrics Name'])
                 "
-                v-model="scope.row.w06"
+                v-model="scope.row.w6"
                 :disabled="isDisble"
-                @blur="(e) => onDataChange(e, scope.row.w06, scope.$index, 6)"
+                @blur="(e) => onDataChange(e, scope.row.w6, scope.$index, 6)"
               >
               </el-input>
-              <p v-else>{{ scope.row.w06 | toLocaleStr }}</p>
+              <p v-else>{{ scope.row.w6 | toLocaleStr }}</p>
             </template>
           </el-table-column>
 
@@ -302,12 +302,12 @@
                     'Units Sales Build',
                   ].includes(scope.row['Metrics Name'])
                 "
-                v-model="scope.row.w07"
+                v-model="scope.row.w7"
                 :disabled="isDisble"
-                @blur="(e) => onDataChange(e, scope.row.w07, scope.$index, 7)"
+                @blur="(e) => onDataChange(e, scope.row.w7, scope.$index, 7)"
               >
               </el-input>
-              <p v-else>{{ scope.row.w07 | toLocaleStr }}</p>
+              <p v-else>{{ scope.row.w7 | toLocaleStr }}</p>
             </template>
           </el-table-column>
 
@@ -333,12 +333,12 @@
                     'Units Sales Build',
                   ].includes(scope.row['Metrics Name'])
                 "
-                v-model="scope.row.w08"
+                v-model="scope.row.w8"
                 :disabled="isDisble"
-                @blur="(e) => onDataChange(e, scope.row.w08, scope.$index, 8)"
+                @blur="(e) => onDataChange(e, scope.row.w8, scope.$index, 8)"
               >
               </el-input>
-              <p v-else>{{ scope.row.w08 | toLocaleStr }}</p>
+              <p v-else>{{ scope.row.w8 | toLocaleStr }}</p>
             </template>
           </el-table-column>
 
@@ -364,12 +364,12 @@
                     'Units Sales Build',
                   ].includes(scope.row['Metrics Name'])
                 "
-                v-model="scope.row.w09"
+                v-model="scope.row.w9"
                 :disabled="isDisble"
-                @blur="(e) => onDataChange(e, scope.row.w09, scope.$index, 9)"
+                @blur="(e) => onDataChange(e, scope.row.w9, scope.$index, 9)"
               >
               </el-input>
-              <p v-else>{{ scope.row.w09 | toLocaleStr }}</p>
+              <p v-else>{{ scope.row.w9 | toLocaleStr }}</p>
             </template>
           </el-table-column>
           <el-table-column
@@ -1937,4 +1937,6 @@ export default {
   margin-left: 15px;
   text-align: justify;
 }
+
+
 </style>

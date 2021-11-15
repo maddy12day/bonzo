@@ -1,55 +1,48 @@
 import memcached from "memcached";
 import { PrismaClient } from "@prisma/client";
-import MemcachePlus from 'memcache-plus';
+import MemcachePlus from "memcache-plus";
 
 const prisma = new PrismaClient();
+const cacheSlicesLengthMap = new Map();
 
 const memcachedConnection = new memcached("localhost:11211", {
   retries: 10,
   retry: 10000,
   remove: true,
 });
-const newCache = new MemcachePlus()
+const newCache = new MemcachePlus();
 export const programFiltersData = async (req, res) => {
-  const program1 = await newCache.get("globalProgramDataSet1")
-  const program2 = await newCache.get("globalProgramDataSet2")
-  const program3 = await newCache.get("globalProgramDataSet3")
-  const program4 = await newCache.get("globalProgramDataSet4")
-  const program5 = await newCache.get("globalProgramDataSet5")
-  res.json({
-    response: [
-      ...program1,
-      ...program2,
-      ...program3,
-      ...program4,
-      ...program5
-    ]
-  });
+  const responseArray = [];
+  const programLength = await newCache.get("globalProgramDataSetMap");
+  for (let [index, pcount] of Array(programLength)
+    .fill(0)
+    .entries()) {
+    let customIndex = index + 1;
+    const program = await newCache.get(`globalProgramDataSet${customIndex}`);
+    responseArray.push(...program);
+    if (Array(programLength).length == customIndex) {
+      res.json({
+        response: responseArray,
+      });
+    }
+  }
 };
 export const regularFiltersData = async (req, res) => {
-  const regular1 =  await newCache.get("globalRegularDataSet1");
-  const regular2 =  await newCache.get("globalRegularDataSet2");
-  const regular3 =  await newCache.get("globalRegularDataSet3");
-  const regular4 =  await newCache.get("globalRegularDataSet4");
-  const regular5 =  await newCache.get("globalRegularDataSet5");
-  const regular6 =  await newCache.get("globalRegularDataSet6");
-  const regular7 =  await newCache.get("globalRegularDataSet7");
-  const regular8 =  await newCache.get("globalRegularDataSet8");
-  const regular9 =  await newCache.get("globalRegularDataSet9");
+  const responseArray = [];
+  const regularLength = await newCache.get("globalRegularDataSetMap");
+  for (let [index, pcount] of Array(regularLength)
+    .fill(0)
+    .entries()) {
+    let customIndex = index + 1;
 
-  res.json({
-    response: [
-      ...regular1,
-      ...regular2,
-      ...regular3,
-      ...regular4,
-      ...regular5,
-      ...regular6,
-      ...regular7,
-      ...regular8,
-      ...regular9
-    ]
-  });
+    const regular = await newCache.get(`globalRegularDataSet${customIndex}`);
+    responseArray.push(...regular);
+    if (Array(regularLength).length == customIndex) {
+      res.json({
+        response: responseArray,
+      });
+    }
+  }
 };
 export const regularFilterDropdownData = async (req, res) => {
   try {
@@ -151,8 +144,8 @@ export const filterAllOptions = async (req, res) => {
 };
 
 export const setProgramFilterCache = async (req, res) => {
- try {
-  const program = await prisma.$queryRaw(`SELECT
+  try {
+    const program = await prisma.$queryRaw(`SELECT
                                           IFNULL(TRIM(dp.product_third_party), 'N/A') AS product_source,
                                           IFNULL(TRIM(dp.product_morphe_new_brand_3p), 'N/A') AS brand_type,
                                           IFNULL(dp.life_cycle, 'N/A') AS life_cycle,
@@ -206,13 +199,21 @@ export const setProgramFilterCache = async (req, res) => {
                                           11,
                                           12,
                                           13;`);
-await newCache.set("globalProgramDataSet1", program.slice(0, 1000))
-await newCache.set("globalProgramDataSet2", program.slice(1000, 3000))
-await newCache.set("globalProgramDataSet3", program.slice(3000, 6000))
-await newCache.set("globalProgramDataSet4", program.slice(6000, 9000))
-await newCache.set("globalProgramDataSet5", program.slice(9000, 11000))
+    newCache.set("globalProgramDataSetMap", Math.ceil(program.length / 2000));
 
-const regular = await prisma.$queryRaw(`SELECT
+    for (let [pindex, pcount] of Array(Math.ceil(program.length / 2000))
+      .fill(0)
+      .entries()) {
+      let customIndex = pindex + 1;
+      let previousSlice = (customIndex - 1) * 2000;
+      let nextSlice = customIndex * 2000;
+      await newCache.set(
+        `globalProgramDataSet${customIndex}`,
+        program.slice(previousSlice, nextSlice)
+      );
+    }
+
+    const regular = await prisma.$queryRaw(`SELECT
                 IFNULL(TRIM(dp.product_third_party), 'N/A') AS product_source,
                 IFNULL(TRIM(dp.product_morphe_new_brand_3p), 'N/A') AS brand_type,
                 IFNULL(dp.life_cycle, 'N/A') AS life_cycle,
@@ -259,21 +260,25 @@ const regular = await prisma.$queryRaw(`SELECT
                 8,
                 9,
                 10;`);
-await newCache.set("globalRegularDataSet1", regular.slice(0, 1000))
-await newCache.set("globalRegularDataSet2", regular.slice(1000, 3000))
-await newCache.set("globalRegularDataSet3", regular.slice(3000, 6000))
-await newCache.set("globalRegularDataSet4", regular.slice(6000, 9000))
-await newCache.set("globalRegularDataSet5", regular.slice(9000, 12000))
-await newCache.set("globalRegularDataSet6", regular.slice(12000, 15000))
-await newCache.set("globalRegularDataSet7", regular.slice(15000, 18000))
-await newCache.set("globalRegularDataSet8", regular.slice(18000, 20000))
-await newCache.set("globalRegularDataSet9", regular.slice(20000, 23000));
-res.json({
-mess: "set successfully..",
-});
- }catch(error) {
-  res.json({
-    eror: `${error}`
+
+    newCache.set("globalRegularDataSetMap", Math.ceil(regular.length / 2000));
+    for (let [rindex, pcount] of Array(Math.ceil(regular.length / 2000))
+      .fill(0)
+      .entries()) {
+      let customIndex = rindex + 1;
+      let previousSlice = (customIndex - 1) * 2000;
+      let nextSlice = customIndex * 2000;
+      await newCache.set(
+        `globalRegularDataSet${customIndex}`,
+        regular.slice(previousSlice, nextSlice)
+      );
+    }
+    res.json({
+      mess: "set successfully..",
     });
- }
+  } catch (error) {
+    res.json({
+      error: `${error}`,
+    });
+  }
 };
