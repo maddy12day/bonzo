@@ -8,9 +8,14 @@
       <Tags :allAppliedFilters="allAppliedFilters" />
     </div>
     <el-table :data="topSkusData.parsedWeeklyData">
-      <template v-if="topSkusData && topSkusData.parsedWeeklyData && topSkusData.parsedWeeklyData.length=='0'">
-        <div slot="append">
-        </div>
+      <template
+        v-if="
+          topSkusData &&
+            topSkusData.parsedWeeklyData &&
+            topSkusData.parsedWeeklyData.length == '0'
+        "
+      >
+        <div slot="append"></div>
       </template>
       <template v-else>
         <el-table-column
@@ -36,7 +41,27 @@
           align="right"
         >
           <template slot-scope="scope">
-            {{ scope.row.data[0][`${forecast_attribute}`] | toLocaleStr }} {{getPercent(forecast_attribute,scope.row.data[0])}}
+            <el-input
+              v-if="isManualAdjustment && weekNo() < 1"
+              autofocus
+              v-model="scope.row.data[0][`${forecast_attribute}`]"
+              :disabled="isDisble"
+              @blur="
+                (e) =>
+                  handleDataChange(
+                    e,
+                    forecast_attribute,
+                    scope.row.data[0][`${forecast_attribute}`],
+                    scope.$index,
+                    0
+                  )
+              "
+            >
+            </el-input>
+            <p v-else>
+              {{ scope.row.data[0][`${forecast_attribute}`] | toLocaleStr }}
+              {{ getPercent(forecast_attribute, scope.row.data[0]) }}
+            </p>
           </template>
         </el-table-column>
         <el-table-column
@@ -46,7 +71,27 @@
           align="right"
         >
           <template slot-scope="scope">
-            {{ scope.row.data[1][`${forecast_attribute}`] | toLocaleStr }} {{getPercent(forecast_attribute,scope.row.data[1])}}
+            <el-input
+              v-if="isManualAdjustment && weekNo() < 2"
+              autofocus
+              v-model="scope.row.data[1][`${forecast_attribute}`]"
+              :disabled="isDisble"
+              @blur="
+                (e) =>
+                  handleDataChange(
+                    e,
+                    forecast_attribute,
+                    scope.row.data[1][`${forecast_attribute}`],
+                    scope.$index,
+                    2
+                  )
+              "
+            >
+            </el-input>
+            <p v-else>
+              {{ scope.row.data[1][`${forecast_attribute}`] | toLocaleStr }}
+              {{ getPercent(forecast_attribute, scope.row.data[1]) }}
+            </p>
           </template>
         </el-table-column>
         <el-table-column
@@ -56,17 +101,57 @@
           align="right"
         >
           <template slot-scope="scope">
-            {{ scope.row.data[2][`${forecast_attribute}`] | toLocaleStr }} {{getPercent(forecast_attribute,scope.row.data[2])}}
+            <el-input
+              v-if="isManualAdjustment && weekNo() < 3"
+              autofocus
+              v-model="scope.row.data[2][`${forecast_attribute}`]"
+              :disabled="isDisble"
+              @blur="
+                (e) =>
+                  handleDataChange(
+                    e,
+                    forecast_attribute,
+                    scope.row.data[2][`${forecast_attribute}`],
+                    scope.$index,
+                    3
+                  )
+              "
+            >
+            </el-input>
+            <p v-else>
+              {{ scope.row.data[2][`${forecast_attribute}`] | toLocaleStr }}
+              {{ getPercent(forecast_attribute, scope.row.data[2]) }}
+            </p>
           </template>
         </el-table-column>
         <el-table-column
           min-width="150"
-          :class-name="checkIfPastWeek(4)"
           :label="`w4 ${getWeekendDates(4)}`"
+          :class-name="checkIfPastWeek(4)"
           align="right"
         >
           <template slot-scope="scope">
-            {{ scope.row.data[3][`${forecast_attribute}`] | toLocaleStr }} {{getPercent(forecast_attribute,scope.row.data[3])}}
+            <el-input
+              v-if="isManualAdjustment && weekNo() < 4"
+              autofocus
+              v-model="scope.row.data[3][`${forecast_attribute}`]"
+              :disabled="isDisble"
+              @blur="
+                (e) =>
+                  handleDataChange(
+                    e,
+                    forecast_attribute,
+                    scope.row.data[3][`${forecast_attribute}`],
+                    scope.$index,
+                    4
+                  )
+              "
+            >
+            </el-input>
+            <p v-else>
+              {{ scope.row.data[3][`${forecast_attribute}`] | toLocaleStr }}
+              {{ getPercent(forecast_attribute, scope.row.data[3]) }}
+            </p>
           </template>
         </el-table-column>
         <el-table-column
@@ -76,7 +161,27 @@
           align="right"
         >
           <template slot-scope="scope">
-            {{ scope.row.data[4][`${forecast_attribute}`] | toLocaleStr }} {{getPercent(forecast_attribute,scope.row.data[4])}}
+            <el-input
+              v-if="isManualAdjustment && weekNo() < 5"
+              autofocus
+              v-model="scope.row.data[4][`${forecast_attribute}`]"
+              :disabled="isDisble"
+              @blur="
+                (e) =>
+                  handleDataChange(
+                    e,
+                    forecast_attribute,
+                    scope.row.data[4][`${forecast_attribute}`],
+                    scope.$index,
+                    5
+                  )
+              "
+            >
+            </el-input>
+            <p v-else>
+              {{ scope.row.data[4][`${forecast_attribute}`] | toLocaleStr }}
+              {{ getPercent(forecast_attribute, scope.row.data[4]) }}
+            </p>
           </template>
         </el-table-column>
         <el-table-column
@@ -86,7 +191,27 @@
           align="right"
         >
           <template slot-scope="scope">
-            {{ scope.row.data[5][`${forecast_attribute}`] | toLocaleStr }} {{getPercent(forecast_attribute,scope.row.data[5])}}
+            <el-input
+              v-if="isManualAdjustment && weekNo() < 6"
+              autofocus
+              v-model="scope.row.data[5][`${forecast_attribute}`]"
+              :disabled="isDisble"
+              @blur="
+                (e) =>
+                  handleDataChange(
+                    e,
+                    forecast_attribute,
+                    scope.row.data[5][`${forecast_attribute}`],
+                    scope.$index,
+                    6
+                  )
+              "
+            >
+            </el-input>
+            <p v-else>
+              {{ scope.row.data[5][`${forecast_attribute}`] | toLocaleStr }}
+              {{ getPercent(forecast_attribute, scope.row.data[5]) }}
+            </p>
           </template>
         </el-table-column>
         <el-table-column
@@ -96,10 +221,29 @@
           align="right"
         >
           <template slot-scope="scope">
-            {{ scope.row.data[6][`${forecast_attribute}`] | toLocaleStr }} {{getPercent(forecast_attribute,scope.row.data[6])}}
+            <el-input
+              v-if="isManualAdjustment && weekNo() < 7"
+              autofocus
+              v-model="scope.row.data[6][`${forecast_attribute}`]"
+              :disabled="isDisble"
+              @blur="
+                (e) =>
+                  handleDataChange(
+                    e,
+                    forecast_attribute,
+                    scope.row.data[6][`${forecast_attribute}`],
+                    scope.$index,
+                    7
+                  )
+              "
+            >
+            </el-input>
+            <p v-else>
+              {{ scope.row.data[6][`${forecast_attribute}`] | toLocaleStr }}
+              {{ getPercent(forecast_attribute, scope.row.data[6]) }}
+            </p>
           </template>
         </el-table-column>
-
         <el-table-column
           min-width="150"
           :label="`w8 ${getWeekendDates(8)}`"
@@ -107,18 +251,57 @@
           align="right"
         >
           <template slot-scope="scope">
-            {{ scope.row.data[7][`${forecast_attribute}`] | toLocaleStr }} {{getPercent(forecast_attribute,scope.row.data[7])}}
+            <el-input
+              v-if="isManualAdjustment && weekNo() < 8"
+              autofocus
+              v-model="scope.row.data[7][`${forecast_attribute}`]"
+              :disabled="isDisble"
+              @blur="
+                (e) =>
+                  handleDataChange(
+                    e,
+                    forecast_attribute,
+                    scope.row.data[7][`${forecast_attribute}`],
+                    scope.$index,
+                    8
+                  )
+              "
+            >
+            </el-input>
+            <p v-else>
+              {{ scope.row.data[7][`${forecast_attribute}`] | toLocaleStr }}
+              {{ getPercent(forecast_attribute, scope.row.data[7]) }}
+            </p>
           </template>
         </el-table-column>
-
         <el-table-column
           min-width="150"
-          :class-name="checkIfPastWeek(9)"
           :label="`w9 ${getWeekendDates(9)}`"
+          :class-name="checkIfPastWeek(9)"
           align="right"
         >
           <template slot-scope="scope">
-            {{ scope.row.data[8][`${forecast_attribute}`] | toLocaleStr }} {{getPercent(forecast_attribute,scope.row.data[8])}}
+            <el-input
+              v-if="isManualAdjustment && weekNo() < 9"
+              autofocus
+              v-model="scope.row.data[8][`${forecast_attribute}`]"
+              :disabled="isDisble"
+              @blur="
+                (e) =>
+                  handleDataChange(
+                    e,
+                    forecast_attribute,
+                    scope.row.data[8][`${forecast_attribute}`],
+                    scope.$index,
+                    9
+                  )
+              "
+            >
+            </el-input>
+            <p v-else>
+              {{ scope.row.data[8][`${forecast_attribute}`] | toLocaleStr }}
+              {{ getPercent(forecast_attribute, scope.row.data[8]) }}
+            </p>
           </template>
         </el-table-column>
         <el-table-column
@@ -128,7 +311,27 @@
           align="right"
         >
           <template slot-scope="scope">
-            {{ scope.row.data[9][`${forecast_attribute}`] | toLocaleStr }} {{getPercent(forecast_attribute,scope.row.data[9])}}
+            <el-input
+              v-if="isManualAdjustment && weekNo() < 10"
+              autofocus
+              v-model="scope.row.data[9][`${forecast_attribute}`]"
+              :disabled="isDisble"
+              @blur="
+                (e) =>
+                  handleDataChange(
+                    e,
+                    forecast_attribute,
+                    scope.row.data[9][`${forecast_attribute}`],
+                    scope.$index,
+                    10
+                  )
+              "
+            >
+            </el-input>
+            <p v-else>
+              {{ scope.row.data[9][`${forecast_attribute}`] | toLocaleStr }}
+              {{ getPercent(forecast_attribute, scope.row.data[9]) }}
+            </p>
           </template>
         </el-table-column>
         <el-table-column
@@ -138,7 +341,27 @@
           align="right"
         >
           <template slot-scope="scope">
-            {{ scope.row.data[10][`${forecast_attribute}`] | toLocaleStr }} {{getPercent(forecast_attribute,scope.row.data[10])}}
+            <el-input
+              v-if="isManualAdjustment && weekNo() < 11"
+              autofocus
+              v-model="scope.row.data[10][`${forecast_attribute}`]"
+              :disabled="isDisble"
+              @blur="
+                (e) =>
+                  handleDataChange(
+                    e,
+                    forecast_attribute,
+                    scope.row.data[10][`${forecast_attribute}`],
+                    scope.$index,
+                    11
+                  )
+              "
+            >
+            </el-input>
+            <p v-else>
+              {{ scope.row.data[10][`${forecast_attribute}`] | toLocaleStr }}
+              {{ getPercent(forecast_attribute, scope.row.data[10]) }}
+            </p>
           </template>
         </el-table-column>
         <el-table-column
@@ -148,17 +371,57 @@
           align="right"
         >
           <template slot-scope="scope">
-            {{ scope.row.data[11][`${forecast_attribute}`] | toLocaleStr }} {{getPercent(forecast_attribute,scope.row.data[11])}}
+            <el-input
+              v-if="isManualAdjustment && weekNo() < 12"
+              autofocus
+              v-model="scope.row.data[11][`${forecast_attribute}`]"
+              :disabled="isDisble"
+              @blur="
+                (e) =>
+                  handleDataChange(
+                    e,
+                    forecast_attribute,
+                    scope.row.data[11][`${forecast_attribute}`],
+                    scope.$index,
+                    12
+                  )
+              "
+            >
+            </el-input>
+            <p v-else>
+              {{ scope.row.data[11][`${forecast_attribute}`] | toLocaleStr }}
+              {{ getPercent(forecast_attribute, scope.row.data[11]) }}
+            </p>
           </template>
         </el-table-column>
         <el-table-column
           min-width="150"
           :label="`w13 ${getWeekendDates(13)}`"
-          :class-name="checkIfPastWeek(3)"
+          :class-name="checkIfPastWeek(13)"
           align="right"
         >
           <template slot-scope="scope">
-            {{ scope.row.data[12][`${forecast_attribute}`] | toLocaleStr }} {{getPercent(forecast_attribute,scope.row.data[12])}}
+            <el-input
+              v-if="isManualAdjustment && weekNo() < 13"
+              autofocus
+              v-model="scope.row.data[12][`${forecast_attribute}`]"
+              :disabled="isDisble"
+              @blur="
+                (e) =>
+                  handleDataChange(
+                    e,
+                    forecast_attribute,
+                    scope.row.data[12][`${forecast_attribute}`],
+                    scope.$index,
+                    13
+                  )
+              "
+            >
+            </el-input>
+            <p v-else>
+              {{ scope.row.data[12][`${forecast_attribute}`] | toLocaleStr }}
+              {{ getPercent(forecast_attribute, scope.row.data[12]) }}
+            </p>
           </template>
         </el-table-column>
         <el-table-column
@@ -168,7 +431,27 @@
           align="right"
         >
           <template slot-scope="scope">
-            {{ scope.row.data[13][`${forecast_attribute}`] | toLocaleStr }} {{getPercent(forecast_attribute,scope.row.data[13])}}
+            <el-input
+              v-if="isManualAdjustment && weekNo() < 14"
+              autofocus
+              v-model="scope.row.data[13][`${forecast_attribute}`]"
+              :disabled="isDisble"
+              @blur="
+                (e) =>
+                  handleDataChange(
+                    e,
+                    forecast_attribute,
+                    scope.row.data[13][`${forecast_attribute}`],
+                    scope.$index,
+                    14
+                  )
+              "
+            >
+            </el-input>
+            <p v-else>
+              {{ scope.row.data[13][`${forecast_attribute}`] | toLocaleStr }}
+              {{ getPercent(forecast_attribute, scope.row.data[13]) }}
+            </p>
           </template>
         </el-table-column>
         <el-table-column
@@ -178,7 +461,27 @@
           align="right"
         >
           <template slot-scope="scope">
-            {{ scope.row.data[14][`${forecast_attribute}`] | toLocaleStr }} {{getPercent(forecast_attribute,scope.row.data[14])}}
+            <el-input
+              v-if="isManualAdjustment && weekNo() < 15"
+              autofocus
+              v-model="scope.row.data[14][`${forecast_attribute}`]"
+              :disabled="isDisble"
+              @blur="
+                (e) =>
+                  handleDataChange(
+                    e,
+                    forecast_attribute,
+                    scope.row.data[14][`${forecast_attribute}`],
+                    scope.$index,
+                    15
+                  )
+              "
+            >
+            </el-input>
+            <p v-else>
+              {{ scope.row.data[14][`${forecast_attribute}`] | toLocaleStr }}
+              {{ getPercent(forecast_attribute, scope.row.data[14]) }}
+            </p>
           </template>
         </el-table-column>
         <el-table-column
@@ -188,17 +491,57 @@
           align="right"
         >
           <template slot-scope="scope">
-            {{ scope.row.data[15][`${forecast_attribute}`] | toLocaleStr }} {{getPercent(forecast_attribute,scope.row.data[15])}}
+            <el-input
+              v-if="isManualAdjustment && weekNo() < 16"
+              autofocus
+              v-model="scope.row.data[15][`${forecast_attribute}`]"
+              :disabled="isDisble"
+              @blur="
+                (e) =>
+                  handleDataChange(
+                    e,
+                    forecast_attribute,
+                    scope.row.data[15][`${forecast_attribute}`],
+                    scope.$index,
+                    16
+                  )
+              "
+            >
+            </el-input>
+            <p v-else>
+              {{ scope.row.data[15][`${forecast_attribute}`] | toLocaleStr }}
+              {{ getPercent(forecast_attribute, scope.row.data[15]) }}
+            </p>
           </template>
         </el-table-column>
         <el-table-column
           min-width="150"
-          :class-name="checkIfPastWeek(17)"
           :label="`w17 ${getWeekendDates(17)}`"
+          :class-name="checkIfPastWeek(17)"
           align="right"
         >
           <template slot-scope="scope">
-            {{ scope.row.data[16][`${forecast_attribute}`] | toLocaleStr }} {{getPercent(forecast_attribute,scope.row.data[16])}}
+            <el-input
+              v-if="isManualAdjustment && weekNo() < 17"
+              autofocus
+              v-model="scope.row.data[16][`${forecast_attribute}`]"
+              :disabled="isDisble"
+              @blur="
+                (e) =>
+                  handleDataChange(
+                    e,
+                    forecast_attribute,
+                    scope.row.data[16][`${forecast_attribute}`],
+                    scope.$index,
+                    17
+                  )
+              "
+            >
+            </el-input>
+            <p v-else>
+              {{ scope.row.data[16][`${forecast_attribute}`] | toLocaleStr }}
+              {{ getPercent(forecast_attribute, scope.row.data[16]) }}
+            </p>
           </template>
         </el-table-column>
         <el-table-column
@@ -208,7 +551,27 @@
           align="right"
         >
           <template slot-scope="scope">
-            {{ scope.row.data[17][`${forecast_attribute}`] | toLocaleStr }} {{getPercent(forecast_attribute,scope.row.data[17])}}
+            <el-input
+              v-if="isManualAdjustment && weekNo() < 18"
+              autofocus
+              v-model="scope.row.data[17][`${forecast_attribute}`]"
+              :disabled="isDisble"
+              @blur="
+                (e) =>
+                  handleDataChange(
+                    e,
+                    forecast_attribute,
+                    scope.row.data[17][`${forecast_attribute}`],
+                    scope.$index,
+                    18
+                  )
+              "
+            >
+            </el-input>
+            <p v-else>
+              {{ scope.row.data[17][`${forecast_attribute}`] | toLocaleStr }}
+              {{ getPercent(forecast_attribute, scope.row.data[17]) }}
+            </p>
           </template>
         </el-table-column>
         <el-table-column
@@ -218,10 +581,29 @@
           align="right"
         >
           <template slot-scope="scope">
-            {{ scope.row.data[18][`${forecast_attribute}`] | toLocaleStr }} {{getPercent(forecast_attribute,scope.row.data[18])}}
+            <el-input
+              v-if="isManualAdjustment && weekNo() < 19"
+              autofocus
+              v-model="scope.row.data[18][`${forecast_attribute}`]"
+              :disabled="isDisble"
+              @blur="
+                (e) =>
+                  handleDataChange(
+                    e,
+                    forecast_attribute,
+                    scope.row.data[18][`${forecast_attribute}`],
+                    scope.$index,
+                    19
+                  )
+              "
+            >
+            </el-input>
+            <p v-else>
+              {{ scope.row.data[18][`${forecast_attribute}`] | toLocaleStr }}
+              {{ getPercent(forecast_attribute, scope.row.data[18]) }}
+            </p>
           </template>
         </el-table-column>
-
         <el-table-column
           min-width="150"
           :label="`w20 ${getWeekendDates(20)}`"
@@ -229,10 +611,29 @@
           align="right"
         >
           <template slot-scope="scope">
-            {{ scope.row.data[19][`${forecast_attribute}`] | toLocaleStr }} {{getPercent(forecast_attribute,scope.row.data[19])}}
+            <el-input
+              v-if="isManualAdjustment && weekNo() < 20"
+              autofocus
+              v-model="scope.row.data[19][`${forecast_attribute}`]"
+              :disabled="isDisble"
+              @blur="
+                (e) =>
+                  handleDataChange(
+                    e,
+                    forecast_attribute,
+                    scope.row.data[19][`${forecast_attribute}`],
+                    scope.$index,
+                    20
+                  )
+              "
+            >
+            </el-input>
+            <p v-else>
+              {{ scope.row.data[19][`${forecast_attribute}`] | toLocaleStr }}
+              {{ getPercent(forecast_attribute, scope.row.data[19]) }}
+            </p>
           </template>
         </el-table-column>
-
         <el-table-column
           min-width="150"
           :label="`w21 ${getWeekendDates(21)}`"
@@ -240,7 +641,27 @@
           align="right"
         >
           <template slot-scope="scope">
-            {{ scope.row.data[20][`${forecast_attribute}`] | toLocaleStr }} {{getPercent(forecast_attribute,scope.row.data[20])}}
+            <el-input
+              v-if="isManualAdjustment && weekNo() < 21"
+              autofocus
+              v-model="scope.row.data[20][`${forecast_attribute}`]"
+              :disabled="isDisble"
+              @blur="
+                (e) =>
+                  handleDataChange(
+                    e,
+                    forecast_attribute,
+                    scope.row.data[20][`${forecast_attribute}`],
+                    scope.$index,
+                    21
+                  )
+              "
+            >
+            </el-input>
+            <p v-else>
+              {{ scope.row.data[20][`${forecast_attribute}`] | toLocaleStr }}
+              {{ getPercent(forecast_attribute, scope.row.data[20]) }}
+            </p>
           </template>
         </el-table-column>
         <el-table-column
@@ -250,7 +671,27 @@
           align="right"
         >
           <template slot-scope="scope">
-            {{ scope.row.data[21][`${forecast_attribute}`] | toLocaleStr }} {{getPercent(forecast_attribute,scope.row.data[21])}}
+            <el-input
+              v-if="isManualAdjustment && weekNo() < 22"
+              autofocus
+              v-model="scope.row.data[21][`${forecast_attribute}`]"
+              :disabled="isDisble"
+              @blur="
+                (e) =>
+                  handleDataChange(
+                    e,
+                    forecast_attribute,
+                    scope.row.data[21][`${forecast_attribute}`],
+                    scope.$index,
+                    22
+                  )
+              "
+            >
+            </el-input>
+            <p v-else>
+              {{ scope.row.data[21][`${forecast_attribute}`] | toLocaleStr }}
+              {{ getPercent(forecast_attribute, scope.row.data[21]) }}
+            </p>
           </template>
         </el-table-column>
         <el-table-column
@@ -260,7 +701,27 @@
           align="right"
         >
           <template slot-scope="scope">
-            {{ scope.row.data[22][`${forecast_attribute}`] | toLocaleStr }} {{getPercent(forecast_attribute,scope.row.data[22])}}
+            <el-input
+              v-if="isManualAdjustment && weekNo() < 23"
+              autofocus
+              v-model="scope.row.data[22][`${forecast_attribute}`]"
+              :disabled="isDisble"
+              @blur="
+                (e) =>
+                  handleDataChange(
+                    e,
+                    forecast_attribute,
+                    scope.row.data[22][`${forecast_attribute}`],
+                    scope.$index,
+                    23
+                  )
+              "
+            >
+            </el-input>
+            <p v-else>
+              {{ scope.row.data[22][`${forecast_attribute}`] | toLocaleStr }}
+              {{ getPercent(forecast_attribute, scope.row.data[22]) }}
+            </p>
           </template>
         </el-table-column>
         <el-table-column
@@ -270,7 +731,27 @@
           align="right"
         >
           <template slot-scope="scope">
-            {{ scope.row.data[23][`${forecast_attribute}`] | toLocaleStr }} {{getPercent(forecast_attribute,scope.row.data[23])}}
+            <el-input
+              v-if="isManualAdjustment && weekNo() < 24"
+              autofocus
+              v-model="scope.row.data[23][`${forecast_attribute}`]"
+              :disabled="isDisble"
+              @blur="
+                (e) =>
+                  handleDataChange(
+                    e,
+                    forecast_attribute,
+                    scope.row.data[23][`${forecast_attribute}`],
+                    scope.$index,
+                    24
+                  )
+              "
+            >
+            </el-input>
+            <p v-else>
+              {{ scope.row.data[23][`${forecast_attribute}`] | toLocaleStr }}
+              {{ getPercent(forecast_attribute, scope.row.data[23]) }}
+            </p>
           </template>
         </el-table-column>
         <el-table-column
@@ -280,7 +761,27 @@
           align="right"
         >
           <template slot-scope="scope">
-            {{ scope.row.data[24][`${forecast_attribute}`] | toLocaleStr }} {{getPercent(forecast_attribute,scope.row.data[24])}}
+            <el-input
+              v-if="isManualAdjustment && weekNo() < 25"
+              autofocus
+              v-model="scope.row.data[24][`${forecast_attribute}`]"
+              :disabled="isDisble"
+              @blur="
+                (e) =>
+                  handleDataChange(
+                    e,
+                    forecast_attribute,
+                    scope.row.data[24][`${forecast_attribute}`],
+                    scope.$index,
+                    25
+                  )
+              "
+            >
+            </el-input>
+            <p v-else>
+              {{ scope.row.data[24][`${forecast_attribute}`] | toLocaleStr }}
+              {{ getPercent(forecast_attribute, scope.row.data[24]) }}
+            </p>
           </template>
         </el-table-column>
         <el-table-column
@@ -290,7 +791,27 @@
           align="right"
         >
           <template slot-scope="scope">
-            {{ scope.row.data[25][`${forecast_attribute}`] | toLocaleStr }} {{getPercent(forecast_attribute,scope.row.data[25])}}
+            <el-input
+              v-if="isManualAdjustment && weekNo() < 26"
+              autofocus
+              v-model="scope.row.data[25][`${forecast_attribute}`]"
+              :disabled="isDisble"
+              @blur="
+                (e) =>
+                  handleDataChange(
+                    e,
+                    forecast_attribute,
+                    scope.row.data[25][`${forecast_attribute}`],
+                    scope.$index,
+                    26
+                  )
+              "
+            >
+            </el-input>
+            <p v-else>
+              {{ scope.row.data[25][`${forecast_attribute}`] | toLocaleStr }}
+              {{ getPercent(forecast_attribute, scope.row.data[25]) }}
+            </p>
           </template>
         </el-table-column>
         <el-table-column
@@ -300,7 +821,27 @@
           align="right"
         >
           <template slot-scope="scope">
-            {{ scope.row.data[26][`${forecast_attribute}`] | toLocaleStr }} {{getPercent(forecast_attribute,scope.row.data[26])}}
+            <el-input
+              v-if="isManualAdjustment && weekNo() < 27"
+              autofocus
+              v-model="scope.row.data[26][`${forecast_attribute}`]"
+              :disabled="isDisble"
+              @blur="
+                (e) =>
+                  handleDataChange(
+                    e,
+                    forecast_attribute,
+                    scope.row.data[26][`${forecast_attribute}`],
+                    scope.$index,
+                    27
+                  )
+              "
+            >
+            </el-input>
+            <p v-else>
+              {{ scope.row.data[26][`${forecast_attribute}`] | toLocaleStr }}
+              {{ getPercent(forecast_attribute, scope.row.data[26]) }}
+            </p>
           </template>
         </el-table-column>
         <el-table-column
@@ -310,7 +851,27 @@
           align="right"
         >
           <template slot-scope="scope">
-            {{ scope.row.data[27][`${forecast_attribute}`] | toLocaleStr }} {{getPercent(forecast_attribute,scope.row.data[27])}}
+            <el-input
+              v-if="isManualAdjustment && weekNo() < 28"
+              autofocus
+              v-model="scope.row.data[27][`${forecast_attribute}`]"
+              :disabled="isDisble"
+              @blur="
+                (e) =>
+                  handleDataChange(
+                    e,
+                    forecast_attribute,
+                    scope.row.data[27][`${forecast_attribute}`],
+                    scope.$index,
+                    28
+                  )
+              "
+            >
+            </el-input>
+            <p v-else>
+              {{ scope.row.data[27][`${forecast_attribute}`] | toLocaleStr }}
+              {{ getPercent(forecast_attribute, scope.row.data[27]) }}
+            </p>
           </template>
         </el-table-column>
         <el-table-column
@@ -320,7 +881,27 @@
           align="right"
         >
           <template slot-scope="scope">
-            {{ scope.row.data[28][`${forecast_attribute}`] | toLocaleStr }} {{getPercent(forecast_attribute,scope.row.data[28])}}
+            <el-input
+              v-if="isManualAdjustment && weekNo() < 29"
+              autofocus
+              v-model="scope.row.data[28][`${forecast_attribute}`]"
+              :disabled="isDisble"
+              @blur="
+                (e) =>
+                  handleDataChange(
+                    e,
+                    forecast_attribute,
+                    scope.row.data[28][`${forecast_attribute}`],
+                    scope.$index,
+                    29
+                  )
+              "
+            >
+            </el-input>
+            <p v-else>
+              {{ scope.row.data[28][`${forecast_attribute}`] | toLocaleStr }}
+              {{ getPercent(forecast_attribute, scope.row.data[28]) }}
+            </p>
           </template>
         </el-table-column>
         <el-table-column
@@ -330,7 +911,27 @@
           align="right"
         >
           <template slot-scope="scope">
-            {{ scope.row.data[29][`${forecast_attribute}`] | toLocaleStr }} {{getPercent(forecast_attribute,scope.row.data[29])}}
+            <el-input
+              v-if="isManualAdjustment && weekNo() < 30"
+              autofocus
+              v-model="scope.row.data[29][`${forecast_attribute}`]"
+              :disabled="isDisble"
+              @blur="
+                (e) =>
+                  handleDataChange(
+                    e,
+                    forecast_attribute,
+                    scope.row.data[29][`${forecast_attribute}`],
+                    scope.$index,
+                    30
+                  )
+              "
+            >
+            </el-input>
+            <p v-else>
+              {{ scope.row.data[29][`${forecast_attribute}`] | toLocaleStr }}
+              {{ getPercent(forecast_attribute, scope.row.data[29]) }}
+            </p>
           </template>
         </el-table-column>
         <el-table-column
@@ -340,10 +941,29 @@
           align="right"
         >
           <template slot-scope="scope">
-            {{ scope.row.data[30][`${forecast_attribute}`] | toLocaleStr }} {{getPercent(forecast_attribute,scope.row.data[30])}}
+            <el-input
+              v-if="isManualAdjustment && weekNo() < 31"
+              autofocus
+              v-model="scope.row.data[30][`${forecast_attribute}`]"
+              :disabled="isDisble"
+              @blur="
+                (e) =>
+                  handleDataChange(
+                    e,
+                    forecast_attribute,
+                    scope.row.data[30][`${forecast_attribute}`],
+                    scope.$index,
+                    31
+                  )
+              "
+            >
+            </el-input>
+            <p v-else>
+              {{ scope.row.data[30][`${forecast_attribute}`] | toLocaleStr }}
+              {{ getPercent(forecast_attribute, scope.row.data[30]) }}
+            </p>
           </template>
         </el-table-column>
-
         <el-table-column
           min-width="150"
           :label="`w32 ${getWeekendDates(32)}`"
@@ -351,10 +971,29 @@
           align="right"
         >
           <template slot-scope="scope">
-            {{ scope.row.data[31][`${forecast_attribute}`] | toLocaleStr }} {{getPercent(forecast_attribute,scope.row.data[31])}}
+            <el-input
+              v-if="isManualAdjustment && weekNo() < 32"
+              autofocus
+              v-model="scope.row.data[31][`${forecast_attribute}`]"
+              :disabled="isDisble"
+              @blur="
+                (e) =>
+                  handleDataChange(
+                    e,
+                    forecast_attribute,
+                    scope.row.data[31][`${forecast_attribute}`],
+                    scope.$index,
+                    32
+                  )
+              "
+            >
+            </el-input>
+            <p v-else>
+              {{ scope.row.data[31][`${forecast_attribute}`] | toLocaleStr }}
+              {{ getPercent(forecast_attribute, scope.row.data[31]) }}
+            </p>
           </template>
         </el-table-column>
-
         <el-table-column
           min-width="150"
           :label="`w33 ${getWeekendDates(33)}`"
@@ -362,7 +1001,27 @@
           align="right"
         >
           <template slot-scope="scope">
-            {{ scope.row.data[32][`${forecast_attribute}`] | toLocaleStr }} {{getPercent(forecast_attribute,scope.row.data[32])}}
+            <el-input
+              v-if="isManualAdjustment && weekNo() < 33"
+              autofocus
+              v-model="scope.row.data[32][`${forecast_attribute}`]"
+              :disabled="isDisble"
+              @blur="
+                (e) =>
+                  handleDataChange(
+                    e,
+                    forecast_attribute,
+                    scope.row.data[32][`${forecast_attribute}`],
+                    scope.$index,
+                    33
+                  )
+              "
+            >
+            </el-input>
+            <p v-else>
+              {{ scope.row.data[32][`${forecast_attribute}`] | toLocaleStr }}
+              {{ getPercent(forecast_attribute, scope.row.data[32]) }}
+            </p>
           </template>
         </el-table-column>
         <el-table-column
@@ -372,7 +1031,27 @@
           align="right"
         >
           <template slot-scope="scope">
-            {{ scope.row.data[33][`${forecast_attribute}`] | toLocaleStr }} {{getPercent(forecast_attribute,scope.row.data[33])}}
+            <el-input
+              v-if="isManualAdjustment && weekNo() < 34"
+              autofocus
+              v-model="scope.row.data[33][`${forecast_attribute}`]"
+              :disabled="isDisble"
+              @blur="
+                (e) =>
+                  handleDataChange(
+                    e,
+                    forecast_attribute,
+                    scope.row.data[33][`${forecast_attribute}`],
+                    scope.$index,
+                    34
+                  )
+              "
+            >
+            </el-input>
+            <p v-else>
+              {{ scope.row.data[33][`${forecast_attribute}`] | toLocaleStr }}
+              {{ getPercent(forecast_attribute, scope.row.data[33]) }}
+            </p>
           </template>
         </el-table-column>
         <el-table-column
@@ -382,7 +1061,27 @@
           align="right"
         >
           <template slot-scope="scope">
-            {{ scope.row.data[34][`${forecast_attribute}`] | toLocaleStr }} {{getPercent(forecast_attribute,scope.row.data[34])}}
+            <el-input
+              v-if="isManualAdjustment && weekNo() < 35"
+              autofocus
+              v-model="scope.row.data[34][`${forecast_attribute}`]"
+              :disabled="isDisble"
+              @blur="
+                (e) =>
+                  handleDataChange(
+                    e,
+                    forecast_attribute,
+                    scope.row.data[34][`${forecast_attribute}`],
+                    scope.$index,
+                    35
+                  )
+              "
+            >
+            </el-input>
+            <p v-else>
+              {{ scope.row.data[34][`${forecast_attribute}`] | toLocaleStr }}
+              {{ getPercent(forecast_attribute, scope.row.data[34]) }}
+            </p>
           </template>
         </el-table-column>
         <el-table-column
@@ -392,7 +1091,27 @@
           align="right"
         >
           <template slot-scope="scope">
-            {{ scope.row.data[35][`${forecast_attribute}`] | toLocaleStr }} {{getPercent(forecast_attribute,scope.row.data[35])}}
+            <el-input
+              v-if="isManualAdjustment && weekNo() < 36"
+              autofocus
+              v-model="scope.row.data[35][`${forecast_attribute}`]"
+              :disabled="isDisble"
+              @blur="
+                (e) =>
+                  handleDataChange(
+                    e,
+                    forecast_attribute,
+                    scope.row.data[35][`${forecast_attribute}`],
+                    scope.$index,
+                    36
+                  )
+              "
+            >
+            </el-input>
+            <p v-else>
+              {{ scope.row.data[35][`${forecast_attribute}`] | toLocaleStr }}
+              {{ getPercent(forecast_attribute, scope.row.data[35]) }}
+            </p>
           </template>
         </el-table-column>
         <el-table-column
@@ -402,7 +1121,27 @@
           align="right"
         >
           <template slot-scope="scope">
-            {{ scope.row.data[36][`${forecast_attribute}`] | toLocaleStr }} {{getPercent(forecast_attribute,scope.row.data[36])}}
+            <el-input
+              v-if="isManualAdjustment && weekNo() < 37"
+              autofocus
+              v-model="scope.row.data[36][`${forecast_attribute}`]"
+              :disabled="isDisble"
+              @blur="
+                (e) =>
+                  handleDataChange(
+                    e,
+                    forecast_attribute,
+                    scope.row.data[36][`${forecast_attribute}`],
+                    scope.$index,
+                    37
+                  )
+              "
+            >
+            </el-input>
+            <p v-else>
+              {{ scope.row.data[36][`${forecast_attribute}`] | toLocaleStr }}
+              {{ getPercent(forecast_attribute, scope.row.data[36]) }}
+            </p>
           </template>
         </el-table-column>
         <el-table-column
@@ -412,7 +1151,27 @@
           align="right"
         >
           <template slot-scope="scope">
-            {{ scope.row.data[37][`${forecast_attribute}`] | toLocaleStr }} {{getPercent(forecast_attribute,scope.row.data[37])}}
+            <el-input
+              v-if="isManualAdjustment && weekNo() < 38"
+              autofocus
+              v-model="scope.row.data[37][`${forecast_attribute}`]"
+              :disabled="isDisble"
+              @blur="
+                (e) =>
+                  handleDataChange(
+                    e,
+                    forecast_attribute,
+                    scope.row.data[37][`${forecast_attribute}`],
+                    scope.$index,
+                    38
+                  )
+              "
+            >
+            </el-input>
+            <p v-else>
+              {{ scope.row.data[37][`${forecast_attribute}`] | toLocaleStr }}
+              {{ getPercent(forecast_attribute, scope.row.data[37]) }}
+            </p>
           </template>
         </el-table-column>
         <el-table-column
@@ -422,7 +1181,27 @@
           align="right"
         >
           <template slot-scope="scope">
-            {{ scope.row.data[38][`${forecast_attribute}`] | toLocaleStr }} {{getPercent(forecast_attribute,scope.row.data[38])}}
+            <el-input
+              v-if="isManualAdjustment && weekNo() < 39"
+              autofocus
+              v-model="scope.row.data[38][`${forecast_attribute}`]"
+              :disabled="isDisble"
+              @blur="
+                (e) =>
+                  handleDataChange(
+                    e,
+                    forecast_attribute,
+                    scope.row.data[38][`${forecast_attribute}`],
+                    scope.$index,
+                    39
+                  )
+              "
+            >
+            </el-input>
+            <p v-else>
+              {{ scope.row.data[38][`${forecast_attribute}`] | toLocaleStr }}
+              {{ getPercent(forecast_attribute, scope.row.data[38]) }}
+            </p>
           </template>
         </el-table-column>
         <el-table-column
@@ -432,7 +1211,27 @@
           align="right"
         >
           <template slot-scope="scope">
-            {{ scope.row.data[39][`${forecast_attribute}`] | toLocaleStr }} {{getPercent(forecast_attribute,scope.row.data[39])}}
+            <el-input
+              v-if="isManualAdjustment && weekNo() < 40"
+              autofocus
+              v-model="scope.row.data[39][`${forecast_attribute}`]"
+              :disabled="isDisble"
+              @blur="
+                (e) =>
+                  handleDataChange(
+                    e,
+                    forecast_attribute,
+                    scope.row.data[39][`${forecast_attribute}`],
+                    scope.$index,
+                    40
+                  )
+              "
+            >
+            </el-input>
+            <p v-else>
+              {{ scope.row.data[39][`${forecast_attribute}`] | toLocaleStr }}
+              {{ getPercent(forecast_attribute, scope.row.data[39]) }}
+            </p>
           </template>
         </el-table-column>
         <el-table-column
@@ -442,7 +1241,27 @@
           align="right"
         >
           <template slot-scope="scope">
-            {{ scope.row.data[40][`${forecast_attribute}`] | toLocaleStr }} {{getPercent(forecast_attribute,scope.row.data[40])}}
+            <el-input
+              v-if="isManualAdjustment && weekNo() < 41"
+              autofocus
+              v-model="scope.row.data[40][`${forecast_attribute}`]"
+              :disabled="isDisble"
+              @blur="
+                (e) =>
+                  handleDataChange(
+                    e,
+                    forecast_attribute,
+                    scope.row.data[40][`${forecast_attribute}`],
+                    scope.$index,
+                    41
+                  )
+              "
+            >
+            </el-input>
+            <p v-else>
+              {{ scope.row.data[40][`${forecast_attribute}`] | toLocaleStr }}
+              {{ getPercent(forecast_attribute, scope.row.data[40]) }}
+            </p>
           </template>
         </el-table-column>
         <el-table-column
@@ -452,7 +1271,27 @@
           align="right"
         >
           <template slot-scope="scope">
-            {{ scope.row.data[41][`${forecast_attribute}`] | toLocaleStr }} {{getPercent(forecast_attribute,scope.row.data[41])}}
+            <el-input
+              v-if="isManualAdjustment && weekNo() < 42"
+              autofocus
+              v-model="scope.row.data[41][`${forecast_attribute}`]"
+              :disabled="isDisble"
+              @blur="
+                (e) =>
+                  handleDataChange(
+                    e,
+                    forecast_attribute,
+                    scope.row.data[41][`${forecast_attribute}`],
+                    scope.$index,
+                    42
+                  )
+              "
+            >
+            </el-input>
+            <p v-else>
+              {{ scope.row.data[41][`${forecast_attribute}`] | toLocaleStr }}
+              {{ getPercent(forecast_attribute, scope.row.data[41]) }}
+            </p>
           </template>
         </el-table-column>
         <el-table-column
@@ -462,10 +1301,29 @@
           align="right"
         >
           <template slot-scope="scope">
-            {{ scope.row.data[42][`${forecast_attribute}`] | toLocaleStr }} {{getPercent(forecast_attribute,scope.row.data[42])}}
+            <el-input
+              v-if="isManualAdjustment && weekNo() < 43"
+              autofocus
+              v-model="scope.row.data[42][`${forecast_attribute}`]"
+              :disabled="isDisble"
+              @blur="
+                (e) =>
+                  handleDataChange(
+                    e,
+                    forecast_attribute,
+                    scope.row.data[42][`${forecast_attribute}`],
+                    scope.$index,
+                    43
+                  )
+              "
+            >
+            </el-input>
+            <p v-else>
+              {{ scope.row.data[42][`${forecast_attribute}`] | toLocaleStr }}
+              {{ getPercent(forecast_attribute, scope.row.data[42]) }}
+            </p>
           </template>
         </el-table-column>
-
         <el-table-column
           min-width="150"
           :label="`w44 ${getWeekendDates(44)}`"
@@ -473,10 +1331,29 @@
           align="right"
         >
           <template slot-scope="scope">
-            {{ scope.row.data[43][`${forecast_attribute}`] | toLocaleStr }} {{getPercent(forecast_attribute,scope.row.data[43])}}
+            <el-input
+              v-if="isManualAdjustment && weekNo() < 44"
+              autofocus
+              v-model="scope.row.data[43][`${forecast_attribute}`]"
+              :disabled="isDisble"
+              @blur="
+                (e) =>
+                  handleDataChange(
+                    e,
+                    forecast_attribute,
+                    scope.row.data[43][`${forecast_attribute}`],
+                    scope.$index,
+                    44
+                  )
+              "
+            >
+            </el-input>
+            <p v-else>
+              {{ scope.row.data[43][`${forecast_attribute}`] | toLocaleStr }}
+              {{ getPercent(forecast_attribute, scope.row.data[43]) }}
+            </p>
           </template>
         </el-table-column>
-
         <el-table-column
           min-width="150"
           :label="`w45 ${getWeekendDates(45)}`"
@@ -484,7 +1361,27 @@
           align="right"
         >
           <template slot-scope="scope">
-            {{ scope.row.data[44][`${forecast_attribute}`] | toLocaleStr }} {{getPercent(forecast_attribute,scope.row.data[44])}}
+            <el-input
+              v-if="isManualAdjustment && weekNo() < 45"
+              autofocus
+              v-model="scope.row.data[44][`${forecast_attribute}`]"
+              :disabled="isDisble"
+              @blur="
+                (e) =>
+                  handleDataChange(
+                    e,
+                    forecast_attribute,
+                    scope.row.data[44][`${forecast_attribute}`],
+                    scope.$index,
+                    45
+                  )
+              "
+            >
+            </el-input>
+            <p v-else>
+              {{ scope.row.data[44][`${forecast_attribute}`] | toLocaleStr }}
+              {{ getPercent(forecast_attribute, scope.row.data[44]) }}
+            </p>
           </template>
         </el-table-column>
         <el-table-column
@@ -494,7 +1391,27 @@
           align="right"
         >
           <template slot-scope="scope">
-            {{ scope.row.data[45][`${forecast_attribute}`] | toLocaleStr }} {{getPercent(forecast_attribute,scope.row.data[45])}}
+            <el-input
+              v-if="isManualAdjustment && weekNo() < 46"
+              autofocus
+              v-model="scope.row.data[45][`${forecast_attribute}`]"
+              :disabled="isDisble"
+              @blur="
+                (e) =>
+                  handleDataChange(
+                    e,
+                    forecast_attribute,
+                    scope.row.data[45][`${forecast_attribute}`],
+                    scope.$index,
+                    46
+                  )
+              "
+            >
+            </el-input>
+            <p v-else>
+              {{ scope.row.data[45][`${forecast_attribute}`] | toLocaleStr }}
+              {{ getPercent(forecast_attribute, scope.row.data[45]) }}
+            </p>
           </template>
         </el-table-column>
         <el-table-column
@@ -504,7 +1421,27 @@
           align="right"
         >
           <template slot-scope="scope">
-            {{ scope.row.data[46][`${forecast_attribute}`] | toLocaleStr }} {{getPercent(forecast_attribute,scope.row.data[46])}}
+            <el-input
+              v-if="isManualAdjustment && weekNo() < 47"
+              autofocus
+              v-model="scope.row.data[46][`${forecast_attribute}`]"
+              :disabled="isDisble"
+              @blur="
+                (e) =>
+                  handleDataChange(
+                    e,
+                    forecast_attribute,
+                    scope.row.data[46][`${forecast_attribute}`],
+                    scope.$index,
+                    47
+                  )
+              "
+            >
+            </el-input>
+            <p v-else>
+              {{ scope.row.data[46][`${forecast_attribute}`] | toLocaleStr }}
+              {{ getPercent(forecast_attribute, scope.row.data[46]) }}
+            </p>
           </template>
         </el-table-column>
         <el-table-column
@@ -514,10 +1451,29 @@
           align="right"
         >
           <template slot-scope="scope">
-            {{ scope.row.data[47][`${forecast_attribute}`] | toLocaleStr }} {{getPercent(forecast_attribute,scope.row.data[47])}}
+            <el-input
+              v-if="isManualAdjustment && weekNo() < 48"
+              autofocus
+              v-model="scope.row.data[47][`${forecast_attribute}`]"
+              :disabled="isDisble"
+              @blur="
+                (e) =>
+                  handleDataChange(
+                    e,
+                    forecast_attribute,
+                    scope.row.data[47][`${forecast_attribute}`],
+                    scope.$index,
+                    48
+                  )
+              "
+            >
+            </el-input>
+            <p v-else>
+              {{ scope.row.data[47][`${forecast_attribute}`] | toLocaleStr }}
+              {{ getPercent(forecast_attribute, scope.row.data[47]) }}
+            </p>
           </template>
         </el-table-column>
-
         <el-table-column
           min-width="150"
           :label="`w49 ${getWeekendDates(49)}`"
@@ -525,10 +1481,29 @@
           align="right"
         >
           <template slot-scope="scope">
-            {{ scope.row.data[48][`${forecast_attribute}`] | toLocaleStr }} {{getPercent(forecast_attribute,scope.row.data[48])}}
+            <el-input
+              v-if="isManualAdjustment && weekNo() < 49"
+              autofocus
+              v-model="scope.row.data[48][`${forecast_attribute}`]"
+              :disabled="isDisble"
+              @blur="
+                (e) =>
+                  handleDataChange(
+                    e,
+                    forecast_attribute,
+                    scope.row.data[48][`${forecast_attribute}`],
+                    scope.$index,
+                    49
+                  )
+              "
+            >
+            </el-input>
+            <p v-else>
+              {{ scope.row.data[48][`${forecast_attribute}`] | toLocaleStr }}
+              {{ getPercent(forecast_attribute, scope.row.data[48]) }}
+            </p>
           </template>
         </el-table-column>
-
         <el-table-column
           min-width="150"
           :label="`w50 ${getWeekendDates(50)}`"
@@ -536,10 +1511,29 @@
           align="right"
         >
           <template slot-scope="scope">
-            {{ scope.row.data[49][`${forecast_attribute}`] | toLocaleStr }} {{getPercent(forecast_attribute,scope.row.data[49])}}
+            <el-input
+              v-if="isManualAdjustment && weekNo() < 50"
+              autofocus
+              v-model="scope.row.data[49][`${forecast_attribute}`]"
+              :disabled="isDisble"
+              @blur="
+                (e) =>
+                  handleDataChange(
+                    e,
+                    forecast_attribute,
+                    scope.row.data[49][`${forecast_attribute}`],
+                    scope.$index,
+                    50
+                  )
+              "
+            >
+            </el-input>
+            <p v-else>
+              {{ scope.row.data[49][`${forecast_attribute}`] | toLocaleStr }}
+              {{ getPercent(forecast_attribute, scope.row.data[49]) }}
+            </p>
           </template>
         </el-table-column>
-
         <el-table-column
           min-width="150"
           :label="`w51 ${getWeekendDates(51)}`"
@@ -547,10 +1541,29 @@
           align="right"
         >
           <template slot-scope="scope">
-            {{ scope.row.data[50][`${forecast_attribute}`] | toLocaleStr }} {{getPercent(forecast_attribute,scope.row.data[50])}}
+            <el-input
+              v-if="isManualAdjustment && weekNo() < 51"
+              autofocus
+              v-model="scope.row.data[50][`${forecast_attribute}`]"
+              :disabled="isDisble"
+              @blur="
+                (e) =>
+                  handleDataChange(
+                    e,
+                    forecast_attribute,
+                    scope.row.data[50][`${forecast_attribute}`],
+                    scope.$index,
+                    51
+                  )
+              "
+            >
+            </el-input>
+            <p v-else>
+              {{ scope.row.data[50][`${forecast_attribute}`] | toLocaleStr }}
+              {{ getPercent(forecast_attribute, scope.row.data[50]) }}
+            </p>
           </template>
         </el-table-column>
-
         <el-table-column
           min-width="150"
           :label="`w52 ${getWeekendDates(52)}`"
@@ -558,11 +1571,53 @@
           align="right"
         >
           <template slot-scope="scope">
-            {{ scope.row.data[51][`${forecast_attribute}`] | toLocaleStr }} {{getPercent(forecast_attribute,scope.row.data[51])}}
+            <el-input
+              v-if="isManualAdjustment && weekNo() < 52"
+              autofocus
+              v-model="scope.row.data[51][`${forecast_attribute}`]"
+              :disabled="isDisble"
+              @blur="
+                (e) =>
+                  handleDataChange(
+                    e,
+                    forecast_attribute,
+                    scope.row.data[51][`${forecast_attribute}`],
+                    scope.$index,
+                    52
+                  )
+              "
+            >
+            </el-input>
+            <p v-else>
+              {{ scope.row.data[51][`${forecast_attribute}`] | toLocaleStr }}
+              {{ getPercent(forecast_attribute, scope.row.data[51]) }}
+            </p>
           </template>
         </el-table-column>
       </template>
     </el-table>
+    <button
+      class="btn btn-primary pull-right btn-sm"
+      @click="handleManualAdjustment"
+      v-if="!isManualAdjustment"
+      :disabled="getDisabledAdjustment"
+    >
+      Manual Adjustment
+    </button>
+    <button
+      @click="submitManualAdjustment"
+      class="btn btn-primary pull-right btn-sm"
+      v-if="isValueChanged"
+    >
+      Submit Adjustment
+    </button>
+    <button
+      class="btn btn-primary pull-right btn-sm"
+      @click="discardChanges"
+      v-if="isManualAdjustment"
+    >
+      Discard
+    </button>
   </card>
 </template>
 <script>
@@ -582,26 +1637,89 @@ export default {
     "forecast_attribute",
     "topSkusData",
     "allAppliedFilters",
+    "disbleAdjustment"
   ],
   data() {
     return {
       forecastData: [],
+      isManualAdjustment: false,
+      isDisble: false,
+      isValueChanged: false,
+      topSkusDataState: localStorage.getItem("topSkuLevelData"),
+      
     };
   },
-  computed: {},
+  computed: {
+    getDisabledAdjustment() {
+      return this.disbleAdjustment
+    }
+  },
   methods: {
-    getPercent(forecast_attribute, rowData) {
-      if(forecast_attribute != "aur" && rowData[forecast_attribute] != 0) {
-        let percent = (rowData[forecast_attribute]/rowData[`total_${forecast_attribute}`]) * 100;
-        return `(${percent.toFixed(2)}%)`;
-      } else {
-        return '';
+    submitManualAdjustment() {
+      this.isManualAdjustment = false;
+      this.isDisble = true;
+      this.$emit("createFilterAdjustment");
+      this.isValueChanged = false;
+    },
+
+    handleManualAdjustment() {
+      this.isManualAdjustment = true;
+    },
+
+    weekNo() {
+      return moment(new Date()).week() - 1;
+    },
+
+    discardChanges() {
+      this.$emit("discardChanges");
+      this.isManualAdjustment = false;
+      this.isValueChanged = false;
+      const elements = document.querySelectorAll(".filter-changed");
+      elements.forEach(function(item) {
+        item.classList.remove("filter-changed");
+      });
+    },
+
+    handleDataChange(e, forecast_attribute, data, index, innerIndex) {
+      console.log("inner", innerIndex);
+      const idx = innerIndex - 1;
+      const oldData = JSON.parse(localStorage.getItem("topSkuLevelData"))[index]
+        .data[idx];
+      console.log(oldData?.weekend);
+      if (Number(data) !== Number(oldData[`${forecast_attribute}`])) {
+        this.isValueChanged = true;
+        e.target.classList.add("filter-changed");
+        e.target.style.border = "none";
+        e.target.parentNode.parentNode.classList.add(
+          "filter-changed"
+        );
+        this.$emit("getAdjustmentChanges", {
+          adjusted_metrics_name: forecast_attribute,
+          weekend: oldData?.weekend ? new Date(oldData?.weekend) : new Date(),
+          before_adjustment_value: parseFloat(oldData[`${forecast_attribute}`]),
+          new_adjusted_value: parseFloat(data),
+          filter_skus: oldData?.sku,
+        });
       }
     },
+
+    getPercent(forecast_attribute, rowData) {
+      if (forecast_attribute != "aur" && rowData[forecast_attribute] != 0) {
+        let percent =
+          (rowData[forecast_attribute] /
+            rowData[`total_${forecast_attribute}`]) *
+          100;
+        return `(${percent.toFixed(2)}%)`;
+      } else {
+        return "";
+      }
+    },
+
     async getFilteredForecastData(forecastYear) {
       // const data = await this.$axios.$get(`/get-filtered-forecast-data/${forecastYear}`);
       // this.forecastData = data;
     },
+
     getWeekendDates(index) {
       return JSON.parse(window.localStorage.getItem("weekendDates"))
         ? `(${moment(
@@ -609,6 +1727,7 @@ export default {
           ).format("MM/DD/YYYY")})`
         : "";
     },
+
     checkIfPastWeek(index) {
       let className = "";
       if (moment(new Date()).week() > index) {
@@ -630,5 +1749,8 @@ export default {
 }
 .disableWeek {
   background: #e8e8e8;
+}
+.filter-changed {
+  background-color: rgb(233, 206, 140);
 }
 </style>

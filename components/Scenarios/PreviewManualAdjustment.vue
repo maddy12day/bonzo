@@ -49,8 +49,7 @@
           </tbody>
         </table>
         <p class="text-right">
-          <button 
-          
+          <button
             class="btn btn-primary"
             @click="(showDialog = false), activateAjustment()"
             v-if="!lockSystem && status && Object.keys(status).length == 0"
@@ -81,7 +80,7 @@
             <template slot-scope="scope">
               {{
                 scope.row.planned_revenue
-                  ? scope.row.planned_revenue.toFixed(2)
+                  ? scope.row.planned_revenue.toFixed()
                   : 0 | toLocaleStr
               }}
             </template>
@@ -95,7 +94,7 @@
             <template slot-scope="scope">
               {{
                 scope.row.forecasted_revenue
-                  ? scope.row.forecasted_revenue.toFixed(2)
+                  ? scope.row.forecasted_revenue.toFixed()
                   : 0 | toLocaleStr
               }}
             </template>
@@ -109,7 +108,7 @@
             <template slot-scope="scope">
               {{
                 scope.row.adjusted_revenue
-                  ? scope.row.adjusted_revenue.toFixed(2)
+                  ? scope.row.adjusted_revenue.toFixed()
                   : 0 | toLocaleStr
               }}
             </template>
@@ -269,12 +268,12 @@
               <th class="theader">Planned Units</th>
               <th class="theader">Forecast Units</th>
               <th class="theader">Adjusted Units</th>
-              <th class="theader">Planned</th>
-              <th class="theader">Forecast</th>
-              <th class="theader">Adjusted</th>
-              <th class="theader">planned(%)</th>
-              <th class="theader">Forecast(%)</th>
-              <th class="theader">Adjusted(%)</th>
+              <th class="theader">Planned Revenue</th>
+              <th class="theader">Forecast Revenue</th>
+              <th class="theader">Adjusted Revenue</th>
+              <th class="theader">planned Revenue(%)</th>
+              <th class="theader">Forecast Revenue(%)</th>
+              <th class="theader">Adjusted Revenue(%)</th>
               <th class="theader">Planned GM(%)</th>
               <th class="theader">Forecast GM(%)</th>
               <th class="theader">Ajusted GM(%)</th>
@@ -300,21 +299,21 @@
               <td>
                 {{
                   col2.planned_revenue
-                    ? parseInt(col2.planned_revenue)
+                    ? parseInt(col2.planned_revenue.toFixed())
                     : 0 | toLocaleStr
                 }}
               </td>
               <td>
                 {{
                   col2.forecasted_revenue
-                    ? parseInt(col2.forecasted_revenue)
+                    ? parseInt(col2.forecasted_revenue.toFixed())
                     : 0 | toLocaleStr
                 }}
               </td>
               <td>
                 {{
                   col2.adjusted_revenue
-                    ? parseInt(col2.adjusted_revenue)
+                    ? parseInt(col2.adjusted_revenue.toFixed())
                     : 0 | toLocaleStr
                 }}
               </td>
@@ -370,7 +369,12 @@
           class="bg-danger table table-bordered bg-white preview-table overflow-scroll"
           style="overflow-x: scroll"
         >
-          <thead v-if="adjustmentUnitSalesCategoryComparison && adjustmentUnitSalesCategoryComparison.parsedData">
+          <thead
+            v-if="
+              adjustmentUnitSalesCategoryComparison &&
+                adjustmentUnitSalesCategoryComparison.parsedData
+            "
+          >
             <tr>
               <th
                 v-for="(col, index2) in Object.keys(
@@ -394,7 +398,7 @@
                 v-for="(col2, index) in Object.values(col2)"
                 :key="Math.random(index, 200)"
               >
-                {{ index > 0 ? col2.toFixed(2) : col2 }}
+                {{ index > 0 ? col2.toFixed() : col2 }}
               </td>
             </tr>
           </tbody>
@@ -467,7 +471,7 @@ export default {
       categoriesCol: [],
       categorySummery: [],
       status: {},
-      lockSystem: false
+      lockSystem: false,
     };
   },
   computed: {},
@@ -484,7 +488,7 @@ export default {
       await this.$axios.$get(
         `/activate-manual-adjustment/${this.adjustmentId}`
       );
-      this.$store.commit('reRender');
+      this.$store.commit("reRender");
     },
     notifyVue(verticalAlign, horizontalAlign, message) {
       let color = 2;
@@ -526,18 +530,11 @@ export default {
       );
     },
     async activateManualAdjustment() {
-      await this.$axios.$post(
-        `/activate-adjustments`,
-        {   
-          id: this.adjustmentId,
-        }
-      );
-      this.notifyVue(
-        "top",
-        "right",
-        "Manual Adjustment is Activated"
-      );
-    }
+      await this.$axios.$post(`/activate-adjustments`, {
+        id: this.adjustmentId,
+      });
+      this.notifyVue("top", "right", "Manual Adjustment is Activated");
+    },
   },
   created() {
     this.showDialog = this.dialogVisible;
@@ -548,8 +545,7 @@ export default {
     this.getAdjustmentUnitSalesCategoryComparison();
     this.getCategorySummery();
     this.adjustmentStatus();
-       this.lockSystem=JSON.parse(localStorage.getItem("isSystemLock"));
-  
+    this.lockSystem = JSON.parse(localStorage.getItem("isSystemLock"));
   },
 };
 </script>
