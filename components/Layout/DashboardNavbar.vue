@@ -72,6 +72,7 @@ export default {
   },
   methods: {
     async logOut() {
+      localStorage.clear();
       await this.$auth.logout();
       this.$router.push("/login");
     },

@@ -26,8 +26,8 @@
           class="btn-custom-div"
           v-if="
             !isFilteredPageDataLoading &&
-            showRegularResetFilter &&
-            activeFilterType == 'Regular'
+              showRegularResetFilter &&
+              activeFilterType == 'Regular'
           "
           @click="resetFilter"
         >
@@ -39,8 +39,8 @@
           class="btn-custom-div"
           v-if="
             !isFilteredPageDataLoading &&
-            showProgramResetFilter &&
-            activeFilterType == 'Program'
+              showProgramResetFilter &&
+              activeFilterType == 'Program'
           "
           @click="resetFilter"
         >
@@ -152,7 +152,7 @@
       </div>
 
       <ManualAdjustmentTable
-        v-if="activeTab == 'Weekly' && showManualAdj"
+        v-if="activeTab == 'Weekly' && showManualAdj && !isFilteredForecast"
         :metricsTableData="baseMetricsListCom"
         tableHeading="Edit Forecast Metrics"
         @EvtAdjValues="getAdjustedValues"
@@ -160,22 +160,24 @@
 
       <client-only>
         <WeeklyMetricsTable
-          v-if="activeTab == 'Weekly' && !showManualAdj"
+          v-if="activeTab == 'Weekly' && !showManualAdj && !isFilteredForecast"
           :metricsTableData="baseMetricsListCom"
           tableHeading="Base Weekly Forecast Metrics"
         />
       </client-only>
 
       <MonthlyMetricsTable
-        v-if="activeTab == 'Monthly'"
+        v-if="activeTab == 'Monthly' && !isFilteredForecast"
         :metricsTableData="baseMetricsListCom"
         tableHeading="Base Monthly Forecast Metrics"
       />
       <div class="col-md-12 text-right" v-if="!isSystemLocked">
         <button
-          :class="`btn btn-primary btn-sm text-left ${
-            disbledCom || showManualAdj ? 'disabled' : ''
-          }`"
+          :class="
+            `btn btn-primary btn-sm text-left ${
+              disbledCom || showManualAdj ? 'disabled' : ''
+            }`
+          "
           @click="switchToManualAdj"
           :disabled="disbledCom || showManualAdj"
           v-if="!changeMABtnText && activeTab == 'Weekly'"
@@ -183,9 +185,9 @@
           Manual Adjustment
         </button>
         <button
-          :class="`btn btn-primary btn-sm text-left ${
-            disbledCom ? 'disabled' : ''
-          }`"
+          :class="
+            `btn btn-primary btn-sm text-left ${disbledCom ? 'disabled' : ''}`
+          "
           @click="() => createManualAdjustment('base')"
           v-if="changeMABtnText"
           :disabled="disbledCom"
@@ -232,7 +234,10 @@
       <FilteredWeeklyMetricsTable
         :key="filterMetricsCompKey"
         v-if="
-          filteredActiveTab == 'Weekly' && !showManualAdj && !showDiscardBtn
+          filteredActiveTab == 'Weekly' &&
+            !showManualAdj &&
+            !showDiscardBtn &&
+            isFilteredForecast
         "
         :filteredForecastMetrics="filteredForecastMetrics"
         tableHeading="Filtered Weekly Forecast Metrics"
@@ -242,7 +247,10 @@
       <client-only>
         <FilterWeeklyManualAdjustment
           v-if="
-            filteredActiveTab == 'Weekly' && showManualAdj && showDiscardBtn
+            filteredActiveTab == 'Weekly' &&
+              showManualAdj &&
+              showDiscardBtn &&
+              isFilteredForecast
           "
           :filteredForecastMetrics="filteredForecastMetrics"
           tableHeading="Filtered Weekly Forecast Metrics"
@@ -252,7 +260,12 @@
         />
       </client-only>
       <FilteredMonthlyMetricsTable
-        v-if="filteredActiveTab == 'Monthly'"
+        v-if="
+          filteredActiveTab == 'Monthly' &&
+            !showManualAdj &&
+            !showDiscardBtn &&
+            isFilteredForecast
+        "
         :filteredForecastMetrics="filteredForecastMetrics"
         tableHeading="Filtered Monthly Forecast Metrics"
         :allAppliedFilters="allAppliedFilters"
@@ -261,9 +274,11 @@
       <!-- v-if="!isSystemLocked" -->
       <div class="col-md-12 text-right">
         <button
-          :class="`btn btn-primary btn-sm text-left ${
-            disbledCom || showManualAdj ? 'disabled' : ''
-          }`"
+          :class="
+            `btn btn-primary btn-sm text-left ${
+              disbledCom || showManualAdj ? 'disabled' : ''
+            }`
+          "
           @click="switchToManualAdj"
           :disabled="disbledCom || showManualAdj"
           v-if="!changeMABtnText && filteredActiveTab == 'Weekly'"
@@ -271,11 +286,11 @@
           Manual Adjustment
         </button>
         <button
-          :class="`btn btn-primary btn-sm text-left ${
-            disbledCom ? 'disabled' : ''
-          }`"
+          :class="
+            `btn btn-primary btn-sm text-left ${disbledCom ? 'disabled' : ''}`
+          "
           @click="() => createManualAdjustment('base')"
-          v-if="changeMABtnText"
+          v-if="changeMABtnText && filteredActiveTab == 'Weekly'"
           :disabled="disbledCom"
         >
           Submit Adjustment
@@ -283,7 +298,7 @@
         <button
           :class="`btn btn-primary btn-sm ${disbledCom ? 'disabled' : ''}`"
           @click="discardChanges"
-          v-if="showDiscardBtn"
+          v-if="showDiscardBtn && filteredActiveTab == 'Weekly'"
           :disabled="disbledCom"
         >
           Discard
@@ -337,6 +352,10 @@
       :forecast_attribute="'retail_sales'"
       :topSkusData="topSkusData"
       :allAppliedFilters="allAppliedFilters"
+      @discardChanges="discardFilterChanges"
+      @getAdjustmentChanges="getFilterAdjustmentValues"
+      @createFilterAdjustment="createManualAdjustment('sku')"
+      :disbleAdjustment="isDisbleAdjustment"
     />
     <ForecastBySkuTable
       v-if="isFilteredForecast"
@@ -345,6 +364,10 @@
       :forecast_attribute="'units_sales'"
       :topSkusData="topSkusData"
       :allAppliedFilters="allAppliedFilters"
+      @discardChanges="discardFilterChanges"
+      @getAdjustmentChanges="getFilterAdjustmentValues"
+      @createFilterAdjustment="createManualAdjustment('sku')"
+      :disbleAdjustment="isDisbleAdjustment"
     />
     <ForecastBySkuTable
       ref="filterChartWidget"
@@ -353,6 +376,10 @@
       :forecast_attribute="'aur'"
       :topSkusData="topSkusData"
       :allAppliedFilters="allAppliedFilters"
+      @discardChanges="discardFilterChanges"
+      @getAdjustmentChanges="getFilterAdjustmentValues"
+      @createFilterAdjustment="createManualAdjustment('sku')"
+      :disbleAdjustment="isDisbleAdjustment"
     />
     <!-- </div> -->
   </div>
@@ -471,11 +498,19 @@ export default {
       )}.xlsx`,
       comparisonCollnData: [],
       filteredQuerySetterData: {},
-      skuLevelAdjustmentObj: []
+      skuLevelAdjustmentObj: [],
     };
   },
 
   methods: {
+    discardFilterChanges() {
+      console.log("discard changes are working");
+    },
+    getFilterAdjustmentValues(data) {
+      this.skuLevelAdjustmentObj.push(data);
+      console.log("adjustment data", data);
+      console.log(this.skuLevelAdjustmentObj);
+    },
     setUpdatedSKUsLimit() {
       let selectedOption = this.options.filter(
         (o) => o.value == this.topSkusLimit
@@ -688,7 +723,7 @@ export default {
         this.baseMetricsList = JSON.parse(
           baseMonthlyMetricsListString.baseMonthlyMetrics
         );
-          localStorage.setItem(
+        localStorage.setItem(
           "baseVersionId",
           this.baseMetricsList[0].demand_forecast_run_log_id
         );
@@ -698,7 +733,6 @@ export default {
       this.filteredActiveTab = activeTab;
 
       let requestedFilterOption = this.emptyFieldCleaner(this.filterPayload);
-
       if (this.filteredActiveTab == "Weekly") {
         requestedFilterOption["filterType"] = "week";
         this.filterWeekly = true;
@@ -721,7 +755,13 @@ export default {
       this.selectedFilterOptions = [];
     },
     async getFilteredWeeklyMetrics(requestedFilterOption) {
-      requestedFilterOption["filterType"] = "month";
+      if (this.filteredActiveTab == "Weekly") {
+        requestedFilterOption["filterType"] = "week";
+        this.filterWeekly = true;
+      } else {
+        requestedFilterOption["filterType"] = "month";
+        this.filterMonthly = true;
+      }
       this.requestedFilterOption = requestedFilterOption;
       const filteredWeeklyforecast = await this.$axios.$post(
         `/get-filtered-forecast-metrics/${this.filteredForecastedYear}`,
@@ -750,6 +790,10 @@ export default {
       const topSkusData = await this.$axios.$post(
         `/get-filtered-forecast-data/${this.filteredForecastedYear}`,
         this.filterPayload
+      );
+      localStorage.setItem(
+        "topSkuLevelData",
+        JSON.stringify(topSkusData.parsedWeeklyData)
       );
       let topLimitedSkuData = {};
       topLimitedSkuData["parsedWeeklyData"] = [];
@@ -848,20 +892,39 @@ export default {
       };
       let res;
       if (level == "sku") {
+        console.log(
+          JSON.stringify({
+            adjusted_by_user_id: parseInt(this.$auth.user.user_id),
+            demand_forecast_run_log_id: parseInt(
+              localStorage.getItem("baseVersionId")
+            ),
+            filter_level: "baseVersion",
+            is_active: false,
+            ...filterObject,
+            adjusted_metrics_name: this.skuLevelAdjustmentObj[0]
+              .adjusted_metrics_name,
+            filterSkuObject: this.skuLevelAdjustmentObj,
+            adjustment_level: "sku",
+          })
+        );
         res = await this.$axios.$post(`/create-manualadjustment`, {
           adjusted_by_user_id: parseInt(this.$auth.user.user_id),
           demand_forecast_run_log_id: parseInt(
             localStorage.getItem("baseVersionId")
           ),
           filter_level: "baseVersion",
+          adjusted_metrics_cell_date: new Date(
+            this.skuLevelAdjustmentObj[0].weekend
+          ),
           is_active: false,
-          adjusted_metrics_name: this.adustments.metrics_name,
-          adjusted_metrics_cell_date: new Date(this.adustments.weekend_date),
-          before_adjustment_value: Number(this.adustments.old_value),
-          new_adjusted_value: Number(this.adustments.new_value),
-          status: "Pending",
           ...filterObject,
+          status: "Pending",
+          adjusted_metrics_name: this.skuLevelAdjustmentObj[0]
+            .adjusted_metrics_name,
+          filterSkuObject: this.skuLevelAdjustmentObj,
+          adjustment_level: "sku",
         });
+        this.skuLevelAdjustmentObj = [];
       } else {
         res = await this.$axios.$post(`/create-manualadjustment`, {
           adjusted_by_user_id: parseInt(this.$auth.user.user_id),
@@ -913,6 +976,7 @@ export default {
           }
         );
         if (adjustmentsJson) {
+          localStorage.setItem("disabledAdjustment", this.disbleAdjustment);
           if (adjustmentsJson.adjustment) {
             if (
               adjustmentsJson &&
@@ -1063,6 +1127,9 @@ export default {
     },
   },
   computed: {
+    isDisbleAdjustment() {
+      return this.disbleAdjustment;
+    },
     isSystemLocked() {
       return this.$store.state.isSystemLocked;
     },
