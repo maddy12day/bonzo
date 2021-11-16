@@ -86,7 +86,7 @@
         >
           <span v-if="revenue && isAPIFetchComplete">
             <!-- $ {{ revenue | toLocaleStr }} -->
-            {{beauty(revenue)}}
+            ${{beauty(revenue)}}
           </span>
           <span
             class="empty-stats"
@@ -104,7 +104,7 @@
         >
           <span v-if="revenue && isAPIFetchComplete">
             <!-- $ {{ revenue | toLocaleStr }} -->
-            {{beauty(revenue)}}
+            ${{beauty(revenue)}}
           </span>
           <span
             class="empty-stats"
@@ -122,7 +122,7 @@
         >
           <span v-if="revenue && revenue !== '0' && isAPIFetchComplete">
             <!-- $ {{ revenue | toLocaleStr }} -->
-            {{beauty(revenue)}}
+            ${{beauty(revenue)}}
           </span>
           <span
             class="empty-stats"
