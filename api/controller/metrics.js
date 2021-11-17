@@ -36,7 +36,19 @@ export const getBaseWeeklyMetrics = async (req, res) => {
         obj.metrics_name !== "inventory_dc_units" &&
         obj.metrics_name !== "inventory_dc_cost"
     );
-
+    forecastedWeeklyMetrics = forecastedWeeklyMetrics.map((data)=>{
+      if (data.metrics_name === 'retail_sales' || data.metrics_name === 'gm') {
+        for (const [key, value] of Object.entries(data)) {
+          if(key != "metrics_master") {
+            data[key] = `$ ${value}`
+          }
+        }
+        return data;
+      }
+      else{
+        return data
+      }
+    });
     const baseWeeklyMetrics = JSON.stringify(
       forecastedWeeklyMetrics,
       (key, value) => (typeof value === "bigint" ? value.toString() : value) // return everything else unchanged
@@ -84,7 +96,19 @@ export const getBaseMonthlyMetrics = async (req, res) => {
         obj.metrics_name !== "inventory_dc_units" &&
         obj.metrics_name !== "inventory_dc_cost"
     );
-
+    forecastedMonthlyMetrics = forecastedMonthlyMetrics.map((data)=>{
+      if (data.metrics_name === 'retail_sales' || data.metrics_name === 'gm') {
+        for (const [key, value] of Object.entries(data)) {
+          if(key != "metrics_master") {
+            data[key] = `$ ${value}`
+          }
+        }
+        return data;
+      }
+      else{
+        return data
+      }
+    });
     const baseMonthlyMetrics = JSON.stringify(
       forecastedMonthlyMetrics,
       (key, value) => (typeof value === "bigint" ? value.toString() : value) // return everything else unchanged
