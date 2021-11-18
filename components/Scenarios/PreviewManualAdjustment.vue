@@ -78,7 +78,7 @@
             align="right"
           >
             <template slot-scope="scope">
-              {{
+              ${{
                 scope.row.planned_revenue
                   ? scope.row.planned_revenue.toFixed()
                   : 0 | toLocaleStr
@@ -92,7 +92,7 @@
             align="right"
           >
             <template slot-scope="scope">
-              {{
+              ${{
                 scope.row.forecasted_revenue
                   ? scope.row.forecasted_revenue.toFixed()
                   : 0 | toLocaleStr
@@ -106,7 +106,7 @@
             align="right"
           >
             <template slot-scope="scope">
-              {{
+              ${{
                 scope.row.adjusted_revenue
                   ? scope.row.adjusted_revenue.toFixed()
                   : 0 | toLocaleStr
@@ -297,21 +297,21 @@
                 }}
               </td>
               <td>
-                {{
+                ${{
                   col2.planned_revenue
                     ? parseInt(col2.planned_revenue.toFixed())
                     : 0 | toLocaleStr
                 }}
               </td>
               <td>
-                {{
+                ${{
                   col2.forecasted_revenue
                     ? parseInt(col2.forecasted_revenue.toFixed())
                     : 0 | toLocaleStr
                 }}
               </td>
               <td>
-                {{
+                ${{
                   col2.adjusted_revenue
                     ? parseInt(col2.adjusted_revenue.toFixed())
                     : 0 | toLocaleStr
