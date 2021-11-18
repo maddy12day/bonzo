@@ -39,7 +39,7 @@ export const getBaseWeeklyMetrics = async (req, res) => {
     forecastedWeeklyMetrics = forecastedWeeklyMetrics.map((data)=>{
       if (data.metrics_name === 'retail_sales' || data.metrics_name === 'gm') {
         for (const [key, value] of Object.entries(data)) {
-          if(key != "metrics_master") {
+          if(key != "metrics_master" && key != "demand_forecast_run_log_id") {
             data[key] = `$ ${value}`
           }
         }
@@ -99,7 +99,7 @@ export const getBaseMonthlyMetrics = async (req, res) => {
     forecastedMonthlyMetrics = forecastedMonthlyMetrics.map((data)=>{
       if (data.metrics_name === 'retail_sales' || data.metrics_name === 'gm') {
         for (const [key, value] of Object.entries(data)) {
-          if(key != "metrics_master") {
+          if(key != "metrics_master" && key != "demand_forecast_run_log_id") {
             data[key] = `$ ${value}`
           }
         }
