@@ -504,6 +504,7 @@ export default {
 
   methods: {
     discardFilterChanges() {
+      this.skuLevelAdjustmentObj = [];
       console.log("discard changes are working");
     },
     getFilterAdjustmentValues(data) {
