@@ -280,7 +280,7 @@
             }`
           "
           @click="switchToManualAdj"
-          :disabled="true"
+          :disabled="disbledCom || showManualAdj"
           v-if="!changeMABtnText && filteredActiveTab == 'Weekly'"
         >
           Manual Adjustment
