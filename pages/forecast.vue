@@ -280,7 +280,7 @@
             }`
           "
           @click="switchToManualAdj"
-          :disabled="disbledCom || showManualAdj"
+          :disabled="true"
           v-if="!changeMABtnText && filteredActiveTab == 'Weekly'"
         >
           Manual Adjustment
@@ -350,6 +350,7 @@
       ref="filterChartWidget"
       :tableHeading="'Revenue'"
       :forecast_attribute="'retail_sales'"
+      :allowManualAdjustment="true"
       :topSkusData="topSkusData"
       :allAppliedFilters="allAppliedFilters"
       @discardChanges="discardFilterChanges"
@@ -360,6 +361,7 @@
     <ForecastBySkuTable
       v-if="isFilteredForecast"
       ref="filterChartWidget"
+      :allowManualAdjustment="true"
       :tableHeading="'Units Sales'"
       :forecast_attribute="'units_sales'"
       :topSkusData="topSkusData"
@@ -372,6 +374,7 @@
     <ForecastBySkuTable
       ref="filterChartWidget"
       v-if="isFilteredForecast"
+      :allowManualAdjustment="false"
       :tableHeading="'AUR'"
       :forecast_attribute="'aur'"
       :topSkusData="topSkusData"
