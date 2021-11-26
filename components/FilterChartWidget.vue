@@ -243,7 +243,7 @@ export default {
       if (duration == "Weekly") {
         let dataMap = new Map();
         for (let i = 1; i <= 52; i++) {
-          dataMap.set(i, { date: i, total_revenue: 0, total_units: 0 });
+          dataMap.set(i-1, { date: i, total_revenue: 0, total_units: 0 });
         }
         for (let d of data) {
           if (parseInt(d.date) <= 52) {
