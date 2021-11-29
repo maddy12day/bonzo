@@ -40,6 +40,15 @@
             {{ buttonText }}
           </base-button>
         </form>
+        <p ><span >Create an account</span></p>
+        <sidebar-item 
+        id="reg-text"
+          :link="{
+            name: `Register`,
+            path: '/register',
+          }"
+        >
+        </sidebar-item>
       </div>
       <div class="col-md-6">
         <div class="text-center">
@@ -75,4 +84,11 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+*{
+  list-style: none;
+}
+a{
+  text-decoration: underline;
+}
+</style>

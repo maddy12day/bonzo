@@ -1599,7 +1599,8 @@
     <button
       class="btn btn-primary pull-right btn-sm"
       @click="handleManualAdjustment"
-      v-if="!isManualAdjustment"
+      v-if="!isManualAdjustment &&
+      allowManualAdjustment"
       :disabled="getDisabledAdjustment"
     >
       Manual Adjustment
@@ -1634,6 +1635,7 @@ export default {
   },
   props: [
     "tableHeading",
+    "allowManualAdjustment",
     "forecast_attribute",
     "topSkusData",
     "allAppliedFilters",
