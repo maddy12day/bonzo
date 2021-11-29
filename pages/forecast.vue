@@ -504,6 +504,7 @@ export default {
 
   methods: {
     discardFilterChanges() {
+      this.descardChangesonFilter();
       this.skuLevelAdjustmentObj = [];
       console.log("discard changes are working");
     },
@@ -680,6 +681,7 @@ export default {
       this.filteredForecastMetrics = JSON.parse(
         localStorage.getItem("filterMetricsOldTableData")
       );
+      this.skuLevelAdjustmentObj = [];
     },
     getAdjustedValues(values) {
       if (values) {
@@ -785,6 +787,19 @@ export default {
         JSON.stringify(weekendDates.weekends)
       );
     },
+    descardChangesonFilter() {
+      const topSkusData = JSON.parse(localStorage.getItem("oldFiltersData"));
+      let topLimitedSkuData = {};
+      topLimitedSkuData["parsedWeeklyData"] = [];
+      for (let i = 0; i < this.topSKUsCountLable; i++) {
+        if (topSkusData.parsedWeeklyData[i]) {
+          topLimitedSkuData["parsedWeeklyData"].push(
+            topSkusData.parsedWeeklyData[i]
+          );
+        }
+      }
+      this.topSkusData = topLimitedSkuData;
+    },
     async getFilteredTopSkus() {
       this.skusJsonData = [];
       this.isDownloadCsvDisbled = true;
@@ -792,6 +807,7 @@ export default {
         `/get-filtered-forecast-data/${this.filteredForecastedYear}`,
         this.filterPayload
       );
+      localStorage.setItem("oldFiltersData", JSON.stringify(topSkusData));
       localStorage.setItem(
         "topSkuLevelData",
         JSON.stringify(topSkusData.parsedWeeklyData)
@@ -1125,6 +1141,11 @@ export default {
       this.filteredStatsComponentKey += 1;
       this.programFiltersComponentKey += 1;
       this.filterChartComponentKey += 1;
+    },
+  },
+  watch: {
+    topSkusData(value) {
+      return (this.topSkusData = value);
     },
   },
   computed: {

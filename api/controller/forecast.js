@@ -891,6 +891,7 @@ const getWeeklyFilteredForecastMetricsQuery = (
   }
                 GROUP BY
                   dfbwm.week_of_year;`;
+  console.log("queryqueryquery", query)
   return query;
 };
 
@@ -972,6 +973,7 @@ const getMonthlyFilteredForecastMetricsQuery = (
   }
     GROUP BY
       dfbwm.month_of_year;`;
+      
   return query;
 };
 
