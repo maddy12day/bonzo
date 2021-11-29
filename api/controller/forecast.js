@@ -259,7 +259,8 @@ export const getFilteredForecastData = async (req, res) => {
                   ${transaction_db}.demand_forecast_base_weekly_metrics dfbwm,
                   ${transaction_db}.dim_products dp
                 WHERE
-                  demand_forecast_run_log_id = ${filteredQuerySetterData.dfrlId}
+                ${whereQueryString(req.body,"dfbwm")}
+                  AND demand_forecast_run_log_id = ${filteredQuerySetterData.dfrlId}
                   AND dfbwm.sku = dp.SKU
                   AND YEAR(dfbwm.weekend) = ${filterForecastedYear}
                   AND dfbwm.sku IN (
@@ -273,6 +274,7 @@ export const getFilteredForecastData = async (req, res) => {
                 ORDER BY
                   dfbwm.sku,
                   dfbwm.weekend;`;
+                  console.log("hello",query);
 
     let updatedWhereQueryString = filteredQuerySetterData.whereQueryWithChannel.replace(
       /fseisbw/g,
@@ -297,7 +299,7 @@ export const getFilteredForecastData = async (req, res) => {
         1
       order by
         2 desc;`;
-
+    console.log("hey",totalForecastedDataQuery);
     let filteredForecastDataPromise = await Promise.allSettled([
       prisma.$queryRaw(query),
       prisma.$queryRaw(totalForecastedDataQuery),
