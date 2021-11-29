@@ -274,7 +274,7 @@ export const getFilteredForecastData = async (req, res) => {
                 ORDER BY
                   dfbwm.sku,
                   dfbwm.weekend;`;
-                  console.log("hello",query);
+
 
     let updatedWhereQueryString = filteredQuerySetterData.whereQueryWithChannel.replace(
       /fseisbw/g,
@@ -299,7 +299,7 @@ export const getFilteredForecastData = async (req, res) => {
         1
       order by
         2 desc;`;
-    console.log("hey",totalForecastedDataQuery);
+
     let filteredForecastDataPromise = await Promise.allSettled([
       prisma.$queryRaw(query),
       prisma.$queryRaw(totalForecastedDataQuery),
