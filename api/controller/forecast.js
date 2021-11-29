@@ -259,8 +259,10 @@ export const getFilteredForecastData = async (req, res) => {
                   ${transaction_db}.demand_forecast_base_weekly_metrics dfbwm,
                   ${transaction_db}.dim_products dp
                 WHERE
-                ${whereQueryString(req.body,"dfbwm")}
-                  AND demand_forecast_run_log_id = ${filteredQuerySetterData.dfrlId}
+                ${whereQueryString(req.body, "dfbwm")}
+                  AND demand_forecast_run_log_id = ${
+                    filteredQuerySetterData.dfrlId
+                  }
                   AND dfbwm.sku = dp.SKU
                   AND YEAR(dfbwm.weekend) = ${filterForecastedYear}
                   AND dfbwm.sku IN (
@@ -274,7 +276,6 @@ export const getFilteredForecastData = async (req, res) => {
                 ORDER BY
                   dfbwm.sku,
                   dfbwm.weekend;`;
-
 
     let updatedWhereQueryString = filteredQuerySetterData.whereQueryWithChannel.replace(
       /fseisbw/g,
@@ -689,7 +690,6 @@ const parseFilteredForecastData = (
                   break;
                 default:
                   obj["Q2"] = (quarterTotal / 13).toFixed(2);
-                
               }
               quarterTotal = 0;
             } else if (index == 39) {
@@ -706,7 +706,6 @@ const parseFilteredForecastData = (
                   break;
                 default:
                   obj["Q3"] = (quarterTotal / 13).toFixed(2);
-                 
               }
               quarterTotal = 0;
             } else if (index == 52) {
@@ -744,7 +743,6 @@ const parseFilteredForecastData = (
                   break;
                 default:
                   obj["Q2"] = (quarterTotal / 3).toFixed(2);
-                  
               }
               quarterTotal = 0;
             } else if (index == 9) {
@@ -893,7 +891,6 @@ const getWeeklyFilteredForecastMetricsQuery = (
   }
                 GROUP BY
                   dfbwm.week_of_year;`;
-  console.log("queryqueryquery", query)
   return query;
 };
 
@@ -975,7 +972,7 @@ const getMonthlyFilteredForecastMetricsQuery = (
   }
     GROUP BY
       dfbwm.month_of_year;`;
-      
+
   return query;
 };
 
@@ -1166,7 +1163,6 @@ const typlanQueryGeneratorByDurations = (
   } ${whereQueryWithDP ? " AND pwurbcbs.sku in (" + filteredSkus + ")" : ""}
               GROUP BY
               ${duration}(pwurbcbs.weekend_date)`;
-  // console.log("opopop", query);
   return query;
 };
 
@@ -1220,8 +1216,6 @@ const typlanChartQueryGeneratorByDurations = (
   }
               GROUP BY
                 ${duration}(weekend_date)`;
-  // console.log("query++", query);
-
   return query;
 };
 // This Year Sale Query Generator
@@ -1312,7 +1306,6 @@ export const getFilteredYearlyStatsData = async (req, res) => {
     filterForecastedYear,
     filteredQuerySetterData.whereQueryWithDP
   );
-  // console.log("filteredPlannedDataQuery");
   // This Year Sale Yearly
 
   const filteredThisYearSaleDataQuery = thisYearSaleYearlyQuarterly(
@@ -1418,9 +1411,6 @@ export const getFilteredQuarterlyStatsData = async (req, res) => {
     filteredQuerySetterData.whereQueryWithDP,
     filteredQuerySetterData.dfrlId
   );
-
-  console.log("parseMetricsData", filteredQuarterlyForecastDataQuery);
-
   try {
     let quarterlyFilteredStats = await Promise.allSettled([
       prisma.$queryRaw(filteredQuarterlyPlannedDataQuery),
