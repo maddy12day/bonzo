@@ -161,6 +161,7 @@
       <client-only>
         <WeeklyMetricsTable
           v-if="activeTab == 'Weekly' && !showManualAdj && !isFilteredForecast"
+          :checkYear='forecastedYear'
           :metricsTableData="baseMetricsListCom"
           tableHeading="Base Weekly Forecast Metrics"
         />
@@ -168,6 +169,7 @@
 
       <MonthlyMetricsTable
         v-if="activeTab == 'Monthly' && !isFilteredForecast"
+        :checkYear='forecastedYear'
         :metricsTableData="baseMetricsListCom"
         tableHeading="Base Monthly Forecast Metrics"
       />
@@ -266,6 +268,7 @@
             !showDiscardBtn &&
             isFilteredForecast
         "
+        :checkYear="filteredForecastedYear"
         :filteredForecastMetrics="filteredForecastMetrics"
         tableHeading="Filtered Monthly Forecast Metrics"
         :allAppliedFilters="allAppliedFilters"

@@ -286,7 +286,7 @@ export default {
     [Table.name]: Table,
     [TableColumn.name]: TableColumn,
   },
-  props: ["tableHeading", "metricsTableData"],
+  props: ["tableHeading", "metricsTableData","checkYear"],
   data() {
     return {
       metricTableDataExportData: [],
@@ -365,7 +365,7 @@ export default {
         className2 = "disappearMonth";
         console.log("num");
       }
-      if (new Date().getMonth() > index) {
+      if (new Date().getMonth() > index && new Date().getFullYear()>=this.checkYear) {
         className = "disablemonth ";
       }
       return `${className} ${className1} ${className2}`;

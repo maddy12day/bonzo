@@ -677,7 +677,7 @@ export default {
     [Table.name]: Table,
     [TableColumn.name]: TableColumn,
   },
-  props: ["tableHeading", "metricsTableData"],
+  props: ["tableHeading", "metricsTableData","checkYear"],
   data() {
     return {
       metricTableDataExportData: [],
@@ -763,7 +763,7 @@ export default {
       if (this.weekIndexTill < index) {
         className2 = "disappearWeek";
       }
-      if (moment(new Date()).week() > index) {
+      if (moment(new Date()).week() > index && new Date().getFullYear()>=this.checkYear) {
         className = "disableWeek";
       }
       return `${className} ${className1} ${className2}`;

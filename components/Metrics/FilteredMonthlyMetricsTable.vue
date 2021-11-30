@@ -299,7 +299,7 @@ export default {
     [TableColumn.name]: TableColumn,
     Tags,
   },
-  props: ["tableHeading", "filteredForecastMetrics", "allAppliedFilters", "filterArray"],
+  props: ["tableHeading", "filteredForecastMetrics", "allAppliedFilters", "filterArray","checkYear"],
   data() {
     return {
       metricTableDataExportData: [],
@@ -380,7 +380,7 @@ export default {
         className2 = "disappearMonth";
         console.log("num");
       }
-      if (new Date().getMonth() > index) {
+      if (new Date().getMonth() > index && new Date().getFullYear()>=this.checkYear) {
         className = "disablemonth ";
       }
       return `${className} ${className1} ${className2}`;
