@@ -716,6 +716,7 @@ export default {
     "filteredForecastMetrics",
     "allAppliedFilters",
     "filterArray",
+    "checkYear"
   ],
   computed: {
     metricTableDataExportDataProp() {
@@ -822,6 +823,7 @@ export default {
       );
     },
     createExportCSV() {
+      if (this.filteredForecastMetrics.parsedFilteredForecastData && this.filteredForecastMetrics) {
       this.metricTableDataExportData = this.createCsvFormat();
       const metricsTableData = this.createCsvFormat();
       const manualAdjustmentLSObj = metricsTableData.map(
@@ -845,6 +847,7 @@ export default {
         "adjustmentTableData",
         JSON.stringify(manualAdjustmentLSObj)
       );
+      }
     },
     getWeekendDates(index) {
       return JSON.parse(window.localStorage.getItem("weekendDates"))
@@ -897,8 +900,10 @@ export default {
       if (this.weekIndexTill < index) {
         className2 = "disappearWeek";
       }
-      if (moment(new Date()).week() > index) {
+      if (new Date().getFullYear()>=this.checkYear) {
+        if (moment(new Date()).week() > index) {
         className = "disableWeek";
+      }
       }
       return `${className} ${className1} ${className2}`;
     },

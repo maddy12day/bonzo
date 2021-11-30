@@ -1639,7 +1639,8 @@ export default {
     "forecast_attribute",
     "topSkusData",
     "allAppliedFilters",
-    "disbleAdjustment"
+    "disbleAdjustment",
+    "checkYear"
   ],
   data() {
     return {
@@ -1732,7 +1733,7 @@ export default {
 
     checkIfPastWeek(index) {
       let className = "";
-      if (moment(new Date()).week() > index) {
+      if (moment(new Date()).week() > index && new Date().getFullYear()>=this.checkYear) {
         className = "disableWeek";
       }
       return className;
