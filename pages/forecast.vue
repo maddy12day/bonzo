@@ -366,7 +366,7 @@
     <ForecastBySkuTable
       v-if="isFilteredForecast"
       ref="filterChartWidget"
-      checkYear="filteredForecastedYear"
+      :checkYear="filteredForecastedYear"
       :allowManualAdjustment="true"
       :tableHeading="'Units Sales'"
       :forecast_attribute="'units_sales'"
@@ -380,7 +380,7 @@
     <ForecastBySkuTable
       ref="filterChartWidget"
       v-if="isFilteredForecast"
-      checkYear="filteredForecastedYear"
+      :checkYear="filteredForecastedYear"
       :allowManualAdjustment="false"
       :tableHeading="'AUR'"
       :forecast_attribute="'aur'"
