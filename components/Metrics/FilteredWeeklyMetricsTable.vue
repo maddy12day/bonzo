@@ -891,8 +891,6 @@ export default {
       }
       },
     checkIfPastWeek(index) {
-
-      console.log(this.checkYear,"year for week");
       let className = "";
       let className1 = "";
       let className2 = "";
