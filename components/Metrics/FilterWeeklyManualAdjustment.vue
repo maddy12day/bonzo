@@ -107,7 +107,7 @@
                 :class="`weekend-${weekNo()}`"
                 type="number"
                 v-if="
-                  weekNo() < 1 &&
+                  weekNo(1) == true &&
                   !isDisble &&
                   [
                     'Sales',
@@ -138,7 +138,7 @@
                 :class="`weekend-${weekNo()}`"
                 type="number"
                 v-if="
-                  weekNo() < 2 &&
+                  weekNo(2) == true &&
                   !isDisble &&
                   [
                     'Sales',
@@ -169,7 +169,7 @@
                 :class="`weekend-${weekNo()}`"
                 type="number"
                 v-if="
-                  weekNo() < 3 &&
+                  weekNo(3) == true &&
                   !isDisble &&
                   [
                     'Sales',
@@ -200,7 +200,7 @@
                 :class="`weekend-${weekNo()}`"
                 type="number"
                 v-if="
-                  weekNo() < 4 &&
+                  weekNo(4) == true &&
                   !isDisble &&
                   [
                     'Sales',
@@ -231,7 +231,7 @@
                 :class="`weekend-${weekNo()}`"
                 type="number"
                 v-if="
-                  weekNo() < 5 &&
+                  weekNo(5) == true &&
                   !isDisble &&
                   [
                     'Sales',
@@ -262,7 +262,7 @@
                 :class="`weekend-${weekNo()}`"
                 type="number"
                 v-if="
-                  weekNo() < 6 &&
+                  weekNo(6) == true &&
                   !isDisble &&
                   [
                     'Sales',
@@ -293,7 +293,7 @@
                 :class="`weekend-${weekNo()}`"
                 type="number"
                 v-if="
-                  weekNo() < 7 &&
+                  weekNo(7) == true &&
                   !isDisble &&
                   [
                     'Sales',
@@ -324,7 +324,7 @@
                 :class="`weekend-${weekNo()}`"
                 type="number"
                 v-if="
-                  weekNo() < 8 &&
+                  weekNo(8) == true &&
                   !isDisble &&
                   [
                     'Sales',
@@ -355,7 +355,7 @@
                 :class="`weekend-${weekNo()}`"
                 type="number"
                 v-if="
-                  weekNo() < 9 &&
+                  weekNo(9) == true &&
                   !isDisble &&
                   [
                     'Sales',
@@ -385,7 +385,7 @@
                 :class="`weekend-${weekNo()}`"
                 type="number"
                 v-if="
-                  weekNo() < 10 &&
+                  weekNo(10) == true &&
                   !isDisble &&
                   [
                     'Sales',
@@ -416,7 +416,7 @@
                 :class="`weekend-${weekNo()}`"
                 type="number"
                 v-if="
-                  weekNo() < 11 &&
+                  weekNo(11) == true &&
                   !isDisble &&
                   [
                     'Sales',
@@ -447,7 +447,7 @@
                 :class="`weekend-${weekNo()}`"
                 type="number"
                 v-if="
-                  weekNo() < 12 &&
+                  weekNo(12) == true &&
                   !isDisble &&
                   [
                     'Sales',
@@ -478,7 +478,7 @@
                 :class="`weekend-${weekNo()}`"
                 type="number"
                 v-if="
-                  weekNo() < 13 &&
+                  weekNo(13) == true &&
                   !isDisble &&
                   [
                     'Sales',
@@ -509,7 +509,7 @@
                 :class="`weekend-${weekNo()}`"
                 type="number"
                 v-if="
-                  weekNo() < 14 &&
+                  weekNo(14) == true &&
                   !isDisble &&
                   [
                     'Sales',
@@ -540,7 +540,7 @@
                 :class="`weekend-${weekNo()}`"
                 type="number"
                 v-if="
-                  weekNo() < 15 &&
+                  weekNo(15) == true &&
                   !isDisble &&
                   [
                     'Sales',
@@ -571,7 +571,7 @@
                 :class="`weekend-${weekNo()}`"
                 type="number"
                 v-if="
-                  weekNo() < 16 &&
+                  weekNo(16) == true &&
                   !isDisble &&
                   [
                     'Sales',
@@ -602,7 +602,7 @@
                 :class="`weekend-${weekNo()}`"
                 type="number"
                 v-if="
-                  weekNo() < 17 &&
+                  weekNo(17) == true &&
                   !isDisble &&
                   [
                     'Sales',
@@ -633,7 +633,7 @@
                 :class="`weekend-${weekNo()}`"
                 type="number"
                 v-if="
-                  weekNo() < 18 &&
+                  weekNo(18) == true &&
                   !isDisble &&
                   [
                     'Sales',
@@ -664,7 +664,7 @@
                 :class="`weekend-${weekNo()}`"
                 type="number"
                 v-if="
-                  weekNo() < 19 &&
+                  weekNo(19) == true &&
                   !isDisble &&
                   [
                     'Sales',
@@ -695,7 +695,7 @@
                 :class="`weekend-${weekNo()}`"
                 type="number"
                 v-if="
-                  weekNo() < 20 &&
+                  weekNo(20) == true &&
                   !isDisble &&
                   [
                     'Sales',
@@ -726,7 +726,7 @@
                 :class="`weekend-${weekNo()}`"
                 type="number"
                 v-if="
-                  weekNo() < 21 &&
+                  weekNo(21) == true &&
                   !isDisble &&
                   [
                     'Sales',
@@ -757,7 +757,7 @@
                 :class="`weekend-${weekNo()}`"
                 type="number"
                 v-if="
-                  weekNo() < 22 &&
+                  weekNo(22) == true &&
                   !isDisble &&
                   [
                     'Sales',
@@ -788,7 +788,7 @@
                 :class="`weekend-${weekNo()}`"
                 type="number"
                 v-if="
-                  weekNo() < 23 &&
+                  weekNo(23) == true &&
                   !isDisble &&
                   [
                     'Sales',
@@ -819,7 +819,7 @@
                 :class="`weekend-${weekNo()}`"
                 type="number"
                 v-if="
-                  weekNo() < 24 &&
+                  weekNo(24) == true &&
                   !isDisble &&
                   [
                     'Sales',
@@ -850,7 +850,7 @@
                 :class="`weekend-${weekNo()}`"
                 type="number"
                 v-if="
-                  weekNo() < 25 &&
+                  weekNo(25) == true &&
                   !isDisble &&
                   [
                     'Sales',
@@ -881,7 +881,7 @@
                 :class="`weekend-${weekNo()}`"
                 type="number"
                 v-if="
-                  weekNo() < 26 &&
+                  weekNo(26) == true &&
                   !isDisble &&
                   [
                     'Sales',
@@ -912,7 +912,7 @@
                 :class="`weekend-${weekNo()}`"
                 type="number"
                 v-if="
-                  weekNo() < 27 &&
+                  weekNo(27) == true &&
                   !isDisble &&
                   [
                     'Sales',
@@ -943,7 +943,7 @@
                 :class="`weekend-${weekNo()}`"
                 type="number"
                 v-if="
-                  weekNo() < 28 &&
+                  weekNo(28) == true &&
                   !isDisble &&
                   [
                     'Sales',
@@ -974,7 +974,7 @@
                 :class="`weekend-${weekNo()}`"
                 type="number"
                 v-if="
-                  weekNo() < 29 &&
+                  weekNo(29) == true &&
                   !isDisble &&
                   [
                     'Sales',
@@ -1005,7 +1005,7 @@
                 :class="`weekend-${weekNo()}`"
                 type="number"
                 v-if="
-                  weekNo() < 30 &&
+                  weekNo(30) == true &&
                   !isDisble &&
                   [
                     'Sales',
@@ -1036,7 +1036,7 @@
                 :class="`weekend-${weekNo()}`"
                 type="number"
                 v-if="
-                  weekNo() < 31 &&
+                  weekNo(31) == true &&
                   !isDisble &&
                   [
                     'Sales',
@@ -1068,7 +1068,7 @@
                 type="number"
                 v-if="
                   !isDisble &&
-                  weekNo() < 32 &&
+                  weekNo(32) == true &&
                   [
                     'Sales',
                     'Sales Build',
@@ -1098,7 +1098,7 @@
                 :class="`weekend-${weekNo()}`"
                 type="number"
                 v-if="
-                  weekNo() < 33 &&
+                  weekNo(33) == true &&
                   !isDisble &&
                   [
                     'Sales',
@@ -1129,7 +1129,7 @@
                 :class="`weekend-${weekNo()}`"
                 type="number"
                 v-if="
-                  weekNo() < 34 &&
+                  weekNo(34) == true &&
                   !isDisble &&
                   [
                     'Sales',
@@ -1160,7 +1160,7 @@
                 :class="`weekend-${weekNo()}`"
                 type="number"
                 v-if="
-                  weekNo() < 35 &&
+                  weekNo(35) == true &&
                   !isDisble &&
                   [
                     'Sales',
@@ -1191,7 +1191,7 @@
                 :class="`weekend-${weekNo()}`"
                 type="number"
                 v-if="
-                  weekNo() < 36 &&
+                  weekNo(36) == true &&
                   !isDisble &&
                   [
                     'Sales',
@@ -1222,7 +1222,7 @@
                 :class="`weekend-${weekNo()}`"
                 type="number"
                 v-if="
-                  weekNo() < 37 &&
+                  weekNo(37) == true &&
                   !isDisble &&
                   [
                     'Sales',
@@ -1253,7 +1253,7 @@
                 :class="`weekend-${weekNo()}`"
                 type="number"
                 v-if="
-                  weekNo() < 38 &&
+                  weekNo(38) == true &&
                   !isDisble &&
                   [
                     'Sales',
@@ -1284,7 +1284,7 @@
                 :class="`weekend-${weekNo()}`"
                 type="number"
                 v-if="
-                  weekNo() < 39 &&
+                  weekNo(39) == true &&
                   !isDisble &&
                   [
                     'Sales',
@@ -1315,7 +1315,7 @@
                 :class="`weekend-${weekNo()}`"
                 type="number"
                 v-if="
-                  weekNo() < 40 &&
+                  weekNo(40) == true &&
                   !isDisble &&
                   [
                     'Sales',
@@ -1346,7 +1346,7 @@
                 :class="`weekend-${weekNo()}`"
                 type="number"
                 v-if="
-                  weekNo() < 41 &&
+                  weekNo(41) == true &&
                   !isDisble &&
                   [
                     'Sales',
@@ -1377,7 +1377,7 @@
                 :class="`weekend-${weekNo()}`"
                 type="number"
                 v-if="
-                  weekNo() < 42 &&
+                  weekNo(42) == true &&
                   !isDisble &&
                   [
                     'Sales',
@@ -1408,7 +1408,7 @@
                 :class="`weekend-${weekNo()}`"
                 type="number"
                 v-if="
-                  weekNo() < 43 &&
+                  weekNo(43) == true &&
                   !isDisble &&
                   [
                     'Sales',
@@ -1439,7 +1439,7 @@
                 :class="`weekend-${weekNo()}`"
                 type="number"
                 v-if="
-                  weekNo() < 44 &&
+                  weekNo(44) == true &&
                   !isDisble &&
                   [
                     'Sales',
@@ -1470,7 +1470,7 @@
                 :class="`weekend-${weekNo()}`"
                 type="number"
                 v-if="
-                  weekNo() < 45 &&
+                  weekNo(45) == true  &&
                   !isDisble &&
                   [
                     'Sales',
@@ -1501,7 +1501,7 @@
                 :class="`weekend-${weekNo()}`"
                 type="number"
                 v-if="
-                  weekNo() < 46 &&
+                  weekNo(46) == true &&
                   !isDisble &&
                   [
                     'Sales',
@@ -1532,7 +1532,7 @@
                 :class="`weekend-${weekNo()}`"
                 type="number"
                 v-if="
-                  weekNo() < 47 &&
+                  weekNo(47) == true &&
                   !isDisble &&
                   [
                     'Sales',
@@ -1563,7 +1563,7 @@
                 :class="`weekend-${weekNo()}`"
                 type="number"
                 v-if="
-                  weekNo() < 48 &&
+                  weekNo(48) == true &&
                   !isDisble &&
                   [
                     'Sales',
@@ -1594,7 +1594,7 @@
                 :class="`weekend-${weekNo()}`"
                 type="number"
                 v-if="
-                  weekNo() < 49 &&
+                  weekNo(49) == true &&
                   !isDisble &&
                   [
                     'Sales',
@@ -1625,7 +1625,7 @@
                 :class="`weekend-${weekNo()}`"
                 type="number"
                 v-if="
-                  weekNo() < 50 &&
+                  weekNo(50) == true &&
                   !isDisble &&
                   [
                     'Sales',
@@ -1656,7 +1656,7 @@
                 :class="`weekend-${weekNo()}`"
                 type="number"
                 v-if="
-                  weekNo() < 51 &&
+                  weekNo(51) == true &&
                   !isDisble &&
                   [
                     'Sales',
@@ -1687,7 +1687,7 @@
                 :class="`weekend-${weekNo()}`"
                 type="number"
                 v-if="
-                  weekNo() < 52 &&
+                  weekNo(52) == true &&
                   !isDisble &&
                   [
                     'Sales',
@@ -1736,6 +1736,7 @@ export default {
     "filteredForecastMetrics",
     "allAppliedFilters",
     "filterArray",
+    "checkYear"
   ],
   computed: {
     metricTableDataExportDataProp() {
@@ -1754,8 +1755,14 @@ export default {
     onFocus() {
       document.querySelector(`.weekend-${this.weekNo()}`).focus();
     },
-    weekNo() {
-      return moment(new Date()).week() - 1;
+    weekNo(num) {
+      let year = new Date().getFullYear();
+      if (year>=this.checkYear) {
+        return (moment(new Date()).week()-1)<num;
+      }
+      else{
+        return true
+      }
     },
     onDataChange(e, value, index, innerIndex) {
       console.log(e, value, index, innerIndex)

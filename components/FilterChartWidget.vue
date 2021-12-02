@@ -240,7 +240,7 @@ export default {
       
   },
      dataMappingWeekly(data, duration) {
-      if (duration == "Weekly") {
+      if (duration == "Weekly" && data) {
         let dataMap = new Map();
         for (let i = 1; i <= 52; i++) {
           dataMap.set(i-1, { date: i, total_revenue: 0, total_units: 0 });
@@ -251,7 +251,7 @@ export default {
           }
         }
         return [...dataMap.values()].slice(0, moment(new Date()).week()-1)
-      } else {
+      } else if(data) {
         let dataMap = new Map();
         for (let i = 1; i <= 12; i++) {
           dataMap.set(i, { date: i, total_revenue: 0, total_units: 0 });
