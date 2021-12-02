@@ -153,6 +153,7 @@
 
       <ManualAdjustmentTable
         v-if="activeTab == 'Weekly' && showManualAdj && !isFilteredForecast"
+        :checkYear="forecastedYear"
         :metricsTableData="baseMetricsListCom"
         tableHeading="Edit Forecast Metrics"
         @EvtAdjValues="getAdjustedValues"
@@ -255,6 +256,7 @@
               showDiscardBtn &&
               isFilteredForecast
           "
+          :checkYear="filteredForecastedYear"
           :filteredForecastMetrics="filteredForecastMetrics"
           tableHeading="Filtered Weekly Forecast Metrics"
           :allAppliedFilters="allAppliedFilters"
