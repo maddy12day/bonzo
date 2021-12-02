@@ -37,17 +37,17 @@ export const getBaseWeeklyMetrics = async (req, res) => {
         obj.metrics_name !== "inventory_dc_cost"
     );
     forecastedWeeklyMetrics = forecastedWeeklyMetrics.map((data)=>{
-      if (data.metrics_name === 'retail_sales' || data.metrics_name === 'gm') {
-        for (const [key, value] of Object.entries(data)) {
-          if(key != "metrics_master" && key != "demand_forecast_run_log_id") {
-            data[key] = `$ ${value}`
-          }
-        }
-        return data;
-      }
-      else{
+      // if (data.metrics_name === 'retail_sales' || data.metrics_name === 'gm') {
+      //   for (const [key, value] of Object.entries(data)) {
+      //     if(key != "metrics_master" && key != "demand_forecast_run_log_id") {
+      //       data[key] = `$ ${value}`
+      //     }
+      //   }
+      //   return data;
+      // }
+      // else{
         return data
-      }
+      // }
     });
     const baseWeeklyMetrics = JSON.stringify(
       forecastedWeeklyMetrics,
@@ -97,17 +97,17 @@ export const getBaseMonthlyMetrics = async (req, res) => {
         obj.metrics_name !== "inventory_dc_cost"
     );
     forecastedMonthlyMetrics = forecastedMonthlyMetrics.map((data)=>{
-      if (data.metrics_name === 'retail_sales' || data.metrics_name === 'gm') {
-        for (const [key, value] of Object.entries(data)) {
-          if(key != "metrics_master" && key != "demand_forecast_run_log_id") {
-            data[key] = `$ ${value}`
-          }
-        }
-        return data;
-      }
-      else{
+      // if (data.metrics_name === 'retail_sales' || data.metrics_name === 'gm') {
+      //   for (const [key, value] of Object.entries(data)) {
+      //     if(key != "metrics_master" && key != "demand_forecast_run_log_id") {
+      //       data[key] = `$ ${value}`
+      //     }
+      //   }
+      //   return data;
+      // }
+      // else{
         return data
-      }
+      // }
     });
     const baseMonthlyMetrics = JSON.stringify(
       forecastedMonthlyMetrics,
