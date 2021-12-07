@@ -118,7 +118,7 @@ export const getMonthlyChartBaseData = async (req, res) => {
                                                 and channel <> 'Wholesale'
                                                 group by Month(weekend_date)`);
 
-                                                const thisYearData = await prisma.$queryRaw(`SELECT monthend, round(sum(units_sales), 0) as units, ROUND(sum(retail_sales), 2) as revenue
+          const thisYearData = await prisma.$queryRaw(`SELECT monthend, round(sum(units_sales), 0) as units, ROUND(sum(retail_sales), 2) as revenue
                                                 from morphe_staging.monthly_aggregate_metrics_new pwurbcbs
                                                   where YEAR(monthend) = ${forecasted_year}
                                                   and channel <> 'Wholesale'
