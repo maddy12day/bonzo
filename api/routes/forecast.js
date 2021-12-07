@@ -11,6 +11,7 @@ import {
   collectionFilteredForecastByRetail,
   downloadAllSkuByMonth,
   setFilteredSKUsAndWhereQuery,
+  getFilteredMonthlyChartData
 } from "../controller/forecast";
 const router = Router();
 
@@ -39,6 +40,7 @@ router.post(
   "/get-filtered-chart-data-by-duration/:filterForecastedYear",
   getFilterChartData
 );
+router.post('/get-filtered-chart-data-for-month/:filterForecastedYear',getFilteredMonthlyChartData);//api for filtered monthly chart
 router.post("/collection-forecast/:forecast_year", collectionFilteredForecast);
 router.post(
   "/collection-forecast-by-ecomm/:forecast_year",

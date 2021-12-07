@@ -281,7 +281,7 @@ export default {
       const reqBody = this.requestedFilterOptionCom;
       delete reqBody["filterType"];
       const chartData = await this.$axios.$post(
-        `/get-filtered-chart-data-by-duration/${this.forecastedYear}`,
+        `/get-filtered-chart-data-for-month/${this.forecastedYear}`,
         {
           filters: { ...reqBody },
           duration: "month",

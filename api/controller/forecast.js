@@ -1218,6 +1218,40 @@ const typlanChartQueryGeneratorByDurations = (
                 ${duration}(weekend_date)`;
   return query;
 };
+// This year sale for monthly chart
+const thisYearSaleYearlyMonthlyQuarterly = (
+  duration,
+  filteredSkus,
+  whereQueryStringWithChannel,
+  transaction_db,
+  year,
+  whereQueryWithDP
+) => {
+  let dateOffset;
+  // duration.toLowerCase() == "month" ? (dateOffset = 0) : (dateOffset = 1);
+  const query = `
+                SELECT
+                  month(fseisbw.monthend) AS date,
+                  IFNULL(SUM(fseisbw.units_sales), 0) AS total_units,
+                  IFNULL(ROUND(SUM(fseisbw.retail_sales), 0), 0) AS total_revenue
+                FROM
+                  ${transaction_db}.monthly_aggregate_metrics_new fseisbw
+                WHERE
+                  YEAR(fseisbw.monthend)= ${year}
+                  AND fseisbw.channel <> 'Wholesale' ${
+                    whereQueryStringWithChannel
+                      ? " AND " + whereQueryStringWithChannel
+                      : ""
+                  } ${
+    whereQueryWithDP ? " AND fseisbw.sku in (" + filteredSkus + ")" : ""
+  }
+                GROUP BY
+                  month(fseisbw.monthend)
+                ORDER BY
+                  month(fseisbw.monthend);`;
+  return query;
+};
+//--------------------------------------------------------end for filtered monthly chart data---------------------------------------------------- 
 // This Year Sale Query Generator
 const thisYearSaleYearlyQuarterly = (
   duration,
@@ -1287,6 +1321,41 @@ const forecastQueryGenByDuration = (
   return query;
 };
 
+//forecast monthly filtered
+const forecastQueryGenByDurationMonthly = (
+  duration,
+  filteredSkus,
+  whereQueryStringWithChannel,
+  transaction_db,
+  year,
+  whereQueryWithDP,
+  dfrlId
+) => {
+  const query = `
+              SELECT
+                ${duration}(fseisbw.monthend) AS date,
+                IFNULL( ROUND(SUM(fseisbw.retail_sales), 2), 0) AS total_revenue,
+                IFNULL( ROUND(SUM(fseisbw.units_sales), 0), 0) AS total_units
+              FROM
+                ${transaction_db}.demand_forecast_base_monthly_metrics fseisbw
+              WHERE
+                YEAR(fseisbw.monthend)= ${year}
+                AND fseisbw.channel <> 'Wholesale' ${
+                  whereQueryStringWithChannel
+                    ? " AND " + whereQueryStringWithChannel
+                    : ""
+                }
+                AND fseisbw.demand_forecast_run_log_id = ${dfrlId} ${
+    whereQueryWithDP ? " AND fseisbw.sku in (" + filteredSkus + ")" : ""
+  }
+              GROUP BY
+                month(fseisbw.monthend)
+              ORDER BY
+                month(fseisbw.monthend);`;
+  return query;
+};
+//end 
+
 // Filtered Stats getFilteredYearlyStatsData
 export const getFilteredYearlyStatsData = async (req, res) => {
   let filter = req.body;
@@ -1316,7 +1385,6 @@ export const getFilteredYearlyStatsData = async (req, res) => {
     filterForecastedYear,
     filteredQuerySetterData.whereQueryWithDP
   );
-
   // Forecast Yearly
 
   const filteredForecastDataQuery = forecastQueryGenByDuration(
@@ -1463,6 +1531,68 @@ const parseChartData = (duration, data) => {
   return chartData;
 };
 
+//Filtered Chart monthly data
+export const getFilteredMonthlyChartData = async (req, res) => {
+  delete req.body.filterType;
+  let filteredQuerySetterData = req.body.filters.filteredQuerySetterData;
+  delete req.body.filters.filteredQuerySetterData;
+
+  let filter = req.body.filters;
+  const { filterForecastedYear } = req.params;
+
+  // Planned Quarterly
+  const filteredQuarterlyPlannedWhereQuery = whereQueryString(
+    filter,
+    "pwurbcbs"
+  );
+  const filteredQuarterlyPlannedDataQuery = typlanChartQueryGeneratorByDurations(
+    req.body.duration,
+    filteredQuarterlyPlannedWhereQuery,
+    "morphe_staging",
+    filterForecastedYear,
+    filteredQuerySetterData
+  );
+
+  // This Year Quarterly
+  const filteredQuarterlyMonthlyThisYearSaleDataQuery = thisYearSaleYearlyMonthlyQuarterly(
+    req.body.duration,
+    filteredQuerySetterData.allFilteredSkus,
+    filteredQuerySetterData.whereQueryWithChannel,
+    "morphe_staging",
+    filterForecastedYear,
+    filteredQuerySetterData.whereQueryWithDP
+  );
+  // Forecast Quarterly
+  const filteredQuarterlyForecastDataQuery = forecastQueryGenByDurationMonthly(
+    req.body.duration,
+    filteredQuerySetterData.allFilteredSkus,
+    filteredQuerySetterData.whereQueryWithChannel,
+    "morphe_staging",
+    filterForecastedYear,
+    filteredQuerySetterData.whereQueryWithDP,
+    filteredQuerySetterData.dfrlId
+  );
+
+  try {
+    let quarterlyFilteredStats = await Promise.allSettled([
+      prisma.$queryRaw(filteredQuarterlyPlannedDataQuery),
+      prisma.$queryRaw(filteredQuarterlyMonthlyThisYearSaleDataQuery),
+      prisma.$queryRaw(filteredQuarterlyForecastDataQuery),
+    ]);
+    let data = quarterlyFilteredStats.map((item) =>
+      parseChartData(req.body.duration, item.value)
+    );
+    res.status(200).json({
+      chartData: data,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Unable to Fetch Filtered Forecast Data",
+      error: `${error}`,
+    });
+  }
+};
+//---------------------------------------------end of filtered monthly chart data-----------------------------------------------------------------
 // Filtered Chart data
 export const getFilterChartData = async (req, res) => {
   delete req.body.filterType;
