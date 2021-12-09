@@ -55,14 +55,14 @@
       </div>
       <client-only>
         <WeeklyMetricsTable
-          v-if="activeTab == 'Weekly' && !showManualAdj && !isFilteredForecast"
+          v-if="activeTab == 'Weekly' && !showManualAdj"
           :checkYear='forecastedYear'
           :metricsTableData="baseMetricsList"
           tableHeading="Weekly Forecast Metrics"
         />
       </client-only>
       <MonthlyMetricsTable
-        v-if="activeTab == 'Monthly' && !isFilteredForecast"
+        v-if="activeTab == 'Monthly'"
         :checkYear='forecastedYear'
         :metricsTableData="baseMetricsList"
         tableHeading="Monthly Forecast Metrics"
