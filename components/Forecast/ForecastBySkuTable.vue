@@ -1713,18 +1713,21 @@ export default {
       }
     },
 
-    getPercent(forecast_attribute, rowData) {
+        getPercent(forecast_attribute, rowData) {
       if (forecast_attribute != "aur" && rowData[forecast_attribute] != 0) {
-        let percent =
+        if(rowData[`total_${forecast_attribute}`]!=0) {
+           let percent =
           (rowData[forecast_attribute] /
             rowData[`total_${forecast_attribute}`]) *
           100;
         return `(${percent.toFixed(2)}%)`;
+        } else{
+          return `(0%)`
+        }
       } else {
         return "";
       }
     },
-
     async getFilteredForecastData(forecastYear) {
       // const data = await this.$axios.$get(`/get-filtered-forecast-data/${forecastYear}`);
       // this.forecastData = data;

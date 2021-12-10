@@ -2,6 +2,7 @@ import { Router } from "express";
 import {
   getBaseAdjustments,
   createManualAdjustment,
+  MonthlyManualAdjustment,
   getWeekendDates,
   checkAdjustmentStatus,
   getAdjustmentSalesSummary,
@@ -18,6 +19,7 @@ const router = Router();
 router.get("/get-base-adjustments", getBaseAdjustments);
 router.get("/get-weekend-dates/:year", getWeekendDates);
 router.post("/create-manualadjustment", createManualAdjustment);
+router.post("/create-monthlymanualadjustment", MonthlyManualAdjustment);
 router.get("/get-adjustment-status/:id", checkAdjustmentStatus);
 router.get("/get-adjustment/:id", getAdjustmentById);
 router.get("/get-adjustment-sales-summary/:id", getAdjustmentSalesSummary);

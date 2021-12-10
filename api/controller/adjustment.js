@@ -126,6 +126,63 @@ export const createManualAdjustment = async (req, res) => {
     });
   }
 };
+export const MonthlyManualAdjustment = async (req, res) => {
+  try {
+   const reqObject = { ...req.body };
+   if (req.body.hasOwnProperty("filterSkuObject")) {
+     delete req.body.filterSkuObject;
+   }
+   const manualAjustment = await prisma.manual_adjustments.create({
+     data: {
+       ...req.body,
+     },
+   });
+   console.log("data=0=0", manualAjustment);
+   if (reqObject.hasOwnProperty("filterSkuObject")) {
+     const reqObjSkuLevel = reqObject.filterSkuObject.map((item) => {
+       delete item["adjusted_metrics_name"];
+       return {
+         ...item,
+         adjustment_id: manualAjustment.id,
+       };
+     });
+     console.log(reqObjSkuLevel);
+     const skuLevelAdjustment = await prisma.manual_adjustments_sku_level.createMany(
+       {
+         data: reqObjSkuLevel,
+         skipDuplicates: true,
+       },
+     );
+     console.log(skuLevelAdjustment);
+   }
+   const executed_by = await prisma.users.findUnique({
+     where: {
+       id: req.body.adjusted_by_user_id,
+     },
+   });
+   const demandForecastRunlogRes = await prisma.demand_forecast_run_log.create(
+     {
+       data: {
+         is_base_forecast: false,
+         demand_planner_user_id: req.body.adjusted_by_user_id,
+         manual_adjustment_id: manualAjustment.id,
+         ma_source_scenario_id: 0,
+         status: "Pending",
+         forecast_type: "Adjustment",
+         executed_by: `${executed_by.first_name} ${executed_by.last_name}`,
+       },
+     }
+   );
+   res.json({
+     manualAjustment,
+     message: "adjustment created successfully",
+   });
+ } catch (error) {
+   res.status(500).json({
+     message: `something went wrong in createManualAdjustment api ${error}`,
+   });
+ }
+}
 
 export const activateManualAdjustment = async (req, res) => {
   try {
