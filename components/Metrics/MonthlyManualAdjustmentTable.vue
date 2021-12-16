@@ -455,6 +455,7 @@ export default {
     return {
       metricTableDataExportData: [],
        isDisble: false,
+       focusMonth:null,
     };
   },
   computed: {
@@ -472,17 +473,20 @@ export default {
       document.querySelector(`.weekend-${this.monthNo()}`).focus();
     },
     monthNo(num) {
- const d = new Date();
-let year = d.getFullYear();
-
+    const d = new Date();
+    let year = d.getFullYear();
       if(year>=this.checkYear){ 
           return (moment(new Date()).month())<num;
       } else{
         return true;
       }
     },
-
      onDataChange(e, value, index, innerIndex) {
+       let monthName=['jan','feb','mar','apr','may','jun','jul','aug','sep','oct','nov','dec']
+       console.log("efnfgbds",this.checkYear)
+       this.focusMonth = monthName[innerIndex-1]
+       this.$store.commit("updateManualAdjustment",`${this.checkYear}-${innerIndex}-02`);
+       console.log("1.1",this.focusMonth)
          console.log("this values",index,value,innerIndex)
       const oldTableData = JSON.parse(
         localStorage.getItem("adjustmentTableData")
@@ -501,7 +505,6 @@ let year = d.getFullYear();
             oldTableData[index][
               `${innerIndex < 10 ? `w0${innerIndex}` : `w${innerIndex}`}`
             ],
-            myarr:['jan','feb','mar','apr','may','jun','jul','aug','sep','oct','nov','dec'],
           metrics_name: oldTableData[index]["metrics_name"],
           ele: e.target.parentNode.parentNode.parentNode,
         });
@@ -559,10 +562,6 @@ let year = d.getFullYear();
     },
   },
   mounted() {
-    const d = new Date();
-let year = d.getFullYear();
-      console.log("hello",year);
-      console.log("hey",this.checkYear);
   },
 };
 </script>

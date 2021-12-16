@@ -21,7 +21,7 @@
         >
           <span v-if="units && isAPIFetchComplete">
             <!-- {{ units | toLocaleStr }} -->
-            {{beauty(units)}}
+            {{numberFormatting(units)}}
           </span>
           <span
             class=""
@@ -39,7 +39,7 @@
         >
           <span v-if="units && isAPIFetchComplete">
             <!-- {{ units | toLocaleStr }} -->
-            {{beauty(units)}}
+            {{numberFormatting(units)}}
           </span>
           <span
             class="empty-stats"
@@ -58,7 +58,7 @@
         >
           <span v-if="units && units !== '0' && isAPIFetchComplete">
             <!-- {{ units | toLocaleStr }} -->
-            {{beauty(units)}}
+            {{numberFormatting(units)}}
           </span>
           <span
             class="empty-stats"
@@ -86,7 +86,7 @@
         >
           <span v-if="revenue && isAPIFetchComplete">
             <!-- $ {{ revenue | toLocaleStr }} -->
-            ${{beauty(revenue)}}
+            ${{numberFormatting(revenue)}}
           </span>
           <span
             class="empty-stats"
@@ -104,7 +104,7 @@
         >
           <span v-if="revenue && isAPIFetchComplete">
             <!-- $ {{ revenue | toLocaleStr }} -->
-            ${{beauty(revenue)}}
+            ${{numberFormatting(revenue)}}
           </span>
           <span
             class="empty-stats"
@@ -122,7 +122,7 @@
         >
           <span v-if="revenue && revenue !== '0' && isAPIFetchComplete">
             <!-- $ {{ revenue | toLocaleStr }} -->
-            ${{beauty(revenue)}}
+            ${{numberFormatting(revenue)}}
           </span>
           <span
             class="empty-stats"
@@ -149,7 +149,7 @@ export default {
     },
   },
     methods: {
-    beauty(payload) {
+    numberFormatting(payload) {
       var numabbr = new numberAbbreviate(['K','M','B']);
       return numabbr.abbreviate(payload, 1);
     },

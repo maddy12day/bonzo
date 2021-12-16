@@ -132,12 +132,13 @@ export const MonthlyManualAdjustment = async (req, res) => {
    if (req.body.hasOwnProperty("filterSkuObject")) {
      delete req.body.filterSkuObject;
    }
+   console.log("hello",req.body)
    const manualAjustment = await prisma.manual_adjustments.create({
      data: {
        ...req.body,
      },
    });
-   console.log("data=0=0", manualAjustment);
+  //  console.log("data=0=0", manualAjustment);
    if (reqObject.hasOwnProperty("filterSkuObject")) {
      const reqObjSkuLevel = reqObject.filterSkuObject.map((item) => {
        delete item["adjusted_metrics_name"];
@@ -146,13 +147,14 @@ export const MonthlyManualAdjustment = async (req, res) => {
          adjustment_id: manualAjustment.id,
        };
      });
-     console.log(reqObjSkuLevel);
+     
      const skuLevelAdjustment = await prisma.manual_adjustments_sku_level.createMany(
        {
          data: reqObjSkuLevel,
          skipDuplicates: true,
        },
      );
+     console.log("hello",reqObjSkuLevel);
      console.log(skuLevelAdjustment);
    }
    const executed_by = await prisma.users.findUnique({
@@ -164,6 +166,7 @@ export const MonthlyManualAdjustment = async (req, res) => {
      {
        data: {
          is_base_forecast: false,
+        
          demand_planner_user_id: req.body.adjusted_by_user_id,
          manual_adjustment_id: manualAjustment.id,
          ma_source_scenario_id: 0,

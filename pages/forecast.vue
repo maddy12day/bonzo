@@ -966,6 +966,7 @@ export default {
             this.skuLevelAdjustmentObj[0].weekend
           ),
           is_active: false,
+          is_weekly:true,
           ...filterObject,
           status: "Pending",
           adjusted_metrics_name: this.skuLevelAdjustmentObj[0]
@@ -982,6 +983,7 @@ export default {
           ),
           filter_level: "baseVersion",
           is_active: false,
+          is_weekly:true,
           adjusted_metrics_name: this.adustments.metrics_name,
           adjusted_metrics_cell_date: new Date(this.adustments.weekend_date),
           before_adjustment_value: Number(this.adustments.old_value),
@@ -1015,6 +1017,8 @@ export default {
       }
     },
     async createMonthlyManualAdjustment(level){
+     let newDate=[`01/01/${this.forecastedYear}`,`01/02/${this.forecastedYear}`,`01/023${this.forecastedYear}`,`01/04/${this.forecastedYear}`,`01/05/${this.forecastedYear}`,`01/06/${this.forecastedYear}`,`01/07/${this.forecastedYear}`,`01/08/${this.forecastedYear}`,`01/09/${this.forecastedYear}`,`01/10/${this.forecastedYear}`,`01/11/${this.forecastedYear}`,`01/12/${this.forecastedYear}`]
+    console.log("hey",newDate);
       let filterObject = {
         filter_product_sources:
           this.productSourceValues && this.productSourceValues.length > 0
@@ -1096,6 +1100,7 @@ export default {
             this.skuLevelAdjustmentObj[0].weekend
           ),
           is_active: false,
+           is_weekly:false,
           ...filterObject,
           status: "Pending",
           adjusted_metrics_name: this.skuLevelAdjustmentObj[0]
@@ -1112,13 +1117,17 @@ export default {
           ),
           filter_level: "baseVersion",
           is_active: false,
+          is_weekly:false,
           adjusted_metrics_name: this.adustments.metrics_name,
-          adjusted_metrics_cell_date: new Date(this.adustments.weekend_date),
+          adjusted_metrics_cell_date: new Date(this.currentManualAdjustmentDate),
           before_adjustment_value: Number(this.adustments.old_value),
           new_adjusted_value: Number(this.adustments.new_value),
           status: "Pending",
+          
           ...filterObject,
         });
+        console.log("hjbkfvlsfnksdbl",this.currentManualAdjustmentDate)
+         
       }
       this.baseAdjustmentsList.adjustmentsResponse.unshift(result.manualAjustment);
       this.baseMetricsList = JSON.parse(
@@ -1317,6 +1326,9 @@ export default {
     isSystemLocked() {
       return this.$store.state.isSystemLocked;
     },
+    currentManualAdjustmentDate(){
+      return this.$store.state.manualAdjustmentMonth;
+    },
     getTopSkusCount() {
       return this.topSKUsCountLable;
     },
@@ -1384,6 +1396,7 @@ export default {
     setInterval(() => {
       this.checkManualAdjustmentStatus();
     }, 10000);
+  
   },
 };
 </script>
