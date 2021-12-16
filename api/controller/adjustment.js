@@ -154,8 +154,6 @@ export const MonthlyManualAdjustment = async (req, res) => {
          skipDuplicates: true,
        },
      );
-     console.log("hello",reqObjSkuLevel);
-     console.log(skuLevelAdjustment);
    }
    const executed_by = await prisma.users.findUnique({
      where: {

@@ -482,12 +482,8 @@ export default {
       }
     },
      onDataChange(e, value, index, innerIndex) {
-       let monthName=['jan','feb','mar','apr','may','jun','jul','aug','sep','oct','nov','dec']
-       console.log("efnfgbds",this.checkYear)
-       this.focusMonth = monthName[innerIndex-1]
+       this.focusMonth =[innerIndex-1]
        this.$store.commit("updateManualAdjustment",`${this.checkYear}-${innerIndex}-02`);
-       console.log("1.1",this.focusMonth)
-         console.log("this values",index,value,innerIndex)
       const oldTableData = JSON.parse(
         localStorage.getItem("adjustmentTableData")
       );

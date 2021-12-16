@@ -1017,8 +1017,6 @@ export default {
       }
     },
     async createMonthlyManualAdjustment(level){
-     let newDate=[`01/01/${this.forecastedYear}`,`01/02/${this.forecastedYear}`,`01/023${this.forecastedYear}`,`01/04/${this.forecastedYear}`,`01/05/${this.forecastedYear}`,`01/06/${this.forecastedYear}`,`01/07/${this.forecastedYear}`,`01/08/${this.forecastedYear}`,`01/09/${this.forecastedYear}`,`01/10/${this.forecastedYear}`,`01/11/${this.forecastedYear}`,`01/12/${this.forecastedYear}`]
-    console.log("hey",newDate);
       let filterObject = {
         filter_product_sources:
           this.productSourceValues && this.productSourceValues.length > 0
@@ -1125,9 +1123,7 @@ export default {
           status: "Pending",
           
           ...filterObject,
-        });
-        console.log("hjbkfvlsfnksdbl",this.currentManualAdjustmentDate)
-         
+        });  
       }
       this.baseAdjustmentsList.adjustmentsResponse.unshift(result.manualAjustment);
       this.baseMetricsList = JSON.parse(
