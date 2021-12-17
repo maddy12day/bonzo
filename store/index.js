@@ -6,7 +6,8 @@ export const state = () => ({
   isDataLoading: false,
   isAPIFetchComplete: false,
   key: 1,
-  isSystemLocked : false
+  isSystemLocked : false,
+  manualAdjustmentMonth:null,
 });
 
 export const mutations = {
@@ -33,5 +34,8 @@ export const mutations = {
   },
   toggleSystemLockState(state) {
     state.isSystemLocked = !state.isSystemLocked
+  },
+  updateManualAdjustment(state,payload){
+    state.manualAdjustmentMonth=payload
   }
 };
