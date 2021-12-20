@@ -1692,9 +1692,8 @@ export default {
     handleDataChange(e, forecast_attribute, data, index, innerIndex) {
       console.log("inner", innerIndex);
       const idx = innerIndex - 1;
-      const oldData = JSON.parse(
-        localStorage.getItem("topSkuLevelData")
-      );
+      const oldData = JSON.parse(localStorage.getItem("topSkuLevelData"))[index]
+        .data[idx];
       console.log(oldData,"oldData");
       if (Number(data) !== Number(oldData[`${forecast_attribute}`])) {
         this.isValueChanged = true;
