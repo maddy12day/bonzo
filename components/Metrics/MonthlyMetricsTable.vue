@@ -359,11 +359,9 @@ export default {
       if (this.monthIndex - 1 > index) {
         // document.getElementsByClassName("monthOfYear")[0].classList.add("disappearMonth");
         className1 = "disappearMonth";
-        console.log("num");
       }
       if (this.monthIndexTill - 1 < index) {
         className2 = "disappearMonth";
-        console.log("num");
       }
       if (new Date().getMonth() > index && new Date().getFullYear()>=this.checkYear) {
         className = "disablemonth ";
