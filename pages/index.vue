@@ -55,7 +55,7 @@
       </div>
       <client-only>
         <WeeklyMetricsTable
-          v-if="activeTab == 'Weekly' && !showManualAdj"
+          v-if="activeTab == 'Weekly'"
           :checkYear='forecastedYear'
           :metricsTableData="baseMetricsList"
           tableHeading="Weekly Forecast Metrics"

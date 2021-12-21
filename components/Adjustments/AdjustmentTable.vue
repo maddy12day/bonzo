@@ -53,7 +53,7 @@
             property="adjusted_metrics_name"
           >
             <template slot-scope="scope">
-              {{ scope.row.adjusted_metrics_name.replace(/_/g, " ") }}
+              {{ scope.row.adjusted_metrics_name }}
             </template>
           </el-table-column>
 
