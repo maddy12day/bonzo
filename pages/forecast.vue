@@ -150,14 +150,6 @@
           </div>
         </div>
       </div>
-
-      <MonthlyManualAdjustmentTable
-       v-if="activeTab == 'Monthly' && showManualAdj && !isFilteredForecast"
-        :checkYear="forecastedYear"
-        :metricsTableData="baseMetricsListCom"
-        tableHeading="Edit Monthly Forecast Metrics"
-        @EvtAdjValues="getAdjustedValues"
-        />
       <ManualAdjustmentTable
         v-if="activeTab == 'Weekly' && showManualAdj && !isFilteredForecast"
         :checkYear="forecastedYear"
@@ -191,19 +183,9 @@
           "
           @click="switchToManualAdj"
           :disabled="disbledCom || showManualAdj"
-          v-if="!changeMABtnText && activeTab == 'Weekly'||'Monthly'"
+          v-if="!changeMABtnText && activeTab == 'Weekly'"
         >
           Manual Adjustment
-        </button>
-          <button 
-          :class="
-            `btn btn-primary btn-sm text-left ${disbledCom ? 'disabled' : ''}` 
-          "
-          @click="() => createMonthlyManualAdjustment('base')"
-          v-if="changeMABtnText && activeTab =='Monthly'"
-          :disabled="disbledCom"
-        >
-          Submiting Adjustment
         </button>
         <button
           :class="
@@ -437,14 +419,12 @@ import XLSX from "xlsx";
 import ComparisonTable from "../components/ComparisionTables/ComparisonTable.vue";
 import Timeline from "../components/Timeline/Timeline.vue";
 import FilterWeeklyManualAdjustment from "../components/Metrics/FilterWeeklyManualAdjustment.vue";
-import MonthlyManualAdjustmentTable from "../components/Metrics/MonthlyManualAdjustmentTable.vue"
 
 export default {
   name: "Forecast",
   components: {
     MonthlyMetricsTable,
     WeeklyMetricsTable,
-    MonthlyManualAdjustmentTable,
     ManualAdjustmentTable,
     StatsWidget,
     AdjustmentTable,
@@ -1016,140 +996,6 @@ export default {
         this.changeMABtnText = false;
       }
     },
-    async createMonthlyManualAdjustment(level){
-      let filterObject = {
-        filter_product_sources:
-          this.productSourceValues && this.productSourceValues.length > 0
-            ? this.productSourceValues.join(",")
-            : null,
-        filter_brand_types:
-          this.brandTypeValues && this.brandTypeValues > 0
-            ? this.brandTypeValues.join(",")
-            : null,
-        filter_life_cycles:
-          this.lifeCycleValues && this.lifeCycleValues.length > 0
-            ? this.lifeCycleValues.join(",")
-            : null,
-        filter_newness:
-          this.newNessValues && this.newNessValues.length > 0
-            ? this.newNessValues.join(",")
-            : null,
-        filter_brands:
-          this.brandValues && this.brandValues.length > 0
-            ? this.brandValues.join(",")
-            : null,
-        filter_channels:
-          this.channelValues && this.channelValues.length > 0
-            ? this.channelValues.join(",")
-            : null,
-        filter_sub_channels:
-          this.subChannelsValues && this.subChannelsValues.length > 0
-            ? this.subChannelsValues.join(",")
-            : null,
-        filter_categories:
-          this.categoriesValues && this.categoriesValues.length > 0
-            ? this.categoriesValues.join(",")
-            : null,
-        filter_collections:
-          this.collectionValues && this.collectionValues.length > 0
-            ? this.collectionValues.join(",")
-            : null,
-        filter_skus:
-          this.skuValues && this.skuValues.length > 0
-            ? this.skuValues.join(",")
-            : null,
-        filter_classes:
-          this.classesValues && this.classesValues.length > 0
-            ? this.classesValues.join(",")
-            : null,
-        filter_sub_classes:
-          this.subClassesValues && this.subClassesValues.length > 0
-            ? this.subClassesValues.join(",")
-            : null,
-        filter_programs:
-          this.programValues && this.programValues.length > 0
-            ? this.programValues.join(",")
-            : null,
-      };
-           let result;
-      if (level == "sku") {
-        console.log(
-          JSON.stringify({
-            adjusted_by_user_id: parseInt(this.$auth.user.user_id),
-            demand_forecast_run_log_id: parseInt(
-              localStorage.getItem("baseVersionId")
-            ),
-            filter_level: "baseVersion",
-            is_active: false,
-            ...filterObject,
-            adjusted_metrics_name: this.skuLevelAdjustmentObj[0]
-              .adjusted_metrics_name,
-            filterSkuObject: this.skuLevelAdjustmentObj,
-            adjustment_level: "sku",
-          })
-        );
-        result = await this.$axios.$post(`/create-monthlymanualadjustment`, {
-          adjusted_by_user_id: parseInt(this.$auth.user.user_id),
-          demand_forecast_run_log_id: parseInt(
-            localStorage.getItem("baseVersionId")
-          ),
-          filter_level: "baseVersion",
-          adjusted_metrics_cell_date: new Date(
-            this.skuLevelAdjustmentObj[0].weekend
-          ),
-          is_active: false,
-           is_weekly:false,
-          ...filterObject,
-          status: "Pending",
-          adjusted_metrics_name: this.skuLevelAdjustmentObj[0]
-            .adjusted_metrics_name,
-          filterSkuObject: this.skuLevelAdjustmentObj,
-          adjustment_level: "sku",
-        });
-        this.skuLevelAdjustmentObj = [];
-      } else {
-        result = await this.$axios.$post(`/create-monthlymanualadjustment`, {
-          adjusted_by_user_id: parseInt(this.$auth.user.user_id),
-          demand_forecast_run_log_id: parseInt(
-            localStorage.getItem("baseVersionId")
-          ),
-          filter_level: "baseVersion",
-          is_active: false,
-          is_weekly:false,
-          adjusted_metrics_name: this.adustments.metrics_name,
-          adjusted_metrics_cell_date: new Date(this.currentManualAdjustmentDate),
-          before_adjustment_value: Number(this.adustments.old_value),
-          new_adjusted_value: Number(this.adustments.new_value),
-          status: "Pending",
-          
-          ...filterObject,
-        });  
-      }
-      this.baseAdjustmentsList.adjustmentsResponse.unshift(result.manualAjustment);
-      this.baseMetricsList = JSON.parse(
-        localStorage.getItem("adjustmentTableData")
-      );
-      result.manualAjustment.status == "Pending"
-        ? this.notifyVue(
-            "top",
-            "right",
-            '"Adjustment" submitted for processing with model. Please check "Base Model Adjustments" section for updates'
-          )
-        : "";
-      filterObject = {};
-      this.showDiscardBtn = false;
-      this.showManualAdj = false;
-      this.callToIntervalAjax = true;
-      if (result.manualAjustment.status == "Pending") {
-        this.showManualAdj = false;
-        this.changeMABtnText = false;
-        this.disbleAdjustment = true;
-      } else {
-        this.disbleAdjustment = false;
-        this.changeMABtnText = false;
-      }
-     },
-
     // check status after every 10 sec for user scenarios
     async checkManualAdjustmentStatus() {
       if (this.callToIntervalAjaxCom) {
