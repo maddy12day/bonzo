@@ -150,14 +150,6 @@
           </div>
         </div>
       </div>
-
-      <MonthlyManualAdjustmentTable
-       v-if="activeTab == 'Monthly' && showManualAdj && !isFilteredForecast"
-        :checkYear="forecastedYear"
-        :metricsTableData="baseMetricsListCom"
-        tableHeading="Edit Monthly Forecast Metrics"
-        @EvtAdjValues="getAdjustedValues"
-        />
       <ManualAdjustmentTable
         v-if="activeTab == 'Weekly' && showManualAdj && !isFilteredForecast"
         :checkYear="forecastedYear"
@@ -191,11 +183,11 @@
           "
           @click="switchToManualAdj"
           :disabled="disbledCom || showManualAdj"
-          v-if="!changeMABtnText && activeTab == 'Weekly'||'Monthly'"
+          v-if="!changeMABtnText && activeTab == 'Weekly'"
         >
           Manual Adjustment
         </button>
-          <button 
+         <button 
           :class="
             `btn btn-primary btn-sm text-left ${disbledCom ? 'disabled' : ''}` 
           "
@@ -437,15 +429,15 @@ import XLSX from "xlsx";
 import ComparisonTable from "../components/ComparisionTables/ComparisonTable.vue";
 import Timeline from "../components/Timeline/Timeline.vue";
 import FilterWeeklyManualAdjustment from "../components/Metrics/FilterWeeklyManualAdjustment.vue";
-import MonthlyManualAdjustmentTable from "../components/Metrics/MonthlyManualAdjustmentTable.vue"
+import MonthlyManualAdjustmentTable from "../components/Metrics/MonthlyManualAdjustmentTable.vue";
 
 export default {
   name: "Forecast",
   components: {
     MonthlyMetricsTable,
     WeeklyMetricsTable,
-    MonthlyManualAdjustmentTable,
     ManualAdjustmentTable,
+    MonthlyManualAdjustmentTable,
     StatsWidget,
     AdjustmentTable,
     RegularFilters,
@@ -1116,14 +1108,15 @@ export default {
           filter_level: "baseVersion",
           is_active: false,
           is_weekly:false,
-          adjusted_metrics_name: this.adustments.metrics_name,
+         adjusted_metrics_name: this.adustments.metrics_name,
           adjusted_metrics_cell_date: new Date(this.currentManualAdjustmentDate),
           before_adjustment_value: Number(this.adustments.old_value),
           new_adjusted_value: Number(this.adustments.new_value),
           status: "Pending",
-          
           ...filterObject,
         });  
+           console.log("hey",this.adjusted_metrics_name);
+
       }
       this.baseAdjustmentsList.adjustmentsResponse.unshift(result.manualAjustment);
       this.baseMetricsList = JSON.parse(
@@ -1149,7 +1142,6 @@ export default {
         this.changeMABtnText = false;
       }
      },
-
     // check status after every 10 sec for user scenarios
     async checkManualAdjustmentStatus() {
       if (this.callToIntervalAjaxCom) {
