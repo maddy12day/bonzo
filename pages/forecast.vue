@@ -1132,7 +1132,7 @@ export default {
       }
       this.baseAdjustmentsList.adjustmentsResponse.unshift(result.manualAjustment);
       this.baseMetricsList = JSON.parse(
-        localStorage.getItem("adjustmentTableData")
+        localStorage.getItem("monthlyAdjustmentTableData")
       );
       result.manualAjustment.status == "Pending"
         ? this.notifyVue(
