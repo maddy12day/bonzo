@@ -19,7 +19,7 @@
           <el-table-column
             min-width="150"
             sortable
-            label="early"
+            label="yearly"
             property="yearly_aggregate"
             align="right"
           >

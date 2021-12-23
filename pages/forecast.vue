@@ -150,6 +150,13 @@
           </div>
         </div>
       </div>
+       <MonthlyManualAdjustmentTable
+       v-if="activeTab == 'Monthly' && showManualAdj && !isFilteredForecast"
+        :checkYear="forecastedYear"
+        :metricsTableData="baseMetricsListCom"
+        tableHeading="Edit Monthly Forecast Metrics"
+        @EvtAdjValues="getAdjustedValues"
+        />
       <ManualAdjustmentTable
         v-if="activeTab == 'Weekly' && showManualAdj && !isFilteredForecast"
         :checkYear="forecastedYear"
@@ -183,7 +190,7 @@
           "
           @click="switchToManualAdj"
           :disabled="disbledCom || showManualAdj"
-          v-if="!changeMABtnText && activeTab == 'Weekly'"
+          v-if="!changeMABtnText && activeTab == 'Weekly'||'Monthly'"
         >
           Manual Adjustment
         </button>
@@ -754,6 +761,10 @@ export default {
           "baseVersionId",
           this.baseMetricsList[0].demand_forecast_run_log_id
         );
+        localStorage.setItem(
+          "monthlyAdjustmentTableData",
+          JSON.stringify(this.baseMetricsList)
+        );
       }
     },
     async showFilteredMetricsByDuration(activeTab) {
@@ -1100,6 +1111,7 @@ export default {
         });
         this.skuLevelAdjustmentObj = [];
       } else {
+        console.log("this.adustments--",this.adustments);
         result = await this.$axios.$post(`/create-monthlymanualadjustment`, {
           adjusted_by_user_id: parseInt(this.$auth.user.user_id),
           demand_forecast_run_log_id: parseInt(

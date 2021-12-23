@@ -482,25 +482,21 @@ export default {
       }
     },
      onDataChange(e, value, index, innerIndex) {
-       this.focusMonth =[innerIndex-1]
+      //  this.focusMonth =[innerIndex-1]
+      console.log(index,"innerIndex==",innerIndex);
+      let month = ['jan','feb','mar','apr','may','jun','jul','aug','sep','oct','nov','dec'];
        this.$store.commit("updateManualAdjustment",`${this.checkYear}-${innerIndex}-02`);
+       
       const oldTableData = JSON.parse(
-        localStorage.getItem("adjustmentTableData")
+        localStorage.getItem("monthlyAdjustmentTableData")
       );
-      if (
-        oldTableData[index][
-          `${innerIndex < 10 ? `w0${innerIndex}` : `w${innerIndex}`}`
-        ] !== value
-      ) {
+      // console.log("oldTableData[index]::",oldTableData[index][month[innerIndex-1]]);
+      if (oldTableData[index][month[innerIndex-1]] !== value) {
+        // console.log("oldTableData[index]::",oldTableData[index]);
         this.$emit("EvtAdjValues", {
           new_value: value,
-          weekend_date: JSON.parse(localStorage.getItem("weekendDates"))[
-            innerIndex - 1
-          ],
-          old_value:
-            oldTableData[index][
-              `${innerIndex < 10 ? `w0${innerIndex}` : `w${innerIndex}`}`
-            ],
+          weekend_date: "2021-12-01",
+          old_value: oldTableData[index][month[innerIndex-1]],
           metrics_name: oldTableData[index]["metrics_name"],
           ele: e.target.parentNode.parentNode.parentNode,
         });
