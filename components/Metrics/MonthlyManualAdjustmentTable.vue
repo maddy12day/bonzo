@@ -455,7 +455,7 @@ export default {
     return {
       metricTableDataExportData: [],
        isDisble: false,
-       focusMonth:null,
+      //  focusMonth:null,
     };
   },
   computed: {
@@ -495,7 +495,7 @@ export default {
         // console.log("oldTableData[index]::",oldTableData[index]);
         this.$emit("EvtAdjValues", {
           new_value: value,
-          weekend_date: "2021-12-01",
+          weekend_date: `${this.checkYear}-${innerIndex}-02`,
           old_value: oldTableData[index][month[innerIndex-1]],
           metrics_name: oldTableData[index]["metrics_name"],
           ele: e.target.parentNode.parentNode.parentNode,
