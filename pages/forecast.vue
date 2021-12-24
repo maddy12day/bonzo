@@ -202,7 +202,7 @@
           v-if="changeMABtnText && activeTab =='Monthly'"
           :disabled="disbledCom"
         >
-          Submiting Adjustment
+          Submit Adjustment
         </button>
         <button
           :class="

@@ -455,7 +455,6 @@ export default {
     return {
       metricTableDataExportData: [],
        isDisble: false,
-      //  focusMonth:null,
     };
   },
   computed: {
@@ -482,7 +481,6 @@ export default {
       }
     },
      onDataChange(e, value, index, innerIndex) {
-      //  this.focusMonth =[innerIndex-1]
       console.log(index,"innerIndex==",innerIndex);
       let month = ['jan','feb','mar','apr','may','jun','jul','aug','sep','oct','nov','dec'];
        this.$store.commit("updateManualAdjustment",`${this.checkYear}-${innerIndex}-02`);
@@ -490,9 +488,7 @@ export default {
       const oldTableData = JSON.parse(
         localStorage.getItem("monthlyAdjustmentTableData")
       );
-      // console.log("oldTableData[index]::",oldTableData[index][month[innerIndex-1]]);
       if (oldTableData[index][month[innerIndex-1]] !== value) {
-        // console.log("oldTableData[index]::",oldTableData[index]);
         this.$emit("EvtAdjValues", {
           new_value: value,
           weekend_date: `${this.checkYear}-${innerIndex}-02`,
