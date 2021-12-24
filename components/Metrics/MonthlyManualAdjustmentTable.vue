@@ -481,7 +481,6 @@ export default {
       }
     },
      onDataChange(e, value, index, innerIndex) {
-      console.log(index,"innerIndex==",innerIndex);
       let month = ['jan','feb','mar','apr','may','jun','jul','aug','sep','oct','nov','dec'];
        this.$store.commit("updateManualAdjustment",`${this.checkYear}-${innerIndex}-02`);
        

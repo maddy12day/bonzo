@@ -1111,7 +1111,6 @@ export default {
         });
         this.skuLevelAdjustmentObj = [];
       } else {
-        console.log("this.adustments--",this.adustments);
         result = await this.$axios.$post(`/create-monthlymanualadjustment`, {
           adjusted_by_user_id: parseInt(this.$auth.user.user_id),
           demand_forecast_run_log_id: parseInt(
@@ -1127,8 +1126,6 @@ export default {
           status: "Pending",
           ...filterObject,
         });  
-           console.log("hey",this.adjusted_metrics_name);
-
       }
       this.baseAdjustmentsList.adjustmentsResponse.unshift(result.manualAjustment);
       this.baseMetricsList = JSON.parse(
