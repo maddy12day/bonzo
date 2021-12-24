@@ -455,7 +455,6 @@ export default {
     return {
       metricTableDataExportData: [],
        isDisble: false,
-       focusMonth:null,
     };
   },
   computed: {
@@ -482,25 +481,17 @@ export default {
       }
     },
      onDataChange(e, value, index, innerIndex) {
-       this.focusMonth =[innerIndex-1]
+      let month = ['jan','feb','mar','apr','may','jun','jul','aug','sep','oct','nov','dec'];
        this.$store.commit("updateManualAdjustment",`${this.checkYear}-${innerIndex}-02`);
+       
       const oldTableData = JSON.parse(
-        localStorage.getItem("adjustmentTableData")
+        localStorage.getItem("monthlyAdjustmentTableData")
       );
-      if (
-        oldTableData[index][
-          `${innerIndex < 10 ? `w0${innerIndex}` : `w${innerIndex}`}`
-        ] !== value
-      ) {
+      if (oldTableData[index][month[innerIndex-1]] !== value) {
         this.$emit("EvtAdjValues", {
           new_value: value,
-          weekend_date: JSON.parse(localStorage.getItem("weekendDates"))[
-            innerIndex - 1
-          ],
-          old_value:
-            oldTableData[index][
-              `${innerIndex < 10 ? `w0${innerIndex}` : `w${innerIndex}`}`
-            ],
+          weekend_date: `${this.checkYear}-${innerIndex}-02`,
+          old_value: oldTableData[index][month[innerIndex-1]],
           metrics_name: oldTableData[index]["metrics_name"],
           ele: e.target.parentNode.parentNode.parentNode,
         });

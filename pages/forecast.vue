@@ -150,6 +150,13 @@
           </div>
         </div>
       </div>
+       <MonthlyManualAdjustmentTable
+       v-if="activeTab == 'Monthly' && showManualAdj && !isFilteredForecast"
+        :checkYear="forecastedYear"
+        :metricsTableData="baseMetricsListCom"
+        tableHeading="Edit Monthly Forecast Metrics"
+        @EvtAdjValues="getAdjustedValues"
+        />
       <ManualAdjustmentTable
         v-if="activeTab == 'Weekly' && showManualAdj && !isFilteredForecast"
         :checkYear="forecastedYear"
@@ -183,7 +190,7 @@
           "
           @click="switchToManualAdj"
           :disabled="disbledCom || showManualAdj"
-          v-if="!changeMABtnText && activeTab == 'Weekly'"
+          v-if="!changeMABtnText && activeTab == 'Weekly'||'Monthly'"
         >
           Manual Adjustment
         </button>
@@ -195,7 +202,7 @@
           v-if="changeMABtnText && activeTab =='Monthly'"
           :disabled="disbledCom"
         >
-          Submiting Adjustment
+          Submit Adjustment
         </button>
         <button
           :class="
@@ -754,6 +761,10 @@ export default {
           "baseVersionId",
           this.baseMetricsList[0].demand_forecast_run_log_id
         );
+        localStorage.setItem(
+          "monthlyAdjustmentTableData",
+          JSON.stringify(this.baseMetricsList)
+        );
       }
     },
     async showFilteredMetricsByDuration(activeTab) {
@@ -1115,12 +1126,10 @@ export default {
           status: "Pending",
           ...filterObject,
         });  
-           console.log("hey",this.adjusted_metrics_name);
-
       }
       this.baseAdjustmentsList.adjustmentsResponse.unshift(result.manualAjustment);
       this.baseMetricsList = JSON.parse(
-        localStorage.getItem("adjustmentTableData")
+        localStorage.getItem("monthlyAdjustmentTableData")
       );
       result.manualAjustment.status == "Pending"
         ? this.notifyVue(
