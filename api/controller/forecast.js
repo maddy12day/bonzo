@@ -972,7 +972,7 @@ const getMonthlyFilteredForecastMetricsQuery = (
   }
     GROUP BY
       dfbwm.month_of_year;`;
-
+console.log("query-",query)
   return query;
 };
 

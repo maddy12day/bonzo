@@ -294,6 +294,22 @@
         :allAppliedFilters="allAppliedFilters"
         :filterArray="filterArray"
       />
+      <client-only>
+      <FilterMonthlyManualAdjustment
+       v-if="
+          filteredActiveTab == 'Monthly' &&
+            showManualAdj &&
+            showDiscardBtn &&
+            isFilteredForecast
+        "
+        :checkYear="filteredForecastedYear"
+        :filteredForecastMetrics="filteredForecastMetrics"
+        tableHeading="Filtered Monthly Forecast Metrics"
+        :allAppliedFilters="allAppliedFilters"
+        :filterArray="filterArray"
+        @EvtAdjValues="getAdjustedValues"
+      />
+      </client-only>
       <!-- v-if="!isSystemLocked" -->
       <div class="col-md-12 text-right">
         <button
@@ -304,9 +320,18 @@
           "
           @click="switchToManualAdj"
           :disabled="disbledCom || showManualAdj"
-          v-if="!changeMABtnText && filteredActiveTab == 'Weekly'"
+          v-if="!changeMABtnText && filteredActiveTab == 'Weekly'||'Monthly'"
         >
           Manual Adjustment
+        </button>
+        <button
+          :class="
+            `btn btn-primary btn-sm text-left ${disbledCom ? 'disabled' : ''}`"
+          @click="() =>createMonthlyManualAdjustment('base')"
+          v-if="changeMABtnText && filteredActiveTab == 'Monthly'"
+          :disabled="disbledCom"
+        >
+           Submiting Adjustment
         </button>
         <button
           :class="
@@ -437,6 +462,7 @@ import ComparisonTable from "../components/ComparisionTables/ComparisonTable.vue
 import Timeline from "../components/Timeline/Timeline.vue";
 import FilterWeeklyManualAdjustment from "../components/Metrics/FilterWeeklyManualAdjustment.vue";
 import MonthlyManualAdjustmentTable from "../components/Metrics/MonthlyManualAdjustmentTable.vue";
+import FilterMonthlyManualAdjustment from "../components/Metrics/FilterMonthlyManualAdjustment.vue"
 
 export default {
   name: "Forecast",
@@ -445,6 +471,7 @@ export default {
     WeeklyMetricsTable,
     ManualAdjustmentTable,
     MonthlyManualAdjustmentTable,
+    FilterMonthlyManualAdjustment,
     StatsWidget,
     AdjustmentTable,
     RegularFilters,
@@ -746,7 +773,27 @@ export default {
           "adjustmentTableData",
           JSON.stringify(this.baseMetricsList)
         );
-      } else {
+      } 
+      // else if(this.activeTab=="Monthly"){
+      //   const filterMonthly = await this.$axios.$get(
+      //     `/base-weekly-metrics/${this.forecastedYear}`,
+      //     {
+      //        progress: true,
+      //     }
+      //   );
+      //    this.baseMetricsList = JSON.parse(
+      //     filterMonthly.baseMonthlyMetrics
+      //   );
+      //    localStorage.setItem(
+      //     "baseVersionId",
+      //     this.baseMetricsList[0].demand_forecast_run_log_id
+      //   );
+      //    localStorage.setItem(
+      //     "filterMonthlyAdjustmentTableData",
+      //     JSON.stringify(this.baseMetricsList)
+      //   );
+      // }
+      else {
         // base metrics table for monthly
         const baseMonthlyMetricsListString = await this.$axios.$get(
           `/base-monthly-metrics/${this.forecastedYear}`,
