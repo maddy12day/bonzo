@@ -294,6 +294,22 @@
         :allAppliedFilters="allAppliedFilters"
         :filterArray="filterArray"
       />
+      <client-only>
+      <FilterMonthlyManualAdjustment
+       v-if="
+          filteredActiveTab == 'Monthly' &&
+            showManualAdj &&
+            showDiscardBtn &&
+            isFilteredForecast
+        "
+        :checkYear="filteredForecastedYear"
+        :filteredForecastMetrics="filteredForecastMetrics"
+        tableHeading="Filtered Monthly Forecast Metrics"
+        :allAppliedFilters="allAppliedFilters"
+        :filterArray="filterArray"
+        @EvtAdjValues="getAdjustedValues"
+      />
+      </client-only>
       <!-- v-if="!isSystemLocked" -->
       <div class="col-md-12 text-right">
         <button
@@ -304,9 +320,18 @@
           "
           @click="switchToManualAdj"
           :disabled="disbledCom || showManualAdj"
-          v-if="!changeMABtnText && filteredActiveTab == 'Weekly'"
+          v-if="!changeMABtnText && filteredActiveTab == 'Weekly'||'Monthly'"
         >
           Manual Adjustment
+        </button>
+        <button
+          :class="
+            `btn btn-primary btn-sm text-left ${disbledCom ? 'disabled' : ''}`"
+          @click="() =>createMonthlyManualAdjustment('base')"
+          v-if="changeMABtnText && filteredActiveTab == 'Monthly'"
+          :disabled="disbledCom"
+        >
+           Submiting Adjustment
         </button>
         <button
           :class="
@@ -321,7 +346,7 @@
         <button
           :class="`btn btn-primary btn-sm ${disbledCom ? 'disabled' : ''}`"
           @click="discardChanges"
-          v-if="showDiscardBtn && filteredActiveTab == 'Weekly'"
+          v-if="showDiscardBtn"
           :disabled="disbledCom"
         >
           Discard
@@ -437,6 +462,7 @@ import ComparisonTable from "../components/ComparisionTables/ComparisonTable.vue
 import Timeline from "../components/Timeline/Timeline.vue";
 import FilterWeeklyManualAdjustment from "../components/Metrics/FilterWeeklyManualAdjustment.vue";
 import MonthlyManualAdjustmentTable from "../components/Metrics/MonthlyManualAdjustmentTable.vue";
+import FilterMonthlyManualAdjustment from "../components/Metrics/FilterMonthlyManualAdjustment.vue"
 
 export default {
   name: "Forecast",
@@ -445,6 +471,7 @@ export default {
     WeeklyMetricsTable,
     ManualAdjustmentTable,
     MonthlyManualAdjustmentTable,
+    FilterMonthlyManualAdjustment,
     StatsWidget,
     AdjustmentTable,
     RegularFilters,
@@ -621,6 +648,7 @@ export default {
       this.showFilteredMetricsByDuration(this.filteredActiveTab);
       this.getFilteredTopSkus();
       this.getFilteredWeeklyMetrics(this.requestedFilterOption);
+      this.getfilteredMonthlyMetrcis(this.requestedFilterOption);
       this.getWeekendDates(value);
     },
     // filter value getter methods
@@ -714,6 +742,15 @@ export default {
       );
       this.skuLevelAdjustmentObj = [];
     },
+     discardingChanges() {
+      this.showManualAdj = false;
+      this.showDiscardBtn = false;
+      this.changeMABtnText = false;
+      this.filteredForecastMetrics = JSON.parse(
+        localStorage.getItem("filterMetricsOldTableDataMWM")
+      );
+      this.skuLevelAdjustmentObj = [];
+    },
     getAdjustedValues(values) {
       if (values) {
         this.changeMABtnText = true;
@@ -746,7 +783,8 @@ export default {
           "adjustmentTableData",
           JSON.stringify(this.baseMetricsList)
         );
-      } else {
+      } 
+      else {
         // base metrics table for monthly
         const baseMonthlyMetricsListString = await this.$axios.$get(
           `/base-monthly-metrics/${this.forecastedYear}`,
@@ -806,6 +844,22 @@ export default {
         requestedFilterOption
       );
       this.filteredForecastMetrics = filteredWeeklyforecast;
+    },
+    async getfilteredMonthlyMetrcis(requestedFilterOption){
+       if (this.filteredActiveTab == "Weekly") {
+        requestedFilterOption["filterType"] = "week";
+        this.filterWeekly = true;
+      } else {
+        requestedFilterOption["filterType"] = "month";
+        this.filterMonthly = true;
+      }
+      this.requestedFilterOption = requestedFilterOption;
+           const filteredMonthlyforecast = await this.$axios.$post(
+        `/get-filtered-forecast-metrics/${this.filteredForecastedYear}`,
+        requestedFilterOption
+      );
+      this.filteredForecastMetrics = filteredMonthlyforecast;
+      localStorage.setItem("filterMetricsOldTableDataMWM", JSON.stringify(filteredMonthlyforecast));
     },
     // retail weeekends
     async getWeekendDates(value) {
@@ -1131,6 +1185,9 @@ export default {
       this.baseMetricsList = JSON.parse(
         localStorage.getItem("monthlyAdjustmentTableData")
       );
+      this.filteredForecastMetrics = JSON.parse(
+        localStorage.getItem("filterMetricsOldTableDataMWM")
+      );
       result.manualAjustment.status == "Pending"
         ? this.notifyVue(
             "top",
@@ -1269,6 +1326,7 @@ export default {
       this.filterChartComponentKey += 1;
       this.getFilteredTopSkus();
       await this.getFilteredWeeklyMetrics(requestedFilterOption);
+      await this.getfilteredMonthlyMetrcis(requestedFilterOption);
       this.isFilteredPageDataLoading = false;
       this.$store.commit("toggleCTAState");
       this.$store.commit("toggleProgramFilterCTAState");
