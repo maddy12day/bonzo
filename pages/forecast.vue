@@ -346,7 +346,7 @@
         <button
           :class="`btn btn-primary btn-sm ${disbledCom ? 'disabled' : ''}`"
           @click="discardChanges"
-          v-if="showDiscardBtn && filteredActiveTab == 'Weekly'"
+          v-if="showDiscardBtn"
           :disabled="disbledCom"
         >
           Discard
@@ -648,6 +648,7 @@ export default {
       this.showFilteredMetricsByDuration(this.filteredActiveTab);
       this.getFilteredTopSkus();
       this.getFilteredWeeklyMetrics(this.requestedFilterOption);
+      this.getfilteredMonthlyMetrcis(this.requestedFilterOption);
       this.getWeekendDates(value);
     },
     // filter value getter methods
@@ -738,6 +739,15 @@ export default {
       this.changeMABtnText = false;
       this.filteredForecastMetrics = JSON.parse(
         localStorage.getItem("filterMetricsOldTableData")
+      );
+      this.skuLevelAdjustmentObj = [];
+    },
+     discardingChanges() {
+      this.showManualAdj = false;
+      this.showDiscardBtn = false;
+      this.changeMABtnText = false;
+      this.filteredForecastMetrics = JSON.parse(
+        localStorage.getItem("filterMetricsOldTableDataMWM")
       );
       this.skuLevelAdjustmentObj = [];
     },
@@ -853,6 +863,22 @@ export default {
         requestedFilterOption
       );
       this.filteredForecastMetrics = filteredWeeklyforecast;
+    },
+    async getfilteredMonthlyMetrcis(requestedFilterOption){
+       if (this.filteredActiveTab == "Weekly") {
+        requestedFilterOption["filterType"] = "week";
+        this.filterWeekly = true;
+      } else {
+        requestedFilterOption["filterType"] = "month";
+        this.filterMonthly = true;
+      }
+      this.requestedFilterOption = requestedFilterOption;
+           const filteredMonthlyforecast = await this.$axios.$post(
+        `/get-filtered-forecast-metrics/${this.filteredForecastedYear}`,
+        requestedFilterOption
+      );
+      this.filteredForecastMetrics = filteredMonthlyforecast;
+      localStorage.setItem("filterMetricsOldTableDataMWM", JSON.stringify(filteredMonthlyforecast));
     },
     // retail weeekends
     async getWeekendDates(value) {
@@ -1178,6 +1204,9 @@ export default {
       this.baseMetricsList = JSON.parse(
         localStorage.getItem("monthlyAdjustmentTableData")
       );
+      this.filteredForecastMetrics = JSON.parse(
+        localStorage.getItem("filterMetricsOldTableDataMWM")
+      );
       result.manualAjustment.status == "Pending"
         ? this.notifyVue(
             "top",
@@ -1316,6 +1345,7 @@ export default {
       this.filterChartComponentKey += 1;
       this.getFilteredTopSkus();
       await this.getFilteredWeeklyMetrics(requestedFilterOption);
+      await this.getfilteredMonthlyMetrcis(requestedFilterOption);
       this.isFilteredPageDataLoading = false;
       this.$store.commit("toggleCTAState");
       this.$store.commit("toggleProgramFilterCTAState");

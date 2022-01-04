@@ -58,48 +58,48 @@
           <el-table-column
             min-width="150"
             label="Q1"
-            property="q1_aggregate"
+            property="Q1"
             align="right"
           >
             <template slot-scope="scope">{{
-              scope.row.q1_aggregate | toLocaleStr
+              scope.row.Q1 | toLocaleStr
             }}</template>
           </el-table-column>
           <el-table-column
             min-width="150"
             label="Q2"
-            property="q2_aggregate"
+            property="Q2"
             align="right"
           >
             <template slot-scope="scope">{{
-              scope.row.q2_aggregate | toLocaleStr
+              scope.row.Q2 | toLocaleStr
             }}</template>
           </el-table-column>
           <el-table-column
             min-width="150"
             label="Q3"
-            property="q3_aggregate"
+            property="Q3"
             align="right"
           >
             <template slot-scope="scope">{{
-              scope.row.q3_aggregate | toLocaleStr
+              scope.row.Q3 | toLocaleStr
             }}</template>
           </el-table-column>
           <el-table-column
             min-width="150"
             label="Q4"
-            property="q4_aggregate"
+            property="Q4"
             align="right"
           >
             <template slot-scope="scope">{{
-              scope.row.q4_aggregate | toLocaleStr
+              scope.row.Q4 | toLocaleStr
             }}</template>
           </el-table-column>
           <el-table-column
             min-width="150"
             sortable
             label="Jan"
-            property="jan"
+            property="w1"
             align="right"
           >
             <template slot-scope="scope">
@@ -117,18 +117,18 @@
                       'Units Sales Build',
                     ].includes(scope.row['Metrics Name'])
                 "
-                v-model="scope.row.jan"
+                v-model="scope.row.w1"
                 :disabled="isDisble"
-                @blur="(e) => onDataChange(e, scope.row.jan, scope.$index, 1)"
+                @blur="(e) => onDataChange(e, scope.row.w1, scope.$index, 1)"
               >
               </el-input>
-              <p v-else>{{ scope.row.jan | toLocaleStr }}</p></template>
+              <p v-else>{{ scope.row.w1 | toLocaleStr }}</p></template>
           </el-table-column>
           <el-table-column
             min-width="150"
             sortable
             label="Feb"
-            property="feb"
+            property="w2"
             align="right"
           >
             <template slot-scope="scope">   
@@ -146,18 +146,18 @@
                       'Units Sales Build',
                     ].includes(scope.row['Metrics Name'])
                 "
-                v-model="scope.row.feb"
+                v-model="scope.row.w2"
                 :disabled="isDisble"
-                @blur="(e) => onDataChange(e, scope.row.feb, scope.$index, 2)"
+                @blur="(e) => onDataChange(e, scope.row.w2, scope.$index, 2)"
               >
               </el-input>
-              <p v-else>{{ scope.row.feb | toLocaleStr }}</p></template>
+              <p v-else>{{ scope.row.w2 | toLocaleStr }}</p></template>
           </el-table-column>
           <el-table-column
             min-width="150"
             sortable
             label="Mar"
-            property="mar"
+            property="w3"
             align="right"
           >
             <template slot-scope="scope">         
@@ -175,18 +175,18 @@
                       'Units Sales Build',
                     ].includes(scope.row['Metrics Name'])
                 "
-                v-model="scope.row.mar"
+                v-model="scope.row.w3"
                 :disabled="isDisble"
-                @blur="(e) => onDataChange(e, scope.row.mar, scope.$index, 3)"
+                @blur="(e) => onDataChange(e, scope.row.w3, scope.$index, 3)"
               >
               </el-input>
-              <p v-else>{{ scope.row.mar | toLocaleStr }}</p></template>
+              <p v-else>{{ scope.row.w3 | toLocaleStr }}</p></template>
           </el-table-column>
           <el-table-column
             min-width="150"
             sortable
             label="Apr"
-            property="apr"
+            property="w4"
             align="right"
           >
             <template slot-scope="scope">
@@ -204,19 +204,19 @@
                       'Units Sales Build',
                     ].includes(scope.row['Metrics Name'])
                 "
-                v-model="scope.row.apr"
+                v-model="scope.row.w4"
                 :disabled="isDisble"
-                @blur="(e) => onDataChange(e, scope.row.apr, scope.$index, 4)"
+                @blur="(e) => onDataChange(e, scope.row.w4, scope.$index, 4)"
               >
             </el-input>
-              <p v-else>{{ scope.row.apr | toLocaleStr }}</p>
+              <p v-else>{{ scope.row.w4 | toLocaleStr }}</p>
             </template>
           </el-table-column>
           <el-table-column
             min-width="150"
             sortable
             label="May"
-            property="may"
+            property="w5"
             align="right"
           >
             <template slot-scope="scope">  
@@ -234,18 +234,18 @@
                       'Units Sales Build',
                     ].includes(scope.row['Metrics Name'])
                 "
-                v-model="scope.row.may"
+                v-model="scope.row.w5"
                 :disabled="isDisble"
-                @blur="(e) => onDataChange(e, scope.row.may, scope.$index, 5)"
+                @blur="(e) => onDataChange(e, scope.row.w5, scope.$index, 5)"
               >
             </el-input>
-              <p v-else>{{ scope.row.may | toLocaleStr }}</p></template>
+              <p v-else>{{ scope.row.w5 | toLocaleStr }}</p></template>
           </el-table-column>
           <el-table-column
             min-width="150"
             sortable
             label="Jun"
-            property="jun"
+            property="w6"
             align="right"
           >
             <template slot-scope="scope">
@@ -263,19 +263,19 @@
                       'Units Sales Build',
                     ].includes(scope.row['Metrics Name'])
                 "
-                v-model="scope.row.jun"
+                v-model="scope.row.w6"
                 :disabled="isDisble"
-                @blur="(e) => onDataChange(e, scope.row.jun, scope.$index, 6)"
+                @blur="(e) => onDataChange(e, scope.row.w6, scope.$index, 6)"
               >
             </el-input>
-              <p v-else>{{ scope.row.jun | toLocaleStr }}</p>
+              <p v-else>{{ scope.row.w6 | toLocaleStr }}</p>
             </template>
           </el-table-column>
           <el-table-column
             min-width="150"
             sortable
             label="Jul"
-            property="jul"
+            property="w7"
             align="right"
           >
             <template slot-scope="scope">
@@ -293,19 +293,19 @@
                       'Units Sales Build',
                     ].includes(scope.row['Metrics Name'])
                 "
-                v-model="scope.row.jul"
+                v-model="scope.row.w7"
                 :disabled="isDisble"
-                @blur="(e) => onDataChange(e, scope.row.jul, scope.$index, 7)"
+                @blur="(e) => onDataChange(e, scope.row.w7, scope.$index, 7)"
               >
             </el-input>
-              <p v-else>{{ scope.row.jul | toLocaleStr }}</p>
+              <p v-else>{{ scope.row.w7 | toLocaleStr }}</p>
             </template>
           </el-table-column>
           <el-table-column
             min-width="150"
             sortable
             label="Aug"
-            property="aug"
+            property="w8"
             align="right"
           >
             <template slot-scope="scope">           
@@ -323,18 +323,18 @@
                       'Units Sales Build',
                     ].includes(scope.row['Metrics Name'])
                 "
-                v-model="scope.row.aug"
+                v-model="scope.row.w8"
                 :disabled="isDisble"
-                @blur="(e) => onDataChange(e, scope.row.aug, scope.$index, 8)"
+                @blur="(e) => onDataChange(e, scope.row.w8, scope.$index, 8)"
               >
             </el-input>
-              <p v-else>{{ scope.row.aug | toLocaleStr }}</p></template>
+              <p v-else>{{ scope.row.w8 | toLocaleStr }}</p></template>
           </el-table-column>
           <el-table-column
             min-width="150"
             sortable
             label="Sep"
-            property="sep"
+            property="w9"
             align="right"
           >
             <template slot-scope="scope">  
@@ -352,18 +352,18 @@
                       'Units Sales Build',
                     ].includes(scope.row['Metrics Name'])
                 "
-                v-model="scope.row.sep"
+                v-model="scope.row.w9"
                 :disabled="isDisble"
-                @blur="(e) => onDataChange(e, scope.row.sep, scope.$index, 9)"
+                @blur="(e) => onDataChange(e, scope.row.w9, scope.$index, 9)"
               >
             </el-input>
-              <p v-else>{{ scope.row.sep | toLocaleStr }}</p></template>
+              <p v-else>{{ scope.row.w9 | toLocaleStr }}</p></template>
           </el-table-column>
           <el-table-column
             min-width="150"
             sortable
             label="Oct"
-            property="oct"
+            property="w10"
             align="right"
           >
             <template slot-scope="scope">
@@ -381,18 +381,18 @@
                       'Units Sales Build',
                     ].includes(scope.row['Metrics Name'])
                 "
-                v-model="scope.row.oct"
+                v-model="scope.row.w10"
                 :disabled="isDisble"
-                @blur="(e) => onDataChange(e, scope.row.oct, scope.$index, 10)"
+                @blur="(e) => onDataChange(e, scope.row.w10, scope.$index, 10)"
               >
             </el-input>
-              <p v-else>{{ scope.row.oct | toLocaleStr }}</p></template>
+              <p v-else>{{ scope.row.w10 | toLocaleStr }}</p></template>
           </el-table-column>
           <el-table-column
             min-width="150"
             sortable
             label="Nov"
-            property="nov"
+            property="w11"
             align="right"
           >
             <template slot-scope="scope">
@@ -410,19 +410,19 @@
                       'Units Sales Build',
                     ].includes(scope.row['Metrics Name'])
                 "
-                v-model="scope.row.nov"
+                v-model="scope.row.w11"
                 :disabled="isDisble"
-                @blur="(e) => onDataChange(e, scope.row.nov, scope.$index, 11)"
+                @blur="(e) => onDataChange(e, scope.row.w11, scope.$index, 11)"
               >
             </el-input>
-              <p v-else>{{ scope.row.nov | toLocaleStr }}</p>
+              <p v-else>{{ scope.row.w11 | toLocaleStr }}</p>
             </template>
           </el-table-column>
           <el-table-column
             min-width="150"
             sortable
             label="Dec"
-            property="dec"
+            property="w12"
             align="right"
           >
             <template slot-scope="scope">
@@ -440,12 +440,12 @@
                       'Units Sales Build',
                     ].includes(scope.row['Metrics Name'])
                 "
-                v-model="scope.row.dec"
+                v-model="scope.row.w12"
                 :disabled="isDisble"
-                @blur="(e) => onDataChange(e, scope.row.dec, scope.$index, 12)"
+                @blur="(e) => onDataChange(e, scope.row.w12, scope.$index, 12)"
               >
             </el-input>
-              <p v-else>{{ scope.row.dec | toLocaleStr }}</p></template>
+              <p v-else>{{ scope.row.w12 | toLocaleStr }}</p></template>
           </el-table-column>
         </el-table>
       </card>
@@ -482,9 +482,6 @@ export default {
       this.createExportCSV();
     },
   },
- updated() {
-    this.onFocus();
-  },
   methods: {
          onFocus() {
       document.querySelector(`.weekend-${this.monthNo()}`).focus();
@@ -499,17 +496,18 @@ export default {
       }
     },
      onDataChange(e, value, index, innerIndex) {
-      let month = ['jan','feb','mar','apr','may','jun','jul','aug','sep','oct','nov','dec'];
+     let month = ['w1','w2','w3','w4','w5','w6','w7','w8','w9','w10','w11','w12'];
        this.$store.commit("updateManualAdjustment",`${this.checkYear}-${innerIndex}-02`);
       const oldTableData = JSON.parse(
-        localStorage.getItem("monthlyAdjustmentTableData")
+        localStorage.getItem("filterMetricsOldTableDataMWM")
       );
-      if (oldTableData[index][month[innerIndex-1]] !== value) {
+      console.log("olddata",oldTableData)
+      if (oldTableData.parsedFilteredForecastData[index][month[innerIndex-1]] !== value) {
         this.$emit("EvtAdjValues", {
           new_value: value,
           weekend_date: `${this.checkYear}-${innerIndex}-02`,
-          old_value: oldTableData[index][month[innerIndex-1]],
-          metrics_name: oldTableData[index]["metrics_name"],
+          old_value: oldTableData.parsedFilteredForecastData[index][month[innerIndex-1]],
+          metrics_name: oldTableData.parsedFilteredForecastData[index]["Metrics Slug"],
           ele: e.target.parentNode.parentNode.parentNode,
         });
         e.target.parentNode.parentNode.parentNode.style.background = "#ffeacb";
@@ -547,22 +545,22 @@ export default {
         let metricTableRow = {
           "Metrics Name":data["Metrics Name"],
           Yearly: data.yearly_aggregate,
-          Q1: data.q1_aggregate,
-          Q2: data.q2_aggregate,
-          Q3: data.q3_aggregate,
-          Q4: data.q4_aggregate,
-          January: data.jan,
-          February: data.feb,
-          March: data.mar,
-          April: data.apr,
-          May: data.may,
-          June: data.jun,
-          July: data.jul,
-          August: data.aug,
-          September: data.sep,
-          October: data.oct,
-          November: data.nov,
-          December: data.dec,
+          Q1: data.Q1,
+          Q2: data.Q1,
+          Q3: data.Q1,
+          Q4: data.Q1,
+          January: data.w1,
+          February: data.w2,
+          March: data.w3,
+          April: data.w4,
+          May: data.w5,
+          June: data.w6,
+          July: data.w7,
+          August: data.w8,
+          September: data.w9,
+          October: data.w10,
+          November: data.w11,
+          December: data.w12,
         };
         return metricTableRow;
       });
