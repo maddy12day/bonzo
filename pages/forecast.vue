@@ -784,25 +784,6 @@ export default {
           JSON.stringify(this.baseMetricsList)
         );
       } 
-      // else if(this.activeTab=="Monthly"){
-      //   const filterMonthly = await this.$axios.$get(
-      //     `/base-weekly-metrics/${this.forecastedYear}`,
-      //     {
-      //        progress: true,
-      //     }
-      //   );
-      //    this.baseMetricsList = JSON.parse(
-      //     filterMonthly.baseMonthlyMetrics
-      //   );
-      //    localStorage.setItem(
-      //     "baseVersionId",
-      //     this.baseMetricsList[0].demand_forecast_run_log_id
-      //   );
-      //    localStorage.setItem(
-      //     "filterMonthlyAdjustmentTableData",
-      //     JSON.stringify(this.baseMetricsList)
-      //   );
-      // }
       else {
         // base metrics table for monthly
         const baseMonthlyMetricsListString = await this.$axios.$get(
