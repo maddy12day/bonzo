@@ -13,7 +13,7 @@
           @change="getSelectedYear"
         >
           <option value="2021">2021</option>
-          <option value="2022">2022</option>
+          <option value="2022" selected>2022</option>
         </select>
       </div>
       <div class="col-md-3 text-right mb-2 offset-md-7">
@@ -373,7 +373,7 @@ export default {
       quarterlyFilteredStats: [],
       filterQuarterlyPayload: {},
       isFilteredQuarterlyStatsFetched: false,
-      forecastedYear: "2021",
+      forecastedYear: "2022",
     };
   },
   components: {

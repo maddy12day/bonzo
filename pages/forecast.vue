@@ -547,8 +547,8 @@ export default {
       skusJsonData: [],
       isDownloadCsvDisbled: true,
       filterMetricsCompKey: Math.random(),
-      forecastedYear: "2021",
-      filteredForecastedYear: "2021",
+      forecastedYear: "2022",
+      filteredForecastedYear: "2022",
       filterArray: [],
       oldFilterMetricsData: [],
       csvFileName: `Filtered SKUs - ${moment().format(
