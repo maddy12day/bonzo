@@ -216,8 +216,16 @@
         </button>
         <button
           :class="`btn btn-primary btn-sm ${disbledCom ? 'disabled' : ''}`"
+          @click="discardedChanges"
+          v-if="showDiscardBtn && activeTab =='Weekly'"
+          :disabled="disbledCom"
+        >
+          Discard
+        </button>
+           <button
+          :class="`btn btn-primary btn-sm ${disbledCom ? 'disabled' : ''}`"
           @click="discardChanges"
-          v-if="showDiscardBtn"
+          v-if="showDiscardBtn && activeTab =='Monthly'"
           :disabled="disbledCom"
         >
           Discard
@@ -748,6 +756,9 @@ export default {
       this.filteredForecastMetrics = JSON.parse(
         localStorage.getItem("filterMetricsOldTableData")
       );
+       this.baseMetricsList = JSON.parse(
+          localStorage.getItem("monthlyAdjustmentTableData")
+        );
       this.skuLevelAdjustmentObj = [];
     },
      discardingChanges() {
@@ -763,8 +774,8 @@ export default {
       this.showManualAdj = false;
       this.showDiscardBtn = false;
       this.changeMABtnText = false;
-      this.filteredForecastMetrics = JSON.parse(
-        localStorage.getItem("monthlyAdjustmentTableData")
+      this.baseMetricsList = JSON.parse(
+          localStorage.getItem("adjustmentTableData")
       );
       this.skuLevelAdjustmentObj = [];
     },
