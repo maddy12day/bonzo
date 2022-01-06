@@ -773,7 +773,7 @@ export default {
     discardedChanges(){
       this.showManualAdj = false;
       this.showDiscardBtn = false;
-      this.changeMABtnText = false;
+      this.changeMABtnText = false ;
       this.baseMetricsList = JSON.parse(
           localStorage.getItem("adjustmentTableData")
       );
