@@ -9,7 +9,7 @@
           @change="getSelectedYear"
         >
           <option value="2021">2021</option>
-          <option value="2022">2022</option>
+          <option value="2022" selected>2022</option>
         </select>
       </div>
       <div class="col-md-3 mb-2 text-right offset-md-7">
@@ -348,7 +348,7 @@ export default {
       yearlyPlannedData: [],
       yearlySaleData: [],
       currentYQTab: "Yearly",
-      forecastedYear: "2021",
+      forecastedYear: "2022",
       isQuarterlyDataLoaded: false
     };
   },

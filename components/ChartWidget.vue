@@ -189,7 +189,7 @@ export default {
         gradientStops: [1, 0.4, 0],
         categories: [],
       },
-        forecastedYear: "2021"
+        forecastedYear: "2022"
     };
   },
   computed: {

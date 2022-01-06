@@ -94,7 +94,7 @@ export default {
       callToIntervalAjax: true,
       genesisNodeTimeline: [],
       mergedScenariosTimeLine: [],
-      forecastedYear: "2021",
+      forecastedYear: "2022",
       // comparisonCollnData: [],
       // ComparisonCategoryData:[],
     };
