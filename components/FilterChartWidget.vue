@@ -160,7 +160,7 @@ export default {
   components: {
     LineChart,
   },
-  props: ["requestedFilterOption"],
+  props: ["requestedFilterOption", "checkYear"],
   data() {
     return {
       activeIndex: 0,
@@ -240,17 +240,32 @@ export default {
       
   },
      dataMappingWeekly(data, duration) {
+       //new variables
+       let y = new Date();
+        let currentYear = y.getFullYear();
+        const d = new Date();
+        var currentMonth = d.getMonth();
+        let currentWeek = moment(new Date()).week()
+
       if (duration == "Weekly" && data) {
         let dataMap = new Map();
         for (let i = 1; i <= 52; i++) {
-          dataMap.set(i-1, { date: i, total_revenue: 0, total_units: 0 });
+          dataMap.set(i, { date: i, total_revenue: null, total_units: null });
         }
         for (let d of data) {
           if (parseInt(d.date) <= 52) {
             dataMap.set(parseInt(d.date), d);
           }
         }
-        return [...dataMap.values()].slice(0, moment(new Date()).week()-1)
+        if(currentYear > this.checkYear){
+          return [...dataMap.values()].slice(0, 52)
+        }
+        else if(currentMonth == 11 && currentWeek == 1){
+          return [...dataMap.values()].slice(0, 52)
+        }
+        else{
+        return [...dataMap.values()].slice(0, currentWeek)
+        }
       } else if(data) {
         let dataMap = new Map();
         for (let i = 1; i <= 12; i++) {
@@ -261,7 +276,12 @@ export default {
             dataMap.set(parseInt(d.date), d);
           }
         }
-        return [...dataMap.values()].slice(0, new Date().getMonth()+1)
+        if(currentYear > this.checkYear){
+        return [...dataMap.values()].slice(0, 11)
+        }
+        else{
+          return [...dataMap.values()].slice(0, new Date().getMonth()+1)
+        }
       }
     },
     async baseWeeklyChart() {
