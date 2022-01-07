@@ -1317,7 +1317,6 @@ const forecastQueryGenByDuration = (
                 ${duration}(fseisbw.weekend)
               ORDER BY
                 ${duration}(fseisbw.weekend);`;
-                console.log("query for filtered forecasted", query);
   return query;
 };
 

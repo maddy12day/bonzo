@@ -240,7 +240,6 @@ export default {
       
   },
      dataMappingWeekly(data, duration) {
-       //new variables
        let y = new Date();
         let currentYear = y.getFullYear();
         const d = new Date();
