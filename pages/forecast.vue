@@ -116,6 +116,7 @@
       v-if="isFilteredForecast"
       :requestedFilterOption="requestedFilterOption"
       :key="filterChartComponentKey"
+      :checkYear="filteredForecastedYear"
     />
 
     <!-- Adjustments Table -->

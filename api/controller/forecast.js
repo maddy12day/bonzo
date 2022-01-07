@@ -1199,7 +1199,7 @@ const typlanChartQueryGeneratorByDurations = (
 
   const query = `
               SELECT
-                ${duration}(pwurbcbs.weekend_date)-${dateOffset} AS date,
+                ${duration}(pwurbcbs.weekend_date) AS date,
                 ROUND(SUM(pwurbcbs.units), 0) AS total_units,
                 ROUND(SUM(pwurbcbs.revenue), 0) AS total_revenue
               FROM
@@ -1265,7 +1265,7 @@ const thisYearSaleYearlyQuarterly = (
   duration.toLowerCase() == "week" ? (dateOffset = 1) : (dateOffset = 0);
   const query = `
                 SELECT
-                  ${duration}(fseisbw.weekend)-${dateOffset} AS date,
+                  ${duration}(fseisbw.weekend) AS date,
                   IFNULL(SUM(fseisbw.unit_sales), 0) AS total_units,
                   IFNULL(ROUND(SUM(fseisbw.revenue), 0), 0) AS total_revenue
                 FROM
