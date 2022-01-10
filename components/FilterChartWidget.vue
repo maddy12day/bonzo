@@ -276,7 +276,7 @@ export default {
           }
         }
         if(currentYear > this.checkYear){
-        return [...dataMap.values()].slice(0, 11)
+        return [...dataMap.values()].slice(0, 12)
         }
         else{
           return [...dataMap.values()].slice(0, new Date().getMonth()+1)
