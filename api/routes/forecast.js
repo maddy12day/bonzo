@@ -10,8 +10,10 @@ import {
   collectionFilteredForecastByEcomm,
   collectionFilteredForecastByRetail,
   downloadAllSkuByMonth,
+  // getFilteredForecastMskuData,
   setFilteredSKUsAndWhereQuery,
-  getFilteredMonthlyChartData
+  getFilteredMonthlyChartData,
+  getFilteredTopSkusByMonth
 } from "../controller/forecast";
 const router = Router();
 
@@ -19,6 +21,10 @@ router.post(
   "/get-filtered-forecast-data/:filterForecastedYear",
   getFilteredForecastData
 );
+// router.post(
+//   "/get-filtered-forecast-Msku-data/:filterForecastedYear",
+//   getFilteredForecastMskuData
+// );
 router.post(
   "/get-filtered-forecast-metrics/:filterForecastedYear",
   getFilteredForecastMetrics
@@ -53,6 +59,10 @@ router.post(
 router.post(
   "/set-filtered-sku-and-where-query",
   setFilteredSKUsAndWhereQuery
+);
+router.post(
+  "/get-filtered-top-skus-by-month/:filterForecastedYear",
+  getFilteredTopSkusByMonth
 );
 
 export default router;

@@ -27,16 +27,27 @@ const getWeekendDateIndex = (weekendDates, currentDate) => {
 const weeklyCommonTableDataMapping = (
   data,
   totalForecastedData,
-  wekendDates
+  // wekendDates
+  type
 ) => {
   const skus = data.map((item) => item.sku);
   const titles = data.map((item) => item.title);
   let uniqueSkus = [...new Set(skus)];
   let uniqueSkusTitle = [...new Set(titles)];
   let counter = uniqueSkus.length <= 50 ? uniqueSkus.length : 50;
+  console.log("counter--",counter)
   const finalData = [];
   for (let i = 0; i < counter; i++) {
-    let topSkusData = Array(52).fill({
+    let topSkusData = type == "weekly" ? Array(52).fill({
+      aur: 0,
+      retail_sales: 0,
+      sku: 0,
+      title: 0,
+      units_sales: 0,
+      weekend: 0,
+      total_units_sales: 0,
+      total_retail_sales: 0,
+    }) : Array(12).fill({
       aur: 0,
       retail_sales: 0,
       sku: 0,
@@ -56,11 +67,12 @@ const weeklyCommonTableDataMapping = (
     );
 
     for (let j = 0; j < arr.length; j++) {
-      let index = getWeekendDateIndex(
-        wekendDates,
-        arr[j].weekend.split("T")[0]
-      );
-      topSkusData[index] = {
+      // let index = getWeekendDateIndex(
+      //   wekendDates,
+      //   arr[j].weekend.split("T")[0]
+      // );
+      // console.log(j,":j---index:",index);
+      topSkusData[j] = {
         aur: arr[j].aur,
         retail_sales: arr[j].retail_sales,
         sku: arr[j].sku,
@@ -212,7 +224,7 @@ const whereQueryString = (obj, alias = "fseisbw") => {
   });
   return str2.slice(0, str2.length - 4);
 };
-//top 10 skus
+//top 10 skus by week
 export const getFilteredForecastData = async (req, res) => {
   let transaction_db = "morphe_staging";
   let filteredQuerySetterData = req.body.filteredQuerySetterData;
@@ -304,17 +316,18 @@ export const getFilteredForecastData = async (req, res) => {
     let filteredForecastDataPromise = await Promise.allSettled([
       prisma.$queryRaw(query),
       prisma.$queryRaw(totalForecastedDataQuery),
-      getWeekendDates(filterForecastedYear),
+      // getWeekendDates(filterForecastedYear),
     ]);
 
     const filteredForecastData = filteredForecastDataPromise[0].value;
     const totalForecastedData = filteredForecastDataPromise[1].value;
-    const weekendDates = filteredForecastDataPromise[2].value;
+    // const weekendDates = filteredForecastDataPromise[2].value;
 
     let parsedWeeklyData = weeklyCommonTableDataMapping(
       filteredForecastData,
       totalForecastedData,
-      weekendDates
+      // weekendDates
+      "weekly"
     );
     res.status(200).json({
       parsedWeeklyData,
@@ -326,6 +339,129 @@ export const getFilteredForecastData = async (req, res) => {
     });
   }
 };
+
+//top 10 skus by month
+export const getFilteredTopSkusByMonth = async (req, res) => {
+  let transaction_db = "morphe_staging";
+  let filteredQuerySetterData = req.body.filteredQuerySetterData;
+  delete req.body.filterType;
+  delete req.body.filteredQuerySetterData;
+
+  try {
+    const { filterForecastedYear } = req.params;
+    let query = `
+                WITH iskus AS (
+                  select
+                    idfbwm.sku as sku,
+                    sum(idfbwm.retail_sales) as retail_sales
+                  from
+                    ${transaction_db}.demand_forecast_base_weekly_metrics idfbwm
+                  where
+                    idfbwm.demand_forecast_run_log_id = ${
+                      filteredQuerySetterData.dfrlId
+                    }
+                    and idfbwm.sku in (
+                      select
+                        idp.SKU
+                      from
+                        ${transaction_db}.dim_products idp
+                      where
+                        ${whereQueryString(req.body, "idfbwm").replace(
+                          /dp/g,
+                          "idp"
+                        )}
+                        AND idp.life_cycle <> 'OBSOLETE'
+                        AND idp.life_cycle <> 'disco'
+                        )
+                  group by 1
+                  order by 2 desc
+                  limit 50)
+                SELECT
+                  dfbwm.sku AS sku,
+                  dp.title AS title,
+                  Month(dfbwm.weekend) AS month,
+                  ROUND(SUM(dfbwm.retail_sales), 0) AS retail_sales,
+                  SUM(dfbwm.units_sales) AS units_sales,
+                  ROUND((SUM(dfbwm.retail_sales) / SUM(dfbwm.units_sales)), 2) AS aur
+                FROM
+                  ${transaction_db}.demand_forecast_base_weekly_metrics dfbwm,
+                  ${transaction_db}.dim_products dp
+                WHERE
+                ${whereQueryString(req.body, "dfbwm")}
+                  AND demand_forecast_run_log_id = ${
+                    filteredQuerySetterData.dfrlId
+                  }
+                  AND dfbwm.sku = dp.SKU
+                  AND YEAR(dfbwm.weekend) = ${filterForecastedYear}
+                  AND dfbwm.sku IN (
+                    select
+                      sku
+                    from
+                      iskus)
+                GROUP BY
+                  dfbwm.sku,
+                  Month(dfbwm.weekend)
+                ORDER BY
+                  dfbwm.sku,
+                  Month(dfbwm.weekend);`;
+                  console.log("query--",query);
+
+    let updatedWhereQueryString = filteredQuerySetterData.whereQueryWithChannel.replace(
+      /fseisbw/g,
+      "dfbwm"
+    );
+    console.log("updatedWhereQueryString",updatedWhereQueryString);
+
+    let totalForecastedDataQuery = `select
+      Month(dfbwm.weekend) as month,
+      ROUND(sum(dfbwm.units_sales), 0) as units_sales,
+      ROUND(sum(dfbwm.retail_sales), 2) as retail_sales
+      from
+        morphe_staging.demand_forecast_base_weekly_metrics dfbwm
+      where
+        dfbwm.demand_forecast_run_log_id = ${filteredQuerySetterData.dfrlId}
+        AND Year(dfbwm.weekend) = ${filterForecastedYear} ${
+      updatedWhereQueryString ? " AND " + updatedWhereQueryString : ""
+    } ${
+      filteredQuerySetterData.whereQueryWithDP
+        ? " AND dfbwm.sku in (" + filteredQuerySetterData.allFilteredSkus + ")"
+        : ""
+    }
+      group by
+        1
+      order by
+        2 desc;`;
+
+        console.log("totalForecastedDataQuery",totalForecastedDataQuery)
+
+    let filteredForecastDataPromise = await Promise.allSettled([
+      prisma.$queryRaw(query),
+      prisma.$queryRaw(totalForecastedDataQuery),
+      // getWeekendDates(filterForecastedYear),
+    ]);
+
+    const filteredForecastData = filteredForecastDataPromise[0].value;
+    const totalForecastedData = filteredForecastDataPromise[1].value;
+    // const weekendDates = filteredForecastDataPromise[2].value;
+    console.log("filteredForecastData--",filteredForecastData);
+
+    let parsedWeeklyData = weeklyCommonTableDataMapping(
+      filteredForecastData,
+      totalForecastedData,
+      "monthly"
+      // weekendDates
+    );
+    res.status(200).json({
+      parsedWeeklyData,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "something went wrong in baseQuarterlyPlanned one api",
+      error: `${error}`,
+    });
+  }
+};
+
 export const downloadAllSkuByMonth = async (req, res) => {
   try {
     let transaction_db = "morphe_staging";
@@ -1199,7 +1335,7 @@ const typlanChartQueryGeneratorByDurations = (
 
   const query = `
               SELECT
-                ${duration}(pwurbcbs.weekend_date)-${dateOffset} AS date,
+                ${duration}(pwurbcbs.weekend_date) AS date,
                 ROUND(SUM(pwurbcbs.units), 0) AS total_units,
                 ROUND(SUM(pwurbcbs.revenue), 0) AS total_revenue
               FROM
@@ -1265,7 +1401,7 @@ const thisYearSaleYearlyQuarterly = (
   duration.toLowerCase() == "week" ? (dateOffset = 1) : (dateOffset = 0);
   const query = `
                 SELECT
-                  ${duration}(fseisbw.weekend)-${dateOffset} AS date,
+                  ${duration}(fseisbw.weekend) AS date,
                   IFNULL(SUM(fseisbw.unit_sales), 0) AS total_units,
                   IFNULL(ROUND(SUM(fseisbw.revenue), 0), 0) AS total_revenue
                 FROM
