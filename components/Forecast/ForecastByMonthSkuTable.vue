@@ -400,21 +400,21 @@
       allowManualAdjustment"
       :disabled="getDisabledAdjustment"
     >
-      Manually Adjustment
+      Manual Adjustment
     </button>
     <button
       @click="submitManualAdjustment"
       class="btn btn-primary pull-right btn-sm"
       v-if="isValueChanged"
     >
-      Submitiing Adjustment
+      Submit Adjustment
     </button>
     <button
       class="btn btn-primary pull-right btn-sm"
       @click="discardSkuChanges"
       v-if="isManualAdjustment"
     >
-      Discarding
+      Discard
     </button>
   </card>
 </template>
@@ -487,14 +487,9 @@ export default {
     },
 
     handleDataChange(e, forecast_attribute, data, index, innerIndex) {
-      console.log("inner", innerIndex);
-      console.log("data",data)
-      console.log("index",index) 
       this.$store.commit("updateManualAdjustment",`${this.checkYear}-${innerIndex+1}-02`);
       const oldData = JSON.parse(localStorage.getItem("topMonthlySkuWiseData"))[index]
         .data[innerIndex];
-      console.log(oldData,"oldData");
-      console.log("forecast_attribute",forecast_attribute);
       if (Number(data) !== Number(oldData[`${forecast_attribute}`])) {  
         this.isValueChanged = true;
         e.target.classList.add("filter-changed");
@@ -509,9 +504,6 @@ export default {
           new_adjusted_value: parseFloat(data),
           filter_skus: oldData?.sku,
         });
-         console.log("olddata",oldData[`${forecast_attribute}`]);
-        console.log("olddatafA",[`${forecast_attribute}`]);
-        console.log("newvalue",data)
       }
     },
 

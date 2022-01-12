@@ -433,9 +433,9 @@
           </div>
         </div>
       </div>
-    <template v-if="filteredSkuTab == 'Weekly'">
+
     <ForecastBySkuTable
-      v-if="isFilteredForecast"
+      v-if="isFilteredForecast && filteredSkuTab  == 'Weekly'"
       ref="filterChartWidget"
       :checkYear="filteredForecastedYear"
       :tableHeading="'Revenue'"
@@ -449,7 +449,7 @@
       :disbleAdjustment="isDisbleAdjustment"
     />
     <ForecastBySkuTable
-      v-if="isFilteredForecast"
+      v-if="isFilteredForecast && filteredSkuTab  == 'Weekly'"
       ref="filterChartWidget"
       :checkYear="filteredForecastedYear"
       :allowManualAdjustment="true"
@@ -463,8 +463,8 @@
       :disbleAdjustment="isDisbleAdjustment"
     />
     <ForecastBySkuTable
+    v-if="isFilteredForecast && filteredSkuTab  == 'Weekly'"
       ref="filterChartWidget"
-      v-if="isFilteredForecast"
       :checkYear="filteredForecastedYear"
       :allowManualAdjustment="false"
       :tableHeading="'AUR'"
@@ -476,10 +476,10 @@
       @createFilterAdjustment="createManualAdjustment('sku')"
       :disbleAdjustment="isDisbleAdjustment"
     />
-    </template>
-      <template v-if="filteredSkuTab == 'Monthly'">
+    <!-- </template> -->
+      <!-- <template v-if="filteredSkuTab == 'Monthly'"> -->
     <ForecastByMonthSkuTable
-    v-if="isFilteredForecast"
+    v-if="isFilteredForecast && filteredSkuTab  == 'Monthly'"
       ref="filterChartWidget"
       :checkYear="filteredForecastedYear"
       :tableHeading="'Revenue'"
@@ -493,7 +493,7 @@
       :disbleAdjustment="isDisbleAdjustment"
     />
     <ForecastByMonthSkuTable 
-      v-if="isFilteredForecast"
+      v-if="isFilteredForecast && filteredSkuTab  == 'Monthly'"
       ref="filterChartWidget"
       :checkYear="filteredForecastedYear"
       :allowManualAdjustment="true"
@@ -507,8 +507,8 @@
       :disbleAdjustment="isDisbleAdjustment"
     />
     <ForecastByMonthSkuTable
+    v-if="isFilteredForecast && filteredSkuTab  == 'Monthly'"
       ref="filterChartWidget"
-      v-if="isFilteredForecast"
       :checkYear="filteredForecastedYear"
       :allowManualAdjustment="false"
       :tableHeading="'AUR'"
@@ -520,10 +520,10 @@
       @createFilterAdjustment="createMonthlyManualAdjustment('sku')"
       :disbleAdjustment="isDisbleAdjustment"
     />
-    </template>
      </card>
   </div>
 </template>
+
 
 <script>
 import RegularFilters from "../components/Filters/RegularFilter.vue";
@@ -654,22 +654,16 @@ export default {
     discardFilterChanges() {
       this.descardChangesonFilter();
       this.skuLevelAdjustmentObj = [];
-      console.log("discard changes are working");
     },
     discardFilterSkuMonthChanges(){
        this.descardChangesSkuMonthFilter();
         this.skuLevelAdjustmentObj = [];
-         console.log("discard for monthly changes are working");
     },
     getFilterAdjustmentValues(data) {
       this.skuLevelAdjustmentObj.push(data);
-      console.log("adjustment data", data);
-      console.log(this.skuLevelAdjustmentObj);
     },
     getFilterSkuAdjustmentValues(data){
       this.skuLevelAdjustmentObj.push(data);
-      console.log("adjustment data", data);
-      console.log(this.skuLevelAdjustmentObj);
     },
 
     setUpdatedSKUsLimit() {
@@ -1161,7 +1155,7 @@ export default {
       };
       let res;
       if (level == "sku") {
-        console.log("hello",
+        console.log(
           JSON.stringify({
             adjusted_by_user_id: parseInt(this.$auth.user.user_id),
             demand_forecast_run_log_id: parseInt(
