@@ -524,6 +524,7 @@
   </div>
 </template>
 
+
 <script>
 import RegularFilters from "../components/Filters/RegularFilter.vue";
 import ProgramFilters from "../components/Filters/ProgramFilter.vue";
@@ -653,30 +654,27 @@ export default {
     discardFilterChanges() {
       this.descardChangesonFilter();
       this.skuLevelAdjustmentObj = [];
-      console.log("discard changes are working");
     },
     discardFilterSkuMonthChanges(){
        this.descardChangesSkuMonthFilter();
         this.skuLevelAdjustmentObj = [];
-         console.log("discard for monthly changes are working");
     },
     getFilterAdjustmentValues(data) {
       this.skuLevelAdjustmentObj.push(data);
-      console.log("adjustment data", data);
-      console.log(this.skuLevelAdjustmentObj);
     },
     getFilterSkuAdjustmentValues(data){
       // console.log("b4skuLevelAdjustmentObj",this.skuLevelAdjustmentObj.length)
       // this.skuLevelAdjustmentObj.push(data);
       // console.log("adjustment data", data);
       // console.log("skuLevelAdjustmentObj",this.skuLevelAdjustmentObj);
-      var index = this.skuLevelAdjustmentObj.findIndex(
+var index = this.skuLevelAdjustmentObj.findIndex(
       (filter) =>
         filter.adjusted_metrics_name === data.adjusted_metrics_name &&
         filter.filter_skus === data.filter_skus
     );
- if(index !== -1) {
-    this.skuLevelAdjustmentObj.splice(index, 1);
+
+ if (index !== -1) {
+   this.skuLevelAdjustmentObj.splice(index, 1);
 this.skuLevelAdjustmentObj.push(data)
 } else {
 this.skuLevelAdjustmentObj.push(data)
@@ -1173,7 +1171,7 @@ this.skuLevelAdjustmentObj.push(data)
       };
       let res;
       if (level == "sku") {
-        console.log("hello",
+        console.log(
           JSON.stringify({
             adjusted_by_user_id: parseInt(this.$auth.user.user_id),
             demand_forecast_run_log_id: parseInt(
@@ -1320,7 +1318,6 @@ this.skuLevelAdjustmentObj.push(data)
               .adjusted_metrics_name,
             filterSkuObject: this.skuLevelAdjustmentObj,
             adjustment_level: "sku",
-            filter_skus: this.skuLevelAdjustmentObj[0].filter_skus
           })
         );
         console.log("skuno",this.filter_skus)
@@ -1342,7 +1339,6 @@ this.skuLevelAdjustmentObj.push(data)
           filterSkuObject: this.skuLevelAdjustmentObj,
           before_adjustment_value: Number(this.skuLevelAdjustmentObj[0].before_adjustment_value),
           new_adjusted_value: Number(this.skuLevelAdjustmentObj[0].new_adjusted_value),
-          filter_skus: (this.skuLevelAdjustmentObj[0].filter_skus), 
           adjustment_level: "sku",
         });
         this.skuLevelAdjustmentObj = [];

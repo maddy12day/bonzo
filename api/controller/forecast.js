@@ -346,7 +346,6 @@ export const getFilteredTopSkusByMonth = async (req, res) => {
   let filteredQuerySetterData = req.body.filteredQuerySetterData;
   delete req.body.filterType;
   delete req.body.filteredQuerySetterData;
-
   try {
     const { filterForecastedYear } = req.params;
     let query =`
@@ -410,8 +409,6 @@ export const getFilteredTopSkusByMonth = async (req, res) => {
       /fseisbw/g,
       "dfbmm"
     );
-    console.log("updatedWhereQueryString",updatedWhereQueryString);
-
     let totalForecastedDataQuery = `select
           dfbmm.monthend as monthend,
           ROUND(sum(dfbmm.units_sales), 0) as units_sales,
@@ -431,15 +428,10 @@ export const getFilteredTopSkusByMonth = async (req, res) => {
         1
       order by
         2 desc;`;
-
-        console.log("totalForecastedDataQuery",totalForecastedDataQuery)
-
     let filteredForecastDataPromise = await Promise.allSettled([
       prisma.$queryRaw(query),
       prisma.$queryRaw(totalForecastedDataQuery),
-      // getWeekendDates(filterForecastedYear),
     ]);
-
     const filteredForecastData = filteredForecastDataPromise[0].value;
     const totalForecastedData = filteredForecastDataPromise[1].value;
     // const weekendDates = filteredForecastDataPromise[2].value;
@@ -450,7 +442,6 @@ export const getFilteredTopSkusByMonth = async (req, res) => {
       filteredForecastData,
       totalForecastedData,
       "monthly"
-      // weekendDates
     );
     res.status(200).json({
       parsedWeeklyData,
