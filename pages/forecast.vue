@@ -433,9 +433,9 @@
           </div>
         </div>
       </div>
-    <template v-if="filteredSkuTab == 'Weekly'">
-    <ForecastBySkuTable
-      v-if="isFilteredForecast"
+  
+  <ForecastBySkuTable
+      v-if="isFilteredForecast && filteredSkuTab  == 'Weekly'"
       ref="filterChartWidget"
       :checkYear="filteredForecastedYear"
       :tableHeading="'Revenue'"
@@ -449,7 +449,7 @@
       :disbleAdjustment="isDisbleAdjustment"
     />
     <ForecastBySkuTable
-      v-if="isFilteredForecast"
+      v-if="isFilteredForecast && filteredSkuTab  == 'Weekly'"
       ref="filterChartWidget"
       :checkYear="filteredForecastedYear"
       :allowManualAdjustment="true"
@@ -463,8 +463,8 @@
       :disbleAdjustment="isDisbleAdjustment"
     />
     <ForecastBySkuTable
+    v-if="isFilteredForecast && filteredSkuTab  == 'Weekly'"
       ref="filterChartWidget"
-      v-if="isFilteredForecast"
       :checkYear="filteredForecastedYear"
       :allowManualAdjustment="false"
       :tableHeading="'AUR'"
@@ -476,10 +476,10 @@
       @createFilterAdjustment="createManualAdjustment('sku')"
       :disbleAdjustment="isDisbleAdjustment"
     />
-    </template>
-      <template v-if="filteredSkuTab == 'Monthly'">
+    <!-- </template> -->
+      <!-- <template v-if="filteredSkuTab == 'Monthly'"> -->
     <ForecastByMonthSkuTable
-    v-if="isFilteredForecast"
+    v-if="isFilteredForecast && filteredSkuTab  == 'Monthly'"
       ref="filterChartWidget"
       :checkYear="filteredForecastedYear"
       :tableHeading="'Revenue'"
@@ -493,7 +493,7 @@
       :disbleAdjustment="isDisbleAdjustment"
     />
     <ForecastByMonthSkuTable 
-      v-if="isFilteredForecast"
+      v-if="isFilteredForecast && filteredSkuTab  == 'Monthly'"
       ref="filterChartWidget"
       :checkYear="filteredForecastedYear"
       :allowManualAdjustment="true"
@@ -507,8 +507,8 @@
       :disbleAdjustment="isDisbleAdjustment"
     />
     <ForecastByMonthSkuTable
+    v-if="isFilteredForecast && filteredSkuTab  == 'Monthly'"
       ref="filterChartWidget"
-      v-if="isFilteredForecast"
       :checkYear="filteredForecastedYear"
       :allowManualAdjustment="false"
       :tableHeading="'AUR'"
@@ -520,7 +520,6 @@
       @createFilterAdjustment="createMonthlyManualAdjustment('sku')"
       :disbleAdjustment="isDisbleAdjustment"
     />
-    </template>
      </card>
   </div>
 </template>
@@ -667,9 +666,22 @@ export default {
       console.log(this.skuLevelAdjustmentObj);
     },
     getFilterSkuAdjustmentValues(data){
-      this.skuLevelAdjustmentObj.push(data);
-      console.log("adjustment data", data);
-      console.log(this.skuLevelAdjustmentObj);
+      // console.log("b4skuLevelAdjustmentObj",this.skuLevelAdjustmentObj.length)
+      // this.skuLevelAdjustmentObj.push(data);
+      // console.log("adjustment data", data);
+      // console.log("skuLevelAdjustmentObj",this.skuLevelAdjustmentObj);
+      var index = this.skuLevelAdjustmentObj.findIndex(
+      (filter) =>
+        filter.adjusted_metrics_name === data.adjusted_metrics_name &&
+        filter.filter_skus === data.filter_skus
+    );
+ if(index !== -1) {
+    this.skuLevelAdjustmentObj.splice(index, 1);
+this.skuLevelAdjustmentObj.push(data)
+} else {
+this.skuLevelAdjustmentObj.push(data)
+}
+  console.log("hello",this.skuLevelAdjustmentObj)
     },
 
     setUpdatedSKUsLimit() {
@@ -1308,8 +1320,10 @@ export default {
               .adjusted_metrics_name,
             filterSkuObject: this.skuLevelAdjustmentObj,
             adjustment_level: "sku",
+            filter_skus: this.skuLevelAdjustmentObj[0].filter_skus
           })
         );
+        console.log("skuno",this.filter_skus)
         result = await this.$axios.$post(`/create-monthlymanualadjustment`, {
           adjusted_by_user_id: parseInt(this.$auth.user.user_id),
           demand_forecast_run_log_id: parseInt(
@@ -1328,8 +1342,8 @@ export default {
           filterSkuObject: this.skuLevelAdjustmentObj,
           before_adjustment_value: Number(this.skuLevelAdjustmentObj[0].before_adjustment_value),
           new_adjusted_value: Number(this.skuLevelAdjustmentObj[0].new_adjusted_value),
+          filter_skus: (this.skuLevelAdjustmentObj[0].filter_skus), 
           adjustment_level: "sku",
-          
         });
         this.skuLevelAdjustmentObj = [];
       } else {

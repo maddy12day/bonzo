@@ -349,82 +349,82 @@ export const getFilteredTopSkusByMonth = async (req, res) => {
 
   try {
     const { filterForecastedYear } = req.params;
-    let query = `
-                WITH iskus AS (
-                  select
-                    idfbwm.sku as sku,
-                    sum(idfbwm.retail_sales) as retail_sales
-                  from
-                    ${transaction_db}.demand_forecast_base_weekly_metrics idfbwm
-                  where
-                    idfbwm.demand_forecast_run_log_id = ${
-                      filteredQuerySetterData.dfrlId
-                    }
-                    and idfbwm.sku in (
-                      select
-                        idp.SKU
-                      from
-                        ${transaction_db}.dim_products idp
-                      where
-                        ${whereQueryString(req.body, "idfbwm").replace(
-                          /dp/g,
-                          "idp"
-                        )}
-                        AND idp.life_cycle <> 'OBSOLETE'
-                        AND idp.life_cycle <> 'disco'
-                        )
-                  group by 1
-                  order by 2 desc
-                  limit 50)
-                SELECT
-                  dfbwm.sku AS sku,
-                  dp.title AS title,
-                  Month(dfbwm.weekend) AS month,
-                  ROUND(SUM(dfbwm.retail_sales), 0) AS retail_sales,
-                  SUM(dfbwm.units_sales) AS units_sales,
-                  ROUND((SUM(dfbwm.retail_sales) / SUM(dfbwm.units_sales)), 2) AS aur
-                FROM
-                  ${transaction_db}.demand_forecast_base_weekly_metrics dfbwm,
-                  ${transaction_db}.dim_products dp
-                WHERE
-                ${whereQueryString(req.body, "dfbwm")}
-                  AND demand_forecast_run_log_id = ${
-                    filteredQuerySetterData.dfrlId
-                  }
-                  AND dfbwm.sku = dp.SKU
-                  AND YEAR(dfbwm.weekend) = ${filterForecastedYear}
-                  AND dfbwm.sku IN (
-                    select
-                      sku
-                    from
-                      iskus)
-                GROUP BY
-                  dfbwm.sku,
-                  Month(dfbwm.weekend)
-                ORDER BY
-                  dfbwm.sku,
-                  Month(dfbwm.weekend);`;
-                  console.log("query--",query);
+    let query =`
+                     WITH iskus AS (
+                       select
+                       dfbmm.sku as sku,
+                       sum(dfbmm.retail_sales) as retail_sales
+                       from
+                       ${transaction_db}.demand_forecast_base_monthly_metrics dfbmm
+                     where
+                      dfbmm.demand_forecast_run_log_id = ${
+                          filteredQuerySetterData.dfrlId
+                        }
+                        and dfbmm.sku in (
+                          select
+                            idp.SKU
+                          from
+                            ${transaction_db}.dim_products idp
+                          where
+                            ${whereQueryString(req.body, "dfbmm").replace(
+                              /dp/g,
+                              "idp"
+                            )}
+                            AND idp.life_cycle <> 'OBSOLETE'
+                            AND idp.life_cycle <> 'disco'
+                            )
+                      group by 1
+                      order by 2 desc
+                      limit 50)
+                    SELECT
+                    dfbmm.sku AS sku,
+                      dp.title AS title,
+                      dfbmm.monthend AS monthend,
+                      ROUND(SUM(dfbmm.retail_sales), 0) AS retail_sales,
+                      SUM(dfbmm.units_sales) AS units_sales,
+                      ROUND((SUM(dfbmm.retail_sales) / SUM(dfbmm.units_sales)), 2) AS aur
+                    FROM
+                      ${transaction_db}.demand_forecast_base_monthly_metrics dfbmm,
+                      ${transaction_db}.dim_products dp
+                    WHERE
+                    ${whereQueryString(req.body, "dfbmm")}
+                      AND demand_forecast_run_log_id = ${
+                        filteredQuerySetterData.dfrlId
+                      }
+                      AND dfbmm.sku = dp.SKU
+                      AND YEAR(dfbmm.monthend) = ${filterForecastedYear}
+                      AND dfbmm.sku IN (
+                        select
+                          sku
+                        from
+                          iskus)
+                    GROUP BY
+                    dfbmm.sku,
+                    dfbmm.monthend
+                    ORDER BY
+                    dfbmm.sku,
+                    dfbmm.monthend;`;
+                      console.log("query",query)
 
     let updatedWhereQueryString = filteredQuerySetterData.whereQueryWithChannel.replace(
       /fseisbw/g,
-      "dfbwm"
+      "dfbmm"
     );
     console.log("updatedWhereQueryString",updatedWhereQueryString);
 
     let totalForecastedDataQuery = `select
-      Month(dfbwm.weekend) as month,
-      ROUND(sum(dfbwm.units_sales), 0) as units_sales,
-      ROUND(sum(dfbwm.retail_sales), 2) as retail_sales
-      from
-        morphe_staging.demand_forecast_base_weekly_metrics dfbwm
-      where
-        dfbwm.demand_forecast_run_log_id = ${filteredQuerySetterData.dfrlId}
-        AND Year(dfbwm.weekend) = ${filterForecastedYear} ${
+          dfbmm.monthend as monthend,
+          ROUND(sum(dfbmm.units_sales), 0) as units_sales,
+          ROUND(sum(dfbmm.retail_sales), 2) as retail_sales
+          from
+          morphe_staging.demand_forecast_base_monthly_metrics dfbmm
+          where
+        dfbmm.demand_forecast_run_log_id = ${filteredQuerySetterData.dfrlId}
+        AND Year(dfbmm.monthend) = ${filterForecastedYear} ${
       updatedWhereQueryString ? " AND " + updatedWhereQueryString : ""
     } ${
       filteredQuerySetterData.whereQueryWithDP
-        ? " AND dfbwm.sku in (" + filteredQuerySetterData.allFilteredSkus + ")"
+        ? " AND dfbmm.sku in (" + filteredQuerySetterData.allFilteredSkus + ")"
         : ""
     }
       group by
@@ -444,6 +444,7 @@ export const getFilteredTopSkusByMonth = async (req, res) => {
     const totalForecastedData = filteredForecastDataPromise[1].value;
     // const weekendDates = filteredForecastDataPromise[2].value;
     console.log("filteredForecastData--",filteredForecastData);
+    console.log("totalForecastedData--",totalForecastedData);
 
     let parsedWeeklyData = weeklyCommonTableDataMapping(
       filteredForecastData,
@@ -456,7 +457,7 @@ export const getFilteredTopSkusByMonth = async (req, res) => {
     });
   } catch (error) {
     res.status(500).json({
-      message: "something went wrong in baseQuarterlyPlanned one api",
+      message: "something went wrong in baseQuarterlyPlanning one one api",
       error: `${error}`,
     });
   }
