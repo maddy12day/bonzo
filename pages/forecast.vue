@@ -660,22 +660,42 @@ export default {
         this.skuLevelAdjustmentObj = [];
     },
     getFilterAdjustmentValues(data) {
-      this.skuLevelAdjustmentObj.push(data);
+        var index = this.skuLevelAdjustmentObj.findIndex(
+      (filter) =>
+        filter.adjusted_metrics_name === data.adjusted_metrics_name &&
+        moment(filter.weekend).week() === moment(data.weekend).week() &&
+        filter.filter_skus === data.filter_skus 
+    );
+    let date = moment(data.weekend)
+      console.log("index",index);
+      console.log("data",date.week())
+    if (index !== -1) {
+    this.skuLevelAdjustmentObj.splice(index, 1);
+    this.skuLevelAdjustmentObj.push(data)
+} else {
+this.skuLevelAdjustmentObj.push(data)
+}
+  console.log("hello",this.skuLevelAdjustmentObj)
+
+      // this.skuLevelAdjustmentObj.push(data);
     },
     getFilterSkuAdjustmentValues(data){
       // console.log("b4skuLevelAdjustmentObj",this.skuLevelAdjustmentObj.length)
       // this.skuLevelAdjustmentObj.push(data);
       // console.log("adjustment data", data);
       // console.log("skuLevelAdjustmentObj",this.skuLevelAdjustmentObj);
-var index = this.skuLevelAdjustmentObj.findIndex(
+      var index = this.skuLevelAdjustmentObj.findIndex(
       (filter) =>
         filter.adjusted_metrics_name === data.adjusted_metrics_name &&
-        filter.filter_skus === data.filter_skus
+        moment(filter.weekend).month() === moment(data.weekend).month() &&
+        filter.filter_skus === data.filter_skus 
     );
-
- if (index !== -1) {
-   this.skuLevelAdjustmentObj.splice(index, 1);
-this.skuLevelAdjustmentObj.push(data)
+    let date = moment(data.weekend)
+      console.log("index",index);
+      console.log("data",date.month()+1)
+    if (index !== -1) {
+    this.skuLevelAdjustmentObj.splice(index, 1);
+    this.skuLevelAdjustmentObj.push(data)
 } else {
 this.skuLevelAdjustmentObj.push(data)
 }
@@ -1320,7 +1340,6 @@ this.skuLevelAdjustmentObj.push(data)
             adjustment_level: "sku",
           })
         );
-        console.log("skuno",this.filter_skus)
         result = await this.$axios.$post(`/create-monthlymanualadjustment`, {
           adjusted_by_user_id: parseInt(this.$auth.user.user_id),
           demand_forecast_run_log_id: parseInt(
