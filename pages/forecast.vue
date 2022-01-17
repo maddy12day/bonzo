@@ -667,23 +667,14 @@ export default {
         filter.filter_skus === data.filter_skus 
     );
     let date = moment(data.weekend)
-      console.log("index",index);
-      console.log("data",date.week())
     if (index !== -1) {
     this.skuLevelAdjustmentObj.splice(index, 1);
     this.skuLevelAdjustmentObj.push(data)
 } else {
 this.skuLevelAdjustmentObj.push(data)
 }
-  console.log("hello",this.skuLevelAdjustmentObj)
-
-      // this.skuLevelAdjustmentObj.push(data);
     },
     getFilterSkuAdjustmentValues(data){
-      // console.log("b4skuLevelAdjustmentObj",this.skuLevelAdjustmentObj.length)
-      // this.skuLevelAdjustmentObj.push(data);
-      // console.log("adjustment data", data);
-      // console.log("skuLevelAdjustmentObj",this.skuLevelAdjustmentObj);
       var index = this.skuLevelAdjustmentObj.findIndex(
       (filter) =>
         filter.adjusted_metrics_name === data.adjusted_metrics_name &&
@@ -691,15 +682,12 @@ this.skuLevelAdjustmentObj.push(data)
         filter.filter_skus === data.filter_skus 
     );
     let date = moment(data.weekend)
-      console.log("index",index);
-      console.log("data",date.month()+1)
     if (index !== -1) {
     this.skuLevelAdjustmentObj.splice(index, 1);
     this.skuLevelAdjustmentObj.push(data)
 } else {
 this.skuLevelAdjustmentObj.push(data)
 }
-  console.log("hello",this.skuLevelAdjustmentObj)
     },
 
     setUpdatedSKUsLimit() {
@@ -1536,7 +1524,6 @@ this.skuLevelAdjustmentObj.push(data)
         this.filterPayload
       );
       this.filterPayload.filteredQuerySetterData = this.filteredQuerySetterData;
-      // console.log("this.filterPayload00=--",this.filterPayload);
     },
     notifyVue(verticalAlign, horizontalAlign, message, type) {
       this.$notify({
