@@ -27,7 +27,7 @@ const getWeekendDateIndex = (weekendDates, currentDate) => {
 const weeklyCommonTableDataMapping = (
   data,
   totalForecastedData,
-  wekendDates
+  type
 ) => {
   const skus = data.map((item) => item.sku);
   const titles = data.map((item) => item.title);
@@ -36,7 +36,16 @@ const weeklyCommonTableDataMapping = (
   let counter = uniqueSkus.length <= 50 ? uniqueSkus.length : 50;
   const finalData = [];
   for (let i = 0; i < counter; i++) {
-    let topSkusData = Array(52).fill({
+    let topSkusData = type == "weekly" ? Array(52).fill({
+      aur: 0,
+      retail_sales: 0,
+      sku: 0,
+      title: 0,
+      units_sales: 0,
+      weekend: 0,
+      total_units_sales: 0,
+      total_retail_sales: 0,
+    }) : Array(12).fill({
       aur: 0,
       retail_sales: 0,
       sku: 0,
@@ -56,11 +65,7 @@ const weeklyCommonTableDataMapping = (
     );
 
     for (let j = 0; j < arr.length; j++) {
-      let index = getWeekendDateIndex(
-        wekendDates,
-        arr[j].weekend.split("T")[0]
-      );
-      topSkusData[index] = {
+      topSkusData[j] = {
         aur: arr[j].aur,
         retail_sales: arr[j].retail_sales,
         sku: arr[j].sku,
@@ -212,7 +217,7 @@ const whereQueryString = (obj, alias = "fseisbw") => {
   });
   return str2.slice(0, str2.length - 4);
 };
-//top 10 skus
+//top 10 skus by week
 export const getFilteredForecastData = async (req, res) => {
   let transaction_db = "morphe_staging";
   let filteredQuerySetterData = req.body.filteredQuerySetterData;
@@ -304,17 +309,14 @@ export const getFilteredForecastData = async (req, res) => {
     let filteredForecastDataPromise = await Promise.allSettled([
       prisma.$queryRaw(query),
       prisma.$queryRaw(totalForecastedDataQuery),
-      getWeekendDates(filterForecastedYear),
     ]);
 
     const filteredForecastData = filteredForecastDataPromise[0].value;
     const totalForecastedData = filteredForecastDataPromise[1].value;
-    const weekendDates = filteredForecastDataPromise[2].value;
-
     let parsedWeeklyData = weeklyCommonTableDataMapping(
       filteredForecastData,
       totalForecastedData,
-      weekendDates
+      "weekly"
     );
     res.status(200).json({
       parsedWeeklyData,
@@ -326,6 +328,117 @@ export const getFilteredForecastData = async (req, res) => {
     });
   }
 };
+
+//top 10 skus by month
+export const getFilteredTopSkusByMonth = async (req, res) => {
+  let transaction_db = "morphe_staging";
+  let filteredQuerySetterData = req.body.filteredQuerySetterData;
+  delete req.body.filterType;
+  delete req.body.filteredQuerySetterData;
+  try {
+    const { filterForecastedYear } = req.params;
+    let query =`
+                     WITH iskus AS (
+                       select
+                       dfbmm.sku as sku,
+                       sum(dfbmm.retail_sales) as retail_sales
+                       from
+                       ${transaction_db}.demand_forecast_base_monthly_metrics dfbmm
+                     where
+                      dfbmm.demand_forecast_run_log_id = ${
+                          filteredQuerySetterData.dfrlId
+                        }
+                        and dfbmm.sku in (
+                          select
+                            idp.SKU
+                          from
+                            ${transaction_db}.dim_products idp
+                          where
+                            ${whereQueryString(req.body, "dfbmm").replace(
+                              /dp/g,
+                              "idp"
+                            )}
+                            AND idp.life_cycle <> 'OBSOLETE'
+                            AND idp.life_cycle <> 'disco'
+                            )
+                      group by 1
+                      order by 2 desc
+                      limit 50)
+                    SELECT
+                    dfbmm.sku AS sku,
+                      dp.title AS title,
+                      dfbmm.monthend AS monthend,
+                      ROUND(SUM(dfbmm.retail_sales), 0) AS retail_sales,
+                      SUM(dfbmm.units_sales) AS units_sales,
+                      ROUND((SUM(dfbmm.retail_sales) / SUM(dfbmm.units_sales)), 2) AS aur
+                    FROM
+                      ${transaction_db}.demand_forecast_base_monthly_metrics dfbmm,
+                      ${transaction_db}.dim_products dp
+                    WHERE
+                    ${whereQueryString(req.body, "dfbmm")}
+                      AND demand_forecast_run_log_id = ${
+                        filteredQuerySetterData.dfrlId
+                      }
+                      AND dfbmm.sku = dp.SKU
+                      AND YEAR(dfbmm.monthend) = ${filterForecastedYear}
+                      AND dfbmm.sku IN (
+                        select
+                          sku
+                        from
+                          iskus)
+                    GROUP BY
+                    dfbmm.sku,
+                    dfbmm.monthend
+                    ORDER BY
+                    dfbmm.sku,
+                    dfbmm.monthend;`;
+
+    let updatedWhereQueryString = filteredQuerySetterData.whereQueryWithChannel.replace(
+      /fseisbw/g,
+      "dfbmm"
+    );
+    let totalForecastedDataQuery = `select
+          dfbmm.monthend as monthend,
+          ROUND(sum(dfbmm.units_sales), 0) as units_sales,
+          ROUND(sum(dfbmm.retail_sales), 2) as retail_sales
+          from
+          morphe_staging.demand_forecast_base_monthly_metrics dfbmm
+          where
+        dfbmm.demand_forecast_run_log_id = ${filteredQuerySetterData.dfrlId}
+        AND Year(dfbmm.monthend) = ${filterForecastedYear} ${
+      updatedWhereQueryString ? " AND " + updatedWhereQueryString : ""
+    } ${
+      filteredQuerySetterData.whereQueryWithDP
+        ? " AND dfbmm.sku in (" + filteredQuerySetterData.allFilteredSkus + ")"
+        : ""
+    }
+      group by
+        1
+      order by
+        2 desc;`;
+    let filteredForecastDataPromise = await Promise.allSettled([
+      prisma.$queryRaw(query),
+      prisma.$queryRaw(totalForecastedDataQuery),
+    ]);
+    const filteredForecastData = filteredForecastDataPromise[0].value;
+    const totalForecastedData = filteredForecastDataPromise[1].value;
+
+    let parsedWeeklyData = weeklyCommonTableDataMapping(
+      filteredForecastData,
+      totalForecastedData,
+      "monthly"
+    );
+    res.status(200).json({
+      parsedWeeklyData,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "something went wrong in baseQuarterlyPlanning one one api",
+      error: `${error}`,
+    });
+  }
+};
+
 export const downloadAllSkuByMonth = async (req, res) => {
   try {
     let transaction_db = "morphe_staging";

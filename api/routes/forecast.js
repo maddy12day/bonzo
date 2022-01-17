@@ -11,7 +11,8 @@ import {
   collectionFilteredForecastByRetail,
   downloadAllSkuByMonth,
   setFilteredSKUsAndWhereQuery,
-  getFilteredMonthlyChartData
+  getFilteredMonthlyChartData,
+  getFilteredTopSkusByMonth
 } from "../controller/forecast";
 const router = Router();
 
@@ -53,6 +54,10 @@ router.post(
 router.post(
   "/set-filtered-sku-and-where-query",
   setFilteredSKUsAndWhereQuery
+);
+router.post(
+  "/get-filtered-top-skus-by-month/:filterForecastedYear",
+  getFilteredTopSkusByMonth
 );
 
 export default router;

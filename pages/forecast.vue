@@ -410,8 +410,33 @@
         </el-select>
       </template>
     </div>
-    <ForecastBySkuTable
-      v-if="isFilteredForecast"
+    <card card-body-classes="table-full-width" v-if="isFilteredForecast">
+          <div class="row mt-1"> 
+        <div class="col-md-2 text-right offset-md-10">
+          <div class="btn-group btn-group-toggle" data-toggle="buttons">
+            <label
+              v-for="(option, index) in FilterSkuType"
+              :key="option.name"
+              class="btn btn-sm btn-primary btn-simple"
+              :id="index"
+              :class="{ active: filteredSkuTab == option.name }"
+            >
+              <input
+                type="radio"
+                name="options"
+                autocomplete="off"
+                checked=""
+                @click="showFilteredMetricsSkuDuration(option.name)"
+              />
+              <span class="d-none d-sm-block">{{ option.name }}</span>
+              <span class="d-block d-sm-none">{{ option.acronym }}</span>
+            </label>
+          </div>
+        </div>
+      </div>
+  
+  <ForecastBySkuTable
+      v-if="isFilteredForecast && filteredSkuTab  == 'Weekly'"
       ref="filterChartWidget"
       :checkYear="filteredForecastedYear"
       :tableHeading="'Revenue'"
@@ -425,7 +450,7 @@
       :disbleAdjustment="isDisbleAdjustment"
     />
     <ForecastBySkuTable
-      v-if="isFilteredForecast"
+      v-if="isFilteredForecast && filteredSkuTab  == 'Weekly'"
       ref="filterChartWidget"
       :checkYear="filteredForecastedYear"
       :allowManualAdjustment="true"
@@ -439,8 +464,8 @@
       :disbleAdjustment="isDisbleAdjustment"
     />
     <ForecastBySkuTable
+    v-if="isFilteredForecast && filteredSkuTab  == 'Weekly'"
       ref="filterChartWidget"
-      v-if="isFilteredForecast"
       :checkYear="filteredForecastedYear"
       :allowManualAdjustment="false"
       :tableHeading="'AUR'"
@@ -452,9 +477,54 @@
       @createFilterAdjustment="createManualAdjustment('sku')"
       :disbleAdjustment="isDisbleAdjustment"
     />
-    <!-- </div> -->
+    <!-- </template> -->
+      <!-- <template v-if="filteredSkuTab == 'Monthly'"> -->
+    <ForecastByMonthSkuTable
+    v-if="isFilteredForecast && filteredSkuTab  == 'Monthly'"
+      ref="filterChartWidget"
+      :checkYear="filteredForecastedYear"
+      :tableHeading="'Revenue'"
+      :forecast_attribute="'retail_sales'"
+      :allowManualAdjustment="true"
+      :topMonthSkusData="topMonthSkusData"
+      :allAppliedFilters="allAppliedFilters"
+      @discardSkuChanges="discardFilterSkuMonthChanges"
+      @getMonthAdjustmentChanges="getFilterSkuAdjustmentValues"
+      @createFilterAdjustment="createMonthlyManualAdjustment('sku')"
+      :disbleAdjustment="isDisbleAdjustment"
+    />
+    <ForecastByMonthSkuTable 
+      v-if="isFilteredForecast && filteredSkuTab  == 'Monthly'"
+      ref="filterChartWidget"
+      :checkYear="filteredForecastedYear"
+      :allowManualAdjustment="true"
+      :tableHeading="'Units Sales'"
+      :forecast_attribute="'units_sales'"
+      :topMonthSkusData="topMonthSkusData"
+      :allAppliedFilters="allAppliedFilters"
+      @discardSkuChanges="discardFilterSkuMonthChanges"
+     @getMonthAdjustmentChanges="getFilterSkuAdjustmentValues"
+      @createFilterAdjustment="createMonthlyManualAdjustment('sku')"
+      :disbleAdjustment="isDisbleAdjustment"
+    />
+    <ForecastByMonthSkuTable
+    v-if="isFilteredForecast && filteredSkuTab  == 'Monthly'"
+      ref="filterChartWidget"
+      :checkYear="filteredForecastedYear"
+      :allowManualAdjustment="false"
+      :tableHeading="'AUR'"
+      :forecast_attribute="'aur'"
+      :topMonthSkusData="topMonthSkusData"
+      :allAppliedFilters="allAppliedFilters"
+      @discardSkuChanges="discardFilterSkuMonthChanges"
+      @getMonthAdjustmentChanges="getFilterSkuAdjustmentValues"
+      @createFilterAdjustment="createMonthlyManualAdjustment('sku')"
+      :disbleAdjustment="isDisbleAdjustment"
+    />
+     </card>
   </div>
 </template>
+
 
 <script>
 import RegularFilters from "../components/Filters/RegularFilter.vue";
@@ -479,7 +549,8 @@ import ComparisonTable from "../components/ComparisionTables/ComparisonTable.vue
 import Timeline from "../components/Timeline/Timeline.vue";
 import FilterWeeklyManualAdjustment from "../components/Metrics/FilterWeeklyManualAdjustment.vue";
 import MonthlyManualAdjustmentTable from "../components/Metrics/MonthlyManualAdjustmentTable.vue";
-import FilterMonthlyManualAdjustment from "../components/Metrics/FilterMonthlyManualAdjustment.vue"
+import FilterMonthlyManualAdjustment from "../components/Metrics/FilterMonthlyManualAdjustment.vue";
+import ForecastByMonthSkuTable from "..//components/Forecast/ForecastByMonthSkuTable.vue"
 
 export default {
   name: "Forecast",
@@ -489,6 +560,7 @@ export default {
     ManualAdjustmentTable,
     MonthlyManualAdjustmentTable,
     FilterMonthlyManualAdjustment,
+    ForecastByMonthSkuTable,
     StatsWidget,
     AdjustmentTable,
     RegularFilters,
@@ -537,9 +609,11 @@ export default {
       activeFilterType: "Regular",
       activeTab: "Monthly",
       filteredActiveTab: "Monthly",
+      filteredSkuTab: "Monthly",
       baseAdjustmentsList: [],
       baseMetricsList: [],
       topSkusData: [],
+      topMonthSkusData:[],
       topLimitedSkuData: [],
       showManualAdj: false,
       changeMABtnText: false,
@@ -581,13 +655,42 @@ export default {
     discardFilterChanges() {
       this.descardChangesonFilter();
       this.skuLevelAdjustmentObj = [];
-      console.log("discard changes are working");
+    },
+    discardFilterSkuMonthChanges(){
+       this.descardChangesSkuMonthFilter();
+        this.skuLevelAdjustmentObj = [];
     },
     getFilterAdjustmentValues(data) {
-      this.skuLevelAdjustmentObj.push(data);
-      console.log("adjustment data", data);
-      console.log(this.skuLevelAdjustmentObj);
+        var index = this.skuLevelAdjustmentObj.findIndex(
+      (filter) =>
+        filter.adjusted_metrics_name === data.adjusted_metrics_name &&
+        moment(filter.weekend).week() === moment(data.weekend).week() &&
+        filter.filter_skus === data.filter_skus 
+    );
+    let date = moment(data.weekend)
+    if (index !== -1) {
+    this.skuLevelAdjustmentObj.splice(index, 1);
+    this.skuLevelAdjustmentObj.push(data)
+} else {
+this.skuLevelAdjustmentObj.push(data)
+}
     },
+    getFilterSkuAdjustmentValues(data){
+      var index = this.skuLevelAdjustmentObj.findIndex(
+      (filter) =>
+        filter.adjusted_metrics_name === data.adjusted_metrics_name &&
+        moment(filter.weekend).month() === moment(data.weekend).month() &&
+        filter.filter_skus === data.filter_skus 
+    );
+    let date = moment(data.weekend)
+    if (index !== -1) {
+    this.skuLevelAdjustmentObj.splice(index, 1);
+    this.skuLevelAdjustmentObj.push(data)
+} else {
+this.skuLevelAdjustmentObj.push(data)
+}
+    },
+
     setUpdatedSKUsLimit() {
       let selectedOption = this.options.filter(
         (o) => o.value == this.topSkusLimit
@@ -604,6 +707,7 @@ export default {
         }
       }
       this.topSkusData = topLimitedSkuData;
+      this.topMonthSkusData = topLimitedSkuData;
     },
     async comparisonTableDataGenerator() {
       const collectionForecast = await this.$axios(
@@ -659,11 +763,13 @@ export default {
     },
     getSelectedFilteredYear(value) {
       this.filteredForecastedYear = value;
-
       this.$refs.filteredChartWidget.initChart(value);
       this.$refs.filterChartWidget.getFilteredForecastData(value);
       this.showFilteredMetricsByDuration(this.filteredActiveTab);
+      this.showFilteredMetricsSkuDuration(this.
+      filteredSkuTab);
       this.getFilteredTopSkus();
+      this.getMonthSkuData();
       this.getFilteredWeeklyMetrics(this.requestedFilterOption);
       this.getfilteredMonthlyMetrcis(this.requestedFilterOption);
       this.getWeekendDates(value);
@@ -853,6 +959,9 @@ export default {
       this.filteredForecastMetrics = result;
       localStorage.setItem("filterMetricsOldTableData", JSON.stringify(result));
     },
+    async showFilteredMetricsSkuDuration(activeTab){
+      this.filteredSkuTab = activeTab;
+    },
     showFilterType(type) {
       this.activeFilterType = type;
       this.$store.commit("updateRegularFilter", []);
@@ -918,6 +1027,19 @@ export default {
       }
       this.topSkusData = topLimitedSkuData;
     },
+    descardChangesSkuMonthFilter() {
+      const topMonthSkusData = JSON.parse(localStorage.getItem("oldMonthlyFiltersSkuData"));
+      let topLimitedSkuData = {};
+      topLimitedSkuData["parsedWeeklyData"] = [];
+      for (let i = 0; i < this.topSKUsCountLable; i++) {
+        if (topMonthSkusData.parsedWeeklyData[i]) {
+          topLimitedSkuData["parsedWeeklyData"].push(
+            topMonthSkusData.parsedWeeklyData[i]
+          );
+        }
+      }
+      this.topMonthSkusData = topLimitedSkuData;
+    },
     async getFilteredTopSkus() {
       this.skusJsonData = [];
       this.isDownloadCsvDisbled = true;
@@ -941,6 +1063,37 @@ export default {
       }
       this.topSkusData = topLimitedSkuData;
       this.topLimitedSkuData = topSkusData;
+      const csvJsonData = await this.$axios.$post(
+        `/download-all-skus-data-by-month/${this.filteredForecastedYear}`,
+        this.filterPayload
+      );
+      this.skusJsonData = csvJsonData.parsedWeeklyData;
+      this.isDownloadCsvDisbled = false;
+    },
+
+    async getMonthSkuData(){
+      this.skusJsonData = [];
+      this.isDownloadCsvDisbled = true;
+      const topMonthSkusData = await this.$axios.$post(
+        `/get-filtered-top-skus-by-month/${this.filteredForecastedYear}`,
+        this.filterPayload
+      );
+      localStorage.setItem("oldMonthlyFiltersSkuData", JSON.stringify(topMonthSkusData));
+      localStorage.setItem(
+        "topMonthlySkuWiseData",
+        JSON.stringify(topMonthSkusData.parsedWeeklyData)
+      );
+      let topLimitedSkuData = {};
+      topLimitedSkuData["parsedWeeklyData"] = [];
+      for (let i = 0; i < this.topSKUsCountLable; i++) {
+        if (topMonthSkusData.parsedWeeklyData[i]) {
+          topLimitedSkuData["parsedWeeklyData"].push(
+            topMonthSkusData.parsedWeeklyData[i]
+          );
+        }
+      }
+      this.topMonthSkusData = topLimitedSkuData;
+      this.topLimitedSkuData = topMonthSkusData;
       const csvJsonData = await this.$axios.$post(
         `/download-all-skus-data-by-month/${this.filteredForecastedYear}`,
         this.filterPayload
@@ -1058,6 +1211,8 @@ export default {
           adjusted_metrics_name: this.skuLevelAdjustmentObj[0]
             .adjusted_metrics_name,
           filterSkuObject: this.skuLevelAdjustmentObj,
+          before_adjustment_value: Number(this.skuLevelAdjustmentObj[0].before_adjustment_value),
+          new_adjusted_value: Number(this.skuLevelAdjustmentObj[0].new_adjusted_value),
           adjustment_level: "sku",
         });
         this.skuLevelAdjustmentObj = [];
@@ -1190,6 +1345,8 @@ export default {
           adjusted_metrics_name: this.skuLevelAdjustmentObj[0]
             .adjusted_metrics_name,
           filterSkuObject: this.skuLevelAdjustmentObj,
+          before_adjustment_value: Number(this.skuLevelAdjustmentObj[0].before_adjustment_value),
+          new_adjusted_value: Number(this.skuLevelAdjustmentObj[0].new_adjusted_value),
           adjustment_level: "sku",
         });
         this.skuLevelAdjustmentObj = [];
@@ -1354,6 +1511,7 @@ export default {
       this.filteredStatsComponentKey += 1;
       this.filterChartComponentKey += 1;
       this.getFilteredTopSkus();
+      this.getMonthSkuData();
       await this.getFilteredWeeklyMetrics(requestedFilterOption);
       await this.getfilteredMonthlyMetrcis(requestedFilterOption);
       this.isFilteredPageDataLoading = false;
@@ -1367,7 +1525,6 @@ export default {
         this.filterPayload
       );
       this.filterPayload.filteredQuerySetterData = this.filteredQuerySetterData;
-      // console.log("this.filterPayload00=--",this.filterPayload);
     },
     notifyVue(verticalAlign, horizontalAlign, message, type) {
       this.$notify({
@@ -1447,6 +1604,16 @@ export default {
       ];
     },
     FilteredDurations() {
+      return [
+        { name: "Monthly", acronym: "M", icon: "tim-icons icon-single-02" },
+        {
+          name: "Weekly",
+          acronym: "W",
+          icon: "tim-icons icon-gift-2",
+        },
+      ];
+    },
+    FilterSkuType(){
       return [
         { name: "Monthly", acronym: "M", icon: "tim-icons icon-single-02" },
         {
