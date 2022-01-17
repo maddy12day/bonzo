@@ -10,7 +10,6 @@ import {
   collectionFilteredForecastByEcomm,
   collectionFilteredForecastByRetail,
   downloadAllSkuByMonth,
-  // getFilteredForecastMskuData,
   setFilteredSKUsAndWhereQuery,
   getFilteredMonthlyChartData,
   getFilteredTopSkusByMonth
@@ -21,10 +20,6 @@ router.post(
   "/get-filtered-forecast-data/:filterForecastedYear",
   getFilteredForecastData
 );
-// router.post(
-//   "/get-filtered-forecast-Msku-data/:filterForecastedYear",
-//   getFilteredForecastMskuData
-// );
 router.post(
   "/get-filtered-forecast-metrics/:filterForecastedYear",
   getFilteredForecastMetrics

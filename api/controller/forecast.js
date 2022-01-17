@@ -27,7 +27,6 @@ const getWeekendDateIndex = (weekendDates, currentDate) => {
 const weeklyCommonTableDataMapping = (
   data,
   totalForecastedData,
-  // wekendDates
   type
 ) => {
   const skus = data.map((item) => item.sku);
@@ -35,7 +34,6 @@ const weeklyCommonTableDataMapping = (
   let uniqueSkus = [...new Set(skus)];
   let uniqueSkusTitle = [...new Set(titles)];
   let counter = uniqueSkus.length <= 50 ? uniqueSkus.length : 50;
-  console.log("counter--",counter)
   const finalData = [];
   for (let i = 0; i < counter; i++) {
     let topSkusData = type == "weekly" ? Array(52).fill({
@@ -67,11 +65,6 @@ const weeklyCommonTableDataMapping = (
     );
 
     for (let j = 0; j < arr.length; j++) {
-      // let index = getWeekendDateIndex(
-      //   wekendDates,
-      //   arr[j].weekend.split("T")[0]
-      // );
-      // console.log(j,":j---index:",index);
       topSkusData[j] = {
         aur: arr[j].aur,
         retail_sales: arr[j].retail_sales,
@@ -316,17 +309,13 @@ export const getFilteredForecastData = async (req, res) => {
     let filteredForecastDataPromise = await Promise.allSettled([
       prisma.$queryRaw(query),
       prisma.$queryRaw(totalForecastedDataQuery),
-      // getWeekendDates(filterForecastedYear),
     ]);
 
     const filteredForecastData = filteredForecastDataPromise[0].value;
     const totalForecastedData = filteredForecastDataPromise[1].value;
-    // const weekendDates = filteredForecastDataPromise[2].value;
-
     let parsedWeeklyData = weeklyCommonTableDataMapping(
       filteredForecastData,
       totalForecastedData,
-      // weekendDates
       "weekly"
     );
     res.status(200).json({
@@ -403,7 +392,6 @@ export const getFilteredTopSkusByMonth = async (req, res) => {
                     ORDER BY
                     dfbmm.sku,
                     dfbmm.monthend;`;
-                      console.log("query",query)
 
     let updatedWhereQueryString = filteredQuerySetterData.whereQueryWithChannel.replace(
       /fseisbw/g,
@@ -434,9 +422,6 @@ export const getFilteredTopSkusByMonth = async (req, res) => {
     ]);
     const filteredForecastData = filteredForecastDataPromise[0].value;
     const totalForecastedData = filteredForecastDataPromise[1].value;
-    // const weekendDates = filteredForecastDataPromise[2].value;
-    console.log("filteredForecastData--",filteredForecastData);
-    console.log("totalForecastedData--",totalForecastedData);
 
     let parsedWeeklyData = weeklyCommonTableDataMapping(
       filteredForecastData,
